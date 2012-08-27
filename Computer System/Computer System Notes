@@ -1,0 +1,40 @@
+Chapter One.	A toul of computer systems
+	1. Information = bit + context
+		ASCII->text files; others->binary files
+	2. Progeam process
+		*.c,text source files (preprocessing, cpp) -> *.i,text (complie, ccl) -> *.s,text assembly files (as) -> target,binary files (ld) -> exe,binary
+	3. Hardware organization of a system
+		a. Buses
+		b. I/O devices
+		c. Main memory
+		d. Processor
+	4. Cache can improve process speed, so storage device form a hierarchy
+	5. OS(Operate System) manage hardware
+		a. to protect the hardware from misuse by runaway applications, 
+		b. to provide applications with simple and uniform mechanisms for manipulating complicated and often wildly different low-level hardware devices.
+		c. System level abstract: process, virtual memory, files.
+		d. Processes - A process is the operating system’s abstraction for a running program.
+		e. Threads - CPU execution units.
+		f. Virtual Memory - Virtual memory is an abstraction that provides each process with the illusion that it has exclusive use of the main memory. Each process has the same uniform view of memory, which is known as its virtual address space. The virtual address space seen by each process consists of a number of welldefined areas.
+			  i. Program code and global data.
+			 ii. Heap
+			iii. Shared lib
+			 iv. Stack
+			  v. Kernel virtual memory
+		g. Files - sequence of bytes
+	6. Networks is a I/O device.
+	7. Important Themes
+		a. for processing more things and more quickly, concurrency and parallelism.
+			Transfer between time and space to improve effectivity. ex, hyperthreading tech.
+		b. Importance of abstraction in computer system.
+
+
+Part I	Program Structure and Execution
+
+Chapter Two Representing and Manipulating of Information
+	1. Information Storage
+		a. byte - 8 bit block, as the smallest addressable unit of memory.
+		b. virtual memory - a large of bytes as system view of memory. The position of every byte in the array known as its address.
+		c. virtual memory address - set of all possible addresses.
+		d. word - indicating the nominal size of integer and pointer data, word size is the maximum size of the virtual address space.
+		e. Boolean Algebra has a close relationship to Information Theory.	
