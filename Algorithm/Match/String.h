@@ -1,16 +1,19 @@
+#ifndef STRING_H
+#define STRING_H
 const int maxLen = 128;	// Max length of String
 
 /*
  * Limited sequence of chars
  */
 
+#include <string.h>
 class String
 {
 public:
-	String(const &ob);	// Copy constructor.
+	String(const String &ob);	// Copy constructor.
 	String(const char *init); //Construct a string initiated as init
 	String();
-	~String() { delete [] ch; }
+	~String() { delete [] ch; delete [] f; }
 
 	int length() const { return curLen; } // return current length of the String.
 
@@ -22,8 +25,17 @@ public:
 	String &operator += (const String &ob);
 	char &operator [] (int i);
 
-	int Match(String &pat) const; // Match pattern string, return match position or -1
+	int Match(String &pat); // Match pattern string, return match position or -1
+	int KMPMatch(String &pat);
+	void fail();
+
+	void display();	// test function
 private:
-	int curLen;
-	char *ch;
+	int curLen;	//	length of string
+	char *ch;	//	string container, c-style string
+	int *f;		//	f array
+	int count;
+	int KMPCount;
 };
+
+#endif

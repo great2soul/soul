@@ -1,8 +1,9 @@
 #include "String.h"
-#include <stdlib>
-#include <iostream>
+#include <iostream> 
+#include <string> 
+#include <cstdlib>
 
-using namespace std;
+using namespace std; 
 
 String::String(const String &ob)
 {
@@ -14,6 +15,8 @@ String::String(const String &ob)
 
 	curLen = ob.curLen;
 	strcpy(ch, ob.ch);
+
+	f = '\0';
 }
 
 String::String(const char *init)
@@ -25,6 +28,10 @@ String::String(const char *init)
 	}
 	curLen = strlen(init);
 	strcpy(ch, init);
+
+	f = '\0';
+	count = 0;
+	KMPCount = 0;
 }
 
 String::String()
@@ -36,6 +43,8 @@ String::String()
 	}
 	curLen = 0;
 	ch[0] = '\0';
+
+	f = '\0';
 }
 
 String& String::operator() (int pos, int len) 
@@ -91,7 +100,7 @@ String& String::operator += (const String &ob)
 	return *this;
 }
 
-String& String::operator [] (int i)
+char& String::operator [] (int i)
 {
 	if(i < 0 || i > curLen) {
 		cout<<"Out of boundary! \n";
@@ -109,15 +118,89 @@ int String::Match(String &pat)
 
 	if(*p && *s) {
 		while(i <= curLen - pat.curLen) {
-			if(*p++ == *s++) {
-				if(!*p) return i;	// finish scanning pattern, *p = 0, success
-			} else {
-				i++;				// failed, i + 1			
-				s = ch + i; 		// s step forward 1
-				p = pat.ch;			// p step back to start point
+			
+			while(*p++ == *s++) { 
+				count++;
+				if(!*p) {
+					cout<<"Count: "<<count<<endl;
+					return i;	// finish scanning pattern, *p = 0, success
+				}			
 			}
+
+			count++;	
+			i++;				// failed, i + 1			
+			s = ch + i; 		// s step forward 1
+			p = pat.ch;			// p step back to start point
 		}
 	}
 
+	cout<<"Count: "<<count<<endl;
 	return -1;	// failed
+}
+ 
+int String::KMPMatch(String &pat)
+{
+	int posP = 0, posT = 0;
+	int lengthP = pat.curLen, lengthT = curLen;
+	pat.fail();
+
+	while(posP < lengthP && posT < lengthT) {
+		KMPCount++;
+		if (pat.ch[posP] == ch[posT]){
+			posP++, posT++;
+		} else if (posP == 0){
+			posT++;
+		} else {
+			posP = pat.f[posP - 1] + 1;
+		}
+	}
+
+	if (posP < lengthP) {
+		return -1;	// failed
+	}else {
+		return posT - lengthP;
+	}
+
+
+}
+
+void String::fail()
+{
+	int lengthP = curLen;
+
+	f = new int[lengthP];
+	if(!f) {
+		cerr<<"Allocation error!\n";
+		exit(1);
+	}
+
+	f[0] = -1;
+	for (int j = 1; j < lengthP; j++) {
+		KMPCount++;
+		int i = f[j - 1];
+		while (*(ch + j) != *(ch + i + 1) && i >= 0) {
+			KMPCount++;
+			i = f[i];
+		}
+
+		if (*(ch + j) == *(ch + i + 1)) {
+			f[j] = i + 1;
+		}else {
+			f[j] = -1;
+		}		
+	}	
+}
+
+void String::display()
+{	
+	for (int i = 0; i < curLen; i++) {
+		cout<<ch[i]<<endl;
+	}
+
+	for (int i = 0; i < curLen; i++) {
+		cout<<f[i]<<endl;
+	}
+
+	cout<<"Count: "<<count<<endl;
+	cout<<"KMPCount: "<<KMPCount<<endl;
 }

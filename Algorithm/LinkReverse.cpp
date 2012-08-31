@@ -1,17 +1,11 @@
 list_p reverse(list_p *lp)      /*反转列表*/
 {
  list_p f=*lp,m=NULL,l=NULL;
- while (f)
-  {
+ while (f) {
    m=f->next ;
-
    f->next=l;
-
    l=f;
-
    f=m;
-
-
   }
 
  return *lp=l;
@@ -39,7 +33,6 @@ list_p init(int *s,int n) /*构建链表*/
    p->next=NULL;
   }
   else{
-
      np->next =NULL;
      p->next=np;
      p=np;
@@ -48,20 +41,16 @@ list_p init(int *s,int n) /*构建链表*/
  }
  return rh;
 }
+
 list_p reverse(list_p *lp)      /*反转列表*/
 {
  list_p f=*lp,m=NULL,l=NULL;
  while (f)
   {
    m=f->next ;
-
    f->next=l;
-
    l=f;
-
    f=m;
-
-
   }
 
  return *lp=l;
@@ -84,6 +73,7 @@ void FREE(list_p f) /*释放空间*/
   }
   free(f);
 }
+
 int main(void)
 {
  int d[]={1,2,3,4};
