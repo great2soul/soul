@@ -1,16 +1,41 @@
 Analysis of algorithm
 1. Focus on performance - how to make program fast
 2. What more important than performance - robust, sercurity, cost, user-froendly.
-3. performance like money
+3. performance like money(currency)
 
 Problem sorting
 Input sequence <a1, a2, ... , an>
 Output permutation(rearrangment) <a1', a2', ... , an'>
 $(such that) a1'<=a2'<=...<=an'
 
-1 Insertion sort
+Insertion sort
 	insert a new key into the sorted part
 
-Asymptotic analysis
+Merge sort - A[1,..,n]
+	If n = 1, done
+	Recursively sort A[1,...,n/2] and A[n/2,...,n]
+	Merge
 
+Asymptotic analysis
+	case 1
+	case 2
+	case 3
+
+Divide and Conquer
+	Divide the problem into subproblem
+	Conquer each subproblem recursively
+	Combine solving
+
+Binery search - find x in sorted array
+	Divide: compare x with middle
+	Conquer: recursively in one subarray
+	Combine: trivial
+
+Powering a number - given number x, integer n > 0, computer x**n
+	Divide: x**(n/2) * x**(n/2) and x**((n-1)/2) * x**((n-1)/2) * x, if n odd
+	Conquer: recursively computer x**(n/2)
+
+Fibonacci number
+	
 Quck sort - Hoare 1962
+

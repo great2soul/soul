@@ -155,9 +155,11 @@ int String::KMPMatch(String &pat)
 		}
 	}
 
-	if (posP < lengthP) {
+	if (posP < lengthP) { 
+		cout<<"KMPCount: "<<KMPCount<<endl;
 		return -1;	// failed
 	}else {
+		cout<<"KMPCount: "<<KMPCount<<endl;
 		return posT - lengthP;
 	}
 
@@ -194,13 +196,16 @@ void String::fail()
 void String::display()
 {	
 	for (int i = 0; i < curLen; i++) {
-		cout<<ch[i]<<endl;
+		cout<<ch[i];
 	}
+
+	cout<<endl;
 
 	for (int i = 0; i < curLen; i++) {
-		cout<<f[i]<<endl;
+		
+		cout<<f[i];
 	}
 
-	cout<<"Count: "<<count<<endl;
-	cout<<"KMPCount: "<<KMPCount<<endl;
+	cout<<endl;
+	
 }
