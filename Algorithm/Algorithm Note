@@ -1,0 +1,16 @@
+Analysis of algorithm
+1. Focus on performance - how to make program fast
+2. What more important than performance - robust, sercurity, cost, user-froendly.
+3. performance like money
+
+Problem sorting
+Input sequence <a1, a2, ... , an>
+Output permutation(rearrangment) <a1', a2', ... , an'>
+$(such that) a1'<=a2'<=...<=an'
+
+1 Insertion sort
+	insert a new key into the sorted part
+
+Asymptotic analysis
+
+Quck sort - Hoare 1962
