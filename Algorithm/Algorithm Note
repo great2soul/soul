@@ -38,4 +38,20 @@ Powering a number - given number x, integer n > 0, computer x**n
 Fibonacci number
 	
 Quck sort - Hoare 1962
+	Sort "in place"
+	practical
+	Divide: partition array into 2 subarrays around pivot x
+	Conquer: recursively sort 2 subarrays
+	Combine: trivial
+	QuickSort(A,p,q)
+		if(p<q)
+			then r <- Partition(A,p,q)
+			QuickSort(A,p,r-1)
+			QuickSort(A,r+1,q)
+	Initial call Partition(A,1,n)
+	Advanced: Running time is independent of input order
+			  No assumption to input
+			  worst case determined by random number generator
+	pivot on random element
+
 
