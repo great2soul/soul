@@ -27,6 +27,14 @@ int strcmp(char *s, char *t)
 	return *s - *t;
 }
 
+void strcat (char *s, char *t)
+{
+	while(*s++ != '\0')
+		;
+	while(*s++ = *t++ != '\0')
+		;
+}
+
 int main()
 {
 	int a = strcmp("a", "ab");
