@@ -25,7 +25,7 @@ main()
 }
 
 #define MAXLEN 1000	/* max lenght of each line */
-int getline(char s[], int lim)
+int getLine(char s[], int lim)
 {
         int c, i;
         for ( i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
@@ -45,7 +45,7 @@ int readlines(char *lineptr[], int maxlines)
 	char *p, line[MAXLEN];
 	
 	nlines = 0;
-	while ((len = getline(line, MAXLEN)) > 0) {
+	while ((len = getLine(line, MAXLEN)) > 0) {
 		if (nlines >= maxlines || (p = alloc(len)) == NULL)
 			return -1;
 		else {
@@ -86,18 +86,5 @@ void qsort(char *v[], int left, int right)
 
 	qsort(v, left, last - 1);
 	qsort(v, last + 1, right);
-}
-
-int getline(char s[], int lim)
-{
-	int c, i;
-	for ( i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
-		s[i] = c;
-	if (c == '\n') {
-		s[i] = c;
-		++i;
-	}
-	s[i] = '\0';
-	return i;
 }
 
