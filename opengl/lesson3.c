@@ -9,14 +9,11 @@
 #include <GL/glut.h>    // Header File For The GLUT Library 
 #include <GL/gl.h>	// Header File For The OpenGL32 Library
 #include <GL/glu.h>	// Header File For The GLu32 Library
-#include <unistd.h>     // Header file for sleeping.
-#include <math.h>
+#include <unistd.h>     // Header File for sleeping.
 
-/* ascii code for the escape key */
+/* ASCII code for the escape key. */
 #define ESCAPE 27
-const int n = 20;
-const GLfloat R = 0.5f;
-const GLfloat Pi = 3.1415926f;
+
 /* The number of our GLUT window */
 int window; 
 
@@ -55,24 +52,40 @@ void ReSizeGLScene(int Width, int Height)
 /* The main drawing function. */
 void DrawGLScene()
 {
-  int i;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
   glLoadIdentity();				// Reset The View
-  
-  glTranslatef(0.0f, 0.0f, -1.0f);
 
-  glBegin(GL_POLYGON);
-  for (i = 0; i < n; ++i)
-	  glVertex2f(R*cos(2*Pi/n*i), R*sin(2*Pi/n*i));
-  glEnd();
-  // since this is double buffered, swap the buffers to display what just got drawn.
+  glTranslatef(-1.5f,0.0f,-6.0f);		// Move Left 1.5 Units And Into The Screen 6.0
+	
+  // draw a triangle (in smooth coloring mode)
+  glBegin(GL_POLYGON);				// start drawing a polygon
+  glColor3f(1.0f,0.0f,0.0f);			// Set The Color To Red
+  glVertex3f( 0.0f, 1.0f, 0.0f);		// Top
+  glColor3f(0.0f,1.0f,0.0f);			// Set The Color To Green
+  glVertex3f( 1.0f,-1.0f, 0.0f);		// Bottom Right
+  glColor3f(0.0f,0.0f,1.0f);			// Set The Color To Blue
+  glVertex3f(-1.0f,-1.0f, 0.0f);		// Bottom Left	
+  glEnd();					// we're done with the polygon (smooth color interpolation)	
+
+  glTranslatef(3.0f,0.0f,0.0f);		        // Move Right 3 Units
+
+  // draw a square (quadrilateral)
+  glColor3f(0.5f,0.5f,1.0f);			// set color to a blue shade.
+  glBegin(GL_QUADS);				// start drawing a polygon (4 sided)
+  glVertex3f(-1.0f, 1.0f, 0.0f);		// Top Left
+  glVertex3f( 1.0f, 1.0f, 0.0f);		// Top Right
+  glVertex3f( 1.0f,-1.0f, 0.0f);		// Bottom Right
+  glVertex3f(-1.0f,-1.0f, 0.0f);		// Bottom Left	
+  glEnd();					// done with the polygon
+
+  // we need to swap the buffer to display our drawing.
   glutSwapBuffers();
 }
 
 /* The function called whenever a key is pressed. */
 void keyPressed(unsigned char key, int x, int y) 
 {
-    /* avoid thrashing this procedure */
+    /* sleep to avoid thrashing this procedure */
     usleep(100);
 
     /* If escape is pressed, kill everything. */
@@ -112,7 +125,7 @@ int main(int argc, char **argv)
   glutDisplayFunc(&DrawGLScene);  
 
   /* Go fullscreen.  This is as soon as possible. */
-  //glutFullScreen();
+  glutFullScreen();
 
   /* Even if there are no events, redraw our gl scene. */
   glutIdleFunc(&DrawGLScene);
@@ -131,4 +144,3 @@ int main(int argc, char **argv)
 
   return 1;
 }
-
