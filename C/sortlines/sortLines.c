@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "sortL.h"
 
 #define MAXLINES 5000	/* max lines to sort */
 
@@ -7,10 +8,9 @@ char *lineptr[MAXLINES];	/* ptr array points to the text */
 
 int readlines(char *lineptr[], int nlines);
 void writelines(char *lineptr[], int nlines);
-
 void qsort(char *lineptr[], int left, int right);
 
-main()
+int main()
 {
 	int nlines;	/* number of input lines */
 
@@ -37,7 +37,6 @@ int getLine(char s[], int lim)
         s[i] = '\0';
         return i;
 }
-char *alloc(int);
 
 int readlines(char *lineptr[], int maxlines)
 {
