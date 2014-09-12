@@ -13,7 +13,13 @@ int abs(int);
 int main ()
 {
 	// 初始化A，B；
-	struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
+	// struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
+	// struct simarr B = {4, {60,80,100,170, '\0'}};
+
+	// struct simarr A = {4, {1,3,4,6, '\0'}};
+	// struct simarr B = {4, {2,8,3,2, '\0'}};
+
+	struct simarr A = {7, {3,5,7,10,15,50,60, '\0'}};
 	struct simarr B = {4, {60,80,100,170, '\0'}};
 
 	// 调用min_sum；
@@ -48,7 +54,7 @@ void min_sum(struct simarr *A, struct simarr *B)
 
 void adjust(struct simarr *A, struct simarr *B, int d)
 {
-	while (d >= 2 * A->val[A->sp - 1]) 
+	while (d >= 2 * A->val[A->sp - 1])
 		d = transfer(A, B, d);
 	if (A->val[A->sp - 1] <= B->val[B->sp - 1])
 		return;
@@ -56,6 +62,13 @@ void adjust(struct simarr *A, struct simarr *B, int d)
 		d = transfer(A, B, d);
 		while(d >= 2 * B->val[B->sp - 1])
 			d = transfer(B, A, d);
+		if (B->val[B->sp - 1] <= A->val[A->sp - 1])
+			return;
+		else {
+			d = transfer(B, A, d);
+			while (d >= 2 * A->val[A->sp - 1])
+				d = transfer(A, B, d);
+		}
 	}
 }
 
