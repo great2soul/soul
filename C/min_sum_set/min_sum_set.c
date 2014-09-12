@@ -13,8 +13,8 @@ int abs(int);
 int main ()
 {
 	// 初始化A，B；
-	struct simarr A = { 5, {5,5,5,5,5, '\0'}};
-	struct simarr B = { 5, {3,3,1,1,1, '\0'}};
+	struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
+	struct simarr B = {4, {60,80,100,170, '\0'}};
 
 	// 调用min_sum；
 	min_sum(&A, &B);
@@ -22,11 +22,11 @@ int main ()
 	// 打印结果；	
 	int i = 0;
 	for(; i < A.sp; i++)
-		printf("%d", A.val[i]);
+		printf("%d\t", A.val[i]);
 	printf("\n");
 	int j = 0;
 	for(; j < B.sp; j++)
-		printf("%d", B.val[j]);
+		printf("%d\t", B.val[j]);
 	printf("\n");
 }
 
@@ -128,9 +128,11 @@ int partition(int left, int right, int *val)
 
 void swap(int left, int right, int* val)
 {
+	if (left == right)
+		return;
 	int tmp = val[left];
 	val[left] = val[right];
-	val[right] = val[left];
+	val[right] = tmp;
 }
 
 int abs(int val)
