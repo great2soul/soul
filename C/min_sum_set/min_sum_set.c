@@ -2,13 +2,9 @@
 #include "stdio.h"
 
 void min_sum(struct simarr*, struct simarr*);
-void adjust(struct simarr*, struct simarr*, int);
 void transfer(struct simarr*, struct simarr*);
-int sum(int *);
-int binsearch(int *A, int, int, int);
 void qsort(int, int, int *);
 void merge(struct simarr *, struct simarr *, struct simarr *);
-int abs(int);
 
 
 int main ()
@@ -73,36 +69,6 @@ void transfer(struct simarr *src, struct simarr *dest)
 	insert(dest, dest->sp, elem);
 }
 
-// int sum(int *A)
-// {
-// 	int sum = 0;
-// 	for (; *A != '\0'; A++)
-// 		sum += *A;
-// 	return sum;
-// }
-
-// int binsearch(int *val, int low, int high, int elem)
-// {
-// 	int mid;
-
-// 	while (high - low > 1) {
-// 		mid = low + (high - low)/2;
-// 		if (elem > val[mid])
-// 			high = mid - 1;
-// 		else if (elem < val[mid])
-// 			low = mid + 1;
-// 		else
-// 			return mid;
-// 	}
-
-// 	if (elem > val[low])
-// 		return low;
-// 	else if (elem < val[high])
-// 		return high + 1;
-// 	else
-// 		return high;
-// }
-
 int partition(int, int, int *);
 void qsort(int left, int right, int val[])
 {
@@ -135,8 +101,3 @@ void swap(int left, int right, int* val)
 	val[left] = val[right];
 	val[right] = tmp;
 }
-
-// int abs(int val)
-// {
-// 	return val > 0 ? val : -val;
-// }
