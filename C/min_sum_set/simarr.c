@@ -32,7 +32,7 @@ void insert(struct simarr *A, int pos, int elem)
 	}
 	else {
 		int end = A->sp;
-		while(pos <= end--)
+		while(pos < end--)
 			A->val[end + 1] = A->val[end];
 		A->val[pos] = elem;
 		++A->sp;

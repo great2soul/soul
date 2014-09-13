@@ -3,24 +3,26 @@
 
 void min_sum(struct simarr*, struct simarr*);
 void adjust(struct simarr*, struct simarr*, int);
-int transfer(struct simarr*, struct simarr*, int);
+void transfer(struct simarr*, struct simarr*);
 int sum(int *);
 int binsearch(int *A, int, int, int);
 void qsort(int, int, int *);
+void merge(struct simarr *, struct simarr *, struct simarr *);
 int abs(int);
 
 
 int main ()
 {
 	// 初始化A，B；
-	// struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
-	// struct simarr B = {4, {60,80,100,170, '\0'}};
+	struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
+	struct simarr B = {4, {60,80,100,170, '\0'}};
 
 	// struct simarr A = {4, {1,3,4,6, '\0'}};
 	// struct simarr B = {4, {2,8,3,2, '\0'}};
 
-	struct simarr A = {7, {3,5,7,10,15,50,60, '\0'}};
-	struct simarr B = {4, {60,80,100,170, '\0'}};
+	// struct simarr A = {7, {3,5,7,10,15,50,60, '\0'}};
+	// struct simarr B = {4, {60,80,100,170, '\0'}};
+
 
 	// 调用min_sum；
 	min_sum(&A, &B);
@@ -38,82 +40,68 @@ int main ()
 
 void min_sum(struct simarr *A, struct simarr *B)
 {
-	int d;
-	int sumA = sum(A->val);
-	int sumB = sum(B->val);
-	if (sumA == sumB)
-		return;
+	struct simarr C = {0, {'\0'}};
+	merge(A, B, &C);
+	qsort(0, C.sp - 1, C.val);
 
-	qsort(0, A->sp - 1, A->val);
-	qsort(0, B->sp - 1, B->val);
-	if ((d = sumA - sumB) > 0)
-		adjust(A,B,d);
-	else
-		adjust(B,A,-d);
-}
-
-void adjust(struct simarr *A, struct simarr *B, int d)
-{
-	while (d >= 2 * A->val[A->sp - 1])
-		d = transfer(A, B, d);
-	if (A->val[A->sp - 1] <= B->val[B->sp - 1])
-		return;
-	else {
-		d = transfer(A, B, d);
-		while(d >= 2 * B->val[B->sp - 1])
-			d = transfer(B, A, d);
-		if (B->val[B->sp - 1] <= A->val[A->sp - 1])
-			return;
+	int d = 0;
+	while (C.sp > 0) {
+		if (d > 0) {
+			d -= C.val[C.sp - 1];
+			transfer(&C, B);
+		}
 		else {
-			d = transfer(B, A, d);
-			while (d >= 2 * A->val[A->sp - 1])
-				d = transfer(A, B, d);
+			d += C.val[C.sp - 1];
+			transfer(&C, A);
 		}
 	}
 }
 
-int transfer(struct simarr *src, struct simarr *dest, int d)
+void merge(struct simarr *A, struct simarr *B, struct simarr *C)
 {
-	// delete min in src
-	int min = getelem(src, src->sp - 1); /* the array is sorted */
+	while (A->sp > 0) 
+		transfer(A, C);
+	while (B->sp > 0)
+		transfer(B, C);
+}
+
+void transfer(struct simarr *src, struct simarr *dest)
+{
+	int elem = getelem(src, src->sp - 1);
 	delete(src, src->sp - 1);
 
-	// add min of from to dest
-	int pos  = binsearch(dest->val, 0, dest->sp - 1, min);
-	insert(dest, pos, min);
-
-	return abs(d -= 2 * min);
+	insert(dest, dest->sp, elem);
 }
 
-int sum(int *A)
-{
-	int sum = 0;
-	for (; *A != '\0'; A++)
-		sum += *A;
-	return sum;
-}
+// int sum(int *A)
+// {
+// 	int sum = 0;
+// 	for (; *A != '\0'; A++)
+// 		sum += *A;
+// 	return sum;
+// }
 
-int binsearch(int *val, int low, int high, int elem)
-{
-	int mid;
+// int binsearch(int *val, int low, int high, int elem)
+// {
+// 	int mid;
 
-	while (high - low > 1) {
-		mid = low + (high - low)/2;
-		if (elem > val[mid])
-			high = mid - 1;
-		else if (elem < val[mid])
-			low = mid + 1;
-		else
-			return mid;
-	}
+// 	while (high - low > 1) {
+// 		mid = low + (high - low)/2;
+// 		if (elem > val[mid])
+// 			high = mid - 1;
+// 		else if (elem < val[mid])
+// 			low = mid + 1;
+// 		else
+// 			return mid;
+// 	}
 
-	if (elem > val[low])
-		return low;
-	else if (elem < val[high])
-		return high + 1;
-	else
-		return high;
-}
+// 	if (elem > val[low])
+// 		return low;
+// 	else if (elem < val[high])
+// 		return high + 1;
+// 	else
+// 		return high;
+// }
 
 int partition(int, int, int *);
 void qsort(int left, int right, int val[])
@@ -133,7 +121,7 @@ int partition(int left, int right, int *val)
 	int i;
 	int pivot = left;
 	for(i = left + 1; i <= right; ++i) 
-		if (val[i] > val[pivot])
+		if (val[i] < val[pivot])
 			swap(++pivot, i, val);
 	swap(left, pivot, val);
 	return pivot;
@@ -148,7 +136,7 @@ void swap(int left, int right, int* val)
 	val[right] = tmp;
 }
 
-int abs(int val)
-{
-	return val > 0 ? val : -val;
-}
+// int abs(int val)
+// {
+// 	return val > 0 ? val : -val;
+// }
