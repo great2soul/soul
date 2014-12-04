@@ -1,0 +1,4267 @@
+1
+00:00:07 --> 00:00:12
+We only have four more lectures
+left, and what Professor Demaine
+
+2
+00:00:12 --> 00:00:18
+and I have decided to do is give
+two series of lectures on sort
+
+3
+00:00:18 --> 00:00:22
+of advanced topics.
+So, today at Wednesday we're
+
+4
+00:00:22 --> 00:00:27
+going to talk about parallel
+algorithms, algorithms where you
+
+5
+00:00:27 --> 00:00:34
+have more than one processor
+whacking away on your problem.
+
+6
+00:00:34 --> 00:00:38
+And this is a very hot topic
+right now because all of the
+
+7
+00:00:38 --> 00:00:42
+chip manufacturers are now
+producing so-called multicore
+
+8
+00:00:42 --> 00:00:47
+processors where you have more
+than one processor per chip.
+
+9
+00:00:47 --> 00:00:50
+So, knowing something about
+that is good.
+
+10
+00:00:50 --> 00:00:55
+The second topic we're going to
+cover is going to be caching,
+
+11
+00:00:55 --> 00:01:00
+and how you design algorithms
+for systems with cache.
+
+12
+00:01:00 --> 00:01:03
+Right now, we've sort of
+program to everything as if it
+
+13
+00:01:03 --> 00:01:07
+were just a single level of
+memory, and for some problems
+
+14
+00:01:07 --> 00:01:10
+that's not an entirely realistic
+model.
+
+15
+00:01:10 --> 00:01:14
+You'd like to have some model
+for how the caching hierarchy
+
+16
+00:01:14 --> 00:01:18
+works, and how you can take
+advantage of that.
+
+17
+00:01:18 --> 00:01:22
+And there's been a lot of
+research in that area as well.
+
+18
+00:01:22 --> 00:01:26
+So, both of those actually turn
+out to be my area of research.
+
+19
+00:01:26 --> 00:01:30
+So, this is actually fun for
+me.
+
+20
+00:01:30 --> 00:01:33
+Actually, most of it's fun
+anyway.
+
+21
+00:01:33 --> 00:01:37
+So, today we'll talk about
+parallel algorithms.
+
+22
+00:01:37 --> 00:01:43
+And the particular topic,
+it turns out that there are
+
+23
+00:01:43 --> 00:01:49
+lots of models for parallel
+algorithms, and for parallelism.
+
+24
+00:01:49 --> 00:01:54
+And it's one of the reasons
+that, whereas for serial
+
+25
+00:01:54 --> 00:02:00
+algorithms, most people sort of
+have this basic model that we've
+
+26
+00:02:00 --> 00:02:04
+been using.
+It's sometimes called a random
+
+27
+00:02:04 --> 00:02:08
+access machine model,
+which is what we've been using
+
+28
+00:02:08 --> 00:02:11
+to analyze things,
+whereas in the parallel space,
+
+29
+00:02:11 --> 00:02:15
+there's just a huge number of
+models, and there is no general
+
+30
+00:02:15 --> 00:02:19
+agreement on what is the best
+model because there are
+
+31
+00:02:19 --> 00:02:23
+different machines that are made
+with different configurations,
+
+32
+00:02:23 --> 00:02:24
+etc.
+and people haven't,
+
+33
+00:02:24 --> 00:02:27
+sort of, agreed on,
+even how parallel machines
+
+34
+00:02:27 --> 00:02:32
+should be organized.
+So, we're going to deal with a
+
+35
+00:02:32 --> 00:02:37
+particular model,
+which goes under the rubric of
+
+36
+00:02:37 --> 00:02:42
+dynamic multithreading,
+which is appropriate for the
+
+37
+00:02:42 --> 00:02:48
+multicore machines that are now
+being built for shared memory
+
+38
+00:02:48 --> 00:02:52
+programming.
+It's not appropriate for what's
+
+39
+00:02:52 --> 00:02:57
+called distributed memory
+programs particularly because
+
+40
+00:02:57 --> 00:03:03
+the processors are able to
+access things.
+
+41
+00:03:03 --> 00:03:06
+And for those,
+you need more involved models.
+
+42
+00:03:06 --> 00:03:10
+And so, let me start just by
+giving an example of how one
+
+43
+00:03:10 --> 00:03:14
+would write something.
+I'm going to give you a program
+
+44
+00:03:14 --> 00:03:18
+for calculating the nth
+Fibonacci number in this model.
+
+45
+00:03:18 --> 00:03:23
+This is actually a really bad
+algorithm that I'm going to give
+
+46
+00:03:23 --> 00:03:28
+you because it's going to be the
+exponential time algorithm,
+
+47
+00:03:28 --> 00:03:32
+whereas we know from week one
+or two that you can calculate
+
+48
+00:03:32 --> 00:03:37
+the nth Fibonacci number and how
+much time?
+
+49
+00:03:37 --> 00:03:40
+Log n time.
+So, this is too exponentials
+
+50
+00:03:40 --> 00:03:46
+off what you should be able to
+get, OK, two exponentials off.
+
+51
+00:03:46 --> 00:03:49
+OK, so here's the code.
+
+52
+00:03:49 --> 00:04:36
+
+
+53
+00:04:36 --> 00:04:40
+OK, so this is essentially the
+pseudocode we would write.
+
+54
+00:04:40 --> 00:04:44
+And let me just explain a
+little bit about,
+
+55
+00:04:44 --> 00:04:48
+we have a couple of key words
+here we haven't seen before:
+
+56
+00:04:48 --> 00:04:52
+in particular,
+spawn and sync.
+
+57
+00:04:52 --> 00:04:58
+OK, so spawn,
+this basically says that the
+
+58
+00:04:58 --> 00:05:07
+subroutine that you're calling,
+you use it as a keyword before
+
+59
+00:05:07 --> 00:05:14
+a subroutine,
+that it can execute at the same
+
+60
+00:05:14 --> 00:05:21
+time as its parent.
+So, here, what we say x equals
+
+61
+00:05:21 --> 00:05:29
+spawn of n minus one,
+we immediately go onto the next
+
+62
+00:05:29 --> 00:05:36
+statement.
+And now, while we're executing
+
+63
+00:05:36 --> 00:05:42
+fib of n minus one,
+we can also be executing,
+
+64
+00:05:42 --> 00:05:49
+now, this statement which
+itself will spawn something off.
+
+65
+00:05:49 --> 00:05:54
+OK, and we continue,
+and then we hit the sync
+
+66
+00:05:54 --> 00:05:58
+statement.
+And, what sync says is,
+
+67
+00:05:58 --> 00:06:04
+wait until all children are
+done.
+
+68
+00:06:04 --> 00:06:09
+OK, so it says once you get to
+this point, you've got to wait
+
+69
+00:06:09 --> 00:06:15
+until everything here has
+completed before you execute the
+
+70
+00:06:15 --> 00:06:21
+x plus y because otherwise
+you're going to try to execute
+
+71
+00:06:21 --> 00:06:26
+the calculation of x plus y
+without having computed it yet.
+
+72
+00:06:26 --> 00:06:31
+OK, so that's the basic
+structure.
+
+73
+00:06:31 --> 00:06:33
+What this describes,
+notice in here we never said
+
+74
+00:06:33 --> 00:06:36
+how many processors or anything
+we are running on.
+
+75
+00:06:36 --> 00:06:40
+OK, so this actually is just
+describing logical parallelism
+
+76
+00:06:40 --> 00:06:41
+--
+
+77
+00:06:41 --> 00:06:51
+
+
+78
+00:06:51 --> 00:07:02
+-- not the actual parallelism
+when we execute it.
+
+79
+00:07:02 --> 00:07:11
+And so, what we need is a
+scheduler, OK,
+
+80
+00:07:11 --> 00:07:25
+to determine how to map this
+dynamically, unfolding execution
+
+81
+00:07:25 --> 00:07:37
+onto whatever processors you
+have available.
+
+82
+00:07:37 --> 00:07:45
+OK, and so, today actually
+we're going to talk mostly about
+
+83
+00:07:45 --> 00:07:48
+scheduling.
+OK, and then,
+
+84
+00:07:48 --> 00:07:56
+next time we're going to talk
+about specific application
+
+85
+00:07:56 --> 00:08:01
+algorithms, and how you analyze
+them.
+
+86
+00:08:01 --> 00:08:11
+OK, so you can view the actual
+multithreaded computation.
+
+87
+00:08:11 --> 00:08:16
+If you take a look at the
+parallel instruction stream,
+
+88
+00:08:16 --> 00:08:21
+it's just a directed acyclic
+graph, OK?
+
+89
+00:08:21 --> 00:08:25
+So, let me show you how that
+works.
+
+90
+00:08:25 --> 00:08:30
+So, normally when we have an
+instruction stream,
+
+91
+00:08:30 --> 00:08:36
+I look at each instruction
+being executed.
+
+92
+00:08:36 --> 00:08:38
+If I'm in a loop,
+I'm not looking at it as a
+
+93
+00:08:38 --> 00:08:40
+loop.
+I'm just looking at the
+
+94
+00:08:40 --> 00:08:42
+sequence of instructions that
+actually executed.
+
+95
+00:08:42 --> 00:08:45
+I can do that just as a chain.
+Before I execute one
+
+96
+00:08:45 --> 00:08:48
+instruction, I have to execute
+the one before it.
+
+97
+00:08:48 --> 00:08:51
+Before I execute that,
+I've got to execute the one
+
+98
+00:08:51 --> 00:08:53
+before it.
+At least, that's the
+
+99
+00:08:53 --> 00:08:55
+abstraction.
+If you've studied processors,
+
+100
+00:08:55 --> 00:08:58
+you know that there are a lot
+of tricks there in figuring out
+
+101
+00:08:58 --> 00:09:02
+instruction level parallelism,
+and how you can actually make
+
+102
+00:09:02 --> 00:09:07
+that serial instruction stream
+actually execute in parallel.
+
+103
+00:09:07 --> 00:09:15
+But what we are going to be
+mostly talking about is the
+
+104
+00:09:15 --> 00:09:22
+logical parallelism here,
+and what we can do in that
+
+105
+00:09:22 --> 00:09:26
+context.
+So, in this DAG,
+
+106
+00:09:26 --> 00:09:34
+the vertices are threads,
+which are maximal sequences of
+
+107
+00:09:34 --> 00:09:40
+instructions not containing --
+
+108
+00:09:40 --> 00:09:47
+
+
+109
+00:09:47 --> 00:09:52
+-- parallel control.
+And by parallel control,
+
+110
+00:09:52 --> 00:09:58
+I just mean spawn,
+sync, and return from a spawned
+
+111
+00:09:58 --> 00:10:02
+procedure.
+So, let's just mark the,
+
+112
+00:10:02 --> 00:10:06
+so the vertices are threads.
+So, let's just mark what the
+
+113
+00:10:06 --> 00:10:10
+vertices are here,
+OK, what the threads are here.
+
+114
+00:10:10 --> 00:10:16
+So, when we enter the function
+here, we basically execute up to
+
+115
+00:10:16 --> 00:10:18
+the point where,
+basically, here,
+
+116
+00:10:18 --> 00:10:24
+let's call that thread A where
+we are just doing a sequential
+
+117
+00:10:24 --> 00:10:29
+execution up to either returning
+or starting to do the spawn,
+
+118
+00:10:29 --> 00:10:33
+fib of n minus one.
+So actually,
+
+119
+00:10:33 --> 00:10:38
+thread A would include the
+calculation of n minus one right
+
+120
+00:10:38 --> 00:10:43
+up to the point where you
+actually make the subroutine
+
+121
+00:10:43 --> 00:10:45
+jump.
+That's thread A.
+
+122
+00:10:45 --> 00:10:49
+Thread B would be the stuff
+that you would do,
+
+123
+00:10:49 --> 00:10:54
+executing from fib of,
+sorry, B would be from the,
+
+124
+00:10:54 --> 00:10:57
+right.
+We'd go up to the spawn.
+
+125
+00:10:57 --> 00:11:03
+So, we've done the spawn.
+I'm really looking at this.
+
+126
+00:11:03 --> 00:11:05
+So, B would be up to the spawn
+of y.
+
+127
+00:11:05 --> 00:11:09
+OK, spawn of fib of n minus two
+to compute y,
+
+128
+00:11:09 --> 00:11:12
+and then we'd have essentially
+an empty thread.
+
+129
+00:11:12 --> 00:11:17
+So, I'll ignore that for now,
+but really then we have after
+
+130
+00:11:17 --> 00:11:22
+the sync up to the point that we
+get to the return of x plus y.
+
+131
+00:11:22 --> 00:11:25
+So basically,
+we're just looking at maximal
+
+132
+00:11:25 --> 00:11:30
+sequences of instructions that
+are all serial.
+
+133
+00:11:30 --> 00:11:34
+And every time I do a parallel
+instruction, OK,
+
+134
+00:11:34 --> 00:11:37
+spawn or a sync,
+or return from it,
+
+135
+00:11:37 --> 00:11:40
+that terminates the current
+thread.
+
+136
+00:11:40 --> 00:11:45
+OK, so we can look at that as a
+bunch of small threads.
+
+137
+00:11:45 --> 00:11:50
+So those of you who are
+familiar with threads from Java
+
+138
+00:11:50 --> 00:11:54
+threads, or POSIX threads,
+OK, so-called P threads,
+
+139
+00:11:54 --> 00:12:00
+those are sort of heavyweight
+static threads.
+
+140
+00:12:00 --> 00:12:04
+This is a much lighter weight
+notion of thread,
+
+141
+00:12:04 --> 00:12:08
+OK, that we are using in this
+model.
+
+142
+00:12:08 --> 00:12:13
+OK, so these are the vertices.
+And now, let me map out a
+
+143
+00:12:13 --> 00:12:19
+little bit how this works,
+so we can where the edges come
+
+144
+00:12:19 --> 00:12:21
+from.
+So, let's imagine we're
+
+145
+00:12:21 --> 00:12:26
+executing fib of four.
+So, I'm going to draw a
+
+146
+00:12:26 --> 00:12:31
+horizontal oval.
+That's going to correspond to
+
+147
+00:12:31 --> 00:12:36
+the procedure execution.
+And, in this procedure,
+
+148
+00:12:36 --> 00:12:39
+there are essentially three
+threads.
+
+149
+00:12:39 --> 00:12:44
+We start out with A,
+so this is our initial thread
+
+150
+00:12:44 --> 00:12:49
+is this guy here.
+And then, when he executes a
+
+151
+00:12:49 --> 00:12:55
+spawn, OK, he's going to execute
+a spawn, we are going to create
+
+152
+00:12:55 --> 00:13:00
+a new procedure,
+and he's going to execute a new
+
+153
+00:13:00 --> 00:13:05
+A recursively within that
+procedure.
+
+154
+00:13:05 --> 00:13:09
+But at the same time,
+we're also going to be,
+
+155
+00:13:09 --> 00:13:14
+now, aloud to go on and execute
+B in the parent,
+
+156
+00:13:14 --> 00:13:18
+we have parallelism here when I
+do a spawn.
+
+157
+00:13:18 --> 00:13:21
+OK, and so there's an edge
+here.
+
+158
+00:13:21 --> 00:13:25
+This edge we are going to call
+a spawn edge,
+
+159
+00:13:25 --> 00:13:31
+and this is called a
+continuation edge because it's
+
+160
+00:13:31 --> 00:13:37
+just simply continuing the
+procedure execution.
+
+161
+00:13:37 --> 00:13:41
+OK, now at this point,
+this guy, we now have two
+
+162
+00:13:41 --> 00:13:45
+things that can execute at the
+same time.
+
+163
+00:13:45 --> 00:13:49
+Once I've executed A,
+I now have two things that can
+
+164
+00:13:49 --> 00:13:52
+execute.
+OK, so this one,
+
+165
+00:13:52 --> 00:13:56
+for example,
+may spawn another thread here.
+
+166
+00:13:56 --> 00:13:59
+Oh, so this is fib of three,
+right?
+
+167
+00:13:59 --> 00:14:07
+And this is now fib of two.
+OK, so he spawns another guy
+
+168
+00:14:07 --> 00:14:15
+here, and simultaneously,
+he can go on and execute B
+
+169
+00:14:15 --> 00:14:22
+here, OK, with a continued edge.
+And B, in fact,
+
+170
+00:14:22 --> 00:14:32
+can also spawn at this point.
+OK, and this is now fib of two
+
+171
+00:14:32 --> 00:14:36
+also.
+And now, at this point,
+
+172
+00:14:36 --> 00:14:44
+we can't execute C yet here
+even though I've spawned things
+
+173
+00:14:44 --> 00:14:48
+off.
+And the reason is because C
+
+174
+00:14:48 --> 00:14:54
+won't execute until we've
+executed the sync statement,
+
+175
+00:14:54 --> 00:15:01
+which can't occur until A and B
+have both been executed,
+
+176
+00:15:01 --> 00:15:06
+OK?
+So, he just sort of sits there
+
+177
+00:15:06 --> 00:15:12
+waiting, OK, and a scheduler
+can't try to schedule him.
+
+178
+00:15:12 --> 00:15:18
+Or if he does,
+then nothing's going to happen
+
+179
+00:15:18 --> 00:15:21
+here, OK?
+So, we can go on.
+
+180
+00:15:21 --> 00:15:25
+Let's see, here we could call
+fib of one.
+
+181
+00:15:25 --> 00:15:34
+The fib of one is only going to
+execute an A statement here.
+
+182
+00:15:34 --> 00:15:39
+OK, of course it can't continue
+here because A is the only
+
+183
+00:15:39 --> 00:15:45
+thing, when I execute fib of
+one, if we look at the code,
+
+184
+00:15:45 --> 00:15:50
+it never executes B or C.
+OK, and similarly here,
+
+185
+00:15:50 --> 00:15:55
+this guy here to do fib of one.
+OK, and this guy,
+
+186
+00:15:55 --> 00:16:01
+I guess, could execute A here
+of fib of one.
+
+187
+00:16:01 --> 00:16:10
+
+
+188
+00:16:10 --> 00:16:17
+OK, and maybe now this guy
+calls his another fib of one,
+
+189
+00:16:17 --> 00:16:25
+and this guy does another one.
+This is going to be fib of
+
+190
+00:16:25 --> 00:16:31
+zero, right?
+I keep drawing that arrow to
+
+191
+00:16:31 --> 00:16:35
+the wrong place,
+OK?
+
+192
+00:16:35 --> 00:16:38
+And now, once these guys
+return, well,
+
+193
+00:16:38 --> 00:16:42
+let's say these guys return
+here, I can now execute C.
+
+194
+00:16:42 --> 00:16:47
+But I can't execute with them
+until both of these guys are
+
+195
+00:16:47 --> 00:16:52
+done, and that guy is done.
+So, you see that we get a
+
+196
+00:16:52 --> 00:16:56
+synchronization point here
+before executing C.
+
+197
+00:16:56 --> 00:17:01
+And then, similarly here,
+now that we've executed this
+
+198
+00:17:01 --> 00:17:06
+and this, we can now execute
+this guy here.
+
+199
+00:17:06 --> 00:17:11
+And so, those returns go to
+there.
+
+200
+00:17:11 --> 00:17:17
+Likewise here,
+this guy can now execute his C,
+
+201
+00:17:17 --> 00:17:26
+and now once both of those are
+done, we can execute this guy
+
+202
+00:17:26 --> 00:17:30
+here.
+And then we are done.
+
+203
+00:17:30 --> 00:17:41
+This is our final thread.
+So, I should have labeled also
+
+204
+00:17:41 --> 00:17:53
+that when I get one of these
+guys here, that's a return edge.
+
+205
+00:17:53 --> 00:18:01
+So, the three types of edges
+are spawn, return,
+
+206
+00:18:01 --> 00:18:08
+and continuation.
+OK, and by describing it in
+
+207
+00:18:08 --> 00:18:11
+this way, I essentially get a
+DAG that unfolds.
+
+208
+00:18:11 --> 00:18:15
+So, rather than having just a
+serial execution trace,
+
+209
+00:18:15 --> 00:18:19
+I get something where I have
+still some serial dependencies.
+
+210
+00:18:19 --> 00:18:23
+There are still some things
+that have to be done before
+
+211
+00:18:23 --> 00:18:27
+other things,
+but there are also things that
+
+212
+00:18:27 --> 00:18:31
+can be done at the same time.
+So how are we doing?
+
+213
+00:18:31 --> 00:18:35
+Yeah, question?
+Is every spawn were covered by
+
+214
+00:18:35 --> 00:18:38
+a sync, effectively,
+yeah, yeah, effectively.
+
+215
+00:18:38 --> 00:18:43
+There's actually a null thread
+that gets executed in there,
+
+216
+00:18:43 --> 00:18:45
+which I hadn't bothered to
+show.
+
+217
+00:18:45 --> 00:18:50
+But yes, basically you would
+then not have any parallelism,
+
+218
+00:18:50 --> 00:18:54
+OK, because you would spawn it
+off, but then you're not doing
+
+219
+00:18:54 --> 00:18:58
+anything in the parent.
+So it's pretty much the same,
+
+220
+00:18:58 --> 00:19:03
+yeah, as if it had executed
+serially.
+
+221
+00:19:03 --> 00:19:06
+Yep, OK, so you can see that
+basically what we had here in
+
+222
+00:19:06 --> 00:19:09
+some sense is a DAG embedded in
+a tree.
+
+223
+00:19:09 --> 00:19:13
+OK, so you have a tree that's
+sort of the procedure structure,
+
+224
+00:19:13 --> 00:19:16
+but in their you have a DAG,
+and that DAG can actually get
+
+225
+00:19:16 --> 00:19:20
+to be pretty complicated.
+OK, now what I want to do is
+
+226
+00:19:20 --> 00:19:23
+now that we understand that
+we've got an underlying DAG,
+
+227
+00:19:23 --> 00:19:27
+I want to switch to trying to
+study the performance attributes
+
+228
+00:19:27 --> 00:19:31
+of a particular DAG execution,
+so looking at performance
+
+229
+00:19:31 --> 00:19:33
+measures.
+
+230
+00:19:33 --> 00:19:45
+
+
+231
+00:19:45 --> 00:19:55
+So, the notation that we'll use
+is we'll let T_P be the running
+
+232
+00:19:55 --> 00:20:05
+time of whatever our computation
+is on P processors.
+
+233
+00:20:05 --> 00:20:07
+OK, so, T_P is,
+how long does it take to
+
+234
+00:20:07 --> 00:20:10
+execute this on P processors?
+Now, in general,
+
+235
+00:20:10 --> 00:20:13
+this is not going to be just a
+particular number,
+
+236
+00:20:13 --> 00:20:17
+OK, because I can have
+different scheduling disciplines
+
+237
+00:20:17 --> 00:20:20
+would lead me to get numbers for
+T_P, OK?
+
+238
+00:20:20 --> 00:20:22
+But when we talk about the
+running time,
+
+239
+00:20:22 --> 00:20:26
+we'll still sort of use this
+notation, and I'll try to be
+
+240
+00:20:26 --> 00:20:30
+careful as we go through to make
+sure that there's no confusion
+
+241
+00:20:30 --> 00:20:34
+about what that means in
+context.
+
+242
+00:20:34 --> 00:20:38
+There are a couple of them,
+though, which are fairly well
+
+243
+00:20:38 --> 00:20:40
+defined.
+One is based on this.
+
+244
+00:20:40 --> 00:20:43
+One is T_1.
+So, T_1 is the running time on
+
+245
+00:20:43 --> 00:20:46
+one processor.
+OK, so if I were to execute
+
+246
+00:20:46 --> 00:20:49
+this on one processor,
+you can imagine it's just as if
+
+247
+00:20:49 --> 00:20:53
+I had just gotten rid of the
+spawn, and syncs,
+
+248
+00:20:53 --> 00:20:55
+and everything,
+and just executed it.
+
+249
+00:20:55 --> 00:21:00
+That will give me a particular
+running time.
+
+250
+00:21:00 --> 00:21:06
+We call that running time on
+one processor the work.
+
+251
+00:21:06 --> 00:21:10
+It's essentially the serial
+time.
+
+252
+00:21:10 --> 00:21:16
+OK, so when we talk about the
+work of a computation,
+
+253
+00:21:16 --> 00:21:22
+we just been essentially a
+serial running time.
+
+254
+00:21:22 --> 00:21:30
+OK, the other measure that ends
+up being interesting is what we
+
+255
+00:21:30 --> 00:21:35
+call T infinity.
+OK, and this is the critical
+
+256
+00:21:35 --> 00:21:40
+pathlength, OK,
+which is essentially the
+
+257
+00:21:40 --> 00:21:46
+longest path in the DAG.
+So, for example,
+
+258
+00:21:46 --> 00:21:50
+if we look at the fib of four
+in this example,
+
+259
+00:21:50 --> 00:21:54
+it has T of one equal to,
+so let's assume we have unit
+
+260
+00:21:54 --> 00:21:58
+time threads.
+I know they're not unit time,
+
+261
+00:21:58 --> 00:22:01
+but let's just imagine,
+for the purposes of
+
+262
+00:22:01 --> 00:22:06
+understanding this,
+that every thread costs me one
+
+263
+00:22:06 --> 00:22:12
+unit of time to execute.
+What would be the work of this
+
+264
+00:22:12 --> 00:22:16
+particular computation?
+17, right, OK,
+
+265
+00:22:16 --> 00:22:21
+because all we do is just add
+up three, six,
+
+266
+00:22:21 --> 00:22:24
+nine, 12, 13,
+14, 15, 16, 17.
+
+267
+00:22:24 --> 00:22:32
+So, the work is 17 in this case
+if it were unit time threads.
+
+268
+00:22:32 --> 00:22:35
+In general, you would add up
+how many instructions or
+
+269
+00:22:35 --> 00:22:39
+whatever were in there.
+OK, and then T infinity is the
+
+270
+00:22:39 --> 00:22:42
+longest path.
+So, this is the longest
+
+271
+00:22:42 --> 00:22:44
+sequence.
+It's like, if you had an
+
+272
+00:22:44 --> 00:22:48
+infinite number of processors,
+you still can't just do
+
+273
+00:22:48 --> 00:22:52
+everything at once because some
+things have to come before other
+
+274
+00:22:52 --> 00:22:55
+things.
+But if you had an infinite
+
+275
+00:22:55 --> 00:22:59
+number of processors,
+as many processors as you want,
+
+276
+00:22:59 --> 00:23:04
+what's the fastest you could
+possibly execute this?
+
+277
+00:23:04 --> 00:23:07
+A little trickier.
+Seven?
+
+278
+00:23:07 --> 00:23:12
+So, what's your seven?
+So, one, two,
+
+279
+00:23:12 --> 00:23:17
+three, four,
+five, six, seven,
+
+280
+00:23:17 --> 00:23:22
+eight, yeah,
+eight is the longest path.
+
+281
+00:23:22 --> 00:23:30
+So, the work and the critical
+path length, as we'll see,
+
+282
+00:23:30 --> 00:23:38
+are key attributes of any
+computation.
+
+283
+00:23:38 --> 00:23:44
+And abstractly,
+and this is just for [the
+
+284
+00:23:44 --> 00:23:50
+notes?], if they're unit time
+threads.
+
+285
+00:23:50 --> 00:23:59
+OK, so we can use these two
+measures to derive lower bounds
+
+286
+00:23:59 --> 00:24:07
+on T_P for P that fall between
+one and infinity,
+
+287
+00:24:07 --> 00:24:09
+OK?
+
+288
+00:24:09 --> 00:24:20
+
+
+289
+00:24:20 --> 00:24:30
+OK, so the first lower bound we
+can derive is that T_P has got
+
+290
+00:24:30 --> 00:24:39
+to be at least T_1 over P.
+OK, so why is that a lower
+
+291
+00:24:39 --> 00:24:42
+bound?
+Yeah?
+
+292
+00:24:42 --> 00:24:57
+But if I have P processors,
+and, OK, and why would I have
+
+293
+00:24:57 --> 00:25:05
+this lower bound?
+OK, yeah, you've got the right
+
+294
+00:25:05 --> 00:25:07
+idea.
+So, but can we be a little bit
+
+295
+00:25:07 --> 00:25:10
+more articulate about it?
+So, that's right,
+
+296
+00:25:10 --> 00:25:13
+so you want to use all of
+processors.
+
+297
+00:25:13 --> 00:25:17
+If you could use all of
+processors, why couldn't I use
+
+298
+00:25:17 --> 00:25:20
+all the processors,
+though, and have T_P be less
+
+299
+00:25:20 --> 00:25:23
+than this?
+Why does it have to be at least
+
+300
+00:25:23 --> 00:25:27
+as big as T_1 over P?
+I'm just asking for a little
+
+301
+00:25:27 --> 00:25:31
+more precision in the answer.
+You've got exactly the right
+
+302
+00:25:31 --> 00:25:35
+idea, but I need a little more
+precision if we're going to
+
+303
+00:25:35 --> 00:25:41
+persuade the rest of the class
+that this is the lower bound.
+
+304
+00:25:41 --> 00:25:42
+Yeah?
+
+305
+00:25:42 --> 00:25:50
+
+
+306
+00:25:50 --> 00:25:53
+Yeah, that's another way of
+looking at it.
+
+307
+00:25:53 --> 00:25:56
+If you were to serialize the
+computation, OK,
+
+308
+00:25:56 --> 00:25:59
+so whatever things you execute
+on each step,
+
+309
+00:25:59 --> 00:26:02
+you do P of them,
+and so if you serialized it,
+
+310
+00:26:02 --> 00:26:07
+somehow then it would take you
+P steps to execute one step of a
+
+311
+00:26:07 --> 00:26:09
+P way, a machine with P
+processors.
+
+312
+00:26:09 --> 00:26:11
+So then, OK,
+yeah?
+
+313
+00:26:11 --> 00:26:13
+OK, maybe a little more
+precise.
+
+314
+00:26:13 --> 00:26:15
+David?
+
+315
+00:26:15 --> 00:26:28
+
+
+316
+00:26:28 --> 00:26:33
+Yeah, good, so let me just
+state this a little bit.
+
+317
+00:26:33 --> 00:26:38
+So, P processors,
+so what are we relying on?
+
+318
+00:26:38 --> 00:26:43
+P processors can do,
+at most, P work in one step,
+
+319
+00:26:43 --> 00:26:47
+right?
+So, in one step they do,
+
+320
+00:26:47 --> 00:26:52
+at most P work.
+They can't do more than P work.
+
+321
+00:26:52 --> 00:26:58
+And so, if they can do,
+at most P work in one step,
+
+322
+00:26:58 --> 00:27:02
+then if the number of steps
+was, in fact,
+
+323
+00:27:02 --> 00:27:08
+less than T_1 over P,
+they would be able to do more
+
+324
+00:27:08 --> 00:27:15
+than T_1 work in P steps.
+And, there's only T_1 work to
+
+325
+00:27:15 --> 00:27:19
+be done.
+OK, I just stated that almost
+
+326
+00:27:19 --> 00:27:22
+as badly as all the responses I
+got.
+
+327
+00:27:22 --> 00:27:25
+[LAUGHTER] OK,
+P processors can do,
+
+328
+00:27:25 --> 00:27:30
+at most, P work in one step,
+right?
+
+329
+00:27:30 --> 00:27:34
+So, if there's T_1 work to be
+done, the number of steps is
+
+330
+00:27:34 --> 00:27:37
+going to be at least T_1 over P,
+OK?
+
+331
+00:27:37 --> 00:27:40
+There we go.
+OK, it wasn't that hard.
+
+332
+00:27:40 --> 00:27:43
+It's just like,
+I've got a certain amount of,
+
+333
+00:27:43 --> 00:27:46
+I've got T_1 work to do.
+I can knock off,
+
+334
+00:27:46 --> 00:27:49
+at most, P on every step.
+How many steps?
+
+335
+00:27:49 --> 00:27:53
+Just divide.
+OK, so it's going to have to be
+
+336
+00:27:53 --> 00:27:55
+at least that amount.
+OK, good.
+
+337
+00:27:55 --> 00:27:59
+The other lower bound is T_P is
+greater than or equal to T
+
+338
+00:27:59 --> 00:28:04
+infinity.
+Somebody explain to me why that
+
+339
+00:28:04 --> 00:28:06
+might be true.
+Yeah?
+
+340
+00:28:06 --> 00:28:10
+Yeah, if you have an infinite
+number of processors,
+
+341
+00:28:10 --> 00:28:13
+you have P.
+so if you could do it in a
+
+342
+00:28:13 --> 00:28:18
+certain amount of time with P,
+you can certainly do it in that
+
+343
+00:28:18 --> 00:28:21
+time with an infinite number of
+processors.
+
+344
+00:28:21 --> 00:28:25
+OK, this is in this model
+where, you know,
+
+345
+00:28:25 --> 00:28:29
+there is lots of stuff that
+this model doesn't model like
+
+346
+00:28:29 --> 00:28:32
+communication costs and
+interference,
+
+347
+00:28:32 --> 00:28:37
+and all sorts of things.
+But it is simple model,
+
+348
+00:28:37 --> 00:28:41
+which actually in practice
+works out pretty well,
+
+349
+00:28:41 --> 00:28:45
+OK, you're not going to be able
+to do more work with P
+
+350
+00:28:45 --> 00:28:51
+processors than you are with an
+infinite number of processors.
+
+351
+00:28:51 --> 00:29:06
+
+
+352
+00:29:06 --> 00:29:12
+OK, so those are helpful bounds
+to understand when we are trying
+
+353
+00:29:12 --> 00:29:17
+to make something go faster,
+it's nice to know what you
+
+354
+00:29:17 --> 00:29:23
+could possibly hope to achieve,
+OK, as opposed to beating your
+
+355
+00:29:23 --> 00:29:28
+head against a wall,
+how come I can't get it to go
+
+356
+00:29:28 --> 00:29:33
+much faster?
+Maybe it's because one of these
+
+357
+00:29:33 --> 00:29:39
+lower bounds is operating.
+OK, well, we're interested in
+
+358
+00:29:39 --> 00:29:44
+how fast we can go.
+That's the main reason for
+
+359
+00:29:44 --> 00:29:51
+using multiple processors is you
+hope you're going to go faster
+
+360
+00:29:51 --> 00:29:55
+than you could with one
+processor.
+
+361
+00:29:55 --> 00:30:03
+So, we define T_1 over T_P to
+be the speedup on P processors.
+
+362
+00:30:03 --> 00:30:09
+OK, so we say,
+how much faster is it on P
+
+363
+00:30:09 --> 00:30:14
+processors than on one
+processor?
+
+364
+00:30:14 --> 00:30:22
+OK, that's the speed up.
+If T_1 over T_P is order P,
+
+365
+00:30:22 --> 00:30:27
+we say that it's linear
+speedup.
+
+366
+00:30:27 --> 00:30:32
+OK, in other words,
+why?
+
+367
+00:30:32 --> 00:30:38
+Because that says that it means
+that if I've thrown P processors
+
+368
+00:30:38 --> 00:30:44
+at the job I'm going to get a
+speedup that's proportional to
+
+369
+00:30:44 --> 00:30:46
+P.
+OK, so when I throw P
+
+370
+00:30:46 --> 00:30:51
+processors at the job and I get
+T_P, if that's order P,
+
+371
+00:30:51 --> 00:30:57
+that means that in some sense
+my processors each contributed
+
+372
+00:30:57 --> 00:31:04
+within a constant factor its
+full measure of support.
+
+373
+00:31:04 --> 00:31:08
+If this, in fact,
+were equal to P,
+
+374
+00:31:08 --> 00:31:13
+we'd call that perfect linear
+speedup.
+
+375
+00:31:13 --> 00:31:20
+OK, so but here we're looking
+at giving ourselves,
+
+376
+00:31:20 --> 00:31:27
+for theoretical purposes,
+a little bit of a constant
+
+377
+00:31:27 --> 00:31:34
+buffer here, perhaps.
+If T_1 over T_P is greater than
+
+378
+00:31:34 --> 00:31:41
+P, we call that super linear
+speedup.
+
+379
+00:31:41 --> 00:31:45
+OK, so can somebody tell me,
+when can I get super linear
+
+380
+00:31:45 --> 00:31:46
+speedup?
+
+381
+00:31:46 --> 00:31:56
+
+
+382
+00:31:56 --> 00:31:59
+When can I get super linear
+speed up?
+
+383
+00:31:59 --> 00:32:01
+Never.
+OK, why never?
+
+384
+00:32:01 --> 00:32:06
+Yeah, if we buy these lower
+bounds, the first lower bound
+
+385
+00:32:06 --> 00:32:11
+there, it is T_P is greater than
+or equal to T_1 over P.
+
+386
+00:32:11 --> 00:32:17
+And, if I just take T_1 over
+T_P, that says it's less than or
+
+387
+00:32:17 --> 00:32:19
+equal to P.
+so, this is never,
+
+388
+00:32:19 --> 00:32:25
+OK, not possible in this model.
+OK, there are other models
+
+389
+00:32:25 --> 00:32:30
+where it is possible to get
+super linear speed up due to
+
+390
+00:32:30 --> 00:32:36
+caching effects,
+and things of that nature.
+
+391
+00:32:36 --> 00:32:43
+But in this simple model that
+we are dealing with,
+
+392
+00:32:43 --> 00:32:50
+it's not possible to get super
+linear speedup.
+
+393
+00:32:50 --> 00:32:57
+OK, not possible.
+Now, the maximum possible
+
+394
+00:32:57 --> 00:33:06
+speedup, given some amount of
+work and critical path length is
+
+395
+00:33:06 --> 00:33:13
+what?
+What's the maximum possible
+
+396
+00:33:13 --> 00:33:20
+speed up I could get over any
+number of processors?
+
+397
+00:33:20 --> 00:33:26
+What's the maximum I could
+possibly get?
+
+398
+00:33:26 --> 00:33:32
+No, I'm saying,
+no matter how many processors,
+
+399
+00:33:32 --> 00:33:40
+what's the most speedup that I
+could get?
+
+400
+00:33:40 --> 00:33:44
+T_1 over T infinity,
+because this is the,
+
+401
+00:33:44 --> 00:33:49
+so T_1 over T infinity is the
+maximum I could possibly get.
+
+402
+00:33:49 --> 00:33:55
+OK, if I threw an infinite
+number of processors at the
+
+403
+00:33:55 --> 00:34:00
+problem, that's going to give me
+my biggest speedup.
+
+404
+00:34:00 --> 00:34:05
+OK, and we call that the
+parallelism.
+
+405
+00:34:05 --> 00:34:08
+OK, so that's defined to be the
+parallelism.
+
+406
+00:34:08 --> 00:34:11
+So the parallelism of the
+particular algorithm is
+
+407
+00:34:11 --> 00:34:16
+essentially the work divided by
+the critical path length.
+
+408
+00:34:16 --> 00:34:31
+Another way of viewing it is
+that this is the average amount
+
+409
+00:34:31 --> 00:34:46
+of work that can be done in
+parallel along each step of the
+
+410
+00:34:46 --> 00:34:57
+critical path.
+And, we denote it often by P
+
+411
+00:34:57 --> 00:35:01
+bar.
+So, do not get confused.
+
+412
+00:35:01 --> 00:35:05
+P bar does not have anything to
+do with P at some level.
+
+413
+00:35:05 --> 00:35:10
+OK, P is going to be a certain
+number of processors you're
+
+414
+00:35:10 --> 00:35:13
+running.
+P bar is defined just in terms
+
+415
+00:35:13 --> 00:35:17
+of the computation you're
+executing, not in terms of the
+
+416
+00:35:17 --> 00:35:21
+machine you're running it on.
+OK, it's just the average
+
+417
+00:35:21 --> 00:35:25
+amount of work that can be done
+in parallel along each step of
+
+418
+00:35:25 --> 00:35:30
+the critical path.
+OK, questions so far?
+
+419
+00:35:30 --> 00:35:33
+So mostly we're just doing
+definitions so far.
+
+420
+00:35:33 --> 00:35:37
+OK, now we get into,
+OK, so it's helpful to know
+
+421
+00:35:37 --> 00:35:41
+what the parallelism is,
+because the parallelism is
+
+422
+00:35:41 --> 00:35:46
+going to, there's no real point
+in trying to get speed up bigger
+
+423
+00:35:46 --> 00:35:50
+than the parallelism.
+OK, so if you are given a
+
+424
+00:35:50 --> 00:35:53
+particular computation,
+you'll be able to say,
+
+425
+00:35:53 --> 00:35:58
+oh, it doesn't go any faster.
+You're throwing more processors
+
+426
+00:35:58 --> 00:36:03
+at it.
+Why is it that going any
+
+427
+00:36:03 --> 00:36:07
+faster?
+And the answer could be,
+
+428
+00:36:07 --> 00:36:14
+no more parallelism.
+OK, let's see what I want to,
+
+429
+00:36:14 --> 00:36:20
+yeah, I think we can raise the
+example here.
+
+430
+00:36:20 --> 00:36:25
+We'll talk more about this
+model.
+
+431
+00:36:25 --> 00:36:31
+Mostly, now,
+we're going to just talk about
+
+432
+00:36:31 --> 00:36:35
+DAG's.
+So, we'll talk about the
+
+433
+00:36:35 --> 00:36:43
+programming model next time.
+So, let's talk about
+
+434
+00:36:43 --> 00:36:48
+scheduling.
+The goal of scheduler is to map
+
+435
+00:36:48 --> 00:36:55
+the computation to P processors.
+And this is typically done by a
+
+436
+00:36:55 --> 00:36:59
+runtime system,
+which, if you will,
+
+437
+00:36:59 --> 00:37:06
+is an algorithm that is running
+underneath the language layer
+
+438
+00:37:06 --> 00:37:12
+that I showed you.
+OK, so the programmer designs
+
+439
+00:37:12 --> 00:37:15
+an algorithm using spawns,
+and syncs, and so forth.
+
+440
+00:37:15 --> 00:37:19
+Then, underneath that,
+there's an algorithm that has
+
+441
+00:37:19 --> 00:37:24
+to actually map that executing
+program onto the processors of
+
+442
+00:37:24 --> 00:37:27
+the machine as it executes.
+And that's the scheduler.
+
+443
+00:37:27 --> 00:37:31
+OK, so it's done by the
+language runtime system,
+
+444
+00:37:31 --> 00:37:37
+typically.
+OK, so it turns out that online
+
+445
+00:37:37 --> 00:37:42
+schedulers, let me just say
+they're complex.
+
+446
+00:37:42 --> 00:37:49
+OK, they're not necessarily
+easy things to build.
+
+447
+00:37:49 --> 00:37:53
+OK, they're not too bad
+actually.
+
+448
+00:37:53 --> 00:38:01
+But, we are not going to go
+there because we only have two
+
+449
+00:38:01 --> 00:38:07
+lectures to do this.
+Instead, we're going to do is
+
+450
+00:38:07 --> 00:38:16
+we'll illustrate the ideas using
+off-line scheduling.
+
+451
+00:38:16 --> 00:38:20
+OK, so you'll get an idea out
+of this for what a scheduler
+
+452
+00:38:20 --> 00:38:24
+does, and it turns out that
+doing these things online is
+
+453
+00:38:24 --> 00:38:27
+another level of complexity
+beyond that.
+
+454
+00:38:27 --> 00:38:31
+And typically,
+the online schedulers that are
+
+455
+00:38:31 --> 00:38:35
+good, these days,
+are randomized schedulers.
+
+456
+00:38:35 --> 00:38:42
+And they have very strong
+proofs of their ability to
+
+457
+00:38:42 --> 00:38:46
+perform.
+But we're not going to go
+
+458
+00:38:46 --> 00:38:50
+there.
+We'll keep it simple.
+
+459
+00:38:50 --> 00:38:56
+And in particular,
+we're going to look at a
+
+460
+00:38:56 --> 00:39:05
+particular type of scheduler
+called a greedy scheduler.
+
+461
+00:39:05 --> 00:39:09
+So, if you have a DAG to
+execute, so the basic rules of
+
+462
+00:39:09 --> 00:39:15
+the scheduler is you can't
+execute a node until all of the
+
+463
+00:39:15 --> 00:39:19
+nodes that precede it in the DAG
+have executed.
+
+464
+00:39:19 --> 00:39:24
+OK, so you've got to wait until
+everything is executed.
+
+465
+00:39:24 --> 00:39:29
+So, a greedy scheduler,
+what it says is let's just try
+
+466
+00:39:29 --> 00:39:34
+to do as much as possible on
+every step, OK?
+
+467
+00:39:34 --> 00:39:50
+
+
+468
+00:39:50 --> 00:39:52
+In other words,
+it says I'm never going to try
+
+469
+00:39:52 --> 00:39:56
+to guess that it's worthwhile
+delaying doing something.
+
+470
+00:39:56 --> 00:40:00
+If I could do something now,
+I'm going to do it.
+
+471
+00:40:00 --> 00:40:08
+And so, each step is going to
+correspond to be one of two
+
+472
+00:40:08 --> 00:40:13
+types.
+The first type is what we'll
+
+473
+00:40:13 --> 00:40:21
+call a complete step.
+And this is a step in which
+
+474
+00:40:21 --> 00:40:27
+there are at least P threads
+ready to run.
+
+475
+00:40:27 --> 00:40:34
+And, I'm executing on P
+processors.
+
+476
+00:40:34 --> 00:40:38
+There are at least P threads
+ready to run.
+
+477
+00:40:38 --> 00:40:42
+So, what's a greedy strategy
+here?
+
+478
+00:40:42 --> 00:40:48
+I've got P processors.
+I've got at least P threads.
+
+479
+00:40:48 --> 00:40:52
+Run any P.
+Yeah, first P would be if you
+
+480
+00:40:52 --> 00:40:57
+had a notion of ordering.
+That would be perfectly
+
+481
+00:40:57 --> 00:41:02
+reasonable.
+Here, we are just going to
+
+482
+00:41:02 --> 00:41:07
+execute any P.
+We might make a mistake there,
+
+483
+00:41:07 --> 00:41:10
+because there may be a
+particular one that if we
+
+484
+00:41:10 --> 00:41:14
+execute now, that'll enable more
+parallelism later on.
+
+485
+00:41:14 --> 00:41:18
+We might not execute that one.
+We don't know.
+
+486
+00:41:18 --> 00:41:21
+OK, but basically,
+what we're going to do is just
+
+487
+00:41:21 --> 00:41:24
+execute any P willy-nilly.
+So, there's some,
+
+488
+00:41:24 --> 00:41:27
+if you will,
+non-determinism in this step
+
+489
+00:41:27 --> 00:41:32
+here because which one you
+execute may or may not be a good
+
+490
+00:41:32 --> 00:41:38
+choice.
+OK, the second type of step
+
+491
+00:41:38 --> 00:41:45
+we're going to have is an
+incomplete step.
+
+492
+00:41:45 --> 00:41:55
+And this is a situation where
+we have fewer than P threads
+
+493
+00:41:55 --> 00:42:04
+ready to run.
+So, what's our strategy there?
+
+494
+00:42:04 --> 00:42:10
+Execute all of them.
+OK, if it's greedy,
+
+495
+00:42:10 --> 00:42:19
+no point in not executing.
+OK, so if I've got more than P
+
+496
+00:42:19 --> 00:42:25
+threads ready to run,
+I execute any P.
+
+497
+00:42:25 --> 00:42:32
+If I have fewer than P threads
+ready to run,
+
+498
+00:42:32 --> 00:42:39
+we execute all of them.
+So, it turns out this is a good
+
+499
+00:42:39 --> 00:42:42
+strategy.
+It's not a perfect strategy.
+
+500
+00:42:42 --> 00:42:48
+In fact, the strategy of trying
+to schedule optimally a DAG on P
+
+501
+00:42:48 --> 00:42:53
+processors is NP complete,
+meaning it's very difficult.
+
+502
+00:42:53 --> 00:42:57
+So, those of you going to take
+6.045 or 6.840,
+
+503
+00:42:57 --> 00:43:01
+I highly recommend these
+courses, and we'll talk more
+
+504
+00:43:01 --> 00:43:06
+about that in the last lecture
+as we talked a little bit about
+
+505
+00:43:06 --> 00:43:13
+what's coming up in the theory
+engineering concentration.
+
+506
+00:43:13 --> 00:43:16
+You can learn about NP
+completeness and about how you
+
+507
+00:43:16 --> 00:43:19
+show that certain problems,
+there are no good algorithms
+
+508
+00:43:19 --> 00:43:22
+for them, OK,
+that we are aware of,
+
+509
+00:43:22 --> 00:43:24
+OK, and what exactly that
+means.
+
+510
+00:43:24 --> 00:43:28
+So, it turns out that this type
+of scheduling problem turns out
+
+511
+00:43:28 --> 00:43:32
+to be a very difficult problem
+to get it optimal.
+
+512
+00:43:32 --> 00:43:46
+But, there's nice theorem,
+due independently to Graham and
+
+513
+00:43:46 --> 00:43:53
+Brent.
+It says, essentially,
+
+514
+00:43:53 --> 00:44:05
+a greedy scheduler executes any
+computation,
+
+515
+00:44:05 --> 00:44:15
+G, with work,
+T_1, and critical path length,
+
+516
+00:44:15 --> 00:44:27
+T infinity in time,
+T_P, less than or equal to T_1
+
+517
+00:44:27 --> 00:44:34
+over P plus T infinity --
+
+518
+00:44:34 --> 00:44:44
+
+
+519
+00:44:44 --> 00:44:49
+-- on a computer with P
+processors.
+
+520
+00:44:49 --> 00:44:56
+OK, so, it says that I can
+achieve T_1 over P plus T
+
+521
+00:44:56 --> 00:45:02
+infinity.
+So, what does that say?
+
+522
+00:45:02 --> 00:45:09
+If we take a look and compare
+this with our lower bounds on
+
+523
+00:45:09 --> 00:45:16
+runtime, how efficient is this?
+How does this compare with the
+
+524
+00:45:16 --> 00:45:22
+optimal execution?
+Yeah, it's two competitive.
+
+525
+00:45:22 --> 00:45:30
+It's within a factor of two of
+optimal because this is a lower
+
+526
+00:45:30 --> 00:45:37
+bound and this is a lower bound.
+And so, if I take twice the max
+
+527
+00:45:37 --> 00:45:41
+of these two,
+twice the maximum of these two,
+
+528
+00:45:41 --> 00:45:44
+that's going to be bigger than
+the sum.
+
+529
+00:45:44 --> 00:45:49
+So, I'm within a factor of two
+of which ever is the stronger,
+
+530
+00:45:49 --> 00:45:54
+lower bound for any situation.
+So, this says you get within a
+
+531
+00:45:54 --> 00:45:58
+factor of two of efficiency of
+scheduling in terms of the
+
+532
+00:45:58 --> 00:46:04
+runtime on P processors.
+OK, does everybody see that?
+
+533
+00:46:04 --> 00:46:10
+So, let's prove this theorem.
+It's quite an elegant theorem.
+
+534
+00:46:10 --> 00:46:15
+It's not a hard theorem.
+One of the nice things,
+
+535
+00:46:15 --> 00:46:20
+by the way, about this week,
+is that nothing is very hard.
+
+536
+00:46:20 --> 00:46:25
+It just requires you to think
+differently.
+
+537
+00:46:25 --> 00:46:31
+OK, so the proof has to do with
+counting up how many complete
+
+538
+00:46:31 --> 00:46:35
+steps we have,
+and how many incomplete steps
+
+539
+00:46:35 --> 00:46:41
+we have.
+OK, so we'll start with the
+
+540
+00:46:41 --> 00:46:49
+number of complete steps.
+So, can somebody tell me what's
+
+541
+00:46:49 --> 00:46:58
+the largest number of complete
+steps I could possibly have?
+
+542
+00:46:58 --> 00:47:05
+Yeah, I heard somebody mumble
+it back there.
+
+543
+00:47:05 --> 00:47:08
+T_1 over P.
+Why is that?
+
+544
+00:47:08 --> 00:47:17
+Yeah, so the number of complete
+steps is, at most,
+
+545
+00:47:17 --> 00:47:25
+T_1 over P because why?
+Yeah, once you've had this
+
+546
+00:47:25 --> 00:47:32
+many, you've done T_1 work,
+OK?
+
+547
+00:47:32 --> 00:47:36
+So, every complete step I'm
+getting P work done.
+
+548
+00:47:36 --> 00:47:41
+So, if I did more than T_1 over
+P steps, there would be no more
+
+549
+00:47:41 --> 00:47:45
+work to be done.
+So, the number of complete
+
+550
+00:47:45 --> 00:47:49
+steps can't be bigger than T_1
+over P.
+
+551
+00:47:49 --> 00:48:10
+
+
+552
+00:48:10 --> 00:48:16
+OK, so that's this piece.
+OK, now we're going to count up
+
+553
+00:48:16 --> 00:48:21
+the incomplete steps,
+and show its bounded by T
+
+554
+00:48:21 --> 00:48:25
+infinity.
+OK, so let's consider an
+
+555
+00:48:25 --> 00:48:31
+incomplete step.
+And, let's see what happens.
+
+556
+00:48:31 --> 00:48:39
+
+
+557
+00:48:39 --> 00:48:57
+And, let's let G prime be the
+subgraph of G that remains to be
+
+558
+00:48:57 --> 00:49:02
+executed.
+OK, so we'll draw a picture
+
+559
+00:49:02 --> 00:49:04
+here.
+So, imagine we have,
+
+560
+00:49:04 --> 00:49:07
+let's draw it on a new board.
+
+561
+00:49:07 --> 00:49:26
+
+
+562
+00:49:26 --> 00:49:32
+So here, we're going to have a
+graph, our graph,
+
+563
+00:49:32 --> 00:49:36
+G.
+We're going to do actually P
+
+564
+00:49:36 --> 00:49:40
+equals three as our example
+here.
+
+565
+00:49:40 --> 00:49:45
+So, imagine that this is the
+graph, G.
+
+566
+00:49:45 --> 00:49:52
+And, I'm not showing the
+procedures here because this
+
+567
+00:49:52 --> 00:50:00
+actually is a theorem that works
+for any DAG.
+
+568
+00:50:00 --> 00:50:09
+And, the procedure outlines are
+not necessary.
+
+569
+00:50:09 --> 00:50:16
+All we care about is the
+threads.
+
+570
+00:50:16 --> 00:50:25
+I missed one.
+OK, so imagine that's my DAG,
+
+571
+00:50:25 --> 00:50:38
+G, and imagine that I have
+executed up to this point.
+
+572
+00:50:38 --> 00:50:47
+Which ones have I executed?
+Yeah, I've executed these guys.
+
+573
+00:50:47 --> 00:50:57
+So, the things that are in G
+prime are just the things that
+
+574
+00:50:57 --> 00:51:04
+have yet to be executed.
+And these guys are the ones
+
+575
+00:51:04 --> 00:51:09
+that are already executed.
+And, we'll imagine that all of
+
+576
+00:51:09 --> 00:51:14
+them are unit time threads
+without loss of generality.
+
+577
+00:51:14 --> 00:51:19
+The theorem would go through,
+even if each of these had a
+
+578
+00:51:19 --> 00:51:23
+particular time associated with
+it.
+
+579
+00:51:23 --> 00:51:27
+The same scheduling algorithm
+will work just fine.
+
+580
+00:51:27 --> 00:51:32
+So, how can I characterize the
+threads that are ready to be
+
+581
+00:51:32 --> 00:51:38
+executed?
+Which are the threads that are
+
+582
+00:51:38 --> 00:51:42
+ready to be executed here?
+Let's just see.
+
+583
+00:51:42 --> 00:51:46
+So, that one?
+No, that's not ready to be
+
+584
+00:51:46 --> 00:51:48
+executed.
+Why?
+
+585
+00:51:48 --> 00:51:52
+Because it's got a predecessor
+here, this guy.
+
+586
+00:51:52 --> 00:51:59
+OK, so this guy is ready to be
+executed, and this guy is ready
+
+587
+00:51:59 --> 00:52:04
+to be executed.
+OK, so those two threads are
+
+588
+00:52:04 --> 00:52:08
+ready to be, how can I
+characterize this?
+
+589
+00:52:08 --> 00:52:12
+What's their property?
+What's a graph theoretic
+
+590
+00:52:12 --> 00:52:17
+property in G prime that tells
+me whether or not something is
+
+591
+00:52:17 --> 00:52:21
+ready to be executed?
+It has no predecessor,
+
+592
+00:52:21 --> 00:52:24
+but what's another way of
+saying that?
+
+593
+00:52:24 --> 00:52:29
+It's got no predecessor in G
+prime.
+
+594
+00:52:29 --> 00:52:38
+What does it mean for a node
+not to have a predecessor in a
+
+595
+00:52:38 --> 00:52:43
+graph?
+Its in degree is zero,
+
+596
+00:52:43 --> 00:52:46
+right?
+Same thing.
+
+597
+00:52:46 --> 00:52:56
+OK, the threads with in degree,
+zero and G prime are the ones
+
+598
+00:52:56 --> 00:53:06
+that are ready to be executed.
+OK, and if it's incomplete
+
+599
+00:53:06 --> 00:53:11
+step, what do I do?
+I'm going to execute says,
+
+600
+00:53:11 --> 00:53:17
+if it's an incomplete step,
+I execute all of them.
+
+601
+00:53:17 --> 00:53:24
+OK, so I execute all of these.
+OK, now I execute all of the in
+
+602
+00:53:24 --> 00:53:30
+degree zero threads,
+what happens to the critical
+
+603
+00:53:30 --> 00:53:38
+path length of the graph that
+remains to be executed?
+
+604
+00:53:38 --> 00:53:48
+It decreases by one.
+OK, so the critical path length
+
+605
+00:53:48 --> 00:54:00
+of what remains to be executed,
+G prime, is reduced by one.
+
+606
+00:54:00 --> 00:54:04
+So, what's left to be executed
+on every incomplete step,
+
+607
+00:54:04 --> 00:54:08
+what's left to be executed
+always reduces by one.
+
+608
+00:54:08 --> 00:54:12
+Notice the next step here is
+going to be a complete step,
+
+609
+00:54:12 --> 00:54:16
+because I've got four things
+that are ready to go.
+
+610
+00:54:16 --> 00:54:21
+And, I can execute them in such
+a way that the critical path
+
+611
+00:54:21 --> 00:54:24
+length doesn't get reduced on
+that step.
+
+612
+00:54:24 --> 00:54:29
+OK, but if I had to execute all
+of them, then it does reduce the
+
+613
+00:54:29 --> 00:54:33
+critical path length.
+Now, of course,
+
+614
+00:54:33 --> 00:54:38
+both could happen,
+OK, at the same time,
+
+615
+00:54:38 --> 00:54:43
+OK, but any time that I have an
+incomplete step,
+
+616
+00:54:43 --> 00:54:50
+I'm guaranteed to reduce the
+critical path length by one.
+
+617
+00:54:50 --> 00:54:56
+OK, so that implies that the
+number of incomplete steps is,
+
+618
+00:54:56 --> 00:55:01
+at most, T infinity.
+And so, therefore,
+
+619
+00:55:01 --> 00:55:05
+T of P is, at most,
+the number of complete steps
+
+620
+00:55:05 --> 00:55:08
+plus the number of incomplete
+steps.
+
+621
+00:55:08 --> 00:55:12
+And we get our bound.
+This is sort of an amortized
+
+622
+00:55:12 --> 00:55:17
+argument if you want to think of
+it that way, OK,
+
+623
+00:55:17 --> 00:55:22
+that at every step I'm either
+amortizing the step against the
+
+624
+00:55:22 --> 00:55:26
+work, or I'm amortizing it
+against the critical path
+
+625
+00:55:26 --> 00:55:32
+length, or possibly both.
+But I'm at least doing one of
+
+626
+00:55:32 --> 00:55:35
+those for every step,
+OK, and so, in the end,
+
+627
+00:55:35 --> 00:55:39
+I just have to add up the two
+contributions.
+
+628
+00:55:39 --> 00:55:42
+Any questions about that?
+So this, by the way,
+
+629
+00:55:42 --> 00:55:46
+is the fundamental theorem of
+all scheduling.
+
+630
+00:55:46 --> 00:55:50
+If ever you study anything
+having to do with scheduling,
+
+631
+00:55:50 --> 00:55:55
+this basic result is sort of
+the foundation of a huge number
+
+632
+00:55:55 --> 00:55:58
+of things.
+And then what people do is they
+
+633
+00:55:58 --> 00:56:01
+gussy it up, like,
+let's do this online,
+
+634
+00:56:01 --> 00:56:05
+OK, with a scheduler,
+etc., that everybody's trying
+
+635
+00:56:05 --> 00:56:09
+to match these bounds,
+OK, of what an omniscient
+
+636
+00:56:09 --> 00:56:14
+greedy scheduler would achieve,
+OK, and there are all kinds of
+
+637
+00:56:14 --> 00:56:19
+other things.
+But this is sort of the basic
+
+638
+00:56:19 --> 00:56:25
+theorem that just pervades the
+whole area of scheduling.
+
+639
+00:56:25 --> 00:56:32
+OK, let's do a quick corollary.
+I'm not going to erase those.
+
+640
+00:56:32 --> 00:56:37
+Those are just too important.
+I want to erase those.
+
+641
+00:56:37 --> 00:56:42
+Let's not erase those.
+I want to erase that either.
+
+642
+00:56:42 --> 00:56:45
+We're going to go back to the
+top.
+
+643
+00:56:45 --> 00:56:51
+Actually, we'll put the
+corollary here because that's
+
+644
+00:56:51 --> 00:56:54
+just one line.
+OK.
+
+645
+00:56:54 --> 00:57:11
+
+
+646
+00:57:11 --> 00:57:17
+The corollary says you get
+linear speed up if the number of
+
+647
+00:57:17 --> 00:57:24
+processors that you allocate,
+that you run your job on is
+
+648
+00:57:24 --> 00:57:31
+order, the parallelism.
+OK, so greedy scheduler gives
+
+649
+00:57:31 --> 00:57:37
+you linear speed up if you're
+running on essentially
+
+650
+00:57:37 --> 00:57:46
+parallelism or fewer processors.
+OK, so let's see why that is.
+
+651
+00:57:46 --> 00:57:51
+And I hope I'll fit this,
+OK?
+
+652
+00:57:51 --> 00:57:58
+So, P bar is T_1 over T
+infinity.
+
+653
+00:57:58 --> 00:58:04
+And that implies that if P
+equals order T_1 over T
+
+654
+00:58:04 --> 00:58:10
+infinity, then that says just
+bringing those around,
+
+655
+00:58:10 --> 00:58:17
+T infinity is order T_1 over P.
+So, everybody with me?
+
+656
+00:58:17 --> 00:58:22
+It's just algebra.
+So, it says this is the
+
+657
+00:58:22 --> 00:58:28
+definition of parallelism,
+T_1 over T infinity,
+
+658
+00:58:28 --> 00:58:35
+and so, if P is order
+parallelism, then it's order T_1
+
+659
+00:58:35 --> 00:58:43
+over T infinity.
+And now, just bring it around.
+
+660
+00:58:43 --> 00:58:49
+It says T infinity is order T_1
+over P.
+
+661
+00:58:49 --> 00:58:56
+So, that says T infinity is
+order T_1 over P.
+
+662
+00:58:56 --> 00:59:03
+OK, and so, therefore,
+continue the proof here,
+
+663
+00:59:03 --> 00:59:12
+thus T_P is at most T_1 over P
+plus T infinity.
+
+664
+00:59:12 --> 00:59:23
+Well, if this is order T_1 over
+P, the whole thing is order T_1
+
+665
+00:59:23 --> 00:59:29
+over P.
+OK, and so, now I have T_P is
+
+666
+00:59:29 --> 00:59:37
+order T_1 over P,
+and what we need is to compute
+
+667
+00:59:37 --> 00:59:45
+T_1 over T_P,
+and that's going to be order
+
+668
+00:59:45 --> 00:59:48
+T_P.
+OK?
+
+669
+00:59:48 --> 00:59:51
+Does everybody see that?
+So what that says is that if I
+
+670
+00:59:51 --> 00:59:54
+have a certain amount of
+parallelism, if I run
+
+671
+00:59:54 --> 00:59:58
+essentially on fewer processors
+than that parallelism,
+
+672
+00:59:58 --> 1:00:02
+I get linear speed up if I use
+greedy scheduling.
+
+673
+1:00:02 --> 1:00:05.077
+OK, if I run on more processors
+than the parallelism,
+
+674
+1:00:05.077 --> 1:00:07.859
+in some sense I'm being
+wasteful because I can't
+
+675
+1:00:07.859 --> 1:00:11.529
+possibly get enough speed up to
+justify those extra processors.
+
+676
+1:00:11.529 --> 1:00:15.021
+So, understanding parallelism
+of a job says that's sort of a
+
+677
+1:00:15.021 --> 1:00:17.862
+limit on the number of
+processors I want to have.
+
+678
+1:00:17.862 --> 1:00:19.757
+And, in fact,
+I can achieve that.
+
+679
+1:00:19.757 --> 1:00:21
+Question?
+
+680
+1:00:21 --> 1:00:39
+
+
+681
+1:00:39 --> 1:00:41.008
+Yeah, really,
+in some sense,
+
+682
+1:00:41.008 --> 1:00:43.611
+this is saying it should be
+omega P.
+
+683
+1:00:43.611 --> 1:00:46.586
+Yeah, so that's fine.
+It's a question of,
+
+684
+1:00:46.586 --> 1:00:48
+so ask again.
+
+685
+1:00:48 --> 1:01:03
+
+
+686
+1:01:03 --> 1:01:06.495
+No, no, it's only if it's
+bounded above by a constant.
+
+687
+1:01:06.495 --> 1:01:08.804
+T_1 and T infinity aren't
+constants.
+
+688
+1:01:08.804 --> 1:01:12.497
+They're variables in this.
+So, we are doing multivariable
+
+689
+1:01:12.497 --> 1:01:15.795
+asymptotic analysis.
+So, any of these things can be
+
+690
+1:01:15.795 --> 1:01:19.555
+a function of anything else,
+and can be growing as much as
+
+691
+1:01:19.555 --> 1:01:22.127
+we want.
+So, the fact that we say we are
+
+692
+1:01:22.127 --> 1:01:26.019
+given it for a particular thing,
+we're really not given that
+
+693
+1:01:26.019 --> 1:01:28.327
+number.
+We're given a whole class of
+
+694
+1:01:28.327 --> 1:01:31.889
+DAG's or whatever of various
+sizes is really what we're
+
+695
+1:01:31.889 --> 1:01:37.788
+talking about.
+So, I can look at the growth.
+
+696
+1:01:37.788 --> 1:01:45.626
+Here, where it's talking about
+the growth of the parallelism,
+
+697
+1:01:45.626 --> 1:01:52.941
+sorry, the growth of the
+runtime T_P as a function of T_1
+
+698
+1:01:52.941 --> 1:01:58.689
+and T infinity.
+So, I am talking about things
+
+699
+1:01:58.689 --> 1:02:03
+that are growing here,
+OK?
+
+700
+1:02:03 --> 1:02:06.018
+OK, so let's put this to work,
+OK?
+
+701
+1:02:06.018 --> 1:02:09.951
+And, in fact,
+so now I'm going to go back to
+
+702
+1:02:09.951 --> 1:02:13.243
+here.
+Now I'm going to tell you about
+
+703
+1:02:13.243 --> 1:02:18.914
+a little bit of my own research,
+and how we use this in some of
+
+704
+1:02:18.914 --> 1:02:23.03
+the work that we did.
+OK, so we've developed a
+
+705
+1:02:23.03 --> 1:02:28.426
+dynamic multithreaded language
+called Cilk, spelled with a C
+
+706
+1:02:28.426 --> 1:02:33
+because it's based on the
+language, C.
+
+707
+1:02:33 --> 1:02:39.837
+And, it's not an acronym
+because silk is like nice
+
+708
+1:02:39.837 --> 1:02:46.953
+threads, OK, although at one
+point my students had a
+
+709
+1:02:46.953 --> 1:02:53.651
+competition for what the acronym
+silk could mean.
+
+710
+1:02:53.651 --> 1:03:01.046
+The winner, turns out,
+was Charles' Idiotic Linguistic
+
+711
+1:03:01.046 --> 1:03:06.214
+Kluge.
+So anyway, if you want to take
+
+712
+1:03:06.214 --> 1:03:10.714
+a look at it,
+you can find some stuff on it
+
+713
+1:03:10.714 --> 1:03:12
+here.
+OK,
+
+714
+1:03:12 --> 1:03:20
+
+
+715
+1:03:20 --> 1:03:28.412
+OK, and what it uses is
+actually one of these more
+
+716
+1:03:28.412 --> 1:03:36.48
+complicated schedulers.
+It's a randomized online
+
+717
+1:03:36.48 --> 1:03:44.206
+scheduler, OK,
+and if you look at its expected
+
+718
+1:03:44.206 --> 1:03:53.476
+runtime on P processors,
+it gets effectively T_1 over P
+
+719
+1:03:53.476 --> 1:04:01.428
+plus O of T infinity provably.
+OK, and empirically,
+
+720
+1:04:01.428 --> 1:04:05.714
+if you actually look at what
+kind of runtimes you get to find
+
+721
+1:04:05.714 --> 1:04:09.285
+out what's hidden in the big O
+there, it turns out,
+
+722
+1:04:09.285 --> 1:04:13.785
+in fact, it's T_1 over P plus T
+infinity with the constants here
+
+723
+1:04:13.785 --> 1:04:16.285
+being very close to one
+empirically.
+
+724
+1:04:16.285 --> 1:04:19.428
+So, no guarantees,
+but this turns out to be a
+
+725
+1:04:19.428 --> 1:04:22.142
+pretty good bound.
+Sometimes, you see a
+
+726
+1:04:22.142 --> 1:04:26.214
+coefficient on T infinity that's
+up maybe close to four or
+
+727
+1:04:26.214 --> 1:04:29.385
+something.
+But generally,
+
+728
+1:04:29.385 --> 1:04:34.533
+you don't see something that's
+much bigger than that.
+
+729
+1:04:34.533 --> 1:04:39.68
+And mostly, it tends to be
+around, if you do a linear
+
+730
+1:04:39.68 --> 1:04:44.729
+regression curve fit,
+you get that the constant here
+
+731
+1:04:44.729 --> 1:04:48.094
+is close to one.
+And so, with this,
+
+732
+1:04:48.094 --> 1:04:54.331
+you get near perfect if you use
+this formula as a model for your
+
+733
+1:04:54.331 --> 1:04:57.795
+runtime.
+You get near perfect linear
+
+734
+1:04:57.795 --> 1:05:03.339
+speed up if the number of
+processors you're running on is
+
+735
+1:05:03.339 --> 1:05:07.892
+much less than your average
+parallelism, which,
+
+736
+1:05:07.892 --> 1:05:14.03
+of course, is the same thing as
+if T infinity is much less than
+
+737
+1:05:14.03 --> 1:05:19.481
+T_1 over P.
+So, what happens here is that
+
+738
+1:05:19.481 --> 1:05:23.247
+when P is much less than P
+infinity, that is,
+
+739
+1:05:23.247 --> 1:05:28.297
+T infinity is much less than
+T_1 over P, this term ceases to
+
+740
+1:05:28.297 --> 1:05:32.319
+matter very much,
+and you get very good speedup,
+
+741
+1:05:32.319 --> 1:05:36
+OK, in fact,
+almost perfect speedup.
+
+742
+1:05:36 --> 1:05:42.357
+So, each processor gives you
+another processor's work as long
+
+743
+1:05:42.357 --> 1:05:48.503
+as you are the range where the
+number of processors is much
+
+744
+1:05:48.503 --> 1:05:52.211
+less than the number of
+parallelism.
+
+745
+1:05:52.211 --> 1:05:58.463
+Now, with this language many
+years ago, which seems now like
+
+746
+1:05:58.463 --> 1:06:03.231
+many years ago,
+OK, it turned out we competed.
+
+747
+1:06:03.231 --> 1:06:08
+We built a bunch of chess
+programs.
+
+748
+1:06:08 --> 1:06:11.962
+And, among our programs were
+Starsocrates,
+
+749
+1:06:11.962 --> 1:06:16.312
+and Cilkchess,
+and we also had several others.
+
+750
+1:06:16.312 --> 1:06:19.501
+And these were,
+I would call them,
+
+751
+1:06:19.501 --> 1:06:22.014
+world-class.
+In particular,
+
+752
+1:06:22.014 --> 1:06:26.75
+we tied for first in the 1995
+World Computer Chess
+
+753
+1:06:26.75 --> 1:06:32.066
+Championship in Hong Kong,
+and then we had a playoff and
+
+754
+1:06:32.066 --> 1:06:35.86
+we lost.
+It was really a shame.
+
+755
+1:06:35.86 --> 1:06:39.157
+We almost won,
+running on a big parallel
+
+756
+1:06:39.157 --> 1:06:41.778
+machine.
+That was, incidentally,
+
+757
+1:06:41.778 --> 1:06:47.02
+some of you may know about the
+Deep Blue chess playing program.
+
+758
+1:06:47.02 --> 1:06:52.008
+That was the last time before
+they faced then world champion
+
+759
+1:06:52.008 --> 1:06:55.728
+Kasparov that they competed
+against programs.
+
+760
+1:06:55.728 --> 1:06:58.941
+They tied for third in that
+tournament.
+
+761
+1:06:58.941 --> 1:07:03
+OK, so we actually out-placed
+them.
+
+762
+1:07:03 --> 1:07:07.159
+However, in the head-to-head
+competition, we lost to them.
+
+763
+1:07:07.159 --> 1:07:11.099
+So we had one loss in the
+tournament up to the point of
+
+764
+1:07:11.099 --> 1:07:13.872
+the finals.
+They had a loss and a draw.
+
+765
+1:07:13.872 --> 1:07:17.375
+Most people aren't aware that
+Deep Blue, in fact,
+
+766
+1:07:17.375 --> 1:07:21.608
+was not the reigning World
+Computer Chess Championship when
+
+767
+1:07:21.608 --> 1:07:24.964
+they faced Kasparov.
+The reason that they faced
+
+768
+1:07:24.964 --> 1:07:30
+Kasparov was because IBM was
+willing to put up the money.
+
+769
+1:07:30 --> 1:07:38.03
+OK, so we developed these chess
+programs, and the way we
+
+770
+1:07:38.03 --> 1:07:44.747
+developed them,
+let me in particular talk about
+
+771
+1:07:44.747 --> 1:07:51.172
+Starsocrates.
+We had this interesting anomaly
+
+772
+1:07:51.172 --> 1:07:55.699
+come up.
+We were running on a 32
+
+773
+1:07:55.699 --> 1:08:03
+processor computer at MIT for
+development.
+
+774
+1:08:03 --> 1:08:07.463
+And, we had access to a 512
+processor computer for the
+
+775
+1:08:07.463 --> 1:08:11.505
+tournament at NCSA at the
+University of Illinois.
+
+776
+1:08:11.505 --> 1:08:16.389
+So, we had this big machine.
+Of course, they didn't want to
+
+777
+1:08:16.389 --> 1:08:20.852
+give it to us very much,
+but we have the same machine,
+
+778
+1:08:20.852 --> 1:08:22.873
+just a small one,
+at MIT.
+
+779
+1:08:22.873 --> 1:08:27.757
+So, we would develop on this,
+and occasionally we'd be able
+
+780
+1:08:27.757 --> 1:08:31.126
+to run on this,
+and this was what we were
+
+781
+1:08:31.126 --> 1:08:37.719
+developing for on our processor.
+So, let me show you sort of the
+
+782
+1:08:37.719 --> 1:08:40
+anomaly that came up,
+OK?
+
+783
+1:08:40 --> 1:08:48
+
+
+784
+1:08:48 --> 1:08:55.974
+So, we had a version of a
+program that I'll call the
+
+785
+1:08:55.974 --> 1:09:02.854
+original program,
+OK, and we had an optimized
+
+786
+1:09:02.854 --> 1:09:12.236
+program that included some new
+features that were supposed to
+
+787
+1:09:12.236 --> 1:09:20.992
+make the program go faster.
+And so, we timed it on our 32
+
+788
+1:09:20.992 --> 1:09:28.341
+processor machine.
+And, it took us 65 seconds to
+
+789
+1:09:28.341 --> 1:09:33.839
+run it.
+OK, and then we timed this new
+
+790
+1:09:33.839 --> 1:09:37.34
+program.
+So, I'll call that T prime of
+
+791
+1:09:37.34 --> 1:09:42.261
+sub 32 on our 32 processor
+machine, and it ran and 40
+
+792
+1:09:42.261 --> 1:09:45.952
+seconds to do this particular
+benchmark.
+
+793
+1:09:45.952 --> 1:09:50.4
+Now, let me just say,
+I've lied about the actual
+
+794
+1:09:50.4 --> 1:09:54.375
+numbers here to make the
+calculations easy.
+
+795
+1:09:54.375 --> 1:10:01
+But, the same idea happened.
+Just the numbers were messier.
+
+796
+1:10:01 --> 1:10:07.275
+OK, so this looks like a
+significant improvement in
+
+797
+1:10:07.275 --> 1:10:12.421
+runtime, but we rejected the
+optimization.
+
+798
+1:10:12.421 --> 1:10:19.574
+OK, and the reason we rejected
+it is because we understood
+
+799
+1:10:19.574 --> 1:10:24.846
+about the issues of work and
+critical path.
+
+800
+1:10:24.846 --> 1:10:30.368
+So, let me show you the
+analysis that we did,
+
+801
+1:10:30.368 --> 1:10:33.813
+OK?
+So the analysis,
+
+802
+1:10:33.813 --> 1:10:37.441
+it turns out,
+if we looked at our
+
+803
+1:10:37.441 --> 1:10:42.089
+instrumentation,
+the work in this case was
+
+804
+1:10:42.089 --> 1:10:46.17
+2,048.
+And, the critical path was one
+
+805
+1:10:46.17 --> 1:10:50.931
+second, which,
+over here with the optimized
+
+806
+1:10:50.931 --> 1:10:55.125
+program, the work was,
+in fact, 1,024.
+
+807
+1:10:55.125 --> 1:11:00
+But the critical path was
+eight.
+
+808
+1:11:00 --> 1:11:07.375
+So, if we plug into our simple
+model here, the one I have up
+
+809
+1:11:07.375 --> 1:11:14.625
+there with the approximation
+there, I have T_32 is equal to
+
+810
+1:11:14.625 --> 1:11:20.625
+T_1 over 32 plus T infinity,
+and that's equal to,
+
+811
+1:11:20.625 --> 1:11:25.25
+well, the work is 2,048 divided
+by 32.
+
+812
+1:11:25.25 --> 1:11:30.125
+What's that?
+64, good, plus the critical
+
+813
+1:11:30.125 --> 1:11:37.625
+path, one, that's 65.
+So, that checks out with what
+
+814
+1:11:37.625 --> 1:11:40
+we saw.
+OK, in fact,
+
+815
+1:11:40 --> 1:11:43.875
+we did that,
+and it checked out.
+
+816
+1:11:43.875 --> 1:11:48.375
+OK, it was very close.
+OK, over here,
+
+817
+1:11:48.375 --> 1:11:54.875
+T prime of 32 is T prime,
+one over 32 plus T infinity
+
+818
+1:11:54.875 --> 1:12:02.75
+prime, and that's equal to 1,024
+divided by 32 is 32 plus eight,
+
+819
+1:12:02.75 --> 1:12:07.981
+the critical path here.
+That's 40.
+
+820
+1:12:07.981 --> 1:12:13.377
+So, that checked out too.
+So, now what we did is we said
+
+821
+1:12:13.377 --> 1:12:17.596
+is we said, OK,
+let's extrapolate to our big
+
+822
+1:12:17.596 --> 1:12:21.422
+machine.
+How fast are these things going
+
+823
+1:12:21.422 --> 1:12:25.445
+to run on our big machine?
+Well, for that,
+
+824
+1:12:25.445 --> 1:12:29.958
+we want T of 512.
+And, that's equal to T_1 over
+
+825
+1:12:29.958 --> 1:12:36.913
+512 plus T infinity.
+And so, what's 2,048 divided by
+
+826
+1:12:36.913 --> 1:12:41.079
+512?
+It's four, plus T infinity is
+
+827
+1:12:41.079 --> 1:12:44.235
+one.
+That's equal to five.
+
+828
+1:12:44.235 --> 1:12:48.401
+So, go quite a bit faster on
+this.
+
+829
+1:12:48.401 --> 1:12:55.471
+But here, T prime of 512 is
+equal to T one prime over 512
+
+830
+1:12:55.471 --> 1:13:03.172
+plus T infinity prime is equal
+to, well, 1,024 plus divided by
+
+831
+1:13:03.172 --> 1:13:11
+512 is two plus critical path of
+eight, that's ten.
+
+832
+1:13:11 --> 1:13:15.913
+OK, and so, you see that on the
+big machine, we would have been
+
+833
+1:13:15.913 --> 1:13:19.163
+running twice as slow had we
+adopted that,
+
+834
+1:13:19.163 --> 1:13:23.205
+quote, "optimization",
+OK, because we had run out of
+
+835
+1:13:23.205 --> 1:13:27.009
+parallelism, and this was making
+the path longer.
+
+836
+1:13:27.009 --> 1:13:31.447
+We needed to have a way of
+doing it where we could reduce
+
+837
+1:13:31.447 --> 1:13:34.459
+the work.
+Yeah, it's good to reduce the
+
+838
+1:13:34.459 --> 1:13:39.135
+work but not as the critical
+path ends up getting rid of the
+
+839
+1:13:39.135 --> 1:13:45
+parallels that we hope to be
+able to use during the runtime.
+
+840
+1:13:45 --> 1:13:48.186
+So, it's twice as slow,
+OK, twice as slow.
+
+841
+1:13:48.186 --> 1:13:52.927
+So the moral is that the work
+and critical path length predict
+
+842
+1:13:52.927 --> 1:13:56.968
+the performance better than the
+execution time alone,
+
+843
+1:13:56.968 --> 1:14:00
+OK, when you look at
+scalability.
+
+844
+1:14:00 --> 1:14:03.6
+And a big issue on a lot of
+these machines is scalability;
+
+845
+1:14:03.6 --> 1:14:07.263
+not always, sometimes you're
+not worried about scalability.
+
+846
+1:14:07.263 --> 1:14:10.421
+Sometimes you just care.
+Had we been running in the
+
+847
+1:14:10.421 --> 1:14:14.21
+competition on a 32 processor
+machine, we would have accepted
+
+848
+1:14:14.21 --> 1:14:16.926
+this optimization.
+It would have been a good
+
+849
+1:14:16.926 --> 1:14:19.515
+trade-off.
+OK, but because we knew that we
+
+850
+1:14:19.515 --> 1:14:22.8
+were running on a machine with a
+lot more processors,
+
+851
+1:14:22.8 --> 1:14:26.336
+and that we were close to
+running out of the parallelism,
+
+852
+1:14:26.336 --> 1:14:29.936
+it didn't make sense to be
+increasing the critical path at
+
+853
+1:14:29.936 --> 1:14:33.726
+that point, because that was
+just reducing the parallelism of
+
+854
+1:14:33.726 --> 1:14:36.887
+our calculation.
+OK, next time,
+
+855
+1:14:36.887 --> 1:14:39.041
+any questions about that first?
+No?
+
+856
+1:14:39.041 --> 1:14:40.626
+OK.
+Next time, now that we
+
+857
+1:14:40.626 --> 1:14:44.111
+understand the model for
+execution, we're going to start
+
+858
+1:14:44.111 --> 1:14:47.786
+looking at the performance of
+particular algorithms what we
+
+859
+1:14:47.786 --> 1:14:50.701
+code them up in a dynamic,
+multithreaded style,
+
+860
+1:14:50.701 --> 1:14:53
+OK?
+

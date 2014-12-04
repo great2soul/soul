@@ -1,0 +1,887 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 6: Order Statistics, Median | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 6: Order Statistics, Median" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 6: Order Statistics, Median" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-6-order-statistics-median">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 6: Order Statistics, Median
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 6: Order Statistics, Median
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-6-order-statistics-median/ocw-6.046-lec6.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1853885633?i=1111036939">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-28sep2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/mR_RUjsJnV8', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-6-order-statistics-median', 'http://img.youtube.com/vi/mR_RUjsJnV8/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-6-order-statistics-median/ocw-6.046-lec6.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered:</strong> Order Statistics, Median</p> <p><strong>Instructors:</strong> Prof. Erik Demaine, Prof. Charles Leiserson<br>  </p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm">
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm">
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-6-order-statistics-median/lec6.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J2005L06.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 6</strong></p>
+<p>Today we're going to not talk about sorting. This is an exciting new development. We're going to talk about another problem, a related problem, but a different problem. We're going to talk about another problem that we would like to solve in linear time. Last class we talked about we could do sorting in linear time. To do that we needed some additional assumptions. Today we're going to look at a problem that really only needs linear time, even though at first glance it might look like it requires sorting. So this is going to be an easier problem. The problem is I give you a bunch of numbers.</p>
+<p>Let's call them elements. And they are in some array, let's say. And they're in no particular order, so unsorted. I want to find the kth smallest element. This is called the element of rank k. In other words, I have this list of numbers which is unsorted. And, if I were to sort it, I would like to know what the kth element is. But I'm not allowed to sort it. One solution to this problem, this is the naïve algorithm, is you just sort and then return the kth element. This is another possible definition of the problem.</p>
+<p>And we would like to do better than that. So you could sort, what's called the array A, and then return A[k]. That is one thing we could do. And if we use heap sort or mergesort, this will take n lg n time. We would like to do better than n lg n. Ideally linear time. The problem is pretty natural, straightforward. It has various applications. Depending on how you choose k, k could be any number between 1 and n. For example, if we choose k=1 that element has a name. Any suggestions of what the name is? The minimum. That's easy. Any suggestions on how we could find the minimum element in an array in linear time? Right.</p>
+<p>Just scan through the array. Keep track of what the smallest number is that you've seen. The same thing with the maximum, k=n. These are rather trivial. But a more interesting version of the order statistic problem is to find the median. This is either k equals n plus 1 over 2 floor or ceiling. I will call both of those elements medians. Finding the median of an unsorted array in linear time is quite tricky. And that sort of is the main goal of this lecture, is to be able to find the medians. For free we're going to be able to find the arbitrary kth smallest element, but typically we're most interested in finding the median. And on Friday in recitation you'll see why that is so useful. There are all sorts of situations where you can use median for really effective divide-and-conquer without having to sort.</p>
+<p>You can solve a lot of problems in linear time as a result. And we're going to cover today two algorithms for finding order statistics. Both of them are linear time. The first one is randomized, so it's only linear expected time. And the second one is worst-case linear time, and it will build on the randomized version. Let's start with a randomize divide-and-conquer algorithm. This algorithm is called rand-select.</p>
+<p>And the parameters are a little bit more than what we're used to. The order statistics problem you're given an array A. And here I've changed notation and I'm looking for the ith smallest element, so i is the index I'm looking for. And I'm also going to change the problem a little bit. And instead of trying to find it in the whole array, I'm going to look in a particular interval of the array, A from p up to q.</p>
+<p>We're going to need that for a recursion. This better be a recursive algorithm because we're using divide-and-conquer. Here is the algorithm. With a base case. It's pretty simple. Then we're going to use part of the quicksort algorithm, randomized quicksort. We didn't actually define this subroutine two lectures ago, but you should know what it does, especially if you've read the textbook. This says in the array A[p...q] pick a random element, so pick a random index between p and q, swap it with the first element, then call partition.</p>
+<p>And partition uses that first element to split the rest of the array into less than or equal to that random partition and greater than or equal to that partition. This is just picking a random partition element between p and q, cutting the array in half, although the two sizes may not be equal. And it returns the index of that partition element, some number between p and q. And we're going to define k to be this particular value, r minus p plus 1. And the reason for that is that k is then the rank of the partition element. This is in A[p...q]. Let me draw a picture here.</p>
+<p>We have our array A. It starts at p and ends at q. There is other stuff, but for this recursive all we care about is p up to q. We pick a random partition element, say this one, and we partition things so that everything in here, let's call this r, is less than or equal to A[r] and everything up here is greater than or equal to A[r]. And A[r] is our partition element. After this call, that's what the array looks like. And we get r. We get the index of where partition element is stored. The number of elements that are less than or equal to A[r] and including r is r minus p plus 1. There will be r minus p elements here, and we're adding 1 to get this element.</p>
+<p>And, if you start counting at 1, if this is rank 1, rank 2, this element will have rank k. That's just from the construction in the partition. And now we get to recurse. And there are three cases -- -- depending on how i relates to k. Remember i is the rank that we're looking for, k is the rank that we happen to get out of this random partition. We don't have much control over k, but if we're lucky i=k. That's the element we want.</p>
+<p>Then we just return the partition element. More likely is that the element we're looking for is either to the left or to the right. And if it's to the left we're going to recurse in the left-hand portion of the array. And if it's to the right we're going to recurse in the right-hand portion. So, pretty straightforward at this point. I just have to get all the indices right. Either we're going to recurse on the part between p and r minus 1, that's this case. The rank we're looking for is to the left of the rank of element A[r]. Or, we're going to recurse on the right part between r plus 1 and q. Where we recurse on the left part the rank we're looking for remains the same, but when we recurse on the right part the rank we're looking for gets offset.</p>
+<p>Because we sort of got rid of the k elements over here. I should have written this length is k. We've sort of swept away k ranks of elements. And now within this array we're looking for the i minus kth smallest element. That's the recursion. We only recurse once. And random partition is not a recursion. That just takes linear time. And the total amount of work we're doing here should be linear time plus one recursion. And we'd next like to see what the total running time is in expectation, but let's first do a little example --</p>
+<p>-- to make this algorithm perfectly clear. Let's suppose we're looking for the seventh smallest element in this array. And let's suppose, just for example, that the pivot we're using is just the first element. So, nothing fancy. I would have to flip a few coins in order to generate a random one, so let's just pick this one. If I partition at the element 6, this is actually an example we did two weeks ago, and I won't go through it again, but we get the same array, as we did two weeks ago, namely 2, 5, 3, 6, 8, 13, 10 and 11. If you run through the partitioning algorithm, that happens to be the order that it throws the elements into.</p>
+<p>And this is our position r. This is p here. It's just 1. And q is just the end. And I am looking for the seventh smallest element. And it happens when I run this partition that 6 falls into the fourth place. And we know that means, because all the elements here are less than 6 and all the elements here are greater than 6, if this array were sorted, 6 would be right here in position four. So, r here is 4. Yeah? The 12 turned into an 11? This was an 11, believe it or not. Let me be simple. Sorry. Sometimes my ones look like twos. Not a good feature. That's an easy way to cover. [LAUGHTER]</p>
+<p>Don't try that on exams. Oh, that one was just a two. No. Even though we're not sorting the array, we're only spending linear work here to partition by 6. We know that if we had sorted the array 6 would fall here. We don't know about these other elements. They're not in sorted order, but from the properties of partition we know 6 went the right spot. We now know rank of 6 is 4. We happened to be looking for 7 and we happened to get this number 4.</p>
+<p>We want something over here. It turns out we're looking for 10, I guess. No, 11. There should be eight elements in this array, so it's the next to max. Max here is 13, I'm cheating here. The answer we're looking for is 11. We know that what we're looking for is in the right-hand part because the rank we're looking for is 7, which is bigger than 4. Now, what rank are we looking for in here? Well, we've gotten rid of four elements over here.</p>
+<p>It happened here that k is also 4 because p is 1 in this example. The rank of 6 was 4. We throw away those four elements. Now we're looking for rank 7 minus 4 which is 3. And, indeed, the rank 3 element here is still 11. So, you recursively find that. That's your answer. Now that algorithm should be pretty clear. The tricky part is to analyze it. And the analysis here is quite a bit like randomized quicksort, although not quite as hairy, so it will go faster. But it will be also sort of a nice review of the randomized quicksort analysis which was a bit tricky and always good to see a couple of times. We're going to follow the same kind of outline as before to look at the expected running time of this algorithm.</p>
+<p>And to start out we're going to, as before, look at some intuition just to feel good about ourselves. Also feel bad as you'll see. Let's think about two sort of extreme cases, a good case and the worst case. And I should mention that in all of the analyses today we assume the elements are distinct. It gets really messy if the elements are not distinct. And you may even have to change the algorithms a little bit because if all the elements are equal, if you pick a random element, the partition does not do so well. But let's assume they're all distinct, which is the really interesting case. A pretty luck case --</p>
+<p>I mean the best cases we partition right in the middle. The number of elements to the left of our partition is equal to the number of elements to the right of our partition. But almost as good would be some kind of 1/10 to 9/10 split. Any constant fraction, we should feel that. Any constant fraction is as good as 1/2. Then the recurrence we get is, let's say at most, this bad. So, it depends. If we have let's say 1/10 on the left and 9/10 on the right every time we do a partition. It depends where our answer is. It could be if i is really small it's in the 1/10 part. If i is really big it's going to be in the 9/10 part, or most of the time it's going to be in the 9/10 part. We're doing worst-case analysis within the lucky case, so we're happy to have upper bounds. I will say t(n) is at most t of T(9/10n)+Theta(n).</p>
+<p>Clearly it's worse if we're in the bigger part. What is the solution to this recurrence? Oh, solving recurrence was so long ago. What method should we use for solving this recurrence? The master method. What case are we in? Three. Good. You still remember. This is Case 3. We're looking at nlog_b(a). b here is 10/9, although it doesn't really matter because a is 1. log base anything of 1 is 0. So, this is n^0 which is 1. And n is polynomially larger than 1. This is going to be O(n), which is good. That is what we want, linear time. If we're in the lucky case, great. Unfortunately this is only intuition.</p>
+<p>And we're not always going to get the lucky case. We could do the same kind of analysis as we did with randomized quicksort. If you alternate between lucky and unlucky, things will still be good, but let's just talk about the unlucky case to show how bad things can get. And this really would be a worst-case analysis. The unlucky case we get a split of 0:n-1. Because we're removing the partition element either way. And there could be nothing less than the partition element. We have 0 on the left-hand side and we have n-1 on the right-hand side. Now we get a recurrence like T(n)=T(n-1) plus linear cost. And what's the solution to that recurrence? n^2. Yes. This one you should just know. It's n^2 because it's an arithmetic series.</p>
+<p>And that's pretty bad. This is much, much worse than sorting and then picking the ith element. In the worst-case this algorithm really sucks, but most of the time it's going to do really well. And, unless you're really, really unlucky and every coin you flip gives the wrong answer, you won't get this case and you will get something more like the lucky case. At least that's what we'd like to prove.</p>
+<p>And we will prove that the expected running time here is linear. So, it's very rare to get anything quadratic. But later on we will see how to make the worst-case linear as well. This would really, really solve the problem. Let's get into the analysis. Now, you've seen an analysis much like this before. What do you suggest we do in order to analyze this expected time? It's a divide-and-conquer algorithm, so we kind of like to write down the recurrence on something resembling the running time.</p>
+<p>I don't need the answer, but what's the first step that we might do to analyze the expected running time of this algorithm? Sorry? Look at different cases, yeah. Exactly. We have all these possible ways that random partition could split. It could split 0 to the n-1. It could split in half. There are n choices where it could split. How can we break into those cases? Indicator random variables. Cool. Exactly. That's what we want to do. Indicator random variable suggests that what we're dealing with is not exactly just a function T(n) but it's a random variable. This is one subtlety. T(n) depends on the random choices, so it's really a random variable.</p>
+<p>And then we're going to use indicator random variables to get a recurrence on T(n). So, T(n) is the running time of rand-select on an input of size n. And I am also going to write down explicitly an assumption about the random numbers. That they should be chosen independently from each other. Every time I call random partition, it's generating a completely independent random number from all the other times I call random partition. That is important, of course, for this analysis to work. We will see why some point down the line. And now, to sort of write down an equation for T(n) we're going to define indicator random variables, as you suggested.</p>
+<p>And we will call it X_k. And this is for all k=0...n-1. Indicator random variables either 1 or 0. And it's going to be 1 if the partition comes out k on the left-hand side. So say the partition generates a k:n-k-1 split and it is 0 otherwise. We have n of these indicator random variables between 0...n-1. And in each case, no matter how the random choice comes out, exactly one of them will be 1.</p>
+<p>All the others will be 0. Now we can divide out the running time of this algorithm based on which case we're in. That will sort of unify this intuition that we did and get all the cases. And then we can look at the expectation. T(n), if we just split out by cases, we have an upper bound like this. If we have 0 to n-1 split, the worst is we have n-1. Then we have to recurse in a problem of size n-1. In fact, it would be pretty hard to recurse in a problem of size 0. If we have a 1 to n-2 split then we take the max of the two sides. That's certainly going to give us an upper bound and so on.</p>
+<p>And at the bottom you get an n-1 to 0 split. This is now sort of conditioning on various events, but we have indicator random variables to tell us when these events happen. We can just multiply each of these values by the indicator random variable and it will come out 0 if that's not the case and will come out 1 and give us this value if that happens to be the split. So, if we add up all of those we'll get the same thing. This is equal to the sum over all k of the indicator random variable times the cost in that case, which is t of max k, and the other side, which is n-k-1, plus theta n.</p>
+<p>This is our recurrence, in some sense, for the random variable representing running time. Now, the value will depend on which case we come into. We know the probability of each of these events happening is the same because we're choosing the partition element uniformly at random, but we cannot really simplify much beyond this until we take expectations. We know this random variable could be as big as n^2. Hopefully it's usually linear. We will take expectations of both sides and get what we want.</p>
+<p>Let's look at the expectation of this random variable, which is just the expectation, I will copy over, summation we have here so I can work on this board. I want to compute the expectation of this summation. What property of expectation should I use? Linearity, good. We can bring the summation outside. Now I have a sum of expectation. Let's look at each expectation individually. It's a product of two random variables, if you will. This is an indicator random variable and this is some more complicated function, some more complicated random variable representing some running time, which depends on what random choices are made in that recursive call.</p>
+<p>Now what should I do? I have the expectation of the product of two random variables. Independence, exactly. If I know that these two random variables are independent then I know that the expectation of the product is the product of the expectations. Now we have to check are they independent? I hope so because otherwise there isn't much else I can do. Why are they independent? Sorry? Because we stated that they are, right. Because of this assumption. We assume that all the random numbers are chosen independently. We need to sort of interpolate that here. These X_k's, all the X_k's, X_0 up to X_n-1, so all the ones appearing in this summation are dependent upon a single random choice of this particular call to random partition.</p>
+<p>All of these are correlated, because if one of them is 1, all the others are forced to be 0. So, there is a lot of correlation among the X_k's. But with respect to everything that is in here, and the only random part is this T(max(kn-k-1)). That is the reason that this random variable is independent from these. The same thing as quicksort, but I know some people got confused about it a couple lectures ago so I am reiterating. We get the product of expectations, E[X_k] E[T(max(kn-k-1))].</p>
+<p>I mean the order n comes outside, but let's leave it inside for now. There is no expectation to compute there for order n. Order n is order n. What is the expectation of X_k? 1/n, because they're all chosen with equal probability. There is n of them, so the expectation is 1/n. The value is either 1 or 0. We start to be able to split this up. We have 1/n times this expected value of some recursive T call, and then we have plus 1 over n times order n, also known as a constant, but everything is summed up n times so let's expand this.</p>
+<p>I have the sum k=0 to n-1. I guess the 1/n can come outside. And we have expectation of [T(max(kn-k-1))]. Lots of nifty braces there. And then plus we have, on the other hand, the sum k=0 to n-1. Let me just write that out again. We have a 1/n in front and we have a Theta(n) inside. This summation is n^2. And then we're dividing by n, so this whole thing is, again, order n. Nothing fancy happened there. This is really just saying the expectation of order n is order n. Average value of order n is order n.</p>
+<p>What is interesting is this part. Now, what could we do with this summation? Here we start to differ from randomized quicksort because we have this max. Randomized quicksort we had the sum of T(k) plus T(n-k-1) because we were making both recursive calls. Here we're only making the biggest one. That max is really a pain for evaluating this recurrence. How could I get rid of the max? That's one way to think of it. Yeah?</p>
+<p>Exactly. I could only sum up to halfway and then double. In other words, terms are getting repeated twice here. When k=0 or when k=n-1, I get the same T(n-1). When k=1 or n-2, I get the same thing, 2 and n-3. What I will actually do is sum from halfway up. That's a little bit cleaner. And let me get the indices right. Floor of n/2 up to n-1 will be safe. And then I just have E[T(k)], except I forgot to multiply by 2, so I'm going to change this 1 to a 2.</p>
+<p>And order n is preserved. This is just because each term is appearing twice. I can factor it out. And if n is odd, I'm actually double-counting somewhat, but it's certain at most that. So, that's a safe upper bound. And upper bounds are all we care about because we're hoping to get linear. And the running time of this algorithm is definitely at least linear, so we just need an upper bounded linear.</p>
+<p>So, this is a recurrence. E[T(n)] is at most 2/n times the sum of half the numbers between 0 and n of E[T(k)]+Theta(n). It's a bit of hairy recurrence. We want to solve it, though. And it's actually a little bit easier than the randomized quicksort recurrence. We're going to solve it. What method should we use? Sorry? Master method? Master would be nice, except that each of the recursive calls is with a different value of k.</p>
+<p>The master method only works when all the calls are with the same value, same size. Alas, it would be nice if we could use the master method. What else do we have? Substitution. When it's hard, when in doubt, use substitution. I mean the good thing here is we know what we want. From the intuition at least, which is now erased, we really feel that this should be linear time. So, we know what we want to prove.</p>
+<p>And indeed we can prove it just directly with substitution. I want to claim there is some constant c greater than zero such that E[T(n)], according to this recurrence, is at most c times n. Let's prove that over here. As we guessed, the proof is by substitution. What that means is we're going to assume, by induction, that this inequality is true for all smaller m. I will just say 4 less than n. And we need to prove it for n. We get E[T(n)].</p>
+<p>Now we are just going to expand using the recurrence that we have. It's at most this. I will copy that over. And then each of these recursive calls is with some value k that is strictly smaller than n. Sorry, I copied it wrong, floor of n over 2, not zero. And so I can apply the induction hypothesis to each of these. This is at most c times k by the induction hypothesis. And so I get this inequality.</p>
+<p>This c can come outside the summation because it's just a constant. And I will be slightly tedious in writing this down again, because what I care about is the summation here that is left over. This is a good old-fashioned summation. And if you remember back to your summation tricks or whatever, you should be able to evaluate this. If we started at zero and went up to n minus 1, that's just an arithmetic series, but here we have the tail end of an arithmetic series. And you should know, at least up to theta, what this is, right? n^2, yeah. It's definitely T(n^2). But we need here a slightly better upper bond, as we will see the constants really matter.</p>
+<p>What we're going to use is that this summation is at most 3/8 times n^2. And that will be critical, the fact that 3/8 is smaller than 1/2, I believe. So it's going to get rid of this 2. I am not going to prove this. This is an exercise. When you know that it is true, it's easy because you can just prove it by induction. Figuring out that number is a little bit more work, but not too much more.</p>
+<p>So you should prove that by induction. Now let me simplify. This is a bit messy, but what I want is c times n. Let's write it as our desired value minus the residual. And here we have some crazy fractions. This is 2 times 3 which is 6 over 8 which is 3/4, right? Here we have 1, so we have to subtract up 1/4 to get 3/4. And this should be, I guess, 1/4 times c times n. And then we have this theta n with double negation becomes a plus theta n. That should be clear. I am just rewriting that. So we have what we want over here. And then we hope that this is nonnegative because what we want is that this less than or equal to c times n.</p>
+<p>That will be true, provided this thing is nonnegative. And it looks pretty good because we're free to choose c however large we want. Whatever constant is imbedded in this beta notation is one fixed constant, whatever makes this recurrence true. We just set c to be bigger than 4 times that constant and then this will be nonnegative. So this is true for c sufficiently large to dwarf that theta constant.</p>
+<p>It's also the base case. I just have to make the cursory mention that we choose c large enough so that this claim is true, even in the base case where n is at most some constant. Here it's like 1 or so because then we're not making a recursive call. What we get -- This algorithm, randomize select, has expected running time order n, Theta(n). The annoying this is that in the worst-case, if you're really, really unlucky it's n^2. Any questions before we move on from this point? This finished off the proof of this fact that we have Theta(n) expected time.</p>
+<p>We already saw the n^2 worst-case. All perfectly clear? Good. You should go over these proofs. They're intrinsically related between randomized quicksort and randomized select. Know them in your heart. This is a great algorithm that works really well in practice because most of the time you're going to split, say, in the middle, somewhere between a 1/4 and 3/4 and everything is good. It's extremely unlikely that you get the n^2 worst-case. It would have to happen with like 1 over n^n probability or something really, really small. But I am a theoretician at least. And it would be really nice if you could get Theta(n) in the worst-case. That would be the cleanest result that you could hope for because that's optimal. You cannot do better than Theta(n). You've got to look at the elements. So, you might ask, can we get rid of this worst-case behavior and somehow avoid randomization and guarantee Theta(n) worst-case running time?</p>
+<p>And you can but it's a rather nontrivial algorithm. And this is going to be one of the most sophisticated that we've seen so far. It won't continue to be the most sophisticated algorithm we will see, but here it is. Worst-case linear time order statistics. And this is an algorithm by several, all very famous people, Blum, Floyd, Pratt, Rivest and Tarjan. I think I've only met the B and the R and the T. Oh, no, I've met Pratt as well. I'm getting close to all the authors. This is a somewhat old result, but at the time it was a major breakthrough and still is an amazing algorithm. Ron Rivest is a professor here. You should know him from the R in RSA. When I took my PhD comprehensives some time ago, on the cover sheet was a joke question.</p>
+<p>It asked of the authors of the worst-case linear time order statistics algorithm, which of them is the most rich? Sadly it was not a graded part of the comprehensive exam, but it was an amusing question. I won't answer it here because we're on tape, [LAUGHTER] but think about it. I may not be obvious. Several of them are rich. It's just the question of who is the most rich. Anyway, before they were rich they came up with this algorithm. They've come up with many algorithms since, even after getting rich, believe it or not. What we want is a good pivot, guaranteed good pivot. Random pivot is going to be really good. And so the simplest algorithm is just pick a random pivot. It's going to be good with high probability. We want to force a good pivot deterministically. And the new idea here is we're going to generate it recursively.</p>
+<p>What else could we do but recurse? Well, you should know from your recurrences that if we did two recursive calls on problems of half the size and we have a linear extra work that's the mergesort recurrence, T(n)=2[T(n/2)+Theta(n)]. You should recite in your sleep. That's n lg n. So we cannot recurse on two problems of half the size. We've got to do better. Somehow these recursions have to add up to strictly less than n. That's the magic of this algorithm. So this will just be called select instead of rand-select. And it really depends on an array, but I will focus on the i-th element that we want to select and the size of the array that we want to select in. And I am going to write this algorithm slightly less formally than randomize-select because it's a bit higher level of an algorithm.</p>
+<p>And let me draw over here the picture of the algorithm. The first step is sort of the weirdest and it's one of the key ideas. You take your elements, and they are in no particular order, so instead of drawing them on a line, I am going to draw them in a 5 by n over 5 grid. Why not? This, unfortunately, take a little while to draw, but it will take you equally long so I will take my time. It doesn't really matter what the width is, but it should be width n over 5 so make sure you draw your figure accordingly. Width n over 5, but the height should be exactly 5. I think I got it right. I can count that high. Here is 5. And this should be, well, you know, our number may not be divisible by 5, so maybe it ends off in sort of an odd way. But what I would like is that these chunks should be floor of n over 5. And then we will have, at most, four elements left over.</p>
+<p>So I am going to ignore those. They don't really matter. It's just an additive constant. Here is my array. I just happened to write it in this funny way. And I will call these vertical things groups. I would circle them, and I did that in my notes, but things get really messy if you start circling. This diagram is going to get really full, just to warn you. By the end it will be almost unintelligible, but there it is.</p>
+<p>If you are really feeling bored, you can draw this a few times. And you should draw how it grows. So there are the groups, vertical groups of five. Next step. The second step is to recurse. This is where things are a bit unusual, well, even more unusual. Oops, sorry. I really should have had a line between one and two so I am going to have to move this down and insert it here. I also, in step one, want to find the median of each group.</p>
+<p>What I would like to do is just imagine this figure, each of the five elements in each group gets reorganized so that the middle one is the median. So I am going to call these the medians of each group. I have five elements so the median is right in the middle. There are two elements less than the median, two elements greater than the median. Again, we're assuming all elements are distinct. So there they are. I compute them. How long does that take me? N over five groups, each with five elements, compute the median of each one?</p>
+<p>Sorry? Yeah, 2 times n over 5. It's theta n, that's all I need to know. I mean, you're counting comparisons, which is good. It's definitely Theta(n). The point is within each group, I only have to do a constant number of comparisons because it's a constant number of elements. It doesn't matter. You could use randomize select for all I care. No matter what you do, it can only take a constant number of comparisons.</p>
+<p>As long as you don't make a comparison more than once. So this is easy. You could sort the five numbers and then look at the third one, it doesn't matter because there are only five of them. That's one nifty idea. Already we have some elements that are sort of vaguely in the middle but just of the group. And we've only done linear work. So doing well so far. Now we get to the second step, which I started to write before, where we recurse.</p>
+<p>So the next idea is, well, we have these floor over n over 5 medians. I am going to compute the median of those medians. I am imagining that I rearranged these. And, unfortunately, it's an even number, there are six of them, but I will rearrange so that this guy, I have drawn in a second box, is the median of these elements so that these two elements are strictly less than this guy, these three elements are strictly greater than this guy. Now, that doesn't directly tell me anything, it would seem, about any of the elements out here.</p>
+<p>We will come back to that. In fact, it does tell us about some of the elements. But right now this element is just the median of these guys. Each of these guys is a median of five elements. That's all we know. If we do that recursively, this is going to take T of n over 5 time. So far so good. We can afford a recursion on a problem of size n over 5 and linear work. We know that works out to linear time.</p>
+<p>But there is more. We're obviously not done yet. The next step is x is our partition element. We partition there. The rest of the algorithm is just like randomized partition, so we're going to define k to be the rank of x. And this can be done, I mean it's n minus r plus 1 or whatever, but I'm not going to write out how to do that because we're at a higher level here. But it can be done. And then we have the three-way branching. So if i happens to equal k we're happy. The pivot element is the element we're looking for, but more likely i is either less than k or it is bigger than k. And then we make the appropriate recursive call, so here we recursively select the i-th smallest element --</p>
+<p>-- in the lower part of the array. Left of the partition element. Otherwise, we recursively select the i minus k-th smallest element in the upper part of the array. I am writing this at a high level because we've already seen it. All of this is the same as the last couple steps of randomized select. That is the algorithm. The real question is why does it work? Why is this linear time? The first question is what's the recurrence? We cannot quite write it down yet because we don't know how big these recursive subproblems could be.</p>
+<p>We're going to either recurse in the lower part or the upper part, that's just like before. If we're unlucky and we have a split of like zero to n minus one, this is going to be a quadratic time algorithm. The claim is that this partition element is guaranteed to be pretty good and good enough. The running time of this thing will be T of something times n, and we don't know what the something is yet. How big could it be? Well, I could ask you.</p>
+<p>But we're sort of indirect here so I will tell you. We have already a recursive call of T of n over 5. It better be that whatever constant, so it's going to be something times n, it better be that that constant is strictly less than 4/5. If it's equal to 4/5 then you're not splitting up the problem enough to get an n lg n running time. If it's strictly less than 4/5 then you're reducing the problem by at least a constant factor.</p>
+<p>In the sense if you add up all the recursive subproblems, n over 5 and something times n, you get something that is a constant strictly less than one times n. That forces the work to be geometric. If it's geometric you're going to get linear time. So this is intuition but it's the right intuition. Whenever you're aiming for linear time keep that in mind. If you're doing a divide-and-conquer, you've got to get the total subproblem size to be some constant less than one times n. That will work.</p>
+<p>OK, so we've got to work out this constant here. And we're going to use this figure, which so far looks surprisingly uncluttered. Now we will make it cluttered. What I would like to do is draw an arrow between two vertices, two points, elements, whatever you want to call them. Let's call them a and b. And I want to orient the arrow so it points to a larger value, so this means that a is less than b. This is notation just for the diagram. And so this element, I am going to write down what I know. This element is the median of these five elements. I will suppose that it is drawn so that these elements are larger than the median, these elements are smaller than the median. Therefore, I have arrows like this. Here is where I wish I had some colored chalk.</p>
+<p>This is just stating this guy is in the middle of those five elements. I know that in every single column. Here is where the diagram starts to get messy. I am not done yet. Now, we also know that this element is the median of the medians. Of all the squared elements, this guy is the middle. And I will draw it so that these are the ones smaller than the median, these are the ones larger than the median. I mean the algorithm cannot do this. It doesn't necessarily know how all this works. I guess it could, but this is just for analysis purposes. We know this guy is bigger than that one and bigger than that one. We don't directly know about the other elements.</p>
+<p>We just know that that one is bigger than both of those and this guy is smaller than these. Now, that is as messy as the figure will get. Now, the nice thing about less than is that it's a transitive relation. If I have a directed path in this graph, I know that this element is strictly less than that element because this is less than that one and this is less than that one. Even though directly I only know within a column and within this middle row, I actually know that this element --</p>
+<p>This is x, by the way. This element is larger than all of these elements because it's larger than this one and this one and each of these is larger than all of those by these arrows. I also know that all of these elements in this rectangle here, and you don't have to do this but I will make the background even more cluttered. All of these elements in this rectangle are greater than or equal to this one and all of the elements in this rectangle are less than or equal to x. Now, how many are there? Well, this is roughly halfway along the set of groups and this is 3/5 of these columns. So what we get is that there are at least --</p>
+<p>We have n over 5 groups and we have half of the groups that we're looking at here roughly, so let's call that floor of n over 2, and then within each group we have three elements. So we have at least 3 times floor of floor of n over 5 over 2 n floor elements that are less than or equal to x. And we have the same that are greater than or equal to x. Let me simplify this a little bit more. I can also give you some more justification, and we drew the picture, but just for why this is true. We have at least n over 5 over 2 group medians that are less than or equal to x.</p>
+<p>This is the argument we use. We have half of the group medians are less than or equal to x because x is the median of the group median, so that is no big surprise. This is almost an equality but we're making floors so it's greater than or equal to. And then, for each group median, we know that there are three elements there that are less than or equal to that group median. So, by transitivity, they're also less than or equal to x. We get this number times three.</p>
+<p>This is actually just floor of n over 10. I was being unnecessarily complicated there, but that is where it came from. What we know is that this thing is now at least 3 times n over 10, which is roughly 3/10 of elements are in one side. In fact, at least 3/10 of the elements are in each side. Therefore, each side has at most 7/10 elements roughly. So the number here will be 7/10. And, if I'm lucky, 7/10 plus 1/5 is strictly less than one. I believe it is, but I have trouble working with tenths. I can only handle powers of two. What we're going to use is a minor simplification, which just barely still works, is a little bit easier to think about. It's mainly to get rid of this floor because the floor is annoying. And we don't really have a sloppiness lemma that applies here.</p>
+<p>It turns out if n is sufficiently large, 3 times floor of n over 10 is greater than or equal to 1/4. Quarters I can handle. The claim is that each group has size at least 1/4, therefore each group has size at most 3/4 because there's a quarter on the side. This will be 3/4. And I can definitely tell that 1/5 is less than 1/4. This is going to add up to something strictly less than one and then it will work.</p>
+<p>How is my time? Good. At this point, the rest of the analysis is easy. How the heck you would come up with this algorithm, you realize that this is clearly a really good choice for finding a partition element, just barely good enough that both recursions add up to linear time. Well, that's why it took so many famous people. Especially in quizzes, but I think in general this class, you won't have to come up with an algorithm this clever because you can just use this algorithm to find the median. And the median is a really good partition element. Now that you know this algorithm, now that we're beyond 1973, you don't need to know how to do this. I mean you should know how this algorithm works, but you don't need to do this in another algorithm because you can just say run this algorithm, you will get the median in linear time, and then you can partition to the left and the right.</p>
+<p>And then the left and the right will have exactly equal size. Great. This is a really powerful subroutine. You could use this all over the place, and you will on Friday. Have I analyzed the running time pretty much? The first step is linear. The second step is T of n over 5. The third step, I didn't write it, is linear. And then the last step is just a recursive call. And now we know that this is 3/4.</p>
+<p>I get this recurrence. T of n is, I'll say at most, T of n over 5 plus T of 3/4n. You could have also used 7/10. It would give the same answer, but you would also need a floor so we won't do that. I claim that this is linear. How should I prove it? Substitution. Claim that T of n is at most again c times n, that will be enough. Proof is by substitution. Again, we assume this is true for smaller n. And want to prove it for n. We have T of n is at most this thing.</p>
+<p>T of n over 5. And by induction, because n of 5 is smaller than n, we know that this is at most c. Let me write it as c over 5 times n. Sure, why not. Then we have here 3/4cn. And then we have a linear term. Now, unfortunately, I have to deal with things that are not powers of two. I will cheat and look at my notes. This is also known as 19/20 times c times n plus theta n. And the point is just that this is strictly less than one. Because it's strictly less than one, I can write this as one times c of n minus some constant, here it happens to be 1/20, as long as I have something left over here, 1/20 times c times n. Then I have this annoying theta n term which I want to get rid of because I want this to be nonnegative.</p>
+<p>But it is nonnegative, as long as I set c to be really, really large, at least 20 times whatever constant is here. So this is at most c times n for c sufficiently large. And, oh, by the way, if n is less than or equal to 50, which we used up here, then T of n is a constant, it doesn't really matter what you do, and T of n is at most c times n for c sufficiently large. That proves this claim. Of course, the constant here is pretty damn big. It depends exactly what the constants and the running times are, which depends on your machine, but practically this algorithm is not so hot because the constants are pretty big. Even though this element is guaranteed to be somewhere vaguely in the middle, and even though these recursions add up to strictly less than n and it's geometric, it's geometric because the problem is reducing by at least a factor of 19/20 each time.</p>
+<p>So it actually takes a while for the problem to get really small. Practically you probably don't want to use this algorithm unless you cannot somehow flip coins. The randomized algorithm works really, really fast. Theoretically this is your dream, the best you could hope for because it's linear time and you need linear time as guaranteed linear time. I will mention, before we end, an exercise.</p>
+<p>Why did we use groups of five? Why not groups of three? As you might guess, the answer is because it doesn't work with groups of three. But it's quite constructive to find out why. If you work through this math with groups of three instead of groups of five, you will find that you don't quite get the problem reduction that you need. Five is the smallest number for which this works. It would work with seven, but theoretically not any better than a constant factor. Any questions? All right. Then recitation Friday. Homework lab Sunday. Problem set due Monday. Quiz one in two weeks.</p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1853885633?i=1111036939">MP4 - 144MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-28sep2005-220k_512kb.mp4">MP4 - 283MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/ocw-6.046-lec6.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>

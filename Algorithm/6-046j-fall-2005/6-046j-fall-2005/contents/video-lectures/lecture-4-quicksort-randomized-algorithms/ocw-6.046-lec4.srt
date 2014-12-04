@@ -1,0 +1,4614 @@
+1
+00:00:08 --> 00:00:11
+OK.
+Today we are going to talk
+
+2
+00:00:11 --> 00:00:18
+about a very interesting
+algorithm called Quicksort --
+
+3
+00:00:18 --> 00:00:23
+
+
+4
+00:00:23 --> 00:00:30
+-- which was invented by Tony
+Hoare in 1962.
+
+5
+00:00:30 --> 00:00:35
+And it has ended up being a
+really interesting algorithm
+
+6
+00:00:35 --> 00:00:40
+from many points of view.
+And because of that,
+
+7
+00:00:40 --> 00:00:47
+it turns out today's lecture is
+going to be both hard and fast.
+
+8
+00:00:47 --> 00:00:52
+If you see the person next to
+you sleeping,
+
+9
+00:00:52 --> 00:00:56
+you will want to say let's get
+going.
+
+10
+00:00:56 --> 00:01:01
+It's a divide-and-conquer
+algorithm.
+
+11
+00:01:01 --> 00:01:06
+
+
+12
+00:01:06 --> 00:01:08
+And it sorts,
+as they say,
+
+13
+00:01:08 --> 00:01:14
+in place, meaning that it just
+rearranged the elements where
+
+14
+00:01:14 --> 00:01:17
+they are.
+That is like insertion sort
+
+15
+00:01:17 --> 00:01:20
+rearranges elements where they
+are.
+
+16
+00:01:20 --> 00:01:24
+Mergesort does not.
+Mergesort requires extra
+
+17
+00:01:24 --> 00:01:30
+storage in order to do the merge
+operation.
+
+18
+00:01:30 --> 00:01:34
+To merge in linear time and
+place, it doesn't merge in place
+
+19
+00:01:34 --> 00:01:37
+in linear time.
+It doesn't do it just by
+
+20
+00:01:37 --> 00:01:41
+rearranging.
+It is nice because it is in
+
+21
+00:01:41 --> 00:01:45
+place, so that means that it is
+fairly efficient in its use of
+
+22
+00:01:45 --> 00:01:48
+storage.
+And it also happens to be very
+
+23
+00:01:48 --> 00:01:53
+practical if you tune it a bit.
+The basic algorithm turns out,
+
+24
+00:01:53 --> 00:01:58
+if you just implement that,
+it's not necessarily that
+
+25
+00:01:58 --> 00:02:02
+efficient.
+But if what you do was then do
+
+26
+00:02:02 --> 00:02:07
+the standard kinds of things you
+do to goose up the runtime of
+
+27
+00:02:07 --> 00:02:12
+something, and we'll talk a
+little about what those things
+
+28
+00:02:12 --> 00:02:16
+are, then it can be very,
+very practical.
+
+29
+00:02:16 --> 00:02:20
+So, it uses divide-and-conquer
+paradigm.
+
+30
+00:02:20 --> 00:02:33
+
+
+31
+00:02:33 --> 00:02:40
+First step is divide.
+And to do this basically it
+
+32
+00:02:40 --> 00:02:48
+does it by partitioning.
+So, it partitions the input
+
+33
+00:02:48 --> 00:02:59
+array into two subarrays around
+an element we call the pivot --
+
+34
+00:02:59 --> 00:03:04
+
+
+35
+00:03:04 --> 00:03:14
+-- such that elements in the
+lower subarray are less than or
+
+36
+00:03:14 --> 00:03:25
+equal to x, are less than or
+equal to elements in the upper
+
+37
+00:03:25 --> 00:03:31
+subarray.
+If we draw a picture of the
+
+38
+00:03:31 --> 00:03:38
+input array, this partition step
+basically takes some element x
+
+39
+00:03:38 --> 00:03:45
+and everything over here is less
+than or equal to x after the
+
+40
+00:03:45 --> 00:03:52
+partition step and everything
+over here is greater than or
+
+41
+00:03:52 --> 00:03:57
+equal to x.
+And so now the conquer step is
+
+42
+00:03:57 --> 00:04:04
+pretty easy.
+You just recursively sort the
+
+43
+00:04:04 --> 00:04:10
+two subarrays.
+So, I recursively sort the
+
+44
+00:04:10 --> 00:04:19
+elements less than or equal to
+x, I recursively sort the
+
+45
+00:04:19 --> 00:04:24
+elements greater than or equal
+to x.
+
+46
+00:04:24 --> 00:04:32
+And then combine is then just
+trivial.
+
+47
+00:04:32 --> 00:04:36
+Because once I have sorted the
+things less than or equal to x,
+
+48
+00:04:36 --> 00:04:40
+then sorted the things greater
+than or equal to x,
+
+49
+00:04:40 --> 00:04:44
+the whole thing is sorted.
+So, there is nothing to do
+
+50
+00:04:44 --> 00:04:48
+really for the combine.
+The key step in quicksort is
+
+51
+00:04:48 --> 00:04:52
+this partition step.
+That is the thing that does all
+
+52
+00:04:52 --> 00:04:55
+of the work.
+And so you can view quicksort
+
+53
+00:04:55 --> 00:04:57
+of just as recursive
+partitioning.
+
+54
+00:04:57 --> 00:05:06
+That's all it is.
+Just as mergesort was recursive
+
+55
+00:05:06 --> 00:05:18
+merging, quicksort sort of goes
+the other way around and does
+
+56
+00:05:18 --> 00:05:28
+recursive partitioning.
+The key is the linear time,
+
+57
+00:05:28 --> 00:05:40
+by which I mean theta n,
+partitioning subroutine.
+
+58
+00:05:40 --> 00:05:43
+And here are some pseudocode
+for it.
+
+59
+00:05:43 --> 00:05:47
+This is actually slightly
+different from the book.
+
+60
+00:05:47 --> 00:05:51
+The book has one.
+In fact, there is a nice
+
+61
+00:05:51 --> 00:05:55
+problem in the book that has
+even a different one,
+
+62
+00:05:55 --> 00:06:00
+but they are all basically the
+same idea.
+
+63
+00:06:00 --> 00:06:01
+Partition (A,
+p, q).
+
+64
+00:06:01 --> 00:06:06
+And what we are looking at,
+at this step of the recursion,
+
+65
+00:06:06 --> 00:06:11
+is the subarray A from p to q.
+And basically we pick a pivot,
+
+66
+00:06:11 --> 00:06:17
+which is we are going to just
+pick as the first element of the
+
+67
+00:06:17 --> 00:06:19
+array A of p.
+
+68
+00:06:19 --> 00:06:26
+
+
+69
+00:06:26 --> 00:06:29
+And the book,
+just for your information,
+
+70
+00:06:29 --> 00:06:32
+uses A of q.
+I use A of p.
+
+71
+00:06:32 --> 00:06:37
+It doesn't really matter.
+And then we set an index to p
+
+72
+00:06:37 --> 00:06:40
+and then we have a loop.
+
+73
+00:06:40 --> 00:07:35
+
+
+74
+00:07:35 --> 00:07:40
+This is the code.
+Basically the structure of it
+
+75
+00:07:40 --> 00:07:47
+is a for loop with an "if"
+statement in the middle.
+
+76
+00:07:47 --> 00:07:54
+And so the structure of the
+algorithm of this partitioning
+
+77
+00:07:54 --> 00:08:00
+step looks as follows.
+We set the pivot to be the
+
+78
+00:08:00 --> 00:08:05
+first element.
+Here is p and here is q.
+
+79
+00:08:05 --> 00:08:10
+This is going to be our
+invariant for the loop.
+
+80
+00:08:10 --> 00:08:15
+And, at any time during the
+execution of a loop,
+
+81
+00:08:15 --> 00:08:22
+I essentially have some values
+up to i which are already less
+
+82
+00:08:22 --> 00:08:28
+than or equal to x and then some
+values that end at j minus 1
+
+83
+00:08:28 --> 00:08:34
+that are greater than or equal
+to x.
+
+84
+00:08:34 --> 00:08:38
+And then I don't know about the
+rest.
+
+85
+00:08:38 --> 00:08:44
+And so we start out with i
+equal to p and j equal to p plus
+
+86
+00:08:44 --> 1.
+
+
+87
+1. --> 00:08:47
+It starts out at p plus 1 so
+
+88
+00:08:47 --> 00:08:52
+that everything is unknown
+except for x here.
+
+89
+00:08:52 --> 00:08:58
+And then the idea is that it is
+going to preserve this
+
+90
+00:08:58 --> 00:09:02
+invariant.
+And the way it does it is,
+
+91
+00:09:02 --> 00:09:06
+as we go through the loop,
+it looks at a of j and says is
+
+92
+00:09:06 --> 00:09:10
+it greater than or equal to x?
+Sorry, is it less than or equal
+
+93
+00:09:10 --> 00:09:12
+to x?
+If it is greater than or equal
+
+94
+00:09:12 --> 00:09:15
+to x it does nothing,
+because what can happen?
+
+95
+00:09:15 --> 00:09:19
+If this is greater than or
+equal to x, essentially it just
+
+96
+00:09:19 --> 00:09:23
+goes to the next iterational
+loop which moves this boundary
+
+97
+00:09:23 --> 00:09:27
+and the invariant is satisfied.
+Does everybody see that?
+
+98
+00:09:27 --> 00:09:31
+Yeah, OK.
+But if it is less than or equal
+
+99
+00:09:31 --> 00:09:35
+to x, I have got a problem if I
+want to maintain the invariant
+
+100
+00:09:35 --> 00:09:38
+if this next element is less
+than or equal to x.
+
+101
+00:09:38 --> 00:09:43
+And so what it does then is it
+says oh, let me just move this
+
+102
+00:09:43 --> 00:09:47
+boundary and swap this element
+here, which is greater than or
+
+103
+00:09:47 --> 00:09:51
+equal to x, with this one here
+that is less than or equal to x,
+
+104
+00:09:51 --> 00:09:55
+thereby increasing the size of
+this subarray and then the
+
+105
+00:09:55 --> 00:09:59
+invariant is satisfied again.
+It is a fairly simple
+
+106
+00:09:59 --> 00:10:03
+algorithm.
+And it is actually a very tight
+
+107
+00:10:03 --> 00:10:08
+and easy algorithm.
+That is one reason that this is
+
+108
+00:10:08 --> 00:10:13
+such a great piece of code
+because it is very efficient.
+
+109
+00:10:13 --> 00:10:18
+Now, in principle,
+the running time for this on n
+
+110
+00:10:18 --> 00:10:21
+elements is order n.
+
+111
+00:10:21 --> 00:10:28
+
+
+112
+00:10:28 --> 00:10:31
+Because I am basically just
+going through the n elements and
+
+113
+00:10:31 --> 00:10:35
+just doing a constant amount of
+work and then just a constant
+
+114
+00:10:35 --> 00:10:39
+amount of work outside.
+This is a clever piece of code.
+
+115
+00:10:39 --> 00:10:41
+In fact, in principle partition
+is easy, right?
+
+116
+00:10:41 --> 00:10:44
+If I weren't worrying about
+doing it in place,
+
+117
+00:10:44 --> 00:10:47
+it is really a pretty easy
+thing to do.
+
+118
+00:10:47 --> 00:10:50
+I take an element and just
+compare every other element with
+
+119
+00:10:50 --> 00:10:52
+it.
+I throw one into one bin and
+
+120
+00:10:52 --> 00:10:57
+one into the other.
+That is clearly linear time.
+
+121
+00:10:57 --> 00:11:01
+But often what you find is that
+just because you can do it that
+
+122
+00:11:01 --> 00:11:04
+way theoretically doesn't mean
+that that is going to end up
+
+123
+00:11:04 --> 00:11:08
+giving you good code.
+And this is a nice piece of
+
+124
+00:11:08 --> 00:11:10
+code that allows you to do it in
+place.
+
+125
+00:11:10 --> 00:11:14
+And that is one reason why this
+is a particularly good
+
+126
+00:11:14 --> 00:11:16
+algorithm, because the constants
+are good.
+
+127
+00:11:16 --> 00:11:20
+So, yes, when we do asymptotic
+analysis we tend to ignore the
+
+128
+00:11:20 --> 00:11:24
+constants, but when you're
+actually building code you care
+
+129
+00:11:24 --> 00:11:30
+about the constants.
+But first you care much more
+
+130
+00:11:30 --> 00:11:37
+than just about the constants,
+is whether overall it is going
+
+131
+00:11:37 --> 00:11:43
+to be a fast algorithm.
+Let's go through an example of
+
+132
+00:11:43 --> 00:11:50
+this, I guess I will do it over
+here, just so we get the gist.
+
+133
+00:11:50 --> 00:11:57
+Here is a sample array that I
+have created out of hallcloth.
+
+134
+00:11:57 --> 00:12:05
+And here we are going to set x,
+the pivot, to be 6.
+
+135
+00:12:05 --> 00:12:08
+Let's look to see how this
+algorithm works.
+
+136
+00:12:08 --> 00:12:12
+So, i starts out here and j
+starts out here if we
+
+137
+00:12:12 --> 00:12:15
+initialize.
+And what we do is start
+
+138
+00:12:15 --> 00:12:18
+scanning right,
+essentially that code is
+
+139
+00:12:18 --> 00:12:23
+scanning right until it gets
+something which is less than or
+
+140
+00:12:23 --> 00:12:27
+equal to the pivot.
+It keeps going here until it
+
+141
+00:12:27 --> 00:12:32
+finds, j keeps incrementing
+until it finds something that is
+
+142
+00:12:32 --> 00:12:38
+less than or equal to the pivot.
+And, in that case,
+
+143
+00:12:38 --> 00:12:44
+it is the number 5.
+Then it says we will swap these
+
+144
+00:12:44 --> 00:12:49
+two things.
+And it does that and we get 6,
+
+145
+00:12:49 --> 00:12:52
+5, 13, 10, 8,
+3, 2, 11.
+
+146
+00:12:52 --> 00:12:58
+And meanwhile now i gets
+incremented and j continues
+
+147
+00:12:58 --> 00:13:05
+where it left off.
+And so now we keep scanning
+
+148
+00:13:05 --> 00:13:12
+right until we get to something
+that is less than or equal to
+
+149
+00:13:12 --> 00:13:16
+the pivot.
+In this case it is 3.
+
+150
+00:13:16 --> 00:13:20
+We swap 3 and 5 and get 6,
+3, etc.
+
+151
+00:13:20 --> 00:13:27
+And now, at this step we
+increment i, we start j out
+
+152
+00:13:27 --> 00:13:30
+here.
+And in this case,
+
+153
+00:13:30 --> 00:13:35
+right off the bat,
+we have something which is less
+
+154
+00:13:35 --> 00:13:39
+than or equal to x,
+so we swap these two.
+
+155
+00:13:39 --> 00:13:42
+I blew it, didn't I?
+Oops.
+
+156
+00:13:42 --> 00:13:46
+What did I do?
+I swapped the wrong thing,
+
+157
+00:13:46 --> 00:13:48
+didn't I, here?
+Ah-ha.
+
+158
+00:13:48 --> 00:13:51
+That is why I am not a
+computer.
+
+159
+00:13:51 --> 00:13:54
+Good.
+We should have swapped this
+
+160
+00:13:54 --> 00:13:57
+guy, right?
+Swapped i plus 1,
+
+161
+00:13:57 --> 00:14:01
+right?
+This was i.
+
+162
+00:14:01 --> 00:14:03
+We swap i plus 1,
+good.
+
+163
+00:14:03 --> 00:14:09
+So, that's all wrong.
+Let's swap the right things.
+
+164
+00:14:09 --> 00:14:12
+Now we have 6,
+5, 3, 10, 8,
+
+165
+00:14:12 --> 00:14:16
+13, 2, 11.
+That even corresponds to my
+
+166
+00:14:16 --> 00:14:22
+notes for some strange reason.
+This is i and now this is j.
+
+167
+00:14:22 --> 00:14:28
+And now when I look,
+I immediately have something
+
+168
+00:14:28 --> 00:14:34
+that is less than or equal to
+the pivot.
+
+169
+00:14:34 --> 00:14:41
+We swap this and i plus 1,
+so now we have 6,
+
+170
+00:14:41 --> 00:14:45
+5, 3, 2, 8, 13,
+10, 11.
+
+171
+00:14:45 --> 00:14:52
+And we, at that point,
+increment i to here.
+
+172
+00:14:52 --> 00:15:03
+And we have j now going here
+and j runs to the end.
+
+173
+00:15:03 --> 00:15:08
+And the loop terminates.
+When the loop terminates there
+
+174
+00:15:08 --> 00:15:14
+is one less swap that we do,
+which is to put our pivot
+
+175
+00:15:14 --> 00:15:18
+element in the middle between
+the two subarrays.
+
+176
+00:15:18 --> 00:15:25
+Here we swap this one and this
+one, and so that gives us then
+
+177
+00:15:25 --> 00:15:27
+2, 5, 3, 6, 8,
+13, 10, 11.
+
+178
+00:15:27 --> 00:15:33
+And this is the pivot.
+And everything over here is
+
+179
+00:15:33 --> 00:15:40
+less than or equal to the pivot.
+And everything over here is
+
+180
+00:15:40 --> 00:15:44
+greater than or equal to the
+pivot.
+
+181
+00:15:44 --> 00:15:56
+
+
+182
+00:15:56 --> 00:15:59
+OK, so the quicksort routine.
+Once we have this partition
+
+183
+00:15:59 --> 00:16:03
+routine, quicksort is a pretty
+easy piece of code to write.
+
+184
+00:16:03 --> 00:16:18
+
+
+185
+00:16:18 --> 00:16:21
+I should have said return here
+i, right?
+
+186
+00:16:21 --> 00:16:24
+You have got to return with the
+pivot.
+
+187
+00:16:24 --> 00:16:29
+Here I have got to return i
+because we want to know where
+
+188
+00:16:29 --> 00:16:33
+the pivot element is.
+Sorry.
+
+189
+00:16:33 --> 00:16:46
+I will plug in my code.
+r gets partition of (A,
+
+190
+00:16:46 --> 00:17:03
+p, q) and then we quicksort (A,
+p, r-1) and quicksort of (A,
+
+191
+00:17:03 --> 00:17:09
+r+1, q).
+And that is it.
+
+192
+00:17:09 --> 00:17:17
+That's the code.
+The initial call is quicksort
+
+193
+00:17:17 --> 00:17:24
+of (A, 1, n).
+Because once we partitioned,
+
+194
+00:17:24 --> 00:17:31
+we just have to quicksort the
+two portions,
+
+195
+00:17:31 --> 00:17:39
+the left and right portions.
+Just the boundary case is
+
+196
+00:17:39 --> 00:17:41
+probably worth mentioning for a
+second.
+
+197
+00:17:41 --> 00:17:44
+If there are zero or one
+elements, that is basically what
+
+198
+00:17:44 --> 00:17:47
+can possibly happen here,
+is that I get zero or one
+
+199
+00:17:47 --> 00:17:49
+elements here.
+Then the point is there is
+
+200
+00:17:49 --> 00:17:52
+nothing to do because the array
+is sorted, either because it is
+
+201
+00:17:52 --> 00:17:56
+an empty array or because it
+only has one element.
+
+202
+00:17:56 --> 00:17:59
+One of the tricks to making
+quicksort go fast,
+
+203
+00:17:59 --> 00:18:01
+as one tunes this,
+is to, in fact,
+
+204
+00:18:01 --> 00:18:04
+look at having a special
+purpose sorting routine for
+
+205
+00:18:04 --> 00:18:07
+small numbers of elements.
+For example,
+
+206
+00:18:07 --> 00:18:10
+if you get down to five
+elements having some straight
+
+207
+00:18:10 --> 00:18:14
+line piece of code that knows
+how to sort five elements
+
+208
+00:18:14 --> 00:18:17
+sufficiently as opposed to
+continuing to go through
+
+209
+00:18:17 --> 00:18:20
+recursion in order to accomplish
+that.
+
+210
+00:18:20 --> 00:18:22
+And there are a variety of
+other things.
+
+211
+00:18:22 --> 00:18:27
+This is a tail recursive code,
+and so you can use certain tail
+
+212
+00:18:27 --> 00:18:31
+recursion optimizations.
+And there are a variety of
+
+213
+00:18:31 --> 00:18:35
+other kinds of optimizations
+that you can use to make this
+
+214
+00:18:35 --> 00:18:37
+code go fast.
+So, yeah, you can tune it up a
+
+215
+00:18:37 --> 00:18:40
+bit beyond what is there,
+but the core of it is this
+
+216
+00:18:40 --> 00:18:43
+efficient partitioning routine.
+
+217
+00:18:43 --> 00:18:53
+
+
+218
+00:18:53 --> 00:18:58
+That is the algorithm.
+It turns out that looking at
+
+219
+00:18:58 --> 00:19:05
+how fast it runs is actually a
+little bit challenging.
+
+220
+00:19:05 --> 00:19:09
+In the analysis,
+we are going to assume that all
+
+221
+00:19:09 --> 00:19:13
+elements are distinct.
+It turns out that this
+
+222
+00:19:13 --> 00:19:19
+particular code does not work
+very well when you have repeated
+
+223
+00:19:19 --> 00:19:25
+elements, but Hoare's original
+partitioning routine is actually
+
+224
+00:19:25 --> 00:19:31
+more efficient in that case if
+there are duplicates in what you
+
+225
+00:19:31 --> 00:19:36
+are sorting.
+And I encourage you to look at
+
+226
+00:19:36 --> 00:19:38
+that.
+It has a much more complicated
+
+227
+00:19:38 --> 00:19:42
+invariant for partitioning
+routine, but it does a similar
+
+228
+00:19:42 --> 00:19:45
+kind of thing.
+It's just a bit more
+
+229
+00:19:45 --> 00:19:48
+complicated.
+If they weren't all distinct,
+
+230
+00:19:48 --> 00:19:52
+there are things you can do to
+make them distinct or you can
+
+231
+00:19:52 --> 00:19:56
+just use this code.
+The easiest thing to do is just
+
+232
+00:19:56 --> 00:20:00
+use Hoare's original code
+because that works pretty well
+
+233
+00:20:00 --> 00:20:07
+when they are nondistinct.
+But this is a little bit easier
+
+234
+00:20:07 --> 00:20:12
+to understand.
+Let's let T(n) be the
+
+235
+00:20:12 --> 00:20:18
+worst-case running time on n
+elements.
+
+236
+00:20:18 --> 00:20:27
+And so what is the worse-case?
+What is the worse-case going to
+
+237
+00:20:27 --> 00:20:31
+be for quicksort?
+
+238
+00:20:31 --> 00:20:40
+
+
+239
+00:20:40 --> 00:20:43
+That's right.
+If you always pick the pivot
+
+240
+00:20:43 --> 00:20:47
+and everything is greater than
+or everything is less than,
+
+241
+00:20:47 --> 00:20:50
+you are not going to partition
+the array very well.
+
+242
+00:20:50 --> 00:20:54
+And when does that happen?
+What does the original input
+
+243
+00:20:54 --> 00:20:57
+look like that makes that
+happen?
+
+244
+00:20:57 --> 00:21:01
+If it is already sorted or
+reverse sorted.
+
+245
+00:21:01 --> 00:21:05
+So, if the input is sorted or
+reverse sorted.
+
+246
+00:21:05 --> 00:21:09
+That is actually kind of
+important to understand,
+
+247
+00:21:09 --> 00:21:14
+because it turns out the most
+common thing to sort is
+
+248
+00:21:14 --> 00:21:19
+something that is already
+sorted, surprisingly,
+
+249
+00:21:19 --> 00:21:22
+or things that are nearly
+sorted.
+
+250
+00:21:22 --> 00:21:27
+But often it is just sorted and
+somebody wants to make sure it
+
+251
+00:21:27 --> 00:21:33
+is sorted.
+Well, let's just sort it again
+
+252
+00:21:33 --> 00:21:38
+rather than checking to see if
+it is sorted.
+
+253
+00:21:38 --> 00:21:43
+And, in those cases,
+one side of the partition of
+
+254
+00:21:43 --> 00:21:50
+each partition has no elements.
+Then we can write out what the
+
+255
+00:21:50 --> 00:21:54
+recursion is for that.
+We have T(n).
+
+256
+00:21:54 --> 00:22:00
+If one side has no elements,
+we are going to have T(0) on
+
+257
+00:22:00 --> 00:22:06
+that side.
+And on the other side we are
+
+258
+00:22:06 --> 00:22:11
+going to have T(n-1).
+We are just writing out the
+
+259
+00:22:11 --> 00:22:16
+recursion for this.
+One side has no elements.
+
+260
+00:22:16 --> 00:22:19
+The other side has n-1
+elements.
+
+261
+00:22:19 --> 00:22:26
+And then partitioning and all
+the bookkeeping and so forth is
+
+262
+00:22:26 --> 00:22:30
+order n.
+What is T(0)?
+
+263
+00:22:30 --> 00:22:35
+What is T(0)?
+What is that asymptotically?
+
+264
+00:22:35 --> 00:22:38
+It's a constant,
+order 1.
+
+265
+00:22:38 --> 00:22:44
+That is just order 1 + T(n-1) +
+order n.
+
+266
+00:22:44 --> 00:22:50
+Well, the order 1 can be
+absorbed into the order n,
+
+267
+00:22:50 --> 00:22:59
+so this is really just saying
+it is T(n-1) + order n.
+
+268
+00:22:59 --> 00:23:08
+And what is that equal to?
+That is order n^2.
+
+269
+00:23:08 --> 00:23:19
+Why is that order n^2?
+It is an arithmetic series.
+
+270
+00:23:19 --> 00:23:30
+Actually, just like we got for
+insertion sort.
+
+271
+00:23:30 --> 00:23:35
+Just like for insertion sort it
+is an arithmetic series.
+
+272
+00:23:35 --> 00:23:42
+Going through all that work and
+we have an algorithm called
+
+273
+00:23:42 --> 00:23:47
+quicksort, and it is no faster
+than insertion sort.
+
+274
+00:23:47 --> 00:23:51
+Nevertheless,
+I said it was a good algorithm.
+
+275
+00:23:51 --> 00:23:57
+The reason it is a good
+algorithm is because its average
+
+276
+00:23:57 --> 00:24:04
+case time, as we are going to
+see, is very good.
+
+277
+00:24:04 --> 00:24:09
+But let's try to understand
+this a little bit more just so
+
+278
+00:24:09 --> 00:24:15
+that we understand the
+difference between what is going
+
+279
+00:24:15 --> 00:24:20
+to happen in the average case
+and what is going to happen in
+
+280
+00:24:20 --> 00:24:25
+the worse-case.
+Let's draw a recursion tree for
+
+281
+00:24:25 --> 00:24:31
+this for T(n) = T(0) + T(n-1) +
+and I will make the constant
+
+282
+00:24:31 --> 00:24:36
+explicit for cn.
+So, we get an intuition of what
+
+283
+00:24:36 --> 00:24:39
+is going on.
+Some constant times n.
+
+284
+00:24:39 --> 00:24:44
+And then we have T(n) is equal
+to, and we write it with the
+
+285
+00:24:44 --> 00:24:47
+constant part here,
+cn, and then T(0) here,
+
+286
+00:24:47 --> 00:24:51
+and then T(n-1) here.
+Now, I know that all you folks
+
+287
+00:24:51 --> 00:24:56
+are really fast and want to jump
+immediately to the full-blown
+
+288
+00:24:56 --> 00:24:59
+tree.
+But, let me tell you,
+
+289
+00:24:59 --> 00:25:04
+my advice is that you spend
+just a couple of minutes writing
+
+290
+00:25:04 --> 00:25:06
+it out.
+Since the tree grows
+
+291
+00:25:06 --> 00:25:10
+exponentially,
+it only costs you a constant
+
+292
+00:25:10 --> 00:25:14
+overhead to write out the small
+cases and make sure that you
+
+293
+00:25:14 --> 00:25:18
+have got the pattern that you
+are developing.
+
+294
+00:25:18 --> 00:25:21
+So, I am going to go one more
+step.
+
+295
+00:25:21 --> 00:25:26
+Here we have T(0) and now this
+becomes c(n-1) and now we have
+
+296
+00:25:26 --> 00:25:30
+another T(0) over here and
+T(n-2).
+
+297
+00:25:30 --> 00:25:35
+And we continue that,
+dot, dot, dot.
+
+298
+00:25:35 --> 00:25:45
+That is all equal to cn with a
+T(0) here, c(n-1) with a T(0),
+
+299
+00:25:45 --> 00:25:53
+c(n-2), T(0) here,
+and that goes all the way down
+
+300
+00:25:53 --> 00:26:01
+until we end up with T(1) down
+here.
+
+301
+00:26:01 --> 00:26:07
+What is the height of this tree?
+
+302
+00:26:07 --> 00:26:17
+
+
+303
+00:26:17 --> 00:26:20
+What is the height of the tree
+here?
+
+304
+00:26:20 --> 00:26:22
+Yeah, n.
+Good.
+
+305
+00:26:22 --> 00:26:30
+Because every step we are just
+decrementing the argument by 1.
+
+306
+00:26:30 --> 00:26:35
+So, the height is n.
+To analyze this,
+
+307
+00:26:35 --> 00:26:40
+let's first add up everything
+that is here.
+
+308
+00:26:40 --> 00:26:48
+Just so we understand where
+these things are coming from,
+
+309
+00:26:48 --> 00:26:56
+this is just theta of the
+summation of k equals 1 to n of
+
+310
+00:26:56 --> 00:27:02
+k, actually of ck.
+That is what is in there.
+
+311
+00:27:02 --> 00:27:08
+And that is equal to order n^2.
+That is where our algorithmatic
+
+312
+00:27:08 --> 00:27:12
+series is coming from.
+So, that is Theta(n^2).
+
+313
+00:27:12 --> 00:27:18
+And then all of these things
+here are all Theta(1).
+
+314
+00:27:18 --> 00:27:23
+
+
+315
+00:27:23 --> 00:27:33
+And how many of them are there?
+There are n Theta(1)'s.
+
+316
+00:27:33 --> 00:27:54
+So, the total amount is T(n) =
+Theta(n) + Theta(n^2) =
+
+317
+00:27:54 --> 00:28:03
+Theta(n^2).
+Just to see what the structure
+
+318
+00:28:03 --> 00:28:09
+is in terms of the recursion
+tree, it is a highly unbalanced
+
+319
+00:28:09 --> 00:28:14
+recursion tree.
+Now I am going to do something
+
+320
+00:28:14 --> 00:28:20
+that I told you should never do,
+which is we are going to be do
+
+321
+00:28:20 --> 00:28:25
+a best-case analysis.
+This is for intuition only.
+
+322
+00:28:25 --> 00:28:32
+And, in general,
+we don't do best-case analyses.
+
+323
+00:28:32 --> 00:28:35
+It doesn't mean anything,
+unless we get some intuition
+
+324
+00:28:35 --> 00:28:38
+for it maybe.
+But basically it means nothing
+
+325
+00:28:38 --> 00:28:43
+mathematically because it's
+providing no guarantee.
+
+326
+00:28:43 --> 00:28:55
+
+
+327
+00:28:55 --> 00:29:00
+And so this is intuition only.
+
+328
+00:29:00 --> 00:29:05
+
+
+329
+00:29:05 --> 00:29:13
+If we are really lucky what
+happens for partition?
+
+330
+00:29:13 --> 00:29:20
+What is going to be the lucky
+case?
+
+331
+00:29:20 --> 00:29:26
+
+
+332
+00:29:26 --> 00:29:28
+Yeah, it splits right in the
+middle.
+
+333
+00:29:28 --> 00:29:31
+Which is essentially --
+
+334
+00:29:31 --> 00:29:43
+
+
+335
+00:29:43 --> 00:29:46
+-- n/2 : n/2.
+It is really (n-1)/2 :
+
+336
+00:29:46 --> 00:29:51
+(n-1)/2, but we're not going to
+worry about the details because
+
+337
+00:29:51 --> 00:29:56
+we're only doing intuition for
+the best-case because best-case
+
+338
+00:29:56 --> 00:30:01
+is not what we want.
+If that happened,
+
+339
+00:30:01 --> 00:30:11
+what is the recurrence I get?
+Imagine it split it exactly in
+
+340
+00:30:11 --> 00:30:18
+the middle every time,
+then what happens?
+
+341
+00:30:18 --> 00:30:26
+You get T(n) = 2T(n/2) + order
+n for partitioning and
+
+342
+00:30:26 --> 00:30:33
+bookkeeping.
+And what is the solution of
+
+343
+00:30:33 --> 00:30:36
+that recurrence?
+That is n log n.
+
+344
+00:30:36 --> 00:30:42
+That is the same as the merge
+sort recurrence.
+
+345
+00:30:42 --> 00:30:46
+It is which case of the master
+theorem?
+
+346
+00:30:46 --> 00:30:51
+Case 2, right?
+Because n to the log base 2 of
+
+347
+00:30:51 --> 00:30:55
+2 is n to the 1,
+it is the same,
+
+348
+00:30:55 --> 00:31:05
+so we tack on the extra log n.
+Case 2 of the master theorem.
+
+349
+00:31:05 --> 00:31:14
+That is pretty good.
+That says that in the best-case
+
+350
+00:31:14 --> 00:31:24
+quicksort is going to do well.
+How about let's suppose the
+
+351
+00:31:24 --> 00:31:32
+split is always let's say 1/10 :
+9/10, 1/10n :
+
+352
+00:31:32 --> 00:31:35
+9/10n.
+In that case,
+
+353
+00:31:35 --> 00:31:43
+are we lucky or are we unlucky?
+
+354
+00:31:43 --> 00:31:52
+
+
+355
+00:31:52 --> 00:31:57
+I mean, if the split is really
+skewed, we clearly are going to
+
+356
+00:31:57 --> 00:32:00
+be unlucky, right,
+because then it's,
+
+357
+00:32:00 --> 00:32:04
+say, 1 to n.
+If it is really in the middle
+
+358
+00:32:04 --> 00:32:08
+it is n log n.
+What do you suppose it is if it
+
+359
+00:32:08 --> 00:32:11
+is 1/10 : 9/10?
+Is that lucky or unlucky?
+
+360
+00:32:11 --> 00:32:14
+We will have a little democracy
+here.
+
+361
+00:32:14 --> 00:32:17
+Who thinks that that is a lucky
+case?
+
+362
+00:32:17 --> 00:32:20
+It is going to be fast running
+time.
+
+363
+00:32:20 --> 00:32:23
+And who thinks it is an unlucky
+case?
+
+364
+00:32:23 --> 00:32:26
+OK, so we have some brave
+souls.
+
+365
+00:32:26 --> 00:32:30
+And who didn't vote?
+Oh, come on.
+
+366
+00:32:30 --> 00:32:32
+Come on.
+It is always better,
+
+367
+00:32:32 --> 00:32:35
+by the way, to say yes or no
+and be right or wrong,
+
+368
+00:32:35 --> 00:32:40
+because then you have some
+emotional commitment to it and
+
+369
+00:32:40 --> 00:32:43
+we will remember better,
+rather than just sitting and
+
+370
+00:32:43 --> 00:32:47
+being quiet.
+You don't manipulate your own
+
+371
+00:32:47 --> 00:32:50
+emotions well enough to remember
+things well.
+
+372
+00:32:50 --> 00:32:54
+Those people who voted win over
+the people who don't vote,
+
+373
+00:32:54 --> 00:32:56
+whether they are right or
+wrong.
+
+374
+00:32:56 --> 00:33:02
+Well, let's take a look.
+Here is the recurrence.
+
+375
+00:33:02 --> 00:33:07
+T(n) = T(1/10n) + T(9/10n) +
+Theta(n).
+
+376
+00:33:07 --> 00:33:15
+And we will assume that this
+part here is less than or equal
+
+377
+00:33:15 --> 00:33:19
+to some cn in order to analyze
+it.
+
+378
+00:33:19 --> 00:33:25
+We will just do a recursion
+tree for this and see.
+
+379
+00:33:25 --> 00:33:30
+Here is a recursion tree.
+
+380
+00:33:30 --> 00:33:35
+
+
+381
+00:33:35 --> 00:33:41
+We have T(n) = cn,
+T(1/10n), T(9/10n).
+
+382
+00:33:41 --> 00:33:46
+Now we have again cn at the
+top.
+
+383
+00:33:46 --> 00:33:51
+This gets complicated,
+right?
+
+384
+00:33:51 --> 00:34:00
+This is 1/10cn.
+Now, over here we have 1/10.
+
+385
+00:34:00 --> 00:34:09
+And then we are plugging it
+into the recursion again,
+
+386
+00:34:09 --> 00:34:20
+so we now get T(1/100n) and
+over here we get T(9/100n).
+
+387
+00:34:20 --> 00:34:26
+And over here we have now
+9/10cn.
+
+388
+00:34:26 --> 00:34:34
+And that gives us T(9/100n)
+again.
+
+389
+00:34:34 --> 00:34:48
+And here we get T(81/100n).
+And we keep going on.
+
+390
+00:34:48 --> 00:34:59
+That is equal to cn,
+1/10cn here.
+
+391
+00:34:59 --> 00:35:08
+Down this way we have 1/100cn.
+And that keeps going down until
+
+392
+00:35:08 --> 00:35:16
+we get to order 1 down here.
+And over here we have 9/10cn.
+
+393
+00:35:16 --> 00:35:24
+And here, let's see,
+this is 9/100cn and this is now
+
+394
+00:35:24 --> 00:35:32
+9/100cn and this is 81/100cn.
+And these things keep going
+
+395
+00:35:32 --> 00:35:36
+down until they get down to
+order 1.
+
+396
+00:35:36 --> 00:35:41
+But the leaves are not all at
+uniform depth here,
+
+397
+00:35:41 --> 00:35:45
+right?
+This side is way further up
+
+398
+00:35:45 --> 00:35:47
+than this side,
+right?
+
+399
+00:35:47 --> 00:35:53
+Because here we are only going
+down by 9/10 each time.
+
+400
+00:35:53 --> 00:35:58
+So, in fact,
+what is the length of this path
+
+401
+00:35:58 --> 00:36:02
+here?
+What is the length of this path
+
+402
+00:36:02 --> 00:36:06
+down to this,
+if I take the left most spine?
+
+403
+00:36:06 --> 00:36:15
+
+
+404
+00:36:15 --> 00:36:23
+Somebody raise there hand.
+Yeah?
+
+405
+00:36:23 --> 00:36:30
+Log base 10 of n.
+Because I am basically cutting
+
+406
+00:36:30 --> 00:36:33
+down by a factor of 10 each
+time.
+
+407
+00:36:33 --> 00:36:35
+And how long does it take me to
+reduce it to 1?
+
+408
+00:36:35 --> 00:36:38
+That is the definition,
+if you will,
+
+409
+00:36:38 --> 00:36:40
+of what a log is,
+log base 10.
+
+410
+00:36:40 --> 00:36:43
+What is this one?
+What is this path going that
+
+411
+00:36:43 --> 00:36:44
+way?
+
+412
+00:36:44 --> 00:36:53
+
+
+413
+00:36:53 --> 00:37:02
+Log of n. Log base 10/9 of n.
+Because we're going down by
+
+414
+00:37:02 --> 00:37:05
+9/10 each time.
+Once again, essentially the
+
+415
+00:37:05 --> 00:37:09
+definition of n.
+And everything in between there
+
+416
+00:37:09 --> 00:37:14
+is somewhere between log base 10
+of n and log base 10/9 of n.
+
+417
+00:37:14 --> 00:37:17
+So, everything is in between
+there.
+
+418
+00:37:17 --> 00:37:22
+Now what I can do is do the
+trick that we did for mergesort
+
+419
+00:37:22 --> 00:37:26
+in looking at what the
+evaluation of this is by adding
+
+420
+00:37:26 --> 00:37:31
+up what is the cost of the total
+level.
+
+421
+00:37:31 --> 00:37:36
+That is just cn.
+What is the cost of the next
+
+422
+00:37:36 --> 00:37:38
+level?
+cn.
+
+423
+00:37:38 --> 00:37:43
+And what is the cost of the
+next level?
+
+424
+00:37:43 --> 00:37:47
+cn.
+Every level we are still doing
+
+425
+00:37:47 --> 00:37:54
+the same amount of work.
+And we take that all the way
+
+426
+00:37:54 --> 00:38:00
+down.
+And the last levels --
+
+427
+00:38:00 --> 00:38:04
+Eventually we hit some point
+where it is not equal to cn
+
+428
+00:38:04 --> 00:38:09
+where we start getting things
+that are less than or equal to
+
+429
+00:38:09 --> 00:38:14
+cn because some of the leaves
+start dropping out starting at
+
+430
+00:38:14 --> 00:38:17
+this level.
+Basically this part is going to
+
+431
+00:38:17 --> 00:38:21
+be log base 10 of n,
+and then we start getting
+
+432
+00:38:21 --> 00:38:25
+things that are less than or
+equal to cn, and so forth,
+
+433
+00:38:25 --> 00:38:30
+until finally we get to add it
+all up.
+
+434
+00:38:30 --> 00:38:36
+T(n) is going to be less than
+or equal to cn times,
+
+435
+00:38:36 --> 00:38:43
+well, what is the longest that
+this could possibly be?
+
+436
+00:38:43 --> 00:38:49
+Log base 10/9 of n.
+Plus we have all of the leaves
+
+437
+00:38:49 --> 00:38:56
+that we have to add in,
+but all the leaves together add
+
+438
+00:38:56 --> 00:39:03
+up to just order n.
+All the leaves add up to order
+
+439
+00:39:03 --> 00:39:08
+n, so we have + Theta(n).
+And so this is how much?
+
+440
+00:39:08 --> 00:39:14
+If I add all of this together,
+what is this asymptotically?
+
+441
+00:39:14 --> 00:39:18
+That is n log n.
+So, T(n) is actually bounded by
+
+442
+00:39:18 --> 00:39:21
+n log n.
+We are lucky.
+
+443
+00:39:21 --> 00:39:25
+Those people who guessed lucky
+were right.
+
+444
+00:39:25 --> 00:39:30
+A 1/10 : 9/10 split is
+asymptotically as good as a 50 :
+
+445
+00:39:30 --> 00:39:34
+50 split.
+And, in fact,
+
+446
+00:39:34 --> 00:39:41
+we can lower bound this by just
+looking at these things here and
+
+447
+00:39:41 --> 00:39:45
+discover that,
+in fact, T(n) is lower bounded
+
+448
+00:39:45 --> 00:39:49
+by cn log base 10 of n + order
+n.
+
+449
+00:39:49 --> 00:39:55
+And so T(n) is lower bounded by
+also asymptotically n log n.
+
+450
+00:39:55 --> 00:40:00
+So, T(n) is actually Theta(n lg
+n).
+
+451
+00:40:00 --> 00:40:04
+Now, this is not really proof.
+I generally recommend that you
+
+452
+00:40:04 --> 00:40:07
+don't do this kind of thing to
+do a proof.
+
+453
+00:40:07 --> 00:40:10
+This is a good intuition of a
+recursion tree.
+
+454
+00:40:10 --> 00:40:14
+The way you prove this is what?
+Substitution method.
+
+455
+00:40:14 --> 00:40:17
+Good.
+What you do is use this to get
+
+456
+00:40:17 --> 00:40:20
+your guess and then use
+substitution method to prove
+
+457
+00:40:20 --> 00:40:25
+that your guess is right.
+It is too easy to make mistakes
+
+458
+00:40:25 --> 00:40:28
+with this method.
+It is very easy to make
+
+459
+00:40:28 --> 00:40:32
+mistakes.
+With the substitution method it
+
+460
+00:40:32 --> 00:40:37
+is harder to make mistakes
+because there is just algebra
+
+461
+00:40:37 --> 00:40:40
+there that you are cranking
+through.
+
+462
+00:40:40 --> 00:40:43
+It is easier to verify rather
+than dot, dot,
+
+463
+00:40:43 --> 00:40:48
+dots and trees that you drew
+improperly and wrote in wrong
+
+464
+00:40:48 --> 00:40:50
+amounts and so forth.
+OK?
+
+465
+00:40:50 --> 00:40:53
+So, this is n log n.
+That's pretty good.
+
+466
+00:40:53 --> 00:40:56
+It is order n log n.
+And we are lucky.
+
+467
+00:40:56 --> 00:41:01
+Now let's try another one.
+This is all for intuition
+
+468
+00:41:01 --> 00:41:05
+because, I will tell you,
+by the time we get to the end
+
+469
+00:41:05 --> 00:41:10
+of this class you folks are
+going to bolting for the door
+
+470
+00:41:10 --> 00:41:13
+because we are going to do some
+good math today,
+
+471
+00:41:13 --> 00:41:16
+actually.
+It is actually fun math,
+
+472
+00:41:16 --> 00:41:20
+I think, but it is challenging.
+If you are not awake,
+
+473
+00:41:20 --> 00:41:23
+you can still sleep now,
+but I will tell you when to
+
+474
+00:41:23 --> 00:41:26
+wake up.
+One more bit of intuition.
+
+475
+00:41:26 --> 00:41:30
+Suppose that we alternate
+steps.
+
+476
+00:41:30 --> 00:41:33
+Suppose we do the partitioning
+thing.
+
+477
+00:41:33 --> 00:41:38
+And it happens that we start
+out lucky and then we have a
+
+478
+00:41:38 --> 00:41:43
+partitioning step that is
+unlucky and then we have a step
+
+479
+00:41:43 --> 00:41:49
+that is lucky and a step that is
+unlucky and we do that all the
+
+480
+00:41:49 --> 00:41:54
+way down the tree.
+Suppose we alternate.
+
+481
+00:41:54 --> 00:42:07
+
+
+482
+00:42:07 --> 00:42:09
+Are we lucky or unlucky if we
+do that?
+
+483
+00:42:09 --> 00:42:11
+This time I want everybody
+voting.
+
+484
+00:42:11 --> 00:42:13
+It doesn't matter what your
+answer is.
+
+485
+00:42:13 --> 00:42:16
+Everybody has to have a stake
+in the game.
+
+486
+00:42:16 --> 00:42:19
+It is sort of like horseracing.
+If ever you have watched
+
+487
+00:42:19 --> 00:42:23
+horseracing, it is really
+boring, but if you put a little
+
+488
+00:42:23 --> 00:42:26
+bit of money down,
+a little skin in the game
+
+489
+00:42:26 --> 00:42:30
+suddenly it is interesting.
+The same thing here.
+
+490
+00:42:30 --> 00:42:33
+I want everybody to put some
+skin in the game.
+
+491
+00:42:33 --> 00:42:37
+Who thinks that this is going
+to be lucky?
+
+492
+00:42:37 --> 00:42:40
+Who thinks it is going to be
+unlucky?
+
+493
+00:42:40 --> 00:42:42
+OK.
+Who didn't vote?
+
+494
+00:42:42 --> 00:42:46
+[LAUGHTER] You guys.
+No skin in the game,
+
+495
+00:42:46 --> 00:42:48
+ha?
+Let's analyze this so we can
+
+496
+00:42:48 --> 00:42:53
+once again write a recurrence.
+On the lucky step,
+
+497
+00:42:53 --> 00:42:57
+we will have L(n) be the
+running time on a lucky step of
+
+498
+00:42:57 --> 00:43:02
+size n.
+And that is going to be twice.
+
+499
+00:43:02 --> 00:43:07
+While the next step is going to
+be unlucky.
+
+500
+00:43:07 --> 00:43:10
+It is two unluckies over 2 plus
+order n.
+
+501
+00:43:10 --> 00:43:15
+That is our lucky step.
+And then for the unlucky step
+
+502
+00:43:15 --> 00:43:20
+it is essentially going to be L
+of n minus 1,
+
+503
+00:43:20 --> 00:43:25
+it is going to be lucky on the
+next step, plus order n.
+
+504
+00:43:25 --> 00:43:30
+That is unlucky.
+See how I have described this
+
+505
+00:43:30 --> 00:43:36
+behavior with a system now of
+recurrences that are dependent
+
+506
+00:43:36 --> 00:43:41
+where the boundary cases,
+once again which are unstated,
+
+507
+00:43:41 --> 00:43:47
+is that the recurrences have a
+constant solution with constant
+
+508
+00:43:47 --> 00:43:50
+input.
+Now we just do a little bit of
+
+509
+00:43:50 --> 00:43:54
+algebra using substitution.
+L(n) is then equal to,
+
+510
+00:43:54 --> 00:44:00
+well, I can just plug in,
+for U(n/2) plug in the value of
+
+511
+00:44:00 --> 00:44:06
+U(n/2).
+And that gives me 2[L(n/2-1) +
+
+512
+00:44:06 --> 00:44:11
+Theta(n) + Theta(n)].
+See what I did here?
+
+513
+00:44:11 --> 00:44:18
+I simply plugged in,
+for U(n/2), this recurrence.
+
+514
+00:44:18 --> 00:44:27
+In fact, technically I guess I
+should have said Theta(n/2) just
+
+515
+00:44:27 --> 00:44:35
+to make this substitution more
+straightforward.
+
+516
+00:44:35 --> 00:44:41
+It is the same thing,
+but just to not skip a step.
+
+517
+00:44:41 --> 00:44:49
+That we can now crank through.
+And that is 2L(n/2 - 1) +,
+
+518
+00:44:49 --> 00:44:57
+and now I have two T(n/2) plus
+another one, so all of that is
+
+519
+00:44:57 --> 00:45:04
+just order n.
+And what is the solution to
+
+520
+00:45:04 --> 00:45:07
+that recurrence?
+n log n.
+
+521
+00:45:07 --> 00:45:13
+Theta(n lg n).
+Does everybody see that?
+
+522
+00:45:13 --> 00:45:15
+OK?
+Theta(n lg n).
+
+523
+00:45:15 --> 00:45:24
+This is basically just,
+once again, master theorem with
+
+524
+00:45:24 --> 00:45:33
+a little bit of jiggering here.
+That minus one is only going to
+
+525
+00:45:33 --> 00:45:38
+help us, actually,
+in the solution of the master
+
+526
+00:45:38 --> 00:45:41
+theorem.
+So, it is order n lg n.
+
+527
+00:45:41 --> 00:45:45
+We are lucky.
+If we alternate lucky and
+
+528
+00:45:45 --> 00:45:50
+unlucky, we are lucky.
+How can we insure that we are
+
+529
+00:45:50 --> 00:45:55
+usually lucky?
+If I have the input already
+
+530
+00:45:55 --> 00:46:00
+sorted, I am going to be
+unlucky.
+
+531
+00:46:00 --> 00:46:03
+Excuse me?
+You could randomly arrange the
+
+532
+00:46:03 --> 00:46:07
+elements, that is one way.
+What is another way?
+
+533
+00:46:07 --> 00:46:10
+That is a perfectly good way,
+actually.
+
+534
+00:46:10 --> 00:46:13
+In fact, it is a common thing
+to do.
+
+535
+00:46:13 --> 00:46:16
+Randomly choose the pivot,
+OK.
+
+536
+00:46:16 --> 00:46:20
+It turns out those are
+effectively equivalent,
+
+537
+00:46:20 --> 00:46:24
+but we are going to do the
+randomly choose the pivot
+
+538
+00:46:24 --> 00:46:30
+because it is a little bit
+easier to analyze.
+
+539
+00:46:30 --> 00:46:33
+But they are effectively
+equivalent.
+
+540
+00:46:33 --> 00:46:39
+That gives us the algorithm
+called randomized quicksort.
+
+541
+00:46:39 --> 00:46:46
+
+
+542
+00:46:46 --> 00:46:53
+And the nice thing about
+randomized quicksort is that the
+
+543
+00:46:53 --> 00:47:00
+running time is independent of
+the input ordering.
+
+544
+00:47:00 --> 00:47:04
+Very much for the same reason
+that if I just scramble the
+
+545
+00:47:04 --> 00:47:08
+input, it would be independent
+of the input ordering.
+
+546
+00:47:08 --> 00:47:12
+If I randomly scramble the
+input then it doesn't matter
+
+547
+00:47:12 --> 00:47:17
+what the order of the input was.
+Whereas, original quicksort has
+
+548
+00:47:17 --> 00:47:21
+some slow cases,
+input sorted or reverse sorted,
+
+549
+00:47:21 --> 00:47:24
+and some fast cases.
+In particular,
+
+550
+00:47:24 --> 00:47:28
+it turns out that if it is
+random it is going to be pretty
+
+551
+00:47:28 --> 00:47:31
+fast.
+If I actually randomly scramble
+
+552
+00:47:31 --> 00:47:35
+the input or pivot on a random
+element, it doesn't matter what
+
+553
+00:47:35 --> 00:47:38
+the input was.
+One way of thinking about this
+
+554
+00:47:38 --> 00:47:40
+is with an adversary.
+Imagine your adversary,
+
+555
+00:47:40 --> 00:47:44
+you are saying I have a good
+sorting algorithm and he says I
+
+556
+00:47:44 --> 00:47:47
+have a good sorting algorithm
+and you're trying to sell to a
+
+557
+00:47:47 --> 00:47:50
+single customer.
+And the customer says OK,
+
+558
+00:47:50 --> 00:47:53
+you guys come up with
+benchmarks for each of your
+
+559
+00:47:53 --> 00:47:55
+algorithms.
+And you get to look at his
+
+560
+00:47:55 --> 00:47:59
+algorithm.
+Well, you look and you say oh,
+
+561
+00:47:59 --> 00:48:02
+he is using quicksort.
+I will just give him something
+
+562
+00:48:02 --> 00:48:06
+that is already sorted.
+That is what you could do to
+
+563
+00:48:06 --> 00:48:08
+him.
+If you had quicksort,
+
+564
+00:48:08 --> 00:48:10
+he would do the same thing to
+you.
+
+565
+00:48:10 --> 00:48:14
+So, how can you defeat him?
+Well, one way is with
+
+566
+00:48:14 --> 00:48:17
+randomization.
+Big idea in computer science,
+
+567
+00:48:17 --> 00:48:20
+use random numbers.
+The idea here is if I permute
+
+568
+00:48:20 --> 00:48:23
+the ordering at random,
+as one suggestion,
+
+569
+00:48:23 --> 00:48:28
+or I pivot at random places,
+then the input ordering didn't
+
+570
+00:48:28 --> 00:48:32
+matter.
+And so there is no bad ordering
+
+571
+00:48:32 --> 00:48:36
+that he can provide that is
+going to make my code run
+
+572
+00:48:36 --> 00:48:39
+slowly.
+Now, I might get unlucky.
+
+573
+00:48:39 --> 00:48:43
+But that is just unlucky in my
+use of my random-number
+
+574
+00:48:43 --> 00:48:46
+generator.
+It is not unlucky with respect
+
+575
+00:48:46 --> 00:48:50
+to what the input was.
+What the input was doesn't
+
+576
+00:48:50 --> 00:48:52
+matter.
+Everybody follow that?
+
+577
+00:48:52 --> 00:48:55
+OK.
+The nice thing about randomized
+
+578
+00:48:55 --> 00:48:59
+quicksort is that it makes no
+assumptions about the input
+
+579
+00:48:59 --> 00:49:05
+distribution.
+You don't have to assume that
+
+580
+00:49:05 --> 00:49:13
+all inputs are equally likely
+because either you can make it
+
+581
+00:49:13 --> 00:49:20
+that way or you pivot in a way
+that makes that effectively
+
+582
+00:49:20 --> 00:49:23
+whole.
+And, in particular,
+
+583
+00:49:23 --> 00:49:30
+there is no specific input that
+can elicit the worst-case
+
+584
+00:49:30 --> 00:49:45
+behavior.
+The worst-case is determined
+
+585
+00:49:45 --> 00:50:00
+only by a random-number
+generator.
+
+586
+00:50:00 --> 00:50:03
+And, therefore,
+since it is only determined by
+
+587
+00:50:03 --> 00:50:08
+a random-number generator,
+we can essentially bound the
+
+588
+00:50:08 --> 00:50:13
+unluckiness mathematically.
+We can say what are the odds?
+
+589
+00:50:13 --> 00:50:16
+So, we are going to analyze
+this.
+
+590
+00:50:16 --> 00:50:21
+And this is where you know if
+you belong in this course or
+
+591
+00:50:21 --> 00:50:24
+not.
+If you have skipped 6.042 or
+
+592
+00:50:24 --> 00:50:30
+whatever, this is a good place
+to do the comparison.
+
+593
+00:50:30 --> 00:50:34
+Since it is going to be a
+little bit, why don't people
+
+594
+00:50:34 --> 00:50:37
+just stand up for a moment and
+take a stretch break.
+
+595
+00:50:37 --> 00:50:42
+Since this is going to be a
+nice piece of mathematics we are
+
+596
+00:50:42 --> 00:50:47
+going to do, you are going to
+want to feel fresh for it.
+
+597
+00:50:47 --> 00:51:02
+
+
+598
+00:51:02 --> 00:51:04
+Stretch break is over.
+
+599
+00:51:04 --> 00:51:10
+
+
+600
+00:51:10 --> 00:51:11
+Analysis.
+Good.
+
+601
+00:51:11 --> 00:51:16
+I think we are going to make
+this.
+
+602
+00:51:16 --> 00:51:22
+I am sort of racing.
+There is a lot of stuff to
+
+603
+00:51:22 --> 00:51:24
+cover today.
+Good.
+
+604
+00:51:24 --> 00:51:32
+Let's let T(n) now be the
+random variable for the running
+
+605
+00:51:32 --> 00:51:36
+time assuming --
+
+606
+00:51:36 --> 00:51:46
+
+
+607
+00:51:46 --> 00:51:47
+Wow.
+I didn't even write here what
+
+608
+00:51:47 --> 00:51:49
+we did here.
+So, we are going to pivot on a
+
+609
+00:51:49 --> 00:51:51
+random element.
+
+610
+00:51:51 --> 00:51:59
+
+
+611
+00:51:59 --> 00:52:01
+That is the basic scheme we are
+going to do.
+
+612
+00:52:01 --> 00:52:05
+And the way I do that,
+by the way, is just in the code
+
+613
+00:52:05 --> 00:52:07
+for partition,
+rather than partitioning on the
+
+614
+00:52:07 --> 00:52:10
+first element,
+before I do the partition,
+
+615
+00:52:10 --> 00:52:14
+I just swap the first element
+with some other element in the
+
+616
+00:52:14 --> 00:52:16
+array chosen at random,
+perhaps itself.
+
+617
+00:52:16 --> 00:52:19
+So, they are all equally likely
+to be pivoted on.
+
+618
+00:52:19 --> 00:52:23
+And then just run the ordinary
+partition.
+
+619
+00:52:23 --> 00:52:27
+This is a random variable for
+running in time assuming,
+
+620
+00:52:27 --> 00:52:32
+we have to make an assumption
+for doing probability,
+
+621
+00:52:32 --> 00:52:36
+the random numbers are
+independent.
+
+622
+00:52:36 --> 00:52:41
+
+
+623
+00:52:41 --> 00:52:44
+So that when I pivot in one
+place, it is independent of how
+
+624
+00:52:44 --> 00:52:48
+I pivoted in some other place as
+I am running this algorithm.
+
+625
+00:52:48 --> 00:52:52
+Then, to analyze this,
+what I am going to do is I want
+
+626
+00:52:52 --> 00:52:57
+to know where we pivoted.
+For k = 0, 1,
+
+627
+00:52:57 --> 00:53:08
+..., n-1, let's let,
+for a particular partition,
+
+628
+00:53:08 --> 00:53:21
+the random variable X_k = 1 if
+partition generates a k :
+
+629
+00:53:21 --> 00:53:30
+n-k-1 split,
+and 0 otherwise.
+
+630
+00:53:30 --> 00:53:35
+
+
+631
+00:53:35 --> 00:53:39
+In the partition routine,
+I am picking a random element
+
+632
+00:53:39 --> 00:53:42
+to pivot on.
+And X_k is going to be my
+
+633
+00:53:42 --> 00:53:47
+random variable that is 1 if it
+generates a split that has k
+
+634
+00:53:47 --> 00:53:52
+elements on the left side and
+n-k-1 elements on the right side
+
+635
+00:53:52 --> 00:53:54
+of the pivot.
+Some of those,
+
+636
+00:53:54 --> 00:54:00
+too, of course are n-1 because
+I also have the pivot.
+
+637
+00:54:00 --> 00:54:03
+And 0 otherwise.
+So, I now have n random
+
+638
+00:54:03 --> 00:54:09
+variables that I have defined
+associated with a single
+
+639
+00:54:09 --> 00:54:15
+partition where all of them are
+going to be zero except one of
+
+640
+00:54:15 --> 00:54:21
+them, whichever one happens to
+occur is going to have the value
+
+641
+00:54:21 --> 1.
+
+
+642
+1. --> 00:54:22
+This is called,
+
+643
+00:54:22 --> 00:54:26
+by the way.
+What is the name of this type
+
+644
+00:54:26 --> 00:54:30
+of random variable?
+
+645
+00:54:30 --> 00:54:37
+
+
+646
+00:54:37 --> 00:54:40
+Bernoulli.
+Well, Bernoulli has other
+
+647
+00:54:40 --> 00:54:43
+assumptions.
+It is an indicator random
+
+648
+00:54:43 --> 00:54:46
+variable.
+It turns out it is Bernoulli,
+
+649
+00:54:46 --> 00:54:50
+but that's OK.
+It is an indicator random
+
+650
+00:54:50 --> 00:54:53
+variable.
+It just takes on the value of
+
+651
+00:54:53 --> 00:54:56
+0, 1.
+And Bernoulli random variables
+
+652
+00:54:56 --> 00:55:02
+are a particular type of
+indicator random variable.
+
+653
+00:55:02 --> 00:55:06
+Which it turns out these are.
+That is an indicator random
+
+654
+00:55:06 --> 00:55:09
+variable.
+Indicator random variables are
+
+655
+00:55:09 --> 00:55:14
+a good way when you are trying
+to understand what the sum of a
+
+656
+00:55:14 --> 00:55:18
+bunch of things is.
+It is a good way to break apart
+
+657
+00:55:18 --> 00:55:22
+your big random variables into
+smaller ones that can be
+
+658
+00:55:22 --> 00:55:25
+analyzed.
+Let's just take a look at this
+
+659
+00:55:25 --> 00:55:30
+indicator random variable.
+What is the expectation of X_k
+
+660
+00:55:30 --> 00:55:32
+equal to?
+
+661
+00:55:32 --> 00:55:42
+
+
+662
+00:55:42 --> 00:55:45
+In other words,
+what is the probability that I
+
+663
+00:55:45 --> 00:55:48
+generate a k :
+n-k-1 split?
+
+664
+00:55:48 --> 00:56:00
+
+
+665
+00:56:00 --> 00:56:05
+X_k is, let's just write out
+what that means,
+
+666
+00:56:05 --> 00:56:08
+just to refresh people's
+memory.
+
+667
+00:56:08 --> 00:56:15
+That is 0 times the probability
+that X_k equals 0 plus 1 times
+
+668
+00:56:15 --> 00:56:21
+the probability that X_k equals
+1, which is equal,
+
+669
+00:56:21 --> 00:56:27
+well, that is all zero.
+That is just equal to the
+
+670
+00:56:27 --> 00:56:34
+probability that X_k equals 1.
+And that is a general property
+
+671
+00:56:34 --> 00:56:39
+of indicator random variables,
+is that their expectation is
+
+672
+00:56:39 --> 00:56:45
+the probability that they are 1.
+The nice thing about indicator
+
+673
+00:56:45 --> 00:56:51
+random variables is it directly
+connects the probability to the
+
+674
+00:56:51 --> 00:56:55
+expectation without any other
+terms going on.
+
+675
+00:56:55 --> 00:56:58
+What is the probability of X_k
+equals 1?
+
+676
+00:56:58 --> 00:57:02
+1/n.
+So, all splits are equally
+
+677
+00:57:02 --> 00:57:04
+likely.
+And I have n elements,
+
+678
+00:57:04 --> 00:57:10
+so each ones has a 1/n chance
+of being picked as the pivot.
+
+679
+00:57:10 --> 00:57:15
+And, once you pick the pivot,
+that determines what is on the
+
+680
+00:57:15 --> 00:57:19
+left and the right and so forth.
+So, it is 1/n.
+
+681
+00:57:19 --> 00:57:23
+Everybody with me so far?
+More or less?
+
+682
+00:57:23 --> 00:57:26
+OK.
+As I say, this is going to test
+
+683
+00:57:26 --> 00:57:32
+whether you're in the class.
+If you go home and you study
+
+684
+00:57:32 --> 00:57:37
+this and you cannot get it,
+and you have a deficiency in
+
+685
+00:57:37 --> 00:57:41
+your math background in trying
+to take the course,
+
+686
+00:57:41 --> 00:57:46
+this is a good indication that
+probably you have taken
+
+687
+00:57:46 --> 00:57:49
+something a little over your
+head.
+
+688
+00:57:49 --> 00:57:54
+Let's write out what T(n) is
+equal to here.
+
+689
+00:57:54 --> 00:58:00
+
+
+690
+00:58:00 --> 00:58:11
+T(n) is going to be equal to
+T(0) + T(n-1) + Theta(n) if we
+
+691
+00:58:11 --> 00:58:24
+get a 0 : n-1 split and is equal
+to T(1) + T(n-2) + order n if we
+
+692
+00:58:24 --> 00:58:30
+have a 1 : n-2 split.
+
+693
+00:58:30 --> 00:58:35
+
+
+694
+00:58:35 --> 00:58:46
+And now down here it is going
+to be T(n-1) + T(0) + Theta(n)
+
+695
+00:58:46 --> 00:58:52
+if we end up with an n-1 :
+0 split.
+
+696
+00:58:52 --> 00:59:00
+So, this is our recurrence for
+T(n).
+
+697
+00:59:00 --> 00:59:03
+And, unfortunately,
+the recurrence is kind of hairy
+
+698
+00:59:03 --> 00:59:06
+because it has got n cases.
+And this is,
+
+699
+00:59:06 --> 00:59:11
+once again, where the
+brilliance of being able to use
+
+700
+00:59:11 --> 00:59:13
+indicator random variables comes
+in.
+
+701
+00:59:13 --> 00:59:18
+Because we will be able to take
+this case analysis and reduce it
+
+702
+00:59:18 --> 00:59:23
+to mathematics so we don't have
+cases using indicator random
+
+703
+00:59:23 --> 00:59:29
+variables.
+And the way we do that is using
+
+704
+00:59:29 --> 00:59:37
+the following trick of
+converting the cases into a
+
+705
+00:59:37 --> 00:59:39
+summation.
+
+706
+00:59:39 --> 00:59:55
+
+
+707
+00:59:55 --> 1:00:00.666
+Let's just take a look at why
+these two things are the same.
+
+708
+1:00:00.666 --> 1:00:06.333
+The indicator random variable
+is zero, except if you get the
+
+709
+1:00:06.333 --> 1:00:10.655
+particular split.
+Therefore, this summation is
+
+710
+1:00:10.655 --> 1:00:14.497
+going to be zero,
+except for that k which
+
+711
+1:00:14.497 --> 1:00:20.355
+actually appeared in which case
+it is the value that we say it
+
+712
+1:00:20.355 --> 1:00:22.468
+is.
+See the trick using
+
+713
+1:00:22.468 --> 1:00:27.079
+multiplication by 0,
+1 variable to handle all the
+
+714
+1:00:27.079 --> 1:00:31.404
+cases?
+I think that is damn clever.
+
+715
+1:00:31.404 --> 1:00:36.213
+I think that is damn clever.
+And this is like the classic
+
+716
+1:00:36.213 --> 1:00:40.421
+thing that you do with indicator
+random variables.
+
+717
+1:00:40.421 --> 1:00:45.144
+It's one of the reasons they
+are a very powerful method.
+
+718
+1:00:45.144 --> 1:00:49.781
+Because now we actually have a
+mathematical expression,
+
+719
+1:00:49.781 --> 1:00:53.559
+hairy although it may be,
+for our recurrence.
+
+720
+1:00:53.559 --> 1:00:58.454
+Now, what we are going to
+analyze is the expected value of
+
+721
+1:00:58.454 --> 1:01:02.977
+T(n).
+That is what we want to do.
+
+722
+1:01:02.977 --> 1:01:06.727
+What is the expected value of
+T(n)?
+
+723
+1:01:06.727 --> 1:01:13.235
+To do that, I just write the
+expected value of T(n) is equal
+
+724
+1:01:13.235 --> 1:01:17.977
+to the expected value of this
+big summation.
+
+725
+1:01:17.977 --> 1:01:24.264
+And now we can go ahead and
+start to evaluate the expected
+
+726
+1:01:24.264 --> 1:01:30
+value of that summation.
+Everybody with me?
+
+727
+1:01:30 --> 1:01:32.486
+Yes?
+Any questions at this point?
+
+728
+1:01:32.486 --> 1:01:35.36
+I see a thumbs up.
+That's nice to see.
+
+729
+1:01:35.36 --> 1:01:39.944
+But I generally believe that
+what I want to see is no thumbs
+
+730
+1:01:39.944 --> 1:01:42.508
+down.
+It is good to see the thumbs
+
+731
+1:01:42.508 --> 1:01:46.704
+up, but that means one person
+understands, or thinks he
+
+732
+1:01:46.704 --> 1:01:48.724
+understands.
+[LAUGHTER] So,
+
+733
+1:01:48.724 --> 1:01:51.832
+this is, I claim,
+equal to the following.
+
+734
+1:01:51.832 --> 1:01:56.571
+Actually, I am going to need a
+little space here so I am going
+
+735
+1:01:56.571 --> 1:02:01
+to move the equal sign over a
+little bit.
+
+736
+1:02:01 --> 1:02:25
+
+
+737
+1:02:25 --> 1:02:27.702
+I claim that summation is equal
+to that.
+
+738
+1:02:27.702 --> 1:02:32
+This expectation is equal to
+that summation of expectations.
+
+739
+1:02:32 --> 1:02:36.042
+Why is that?
+What are the magic words that
+
+740
+1:02:36.042 --> 1:02:40.281
+justify this step?
+Linearity of expectation.
+
+741
+1:02:40.281 --> 1:02:45.704
+The expectation of a sum is the
+sum of the expectations.
+
+742
+1:02:45.704 --> 1:02:49.253
+So, that is linearity of
+expectation.
+
+743
+1:02:49.253 --> 1:02:52.605
+I don't need independence for
+that.
+
+744
+1:02:52.605 --> 1:02:57.83
+That is just always true for
+expectation of any random
+
+745
+1:02:57.83 --> 1:03:04.591
+variables.
+The sum of the expectations is
+
+746
+1:03:04.591 --> 1:03:10.867
+the expectation of the sum and
+vice versa.
+
+747
+1:03:10.867 --> 1:03:19.744
+Here we did the vice versa.
+That is equal to now the sum of
+
+748
+1:03:19.744 --> 1:03:30
+k=0 to n-1 of expectation of X_k
+[T(k) + T(n-k-1) + Theta(n)].
+
+749
+1:03:30 --> 1:03:36
+
+
+750
+1:03:36 --> 1:03:42.272
+Why is that true?
+What I have done is I've said
+
+751
+1:03:42.272 --> 1:03:49.227
+the expectation of the product
+is the product of the
+
+752
+1:03:49.227 --> 1:03:53.454
+expectations.
+That is because of
+
+753
+1:03:53.454 --> 1:04:00
+independence.
+What is independent of what?
+
+754
+1:04:00 --> 1:04:02.492
+The X_k here,
+random variable,
+
+755
+1:04:02.492 --> 1:04:06.962
+are independent of any of the
+other partitionings in,
+
+756
+1:04:06.962 --> 1:04:10.401
+if you will,
+the X_k that would exist for
+
+757
+1:04:10.401 --> 1:04:13.151
+any of the other recursive
+calls.
+
+758
+1:04:13.151 --> 1:04:18.223
+So, whatever happens in here is
+independent of what happened
+
+759
+1:04:18.223 --> 1:04:20.716
+there.
+We are actually hiding.
+
+760
+1:04:20.716 --> 1:04:25.358
+Since we have a recurrence,
+we are not partitioning the
+
+761
+1:04:25.358 --> 1:04:30
+same wage time.
+We have a different one.
+
+762
+1:04:30 --> 1:04:33.168
+We actually have something
+going on underneath the
+
+763
+1:04:33.168 --> 1:04:36.271
+mathematics you have to pay
+attention to that the
+
+764
+1:04:36.271 --> 1:04:40.15
+mathematics alone isn't really
+showing, which is that in T(k)
+
+765
+1:04:40.15 --> 1:04:43.706
+there is actually a set of
+random choices that are being
+
+766
+1:04:43.706 --> 1:04:46.745
+made, if you will.
+And so you have to understand
+
+767
+1:04:46.745 --> 1:04:50.366
+that those are independent of
+those, in which case we can
+
+768
+1:04:50.366 --> 1:04:53.469
+multiple the probabilities of
+their expectations.
+
+769
+1:04:53.469 --> 1:04:55.991
+Is everybody with me?
+That is a big one,
+
+770
+1:04:55.991 --> 1:05:00
+independence of X_k from other
+random choices.
+
+771
+1:05:00 --> 1:05:04.624
+That is equal to now,
+well, first of all,
+
+772
+1:05:04.624 --> 1:05:09.71
+this is nice.
+What is the expectation of X_k?
+
+773
+1:05:09.71 --> 1:05:13.179
+1/n.
+That actually doesn't even
+
+774
+1:05:13.179 --> 1:05:20
+belong in the summation.
+We will just pop it outside.
+
+775
+1:05:20 --> 1:05:35.541
+I get 1/n times the sum of k=0
+to n-1 of expectation of T(k) +
+
+776
+1:05:35.541 --> 1:05:49.808
+1/n summation k=0 to n-1 of
+expectation of T(n-k-1) + 1/n
+
+777
+1:05:49.808 --> 1:06:00
+summation k=0 to n-1 up to
+Theta(n).
+
+778
+1:06:00 --> 1:06:04.838
+That is, again,
+using linearity of expectation
+
+779
+1:06:04.838 --> 1:06:11.075
+there this time to split up
+these pieces and just factoring
+
+780
+1:06:11.075 --> 1:06:15.053
+out the expectation of k as
+being 1/n.
+
+781
+1:06:15.053 --> 1:06:20.43
+Everybody with me still?
+All of this is elementary.
+
+782
+1:06:20.43 --> 1:06:26.989
+It is just one of these things
+that is hard just because there
+
+783
+1:06:26.989 --> 1:06:33.174
+are so many steps.
+And it takes that you have seen
+
+784
+1:06:33.174 --> 1:06:37.986
+some of this before.
+Now the next observation is
+
+785
+1:06:37.986 --> 1:06:43.003
+that these two summations are,
+in fact, identical.
+
+786
+1:06:43.003 --> 1:06:48.532
+They are the same summation,
+just in a different order.
+
+787
+1:06:48.532 --> 1:06:53.549
+This is going T(0),
+T(1), T(2), T(3) up to T(n-1).
+
+788
+1:06:53.549 --> 1:07:00
+This one is going T(n-1),
+T(n-2), T(n-3) down to T(0).
+
+789
+1:07:00 --> 1:07:02.049
+These are, in fact,
+equal.
+
+790
+1:07:02.049 --> 1:07:05
+So, therefore,
+I have two of them.
+
+791
+1:07:05 --> 1:07:19
+
+
+792
+1:07:19 --> 1:07:22
+And then what is this term
+equal to?
+
+793
+1:07:22 --> 1:07:37
+
+
+794
+1:07:37 --> 1:07:40.991
+What is that one equal to?
+Theta(n).
+
+795
+1:07:40.991 --> 1:07:45.438
+Let's just see why.
+The summation of 0 :
+
+796
+1:07:45.438 --> 1:07:50
+n of Theta(n) is Theta(n^2)
+divided by n.
+
+797
+1:07:50 --> 1:07:54.447
+Or, if I want to bring the
+Theta(n) out,
+
+798
+1:07:54.447 --> 1:08:01.631
+I have 1 times the summation of
+k equals1 to n of Theta(1) or of
+
+799
+1:08:01.631 --> 1.
+
+
+800
+1. --> 1:08:04.527
+So, once again,
+
+801
+1:08:04.527 --> 1:08:07.888
+you get n, either way of doing
+it.
+
+802
+1:08:07.888 --> 1:08:12.981
+This is, in some sense,
+because the summations have
+
+803
+1:08:12.981 --> 1:08:17.157
+identical terms,
+and this is just algebra.
+
+804
+1:08:17.157 --> 1:08:22.861
+Now what we are going to do is
+do something for technical
+
+805
+1:08:22.861 --> 1:08:30.217
+convenience.
+Because we are going to absorb
+
+806
+1:08:30.217 --> 1:08:38.391
+the k=0, 1 terms into the
+Theta(n) for technical
+
+807
+1:08:38.391 --> 1:08:41
+convenience.
+
+808
+1:08:41 --> 1:08:46
+
+
+809
+1:08:46 --> 1:08:50.432
+We have a recurrence here where
+I have an order n.
+
+810
+1:08:50.432 --> 1:08:54.412
+And, if I look at the cases
+where k=0 or k=1,
+
+811
+1:08:54.412 --> 1:08:59.929
+I know what the expectation is.
+For 0, 1, the expected cost is
+
+812
+1:08:59.929 --> 1:09:04
+the worst case cost,
+which is constant.
+
+813
+1:09:04 --> 1:09:07.92
+Because I am only solving the
+problem for a constant size.
+
+814
+1:09:07.92 --> 1:09:12.253
+And we know that for any of the
+boundary cases that our solution
+
+815
+1:09:12.253 --> 1:09:15.142
+of recurrence,
+our assumption is that it is
+
+816
+1:09:15.142 --> 1:09:18.1
+constant time.
+So, I basically can just take
+
+817
+1:09:18.1 --> 1:09:21.608
+those two terms out.
+And all that does it accumulate
+
+818
+1:09:21.608 --> 1:09:24.291
+some more constant here in the
+Theta(n).
+
+819
+1:09:24.291 --> 1:09:27.798
+It is going to make the
+solution of the recurrence a
+
+820
+1:09:27.798 --> 1:09:33.396
+little bit easier.
+And, if I do that,
+
+821
+1:09:33.396 --> 1:09:43.584
+I get expectation of T(n) = 2/n
+summation k=2 to n-1 of
+
+822
+1:09:43.584 --> 1:09:50
+expectation of T(k) + Theta(n).
+
+823
+1:09:50 --> 1:10:00
+
+
+824
+1:10:00 --> 1:10:06.864
+So, all of that work was to
+derive the recurrence.
+
+825
+1:10:06.864 --> 1:10:14.57
+And now we have to solve it.
+Just to review what we did,
+
+826
+1:10:14.57 --> 1:10:21.434
+we started out with a
+recurrence which was for the
+
+827
+1:10:21.434 --> 1:10:29
+random variable which involved a
+case statement.
+
+828
+1:10:29 --> 1:10:33.128
+We converted that into some
+mathematics without the case
+
+829
+1:10:33.128 --> 1:10:37.031
+statement, just with a product,
+and then we derived a
+
+830
+1:10:37.031 --> 1:10:41.535
+recurrence for the expectation.
+And now we are in the process
+
+831
+1:10:41.535 --> 1:10:44.087
+of trying to solve that
+recurrence.
+
+832
+1:10:44.087 --> 1:10:47.765
+We have done some
+simplification of the recurrence
+
+833
+1:10:47.765 --> 1:10:52.569
+so that we understand what it is
+that we are going to solve here.
+
+834
+1:10:52.569 --> 1:10:56.472
+By the way, I don't give things
+like this on quizzes.
+
+835
+1:10:56.472 --> 1:11:00
+I do expect you to understand
+it.
+
+836
+1:11:00 --> 1:11:03.12
+The elements of this you will
+find on a quiz.
+
+837
+1:11:03.12 --> 1:11:05.602
+This is a lot of work to figure
+out.
+
+838
+1:11:05.602 --> 1:11:09.148
+This took smart people to do.
+Even though it is all
+
+839
+1:11:09.148 --> 1:11:12.907
+elementary, but working out
+something like this at the
+
+840
+1:11:12.907 --> 1:11:17.375
+elementary level is still a bit
+of work even for somebody who is
+
+841
+1:11:17.375 --> 1:11:23.465
+knowledgeable in this area.
+Now we are going to solve that
+
+842
+1:11:23.465 --> 1:11:30.395
+last recurrence over there and
+we are going to prove that the
+
+843
+1:11:30.395 --> 1:11:37.556
+expectation of T(n) is less than
+or equal to (an lg n) for some
+
+844
+1:11:37.556 --> 1:11:44.139
+constant a greater than 0.
+That is going to be what we are
+
+845
+1:11:44.139 --> 1:11:48.759
+going to do.
+And so what technique do you
+
+846
+1:11:48.759 --> 1:11:52.571
+think we should use to prove
+this?
+
+847
+1:11:52.571 --> 1:11:58
+Does this look like a master
+method?
+
+848
+1:11:58 --> 1:12:03
+
+
+849
+1:12:03 --> 1:12:08.6
+It is nothing like the master
+method.
+
+850
+1:12:08.6 --> 1:12:13.733
+So, when in doubt do
+substitution.
+
+851
+1:12:13.733 --> 1:12:19.333
+It is the grand-daddy of all
+methods.
+
+852
+1:12:19.333 --> 1:12:28.355
+What we will do is solve the
+base case by simply choosing a
+
+853
+1:12:28.355 --> 1:12:37.844
+big enough so that (an lg n) is
+bigger than the expectation of
+
+854
+1:12:37.844 --> 1:12:45
+T(n) for sufficiently large
+small n.
+
+855
+1:12:45 --> 1:12:49.212
+So, I just pick a to be big
+enough.
+
+856
+1:12:49.212 --> 1:12:54.044
+And this is,
+by the way, why I wanted to
+
+857
+1:12:54.044 --> 1:12:59
+exclude 0 and 1 from the
+recurrence.
+
+858
+1:12:59 --> 1:13:03.338
+Because, for example,
+when n=0, log of 0 is,
+
+859
+1:13:03.338 --> 1:13:08.181
+it's like dividing by 0,
+right, you cannot do it.
+
+860
+1:13:08.181 --> 1:13:12.519
+Log of 1 is 0.
+So here, even if I restricted
+
+861
+1:13:12.519 --> 1:13:18.37
+it to 1, here I would have a 0,
+and I can't ever pick a big
+
+862
+1:13:18.37 --> 1:13:24.424
+enough to dominate those cases.
+What I do is I just say look,
+
+863
+1:13:24.424 --> 1:13:30.578
+I just absorb whatever the cost
+is into the T(n) for technical
+
+864
+1:13:30.578 --> 1:13:37.169
+convenience.
+And that lets me address it as
+
+865
+1:13:37.169 --> 1:13:44.119
+(an lg n) to be big enough to
+handle the base case.
+
+866
+1:13:44.119 --> 1:13:50.93
+So, that is why we made that
+technical assumption.
+
+867
+1:13:50.93 --> 1:13:58.714
+We are going to use a fact
+which is that the summation of
+
+868
+1:13:58.714 --> 1:14:06.776
+k=2 to n-1 of k lg k is less
+than or equal to 1/2n^2 lg n -
+
+869
+1:14:06.776 --> 1:14:11.242
+1/8n^2.
+I am going to leave that as an
+
+870
+1:14:11.242 --> 1:14:15.429
+exercise for you to workout.
+I think it is an exercise in
+
+871
+1:14:15.429 --> 1:14:18.644
+the book, too.
+I want you to go and evaluate
+
+872
+1:14:18.644 --> 1:14:21.261
+this.
+There are two ways to evaluate
+
+873
+1:14:21.261 --> 1:14:23.13
+it.
+One is by using purely
+
+874
+1:14:23.13 --> 1:14:27.093
+summations and facts about
+summations by splitting the
+
+875
+1:14:27.093 --> 1:14:31.579
+summation into two pieces and
+reconstituting it to prove this
+
+876
+1:14:31.579 --> 1:14:35.338
+bound.
+The other way is to use the
+
+877
+1:14:35.338 --> 1:14:38.629
+integral method for solving
+summations.
+
+878
+1:14:38.629 --> 1:14:43.22
+Either way you can prove.
+The integral method actually
+
+879
+1:14:43.22 --> 1:14:46.165
+gets you a tighter bound than
+this.
+
+880
+1:14:46.165 --> 1:14:50.582
+This is a basic fact,
+and you should go off and know
+
+881
+1:14:50.582 --> 1:14:55
+how to do that.
+Now let's do substitution.
+
+882
+1:14:55 --> 1:15:06
+
+
+883
+1:15:06 --> 1:15:18.821
+The expectation of T(n) is less
+than or equal to 2/n times the
+
+884
+1:15:18.821 --> 1:15:29.331
+summation k=2 to n-1,
+now we do the substitution of
+
+885
+1:15:29.331 --> 1:15:39
+ak lg k, the smaller values plus
+Theta(n).
+
+886
+1:15:39 --> 1:15:42.416
+I might mentioned,
+by the way, that the hard part
+
+887
+1:15:42.416 --> 1:15:45.334
+of doing this,
+it is easy to get the bound
+
+888
+1:15:45.334 --> 1:15:48.679
+without this term,
+it is easy to get this bound,
+
+889
+1:15:48.679 --> 1:15:51.669
+1/2n^2 lg n,
+it is harder to get the second
+
+890
+1:15:51.669 --> 1:15:54.231
+order term.
+It turns out you need the
+
+891
+1:15:54.231 --> 1:15:59
+second order term in order to do
+what we are going to do.
+
+892
+1:15:59 --> 1:16:05.621
+You have to be able to subtract
+a quadratic amount of the n^2 lg
+
+893
+1:16:05.621 --> 1:16:09.195
+n in order to make this proof
+work.
+
+894
+1:16:09.195 --> 1:16:15.291
+And that is the trickier part
+in evaluating that summation.
+
+895
+1:16:15.291 --> 1:16:20.126
+So, we get this.
+That is less than or equal to?
+
+896
+1:16:20.126 --> 1:16:26.537
+Well, I happen to know how much
+this is by using that formula.
+
+897
+1:16:26.537 --> 1:16:31.792
+I use my fact and get 2a/n
+(1/2n^2 lg n - 1/8n^2) +
+
+898
+1:16:31.792 --> 1:16:43.558
+Theta(n).
+Did I do something wrong?
+
+899
+1:16:43.558 --> 1:16:51.97
+There we go.
+Very good.
+
+900
+1:16:51.97 --> 1:17:05.272
+That is equal to -
+If I multiply this first part
+
+901
+1:17:05.272 --> 1:17:14.363
+through that is an lg n.
+And now, so I don't make a
+
+902
+1:17:14.363 --> 1:17:22.545
+mistake, I want to express this
+as my desired,
+
+903
+1:17:22.545 --> 1:17:32
+this is what I want it to be,
+minus a residual.
+
+904
+1:17:32 --> 1:17:38.702
+I am going to write the
+residual as this part.
+
+905
+1:17:38.702 --> 1:17:47.489
+And so, the way to write that
+is, that is going to be minus.
+
+906
+1:17:47.489 --> 1:17:56.723
+And then it is going to be this
+term here, which is going to be
+
+907
+1:17:56.723 --> 1:18:00
+an/4 - Theta(n).
+
+908
+1:18:00 --> 1:18:05
+
+
+909
+1:18:05 --> 1:18:12.309
+And that is going to be less
+than or equal to an lg n if this
+
+910
+1:18:12.309 --> 1:18:17.304
+part is positive.
+And I can make that part
+
+911
+1:18:17.304 --> 1:18:24.614
+positive by picking a big enough
+such that an/4 dominates the
+
+912
+1:18:24.614 --> 1:18:34.59
+constant in the Theta(n) here.
+Whatever the constant is here,
+
+913
+1:18:34.59 --> 1:18:45.211
+I can find an a that is big
+enough so that this term makes
+
+914
+1:18:45.211 --> 1:18:54.527
+this part positive.
+If a is big enough so that an/4
+
+915
+1:18:54.527 --> 1:19:01.217
+dominates Theta(n).
+And so the running time of
+
+916
+1:19:01.217 --> 1:19:04.288
+randomized quicksort is order n
+lg n.
+
+917
+1:19:04.288 --> 1:19:09.064
+That is what we just proved,
+the expected running time is
+
+918
+1:19:09.064 --> 1:19:11.623
+order n lg n.
+Now, in practice,
+
+919
+1:19:11.623 --> 1:19:16.741
+quicksort is a great algorithm.
+It is typically three or more
+
+920
+1:19:16.741 --> 1:19:21.688
+times faster than mergesort.
+It doesn't give you the strong
+
+921
+1:19:21.688 --> 1:19:26.464
+guarantee necessarily of
+mergesort and being worst-case n
+
+922
+1:19:26.464 --> 1:19:29.245
+lg n.
+But in practice,
+
+923
+1:19:29.245 --> 1:19:33.136
+if you use randomized
+quicksort, it is generally as
+
+924
+1:19:33.136 --> 1:19:37.573
+much as three times faster.
+It does require code tuning in
+
+925
+1:19:37.573 --> 1:19:40.219
+order to get it up to be that
+fast.
+
+926
+1:19:40.219 --> 1:19:44.966
+You do have to go and coarsen
+the base cases and do some other
+
+927
+1:19:44.966 --> 1:19:47.613
+tricks there,
+but most good sorting
+
+928
+1:19:47.613 --> 1:19:51.66
+algorithms that you will find
+are based on quicksort.
+
+929
+1:19:51.66 --> 1:19:56.018
+Also one of the other reasons
+it works well is because it
+
+930
+1:19:56.018 --> 1:20:01
+tends to work well with caches
+in virtual memory.
+
+931
+1:20:01 --> 1:20:05.431
+We are not really talking much
+about caching models and so
+
+932
+1:20:05.431 --> 1:20:09.941
+forth, big topic these days in
+algorithms, but it does work
+
+933
+1:20:09.941 --> 1:20:12.973
+very well with caches in virtual
+memory.
+
+934
+1:20:12.973 --> 1:20:17.405
+It is another reason that this
+is a good algorithm to use.
+
+935
+1:20:17.405 --> 1:20:20.359
+Good recitation,
+by the way, on Friday.
+
+936
+1:20:20.359 --> 1:20:24.247
+We are going to see another n
+log n time algorithm,
+
+937
+1:20:24.247 --> 1:20:27
+a very important one in
+recitation on Friday.
+

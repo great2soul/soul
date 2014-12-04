@@ -1,0 +1,6414 @@
+1
+00:00:07 --> 00:00:10
+We're going to talk about
+shortest paths,
+
+2
+00:00:10 --> 00:00:14
+and we're going to talk about
+shortest paths for three
+
+3
+00:00:14 --> 00:00:17
+lectures.
+So, this is a trilogy.
+
+4
+00:00:17 --> 00:00:20
+Today will be Shortest Paths
+One.
+
+5
+00:00:20 --> 00:00:25
+I've been watching far too many
+versions of Star Wars this
+
+6
+00:00:25 --> 00:00:28
+weekend.
+I saw the musical yesterday,
+
+7
+00:00:28 --> 00:00:31
+matinee.
+That was an MIT musical.
+
+8
+00:00:31 --> 00:00:35
+That was fun,
+of all three movies in about
+
+9
+00:00:35 --> 00:00:38
+four hours.
+That was a bit long and then I
+
+10
+00:00:38 --> 00:00:42
+saw the one-man show on Friday.
+One-man Star Wars:
+
+11
+00:00:42 --> 00:00:45
+the original three movies in
+one hour.
+
+12
+00:00:45 --> 00:00:48
+That was the opposite of too
+long.
+
+13
+00:00:48 --> 00:00:51
+Both were fun.
+So I get my trilogy fix.
+
+14
+00:00:51 --> 00:00:54
+All episodes,
+first we're going to start with
+
+15
+00:00:54 --> 00:00:58
+The New Hope,
+and we're going to talk about
+
+16
+00:00:58 --> 00:01:02
+the shortest paths problem and
+solve one particular problem of
+
+17
+00:01:02 --> 00:01:09
+it, a very interesting version.
+And then we're going to look at
+
+18
+00:01:09 --> 00:01:12
+increasingly more general
+versions as we go on.
+
+19
+00:01:12 --> 00:01:15
+Shortest paths are sort of an
+application of dynamic
+
+20
+00:01:15 --> 00:01:19
+programming, which we saw last
+week, and greedy algorithms,
+
+21
+00:01:19 --> 00:01:23
+which we also saw last week.
+So, were going to build that
+
+22
+00:01:23 --> 00:01:27
+and get some pretty interesting
+algorithms for an important
+
+23
+00:01:27 --> 00:01:30
+problem, which is how to get
+from Alderon to,
+
+24
+00:01:30 --> 00:01:33
+I don't know,
+Cambridge as quickly as
+
+25
+00:01:33 --> 00:01:37
+possible, OK,
+when you live in a graph.
+
+26
+00:01:37 --> 00:01:41
+So, there's geometric shortest
+paths which is a little bit
+
+27
+00:01:41 --> 00:01:44
+harder.
+Here, we're just going to look
+
+28
+00:01:44 --> 00:01:48
+at shortest paths in graphs.
+Now, hopefully you all know
+
+29
+00:01:48 --> 00:01:52
+what a path in a graph is.
+But, so, very quick review in
+
+30
+00:01:52 --> 00:01:56
+particular because we're going
+to be looking at weighted
+
+31
+00:01:56 --> 00:01:59
+graphs.
+So, the usual setup:
+
+32
+00:01:59 --> 00:02:03
+suppose we have directed graph,
+G, have some vertices,
+
+33
+00:02:03 --> 00:02:07
+some edges.
+We have edge weights,
+
+34
+00:02:07 --> 00:02:12
+make it a little more
+interesting.
+
+35
+00:02:12 --> 00:02:18
+So, this is just a real number
+on each edge.
+
+36
+00:02:18 --> 00:02:25
+So, edge weights are usually
+given by function,
+
+37
+00:02:25 --> 00:02:27
+w.
+For every edge,
+
+38
+00:02:27 --> 00:02:32
+you get a real number.
+
+39
+00:02:32 --> 00:02:40
+
+
+40
+00:02:40 --> 00:02:43
+And then, if we look at the
+paths in the graph,
+
+41
+00:02:43 --> 00:02:47
+so we're going to use some
+simple notation for paths called
+
+42
+00:02:47 --> 00:02:51
+a path, p, starts at some
+vertex, and it goes to some
+
+43
+00:02:51 --> 00:02:52
+other vertex,
+and so on.
+
+44
+00:02:52 --> 00:02:56
+Say the last vertex is v_k,
+and each of these should be a
+
+45
+00:02:56 --> 00:03:00
+directed edge in the digraph.
+So, this is a directed path.
+
+46
+00:03:00 --> 00:03:04
+It has to respect edges in
+here.
+
+47
+00:03:04 --> 00:03:10
+And, we'll say that the weight
+of such a path is just the sum
+
+48
+00:03:10 --> 00:03:14
+of the weights of the edges
+along the path.
+
+49
+00:03:14 --> 00:03:18
+And, we'll call that w(p).
+This is sum,
+
+50
+00:03:18 --> 00:03:23
+i equals one to k minus one of
+w(v_i, v_(i+1)) plus one.
+
+51
+00:03:23 --> 00:03:27
+OK, so just to rub it in,
+and in particular,
+
+52
+00:03:27 --> 00:03:32
+how general this can be,
+we have some path,
+
+53
+00:03:32 --> 00:03:37
+it starts at some vertex,
+there's some edge weights along
+
+54
+00:03:37 --> 00:03:42
+the way.
+This is some arbitrary path in
+
+55
+00:03:42 --> 00:03:46
+the graph, in some hypothetical
+graph.
+
+56
+00:03:46 --> 00:03:58
+
+
+57
+00:03:58 --> 00:04:01
+OK, this is mainly to point out
+that some of the edge weights
+
+58
+00:04:01 --> 00:04:04
+could be negative.
+Some of them could be zero.
+
+59
+00:04:04 --> 00:04:08
+This sum here is minus two.
+So, the weight of this path is
+
+60
+00:04:08 --> 00:04:09
+minus two.
+And, presumably,
+
+61
+00:04:09 --> 00:04:12
+the graph is much bigger than
+this.
+
+62
+00:04:12 --> 00:04:14
+This is just one path in the
+graph.
+
+63
+00:04:14 --> 00:04:18
+We're usually thinking about
+simple paths that can't repeat a
+
+64
+00:04:18 --> 00:04:20
+vertex.
+But, sometimes we allow that.
+
+65
+00:04:20 --> 00:04:23
+And then, what we care about is
+the shortest path,
+
+66
+00:04:23 --> 00:04:26
+or a shortest path.
+Again, this may not be unique,
+
+67
+00:04:26 --> 00:04:31
+but we'll still usually call it
+the shortest path.
+
+68
+00:04:31 --> 00:04:36
+So, we want the shortest path
+from some A to some B.
+
+69
+00:04:36 --> 00:04:39
+Or, we'll call the vertices u
+and v.
+
+70
+00:04:39 --> 00:04:45
+And we want this to be some
+path of minimum possible weight,
+
+71
+00:04:45 --> 00:04:49
+subject to starting at u,
+and going to v.
+
+72
+00:04:49 --> 00:04:53
+OK, so that's what we're
+looking for.
+
+73
+00:04:53 --> 00:04:58
+In general, give you a vertex,
+u, give you a vertex,
+
+74
+00:04:58 --> 00:05:04
+v, find a shortest path as
+quickly as possible.
+
+75
+00:05:04 --> 00:05:06
+What's a good algorithm for
+that?
+
+76
+00:05:06 --> 00:05:10
+That's the topic for the next
+three lectures.
+
+77
+00:05:10 --> 00:05:15
+We'll usually think about a
+slightly simpler problem,
+
+78
+00:05:15 --> 00:05:19
+which is just computing the
+weight of that path,
+
+79
+00:05:19 --> 00:05:24
+which is essentially computing
+the distance from A to B.
+
+80
+00:05:24 --> 00:05:28
+So, we'll call this the
+shortest path weight from u to
+
+81
+00:05:28 --> 00:05:33
+v.
+And, we'll denote it by delta
+
+82
+00:05:33 --> 00:05:38
+of (u,v), delta .
+So, I mean, it's the weight of
+
+83
+00:05:38 --> 00:05:43
+the shortest path,
+or a weight of every shortest
+
+84
+00:05:43 --> 00:05:45
+path.
+Or, in other words,
+
+85
+00:05:45 --> 00:05:51
+it's the Min over the weight of
+each path from u to v.
+
+86
+00:05:51 --> 00:05:56
+So, p here is a path.
+OK, so you just consider,
+
+87
+00:05:56 --> 00:06:02
+there could be a lot of
+different paths.
+
+88
+00:06:02 --> 00:06:04
+There could,
+in principle,
+
+89
+00:06:04 --> 00:06:09
+be infinitely many,
+if you're allowed to repeat
+
+90
+00:06:09 --> 00:06:13
+vertices.
+You look at all those paths
+
+91
+00:06:13 --> 00:06:17
+hypothetically.
+You take the minimum weight.
+
+92
+00:06:17 --> 00:06:19
+Question?
+Good.
+
+93
+00:06:19 --> 00:06:25
+My next question was going to
+be, when do shortest paths not
+
+94
+00:06:25 --> 00:06:28
+exist?
+And you've hit upon one
+
+95
+00:06:28 --> 00:06:36
+version, which is when you have
+negative edge weights.
+
+96
+00:06:36 --> 00:06:40
+So, in principle,
+when you have negative edge
+
+97
+00:06:40 --> 00:06:45
+weights, some shortest paths may
+not exist in the sense that
+
+98
+00:06:45 --> 00:06:50
+there is no shortest paths.
+There are no shortest paths.
+
+99
+00:06:50 --> 00:06:54
+There is no shortest path from
+u to v.
+
+100
+00:06:54 --> 00:06:58
+OK, in particular,
+if I have two vertices,
+
+101
+00:06:58 --> 00:07:02
+u and v, and I want the
+shortest path between them,
+
+102
+00:07:02 --> 00:07:06
+and I have negative edge
+weights, well,
+
+103
+00:07:06 --> 00:07:12
+this is fine.
+I mean, I can still compute the
+
+104
+00:07:12 --> 00:07:17
+weight of a path that has
+negative weights.
+
+105
+00:07:17 --> 00:07:24
+But when specifically won't I
+have a single shortest path from
+
+106
+00:07:24 --> 00:07:26
+u to v?
+So, go ahead.
+
+107
+00:07:26 --> 00:07:29
+Good.
+So, if I can find the cycle
+
+108
+00:07:29 --> 00:07:34
+somewhere along here whose total
+weight, say, the sum of all the
+
+109
+00:07:34 --> 00:07:37
+weights of these images is
+negative, then I get there,
+
+110
+00:07:37 --> 00:07:40
+I go around as many times as I
+want.
+
+111
+00:07:40 --> 00:07:44
+I keep decreasing the weight
+because the weight is negative.
+
+112
+00:07:44 --> 00:07:48
+I decrease it by some fixed
+amount, and then I can go to v.
+
+113
+00:07:48 --> 00:07:52
+So, as long as there is a
+negative weights cycle reachable
+
+114
+00:07:52 --> 00:07:56
+from u that can also reach v,
+then there's no shortest path
+
+115
+00:07:56 --> 00:08:00
+because if I take any particular
+path, I can make it shorter by
+
+116
+00:08:00 --> 00:08:04
+going around a couple more
+times.
+
+117
+00:08:04 --> 00:08:07
+So, in some sense,
+this is not really a minimum.
+
+118
+00:08:07 --> 00:08:11
+It's more like an infimum for
+those who like to get fancy
+
+119
+00:08:11 --> 00:08:14
+about such things.
+But we'll just say that delta
+
+120
+00:08:14 --> 00:08:16
+of (u,v) is minus infinity in
+this case.
+
+121
+00:08:16 --> 00:08:19
+There's a negative weights
+cycle from u to v.
+
+122
+00:08:19 --> 00:08:23
+So, that's one case we have to
+worry about in some sense.
+
+123
+00:08:23 --> 00:08:27
+But, as long as there are no
+negative weight cycles,
+
+124
+00:08:27 --> 00:08:30
+delta of (u,v) will be
+something bigger than minus
+
+125
+00:08:30 --> 00:08:34
+infinity, bounded below by some
+finite value even if you could
+
+126
+00:08:34 --> 00:08:38
+have negative weights,
+but still no negative weights
+
+127
+00:08:38 --> 00:08:41
+cycle for example,
+there might not be any cycles
+
+128
+00:08:41 --> 00:08:45
+in your graph.
+So that's still interesting.
+
+129
+00:08:45 --> 00:08:50
+And, I guess it's useful to
+note that you can get from A to
+
+130
+00:08:50 --> 00:08:53
+B in negative infinite time.
+It's time travel,
+
+131
+00:08:53 --> 00:08:56
+if the weights happen that
+correspond to time.
+
+132
+00:08:56 --> 00:09:00
+But when else might shortest
+paths not exist?
+
+133
+00:09:00 --> 00:09:04
+So, this is one case,
+but there's another,
+
+134
+00:09:04 --> 00:09:07
+simpler case.
+It's not connected.
+
+135
+00:09:07 --> 00:09:12
+There might not be any path
+from u to v.
+
+136
+00:09:12 --> 00:09:17
+This path might be empty.
+There may be no path from u to
+
+137
+00:09:17 --> 00:09:21
+v.
+Here we have to define what
+
+138
+00:09:21 --> 00:09:25
+happens, and here,
+we'll say it's infinity if
+
+139
+00:09:25 --> 00:09:32
+there's no path from u to v.
+So, there are these exceptional
+
+140
+00:09:32 --> 00:09:35
+cases plus infinity and minus
+infinity, which are pretty
+
+141
+00:09:35 --> 00:09:39
+intuitive because it takes a
+really long time to get from u
+
+142
+00:09:39 --> 00:09:44
+to v if there's no path there.
+You can't get there from here.
+
+143
+00:09:44 --> 00:09:47
+OK, but that's the definition.
+Most of the time,
+
+144
+00:09:47 --> 00:09:50
+this is the case we care about,
+of course.
+
+145
+00:09:50 --> 00:09:53
+Usually this is a finite set.
+OK, good, so that's the
+
+146
+00:09:53 --> 00:09:56
+definition.
+We're going to get a few basic
+
+147
+00:09:56 --> 00:10:00
+structural properties about
+shortest paths that will allow
+
+148
+00:10:00 --> 00:10:04
+us to obtain good algorithms
+finding these paths when they
+
+149
+00:10:04 --> 00:10:07
+exist.
+And, in particular,
+
+150
+00:10:07 --> 00:10:10
+we want to use ideas from
+dynamic programming.
+
+151
+00:10:10 --> 00:10:14
+So, if I want to use dynamic
+programming to solve shortest
+
+152
+00:10:14 --> 00:10:17
+paths, what do I need to
+establish?
+
+153
+00:10:17 --> 00:10:19
+What's the first thing I should
+check?
+
+154
+00:10:19 --> 00:10:23
+You've all implemented dynamic
+programming by now,
+
+155
+00:10:23 --> 00:10:27
+so should make complete sense
+hopefully, at least more sense
+
+156
+00:10:27 --> 00:10:30
+than it did a couple of weeks
+ago, last week,
+
+157
+00:10:30 --> 00:10:34
+when we learned it.
+Dynamic programming is
+
+158
+00:10:34 --> 00:10:39
+something that grows on you.
+Every year I think I understand
+
+159
+00:10:39 --> 00:10:42
+it better than the previous
+year.
+
+160
+00:10:42 --> 00:10:45
+But, in particular,
+when you learned dynamic
+
+161
+00:10:45 --> 00:10:50
+programming in this class,
+there is this nice key property
+
+162
+00:10:50 --> 00:10:52
+that you should check.
+Yeah?
+
+163
+00:10:52 --> 00:10:54
+Optimal substructure:
+good.
+
+164
+00:10:54 --> 00:10:58
+This is the phrase you should
+keep in mind.
+
+165
+00:10:58 --> 00:11:03
+It's not really enough for
+dynamic programming to be useful
+
+166
+00:11:03 --> 00:11:07
+in an efficient way,
+but it at least tells you that
+
+167
+00:11:07 --> 00:11:12
+you should be able to try to
+apply it.
+
+168
+00:11:12 --> 00:11:15
+That's a pretty weak statement,
+but it's something that you
+
+169
+00:11:15 --> 00:11:18
+should check.
+It's definitely pretty much a
+
+170
+00:11:18 --> 00:11:22
+necessary condition for dynamic
+programming to make sense.
+
+171
+00:11:22 --> 00:11:26
+And so, optimal some structure
+here means that if I take some
+
+172
+00:11:26 --> 00:11:29
+shortest path,
+and I look at a subpath of that
+
+173
+00:11:29 --> 00:11:32
+shortest path,
+I claimed that it too is a
+
+174
+00:11:32 --> 00:11:34
+shortest path,
+OK, with its respective
+
+175
+00:11:34 --> 00:11:39
+endpoints; obviously not between
+the same endpoints.
+
+176
+00:11:39 --> 00:11:43
+But if I have some shortest
+path between two endpoints,
+
+177
+00:11:43 --> 00:11:47
+I take any subpath and that's
+also the shortest path.
+
+178
+00:11:47 --> 00:11:51
+This is one version of optimal
+substructure.
+
+179
+00:11:51 --> 00:11:55
+This one turns out to be true
+for this setup.
+
+180
+00:11:55 --> 00:11:59
+And, how should I prove an
+optimal substructure property?
+
+181
+00:11:59 --> 00:12:04
+Cut and paste.
+Yep, that works here too.
+
+182
+00:12:04 --> 00:12:09
+I mean, this isn't always true.
+But it's a good technique here.
+
+183
+00:12:09 --> 00:12:14
+So, we're going to think about,
+and I'll do essentially a proof
+
+184
+00:12:14 --> 00:12:17
+by picture here.
+So, suppose you have some
+
+185
+00:12:17 --> 00:12:22
+subpath of some shortest path.
+So, let's say the subpath is x
+
+186
+00:12:22 --> 00:12:25
+to y.
+And, the path goes from u to v.
+
+187
+00:12:25 --> 00:12:30
+So, we assume that (u,v) is a
+shortest path.
+
+188
+00:12:30 --> 00:12:33
+We want to prove that (x,y) is
+a shortest path.
+
+189
+00:12:33 --> 00:12:36
+Well, suppose (x,y) isn't a
+shortest path.
+
+190
+00:12:36 --> 00:12:40
+Then there is some shorter path
+that goes from x to y.
+
+191
+00:12:40 --> 00:12:45
+But, if you have some shorter
+path from x to y than this one.
+
+192
+00:12:45 --> 00:12:49
+Then I should just erase this
+part of the shortest path from u
+
+193
+00:12:49 --> 00:12:52
+to v, and replace it with this
+shorter one.
+
+194
+00:12:52 --> 00:12:56
+So, this is some hypothetical
+shorter path.
+
+195
+00:12:56 --> 00:12:59
+So, suppose this existed.
+If that existed,
+
+196
+00:12:59 --> 00:13:02
+then I should just cut the old
+path from x to y,
+
+197
+00:13:02 --> 00:13:07
+and paste in this new one from
+x to y.
+
+198
+00:13:07 --> 00:13:10
+It's strictly shorter.
+Therefore, I get a strictly
+
+199
+00:13:10 --> 00:13:14
+shorter path from u to v.
+But I assumed u to v was a
+
+200
+00:13:14 --> 00:13:16
+shortest path:
+contradiction.
+
+201
+00:13:16 --> 00:13:18
+OK, so there is no shorter
+path.
+
+202
+00:13:18 --> 00:13:21
+And that proves the lemma that
+we have this:
+
+203
+00:13:21 --> 00:13:25
+subpaths of shortest paths are
+shortest paths.
+
+204
+00:13:25 --> 00:13:29
+OK, this should now be a pretty
+familiar proof technique.
+
+205
+00:13:29 --> 00:13:34
+But, there is yet another
+instance of cut and paste.
+
+206
+00:13:34 --> 00:13:36
+OK, so that's a good sign for
+computing shortest paths.
+
+207
+00:13:36 --> 00:13:39
+I mean, in terms of dynamic
+programming, we won't look
+
+208
+00:13:39 --> 00:13:42
+directly at dynamic programming
+here because we are going to aim
+
+209
+00:13:42 --> 00:13:44
+for greedy, which is even
+stronger.
+
+210
+00:13:44 --> 00:13:47
+But, next Monday we'll see some
+dynamic programming approaches.
+
+211
+00:13:47 --> 00:13:49
+Intuitively,
+there are some pretty natural
+
+212
+00:13:49 --> 00:13:52
+sub-problems here.
+I mean, going from u to v,
+
+213
+00:13:52 --> 00:13:55
+if I want to find what is the
+shortest path from u to v,
+
+214
+00:13:55 --> 00:13:56
+well, that's a particular
+problem.
+
+215
+00:13:56 --> 00:13:59
+Maybe it involves computing
+shortest paths from u to some
+
+216
+00:13:59 --> 00:14:01
+intermediate point,
+x, and then from x to u,
+
+217
+00:14:01 --> 00:14:05
+something like that.
+That feels good.
+
+218
+00:14:05 --> 00:14:07
+That's like,
+quadratically,
+
+219
+00:14:07 --> 00:14:11
+many subproblems.
+And, V^2 subproblems,
+
+220
+00:14:11 --> 00:14:16
+it sounds like that would lead
+to a dynamic program.
+
+221
+00:14:16 --> 00:14:21
+You can make it work out;
+it's just a little bit trickier
+
+222
+00:14:21 --> 00:14:25
+than that.
+We'll see that next Monday.
+
+223
+00:14:25 --> 00:14:29
+But thinking about this
+intermediate point we get
+
+224
+00:14:29 --> 00:14:35
+something called the triangle
+inequality.
+
+225
+00:14:35 --> 00:14:40
+So, you've probably heard some
+form of the triangle inequality
+
+226
+00:14:40 --> 00:14:42
+before.
+It holds in all sorts of
+
+227
+00:14:42 --> 00:14:46
+geometric spaces,
+but it also holds for shortest
+
+228
+00:14:46 --> 00:14:51
+paths, which is slightly less
+obvious, or more obvious,
+
+229
+00:14:51 --> 00:14:54
+I guess, depending on your
+inclination.
+
+230
+00:14:54 --> 00:14:59
+So, if you have any triple of
+vertices, the shortest path from
+
+231
+00:14:59 --> 00:15:03
+u to v is, at most,
+the shortest path from u to x
+
+232
+00:15:03 --> 00:15:08
+plus the shortest path from x to
+v.
+
+233
+00:15:08 --> 00:15:10
+Of course, here I need a
+shortest path weight from u to
+
+234
+00:15:10 --> 00:15:12
+x, and shortest path weight from
+x to v.
+
+235
+00:15:12 --> 00:15:15
+So, this should be pretty
+natural just from the statement,
+
+236
+00:15:15 --> 00:15:18
+even more natural if you draw
+the picture.
+
+237
+00:15:18 --> 00:15:19
+So, we have some vertex,
+u.
+
+238
+00:15:19 --> 00:15:22
+I'm using wiggly lines to
+denote potentially long paths as
+
+239
+00:15:22 --> 00:15:24
+opposed to edges.
+We have some intermediate
+
+240
+00:15:24 --> 00:15:27
+point, x, and we have some
+target, v, and we are
+
+241
+00:15:27 --> 00:15:30
+considering these three shortest
+paths.
+
+242
+00:15:30 --> 00:15:35
+This is the shortest path from
+u to v, or this is its weights.
+
+243
+00:15:35 --> 00:15:38
+This is the shortest path from
+u to x.
+
+244
+00:15:38 --> 00:15:42
+And here's its weight,
+and the shortest path from x to
+
+245
+00:15:42 --> 00:15:44
+v.
+And here's its weight.
+
+246
+00:15:44 --> 00:15:48
+And, the point is,
+this should be the shortest
+
+247
+00:15:48 --> 00:15:51
+path or a shortest path from u
+to v.
+
+248
+00:15:51 --> 00:15:55
+And, in particular,
+one such path is you go from u
+
+249
+00:15:55 --> 00:16:00
+to x, and then you go from x to
+v.
+
+250
+00:16:00 --> 00:16:04
+So, I mean, this sum is just
+measuring the length of this
+
+251
+00:16:04 --> 00:16:07
+particular path.
+Take the shortest path here;
+
+252
+00:16:07 --> 00:16:12
+take the shortest path here.
+And, this is supposed to be the
+
+253
+00:16:12 --> 00:16:15
+Min over all paths.
+So, certainly this is,
+
+254
+00:16:15 --> 00:16:19
+at most, this particular path,
+the sum of these two values,
+
+255
+00:16:19 --> 00:16:22
+OK, another proof by picture.
+Clear?
+
+256
+00:16:22 --> 00:16:26
+OK, this stuff is easy.
+I assume we'll get into some
+
+257
+00:16:26 --> 00:16:31
+more set exciting algorithms in
+particular, which is always more
+
+258
+00:16:31 --> 00:16:36
+exciting.
+Today, we're going to look at a
+
+259
+00:16:36 --> 00:16:41
+particular version of shortest
+paths called,
+
+260
+00:16:41 --> 00:16:46
+or the shortest paths problem
+called the single source
+
+261
+00:16:46 --> 00:16:51
+shortest path problem.
+OK, it's a little bit more
+
+262
+00:16:51 --> 00:16:56
+general than go from A to B.
+The problem is,
+
+263
+00:16:56 --> 00:17:03
+you're given a source vertex,
+and you want to know how to get
+
+264
+00:17:03 --> 00:17:09
+from that source vertex to
+everywhere else.
+
+265
+00:17:09 --> 00:17:12
+So, we'll call this source
+vertex s.
+
+266
+00:17:12 --> 00:17:15
+And from that source,
+we want to find,
+
+267
+00:17:15 --> 00:17:21
+let's say, the shortest path
+weights from s to everyone.
+
+268
+00:17:21 --> 00:17:24
+In particular,
+we'd also like to know the
+
+269
+00:17:24 --> 00:17:30
+shortest paths,
+but that isn't too much harder.
+
+270
+00:17:30 --> 00:17:33
+So, that's delta of s,
+v for all vertices,
+
+271
+00:17:33 --> 00:17:35
+v.
+OK, so this is actually a
+
+272
+00:17:35 --> 00:17:39
+little bit harder than the
+problem we started with a
+
+273
+00:17:39 --> 00:17:41
+getting from Alderon to
+Cambridge.
+
+274
+00:17:41 --> 00:17:46
+Now, we want to get from
+Alderon to the entire universe.
+
+275
+00:17:46 --> 00:17:50
+OK, it turns out,
+this is one of the weird things
+
+276
+00:17:50 --> 00:17:53
+about shortest paths,
+according to the
+
+277
+00:17:53 --> 00:17:57
+state-of-the-art we know today,
+it seems like the following
+
+278
+00:17:57 --> 00:18:02
+statement will remain true for
+all time.
+
+279
+00:18:02 --> 00:18:05
+But we don't know.
+The best algorithms for solving
+
+280
+00:18:05 --> 00:18:08
+the A to B problem,
+given s, given t,
+
+281
+00:18:08 --> 00:18:11
+go from s to t,
+is no easier than this problem.
+
+282
+00:18:11 --> 00:18:15
+It's the best ways we know how
+to solve going from A to B is to
+
+283
+00:18:15 --> 00:18:18
+solve how to go from A to
+everywhere else.
+
+284
+00:18:18 --> 00:18:22
+So, we sort of can't help
+ourselves, but to solve this
+
+285
+00:18:22 --> 00:18:26
+problem it turns out.
+Today, we're going to look at a
+
+286
+00:18:26 --> 00:18:30
+further restriction on this
+problem because this is a bit
+
+287
+00:18:30 --> 00:18:34
+tricky.
+Will solve it next class.
+
+288
+00:18:34 --> 00:18:39
+But, today we're going to get
+rid of the negative weight cycle
+
+289
+00:18:39 --> 00:18:42
+issue by forbidding negative
+weights.
+
+290
+00:18:42 --> 00:18:47
+So, we're going to assume that
+all of the edge weights are
+
+291
+00:18:47 --> 00:18:50
+nonnegative, so,
+for all vertices,
+
+292
+00:18:50 --> 00:18:53
+u and v.
+So, in particular,
+
+293
+00:18:53 --> 00:18:58
+shortest paths exist,
+provided paths exist.
+
+294
+00:18:58 --> 00:19:12
+
+
+295
+00:19:12 --> 00:19:15
+And, we don't have to worry
+about these minus infinities.
+
+296
+00:19:15 --> 00:19:18
+Delta of (u,v) is always bigger
+than minus infinity.
+
+297
+00:19:18 --> 00:19:21
+It still might be plus infinity
+if there is no path,
+
+298
+00:19:21 --> 00:19:23
+but this will make life a lot
+easier.
+
+299
+00:19:23 --> 00:19:26
+And the algorithm we'll cover
+today really requires this
+
+300
+00:19:26 --> 00:19:30
+property.
+You can't get away without it.
+
+301
+00:19:30 --> 00:19:36
+Next class, we'll get away
+without it with a fancier and
+
+302
+00:19:36 --> 00:19:40
+slower algorithm.
+So, as I hinted at,
+
+303
+00:19:40 --> 00:19:47
+the main idea we're going to
+use for the algorithm today is
+
+304
+00:19:47 --> 00:19:54
+greedy, which should be faster
+than dynamic programming
+
+305
+00:19:54 --> 00:19:58
+generally.
+And, the tricky part will be
+
+306
+00:19:58 --> 00:20:06
+proving that the greedy
+algorithm actually works.
+
+307
+00:20:06 --> 00:20:11
+So, I think there's pretty much
+only one natural way to go
+
+308
+00:20:11 --> 00:20:16
+about, well, there's one way
+that works to go about greedy,
+
+309
+00:20:16 --> 00:20:19
+let's say.
+This may be not the obvious
+
+310
+00:20:19 --> 00:20:22
+one.
+So, let me give you a little
+
+311
+00:20:22 --> 00:20:26
+bit of setup.
+The invariant we are going to
+
+312
+00:20:26 --> 00:20:31
+maintain is that at all times,
+we have estimates on the
+
+313
+00:20:31 --> 00:20:36
+distances from the source to
+every vertex.
+
+314
+00:20:36 --> 00:20:39
+When I say distance,
+I mean shortest path weight.
+
+315
+00:20:39 --> 00:20:43
+I'm going to use weight and
+distance interchangeably here
+
+316
+00:20:43 --> 00:20:46
+for more intuition.
+And, in particular,
+
+317
+00:20:46 --> 00:20:50
+I want to maintain the set of
+vertices where those estimates
+
+318
+00:20:50 --> 00:20:53
+are actually the right answer.
+
+319
+00:20:53 --> 00:21:10
+
+
+320
+00:21:10 --> 00:21:13
+OK, this is little s.
+This is big S.
+
+321
+00:21:13 --> 00:21:18
+So, the big S will be the set
+of all vertices where I know the
+
+322
+00:21:18 --> 00:21:21
+answer.
+What is the shortest path
+
+323
+00:21:21 --> 00:21:25
+distance from little S to that
+vertex in big S?
+
+324
+00:21:25 --> 00:21:29
+So, for starters,
+which distance do I know?
+
+325
+00:21:29 --> 00:21:31
+Sorry?
+s.
+
+326
+00:21:31 --> 00:21:34
+I know the shortest path
+distance from s to s because if
+
+327
+00:21:34 --> 00:21:37
+I assume that all of my weights
+are nonnegative,
+
+328
+00:21:37 --> 00:21:40
+I really can't get from s to s
+any faster than not doing
+
+329
+00:21:40 --> 00:21:43
+anything.
+OK, if I had a negative weight
+
+330
+00:21:43 --> 00:21:46
+cycle, maybe the distance from s
+to s is minus infinity.
+
+331
+00:21:46 --> 00:21:50
+OK, but I can't have negative
+weights so there's no way I can
+
+332
+00:21:50 --> 00:21:53
+get from s to s any faster than
+zero time.
+
+333
+00:21:53 --> 00:21:56
+There might be a longer path
+that still has zero cost,
+
+334
+00:21:56 --> 00:22:00
+but it can't be any better than
+zero.
+
+335
+00:22:00 --> 00:22:02
+So, in particular,
+I know that.
+
+336
+00:22:02 --> 00:22:05
+So, initially,
+S is certainly an s.
+
+337
+00:22:05 --> 00:22:09
+OK, and the idea is we're going
+to accumulate more and more
+
+338
+00:22:09 --> 00:22:14
+vertices that we know.
+So, at some point we know the
+
+339
+00:22:14 --> 00:22:16
+distances from some of the
+vertices.
+
+340
+00:22:16 --> 00:22:21
+So, we have some cloud here.
+This is S, and this is
+
+341
+00:22:21 --> 00:22:23
+everything else.
+This is the graph,
+
+342
+00:22:23 --> 00:22:26
+G.
+This is the subset of the
+
+343
+00:22:26 --> 00:22:29
+vertices.
+And, there's some edges that go
+
+344
+00:22:29 --> 00:22:33
+out from there.
+And, so we have estimates on
+
+345
+00:22:33 --> 00:22:36
+how to get to these vertices.
+Some of them,
+
+346
+00:22:36 --> 00:22:39
+we may not have even seen yet.
+They may not be connected to
+
+347
+00:22:39 --> 00:22:42
+this portion of S.
+I mean: not directly.
+
+348
+00:22:42 --> 00:22:44
+They might be connected by some
+longer path.
+
+349
+00:22:44 --> 00:22:48
+They might be in a completely
+different connected component.
+
+350
+00:22:48 --> 00:22:50
+We don't know yet.
+Some of them,
+
+351
+00:22:50 --> 00:22:53
+we have estimates for because
+we've sort of seen how to get
+
+352
+00:22:53 --> 00:22:55
+there from S.
+And the idea is,
+
+353
+00:22:55 --> 00:22:58
+among all of these nodes where
+we have estimates,
+
+354
+00:22:58 --> 00:23:01
+and on to get from little S,
+which is some vertex in here,
+
+355
+00:23:01 --> 00:23:04
+to these vertices,
+we're going to take the one for
+
+356
+00:23:04 --> 00:23:10
+which the estimate is smallest.
+That's the greedy choice.
+
+357
+00:23:10 --> 00:23:15
+And, we're just going to add
+that vertex to S.
+
+358
+00:23:15 --> 00:23:18
+So, S grows one vertex per
+step.
+
+359
+00:23:18 --> 00:23:23
+Each step, we're going to add
+to S, the vertex.
+
+360
+00:23:23 --> 00:23:27
+Of course, again,
+this is not a unique,
+
+361
+00:23:27 --> 00:23:32
+it's a vertex,
+v, in V minus S.
+
+362
+00:23:32 --> 00:23:39
+So, it's something we haven't
+yet computed yet whose estimated
+
+363
+00:23:39 --> 00:23:47
+distance from S is minimum.
+So, we look at all the vertices
+
+364
+00:23:47 --> 00:23:55
+we haven't yet added to S.
+Just take the one where we have
+
+365
+00:23:55 --> 00:24:01
+the estimated smallest distance.
+The intuition is that that
+
+366
+00:24:01 --> 00:24:03
+should be a good choice.
+So, if I pick the one that's
+
+367
+00:24:03 --> 00:24:06
+closest to little s among all
+the ones that I've seen,
+
+368
+00:24:06 --> 00:24:09
+among all the paths that I've
+seen, I sort of have to buy into
+
+369
+00:24:09 --> 00:24:11
+that those are good paths.
+But, I mean,
+
+370
+00:24:11 --> 00:24:13
+maybe there's some path I
+didn't see.
+
+371
+00:24:13 --> 00:24:16
+Maybe you go out to here and
+then you take some other path to
+
+372
+00:24:16 --> 00:24:18
+some vertex, which we've already
+seen.
+
+373
+00:24:18 --> 00:24:20
+OK, the worry is,
+well, I'd better not say that
+
+374
+00:24:20 --> 00:24:23
+that's the shortest path because
+there may have been some other
+
+375
+00:24:23 --> 00:24:25
+way to get there.
+Right, as soon as I add
+
+376
+00:24:25 --> 00:24:27
+something to S,
+I declare I've solved the
+
+377
+00:24:27 --> 00:24:32
+problem for that vertex.
+I can't change my answer later.
+
+378
+00:24:32 --> 00:24:35
+OK, the estimates can change
+until they get added to S.
+
+379
+00:24:35 --> 00:24:39
+So, I don't want to add this
+vertex to S because I haven't
+
+380
+00:24:39 --> 00:24:43
+considered this path.
+Well, if all my weights are
+
+381
+00:24:43 --> 00:24:47
+nonnegative, and I take the
+vertex here that has the
+
+382
+00:24:47 --> 00:24:50
+shortest estimate from S,
+so let's suppose this one is
+
+383
+00:24:50 --> 00:24:54
+the shortest one,
+then this can't be a shorter
+
+384
+00:24:54 --> 00:24:57
+path because the distance
+estimate, at least,
+
+385
+00:24:57 --> 00:25:02
+from S to that vertex is larger
+from S to that vertex.
+
+386
+00:25:02 --> 00:25:05
+So, no way can I make the path
+longer and decrease the
+
+387
+00:25:05 --> 00:25:07
+distance.
+That's the intuition.
+
+388
+00:25:07 --> 00:25:10
+OK, it's a little bit fuzzy
+here because I don't have any
+
+389
+00:25:10 --> 00:25:14
+induction hypotheses set up,
+and it's going to be a lot more
+
+390
+00:25:14 --> 00:25:17
+work to prove that.
+But that's the intuition why
+
+391
+00:25:17 --> 00:25:21
+this is the right thing to do.
+OK, you have to prove something
+
+392
+00:25:21 --> 00:25:25
+about the distance estimates for
+that to be a proof.
+
+393
+00:25:25 --> 00:25:27
+But, intuitively,
+it feels good.
+
+394
+00:25:27 --> 00:25:32
+It was a good starting point.
+OK, and then presumably we have
+
+395
+00:25:32 --> 00:25:34
+to maintain these distance
+estimates.
+
+396
+00:25:34 --> 00:25:38
+So, the heart of the algorithm
+is updating distance estimates,
+
+397
+00:25:38 --> 00:25:41
+I mean, choosing the best
+vertex to add to S,
+
+398
+00:25:41 --> 00:25:44
+that's one step.
+Then, updating the distance
+
+399
+00:25:44 --> 00:25:46
+estimates is sort of where the
+work is.
+
+400
+00:25:46 --> 00:25:50
+And, it turns out we'll only
+need to update distance
+
+401
+00:25:50 --> 00:25:53
+estimates of some of the
+vertices, the ones that are
+
+402
+00:25:53 --> 00:25:56
+adjacent to v.
+v was the vertex we just added
+
+403
+00:25:56 --> 00:25:59
+to S.
+So, once we add somebody to S,
+
+404
+00:25:59 --> 00:26:02
+so we grow S by a little bit,
+then we look at all the new
+
+405
+00:26:02 --> 00:26:07
+edges that go out of S from that
+vertex.
+
+406
+00:26:07 --> 00:26:14
+We update something.
+That's the idea.
+
+407
+00:26:14 --> 00:26:24
+So, that's the idea for how
+we're going to use greedy.
+
+408
+00:26:24 --> 00:26:32
+Now I'll give you the
+algorithm.
+
+409
+00:26:32 --> 00:26:40
+So, this is called Dijkstra's
+algorithm.
+
+410
+00:26:40 --> 00:26:47
+Dijkstra is a famous,
+recently late,
+
+411
+00:26:47 --> 00:26:57
+if that makes sense,
+computer scientist from the
+
+412
+00:26:57 --> 00:27:04
+Netherlands.
+And, this is probably the
+
+413
+00:27:04 --> 00:27:12
+algorithm he is most famous for.
+So, the beginning of the
+
+414
+00:27:12 --> 00:27:18
+algorithm is just some
+initialization,
+
+415
+00:27:18 --> 00:27:24
+not too exciting.
+OK, but let me tell you what
+
+416
+00:27:24 --> 00:27:34
+some of the variables mean.
+OK, so d is some array indexed
+
+417
+00:27:34 --> 00:27:42
+by vertices, and the idea is
+that d of x is the distance
+
+418
+00:27:42 --> 00:27:47
+estimate for x,
+so, from S to x.
+
+419
+00:27:47 --> 00:27:54
+so in particular,
+it's going to equal the real
+
+420
+00:27:54 --> 00:28:03
+shortest path weight from S to x
+when we've added x to our set
+
+421
+00:28:03 --> 00:28:07
+capital, S.
+OK, so this is,
+
+422
+00:28:07 --> 00:28:10
+in particular,
+going to be the output to the
+
+423
+00:28:10 --> 00:28:11
+algorithm.
+Did you have a question?
+
+424
+00:28:11 --> 00:28:13
+Or were you just stretching?
+Good.
+
+425
+00:28:13 --> 00:28:15
+So, in d of x,
+when we are done,
+
+426
+00:28:15 --> 00:28:17
+d of x is the output.
+For every vertex,
+
+427
+00:28:17 --> 00:28:20
+it's going to give us the
+shortest path weight from S to
+
+428
+00:28:20 --> 00:28:21
+that vertex.
+Along the way,
+
+429
+00:28:21 --> 00:28:24
+it's going to be some estimated
+distance from S to that vertex.
+
+430
+00:28:24 --> 00:28:26
+And, we're going to improve it
+over time.
+
+431
+00:28:26 --> 00:28:29
+This is an infinity.
+So initially,
+
+432
+00:28:29 --> 00:28:32
+we know that the distance,
+we know the distance from S to
+
+433
+00:28:32 --> 00:28:35
+S is zero.
+So, we're going to set that to
+
+434
+00:28:35 --> 00:28:37
+be our estimate.
+It's going to be accurate.
+
+435
+00:28:37 --> 00:28:40
+Everything else we're going to
+just set to infinity because we
+
+436
+00:28:40 --> 00:28:43
+may not be connected.
+From the beginning,
+
+437
+00:28:43 --> 00:28:45
+we don't know much.
+S, initially,
+
+438
+00:28:45 --> 00:28:47
+is going to be infinity.
+Immediately,
+
+439
+00:28:47 --> 00:28:49
+we're going to add little s to
+big S.
+
+440
+00:28:49 --> 00:28:52
+And then, the interesting part
+here is Q, which is going to
+
+441
+00:28:52 --> 00:28:55
+consist of, initially all the
+vertices in the graph.
+
+442
+00:28:55 --> 00:29:00
+And, it's going to not just be
+a queue as the letter suggests.
+
+443
+00:29:00 --> 00:29:03
+It's going to be a priority
+queue.
+
+444
+00:29:03 --> 00:29:07
+So, it's going to maintain,
+in particular,
+
+445
+00:29:07 --> 00:29:12
+the vertex that has the
+smallest distance estimate.
+
+446
+00:29:12 --> 00:29:17
+So, this is a priority queue.
+This is really an abuse of
+
+447
+00:29:17 --> 00:29:23
+notation for a data structure.
+OK, so this could be a heap or
+
+448
+00:29:23 --> 00:29:27
+whatever.
+The vertices are keyed on d,
+
+449
+00:29:27 --> 00:29:32
+our distance estimate.
+So, in particular,
+
+450
+00:29:32 --> 00:29:35
+S will have the,
+this is going to be a Min heap.
+
+451
+00:29:35 --> 00:29:38
+S will be the guy who has the
+minimum.
+
+452
+00:29:38 --> 00:29:41
+Everyone else has the same key
+initially.
+
+453
+00:29:41 --> 00:29:45
+And, we're going to repeatedly
+extract the minimum element from
+
+454
+00:29:45 --> 00:29:50
+this queue and do other things.
+OK, so this is initialization.
+
+455
+00:29:50 --> 00:29:53
+OK, I'm going to call that
+initialization.
+
+456
+00:29:53 --> 00:29:57
+It's a pretty simple thing.
+It just takes linear time,
+
+457
+00:29:57 --> 00:30:02
+nothing fancy going on.
+The heart of the algorithm is
+
+458
+00:30:02 --> 00:30:06
+all in six lines.
+And, so this is not really a
+
+459
+00:30:06 --> 00:30:09
+step.
+The first step here that we
+
+460
+00:30:09 --> 00:30:15
+need to do is we take the vertex
+whose distance estimate is
+
+461
+00:30:15 --> 00:30:17
+minimum.
+So that, among all the
+
+462
+00:30:17 --> 00:30:21
+vertices, not yet,
+and that's currently S is
+
+463
+00:30:21 --> 00:30:23
+empty.
+Q has everyone.
+
+464
+00:30:23 --> 00:30:29
+In general, Q will have
+everyone except S.
+
+465
+00:30:29 --> 00:30:33
+So, we'll take the vertex,
+u, that has the minimum key in
+
+466
+00:30:33 --> 00:30:38
+that priority queue.
+So, extract the Min from Q.
+
+467
+00:30:38 --> 00:30:48
+
+
+468
+00:30:48 --> 00:31:02
+OK.
+We're going to add a little u
+
+469
+00:31:02 --> 00:31:07
+to S, claim that that is now,
+I mean, that's exactly what
+
+470
+00:31:07 --> 00:31:11
+we're saying here.
+We add to S that vertex that
+
+471
+00:31:11 --> 00:31:17
+has minimum distance estimate.
+And now, we need to update the
+
+472
+00:31:17 --> 00:31:21
+distances.
+So, we're going to look at each
+
+473
+00:31:21 --> 00:31:27
+adjacent vertex for each v in
+the adjacency list for u.
+
+474
+00:31:27 --> 00:31:30
+We look at a few distances.
+
+475
+00:31:30 --> 00:31:47
+
+
+476
+00:31:47 --> 00:31:49
+So that's the algorithm or more
+or less.
+
+477
+00:31:49 --> 00:31:53
+This is the key.
+I should define it a little bit
+
+478
+00:31:53 --> 00:31:56
+what's going on here.
+We talked mainly about
+
+479
+00:31:56 --> 00:32:00
+undirected graph last time.
+Here, we're thinking about
+
+480
+00:32:00 --> 00:32:03
+undirected graphs.
+And, the adjacency list for u
+
+481
+00:32:03 --> 00:32:07
+here is just going to mean,
+give me all the vertices for
+
+482
+00:32:07 --> 00:32:09
+which there is an edge from u to
+v.
+
+483
+00:32:09 --> 00:32:11
+So, this is the outgoing
+adjacency list,
+
+484
+00:32:11 --> 00:32:13
+not the incoming adjacency
+list.
+
+485
+00:32:13 --> 00:32:16
+Undirected graphs:
+you list everything.
+
+486
+00:32:16 --> 00:32:19
+Directed graphs:
+here, we're only going to care
+
+487
+00:32:19 --> 00:32:21
+about those ones.
+So, for every edge,
+
+488
+00:32:21 --> 00:32:24
+(u,v), is what this is saying,
+we are going to compare the
+
+489
+00:32:24 --> 00:32:28
+current estimate for v,
+and this candidate estimate,
+
+490
+00:32:28 --> 00:32:30
+which intuitively means you go
+from s to u.
+
+491
+00:32:30 --> 00:32:34
+That's d of u because we now
+know that that's the right
+
+492
+00:32:34 --> 00:32:37
+answer.
+This, in fact,
+
+493
+00:32:37 --> 00:32:39
+equals, we hope,
+assuming the algorithm is
+
+494
+00:32:39 --> 00:32:44
+correct, this should be the
+shortest path weight from s to u
+
+495
+00:32:44 --> 00:32:48
+because we just added u to S.
+And whenever we add something
+
+496
+00:32:48 --> 00:32:50
+to S, it should have the right
+value.
+
+497
+00:32:50 --> 00:32:54
+So, we could say,
+well, you take the shortest
+
+498
+00:32:54 --> 00:32:57
+path from S to u,
+and then you follow this edge
+
+499
+00:32:57 --> 00:32:59
+from u to v.
+That has weight,
+
+500
+00:32:59 --> 00:33:02
+w, of (u,v).
+That's one possible path from S
+
+501
+00:33:02 --> 00:33:05
+to v.
+And, if that's a shorter path
+
+502
+00:33:05 --> 00:33:09
+than the one we currently have
+in our estimate,
+
+503
+00:33:09 --> 00:33:12
+if this is smaller than that,
+then we should update the
+
+504
+00:33:12 --> 00:33:16
+estimate to be that sum because
+that's a better path,
+
+505
+00:33:16 --> 00:33:19
+so, add it to our database of
+paths, so to speak:
+
+506
+00:33:19 --> 00:33:23
+OK, very intuitive operation;
+clearly should not do anything
+
+507
+00:33:23 --> 00:33:25
+bad.
+I mean, these should be paths
+
+508
+00:33:25 --> 00:33:30
+that makes sense.
+We'll prove that in a moment.
+
+509
+00:33:30 --> 00:33:33
+That's the first part of
+correctness, that this never
+
+510
+00:33:33 --> 00:33:36
+screws up.
+And then, the tricky part is to
+
+511
+00:33:36 --> 00:33:40
+show that it finds all the paths
+that we care about.
+
+512
+00:33:40 --> 00:33:43
+This step is called a
+relaxation step.
+
+513
+00:33:43 --> 00:33:47
+Relaxation is always a
+difficult technique to teach to
+
+514
+00:33:47 --> 00:33:50
+MIT students.
+It doesn't come very naturally.
+
+515
+00:33:50 --> 00:33:55
+But it's very simple operation.
+It comes from optimization
+
+516
+00:33:55 --> 00:34:00
+terminology, programming
+terminology, so to speak.
+
+517
+00:34:00 --> 00:34:04
+And, does this inequality look
+familiar at all especially when
+
+518
+00:34:04 --> 00:34:08
+you start writing it this way?
+You say, the shortest path from
+
+519
+00:34:08 --> 00:34:12
+S to v and the shortest path
+from S to u in some edge from u
+
+520
+00:34:12 --> 00:34:15
+to v, does that look like
+anything we've seen?
+
+521
+00:34:15 --> 00:34:18
+In fact, it was on this board
+but I just erased it.
+
+522
+00:34:18 --> 00:34:20
+Triangle inequality,
+yeah.
+
+523
+00:34:20 --> 00:34:24
+So, this is trying to make the
+triangle inequality true.
+
+524
+00:34:24 --> 00:34:28
+Certainly, the shortest path
+from S to v should be less than
+
+525
+00:34:28 --> 00:34:32
+or equal to, not greater than.
+The shortest path from S to u,
+
+526
+00:34:32 --> 00:34:36
+plus whatever path from u to v,
+the shortest path should be,
+
+527
+00:34:36 --> 00:34:40
+at most, that.
+So, this is sort of a somewhat
+
+528
+00:34:40 --> 00:34:42
+more general triangle
+inequality.
+
+529
+00:34:42 --> 00:34:44
+And, we want to,
+certainly it should be true.
+
+530
+00:34:44 --> 00:34:46
+So, if it's not true,
+we fix it.
+
+531
+00:34:46 --> 00:34:48
+If it's greater than,
+we make it equal.
+
+532
+00:34:48 --> 00:34:51
+But we don't want to make it
+less than because that's not
+
+533
+00:34:51 --> 00:34:52
+always true.
+OK, but certainly,
+
+534
+00:34:52 --> 00:34:54
+it should be less than or equal
+to.
+
+535
+00:34:54 --> 00:34:56
+So, this is fixing the triangle
+inequality.
+
+536
+00:34:56 --> 00:35:00
+It's trying to make that
+constraint more true.
+
+537
+00:35:00 --> 00:35:03
+In optimization,
+that's called relaxing the
+
+538
+00:35:03 --> 00:35:06
+constraint.
+OK, so we're sort of relaxing
+
+539
+00:35:06 --> 00:35:11
+the triangle inequality here.
+In the end, we should have all
+
+540
+00:35:11 --> 00:35:14
+the shortest paths.
+That's a claim.
+
+541
+00:35:14 --> 00:35:19
+So: a very simple algorithm.
+Let's try it out on a graph,
+
+542
+00:35:19 --> 00:35:23
+and that should make it more
+intuitive why it's working,
+
+543
+00:35:23 --> 00:35:28
+and that the rest of the
+lecture will be proving that it
+
+544
+00:35:28 --> 00:35:32
+works.
+Yeah, this is enough room.
+
+545
+00:35:32 --> 00:35:36
+So, oh, I should mention one
+other thing here.
+
+546
+00:35:36 --> 00:35:38
+Sorry.
+Whenever we change d of v,
+
+547
+00:35:38 --> 00:35:43
+this is changing the key of v
+in the priority queue.
+
+548
+00:35:43 --> 00:35:48
+So, implicitly what's happening
+here in this assignment,
+
+549
+00:35:48 --> 00:35:53
+this is getting a bit messy,
+is a decreased key operation,
+
+550
+00:35:53 --> 00:35:58
+OK, which we talked briefly
+about last class in the context
+
+551
+00:35:58 --> 00:36:05
+of minimum spanning trees where
+we were also decreasing the key.
+
+552
+00:36:05 --> 00:36:08
+The point is we were changing
+the key of one element industry
+
+553
+00:36:08 --> 00:36:11
+like station step in the
+priority queue so that if it now
+
+554
+00:36:11 --> 00:36:14
+becomes the minimum,
+we should extract here.
+
+555
+00:36:14 --> 00:36:17
+And, we are only ever
+decreasing keys because we are
+
+556
+00:36:17 --> 00:36:20
+always replacing larger values
+with smaller values.
+
+557
+00:36:20 --> 00:36:23
+So, we'll come back to that
+later when we analyze the
+
+558
+00:36:23 --> 00:36:25
+running time.
+But, there is some data
+
+559
+00:36:25 --> 00:36:28
+structure work going on here.
+Again, we are abusing notation
+
+560
+00:36:28 --> 00:36:33
+a bit.
+OK, so here is a graph with
+
+561
+00:36:33 --> 00:36:36
+edge weights.
+
+562
+00:36:36 --> 00:37:06
+
+
+563
+00:37:06 --> 00:37:10
+OK, and I want my priority
+queue over here.
+
+564
+00:37:10 --> 00:37:14
+And, I'm also going to draw my
+estimates.
+
+565
+00:37:14 --> 00:37:19
+OK, now I don't want to cheat.
+So, we're going to run the
+
+566
+00:37:19 --> 00:37:23
+algorithm on this graph.
+s will be A,
+
+567
+00:37:23 --> 00:37:30
+and I want to know the shortest
+path from A to everyone else.
+
+568
+00:37:30 --> 00:37:32
+So, you can check,
+OK, paths exist.
+
+569
+00:37:32 --> 00:37:35
+So, hopefully everything should
+end up a finite value by the
+
+570
+00:37:35 --> 00:37:37
+end.
+All the weights are
+
+571
+00:37:37 --> 00:37:39
+nonnegative, so this algorithm
+should work.
+
+572
+00:37:39 --> 00:37:42
+The algorithm doesn't even need
+connectivity,
+
+573
+00:37:42 --> 00:37:45
+but it does mean that all the
+weights are nonnegative.
+
+574
+00:37:45 --> 00:37:48
+So, we run the algorithm.
+For the initialization,
+
+575
+00:37:48 --> 00:37:51
+we set the distance estimate
+for our source to be zero
+
+576
+00:37:51 --> 00:37:54
+because, in fact,
+there's only one path from A to
+
+577
+00:37:54 --> 00:37:57
+A, and that to do nothing,
+the empty path.
+
+578
+00:37:57 --> 00:38:00
+So, I'm going to put the key of
+zero over here.
+
+579
+00:38:00 --> 00:38:03
+And, for everyone else,
+we're just going to put
+
+580
+00:38:03 --> 00:38:08
+infinity because we don't know
+any better at this point.
+
+581
+00:38:08 --> 00:38:11
+So, I'll put keys of infinity
+for everyone else.
+
+582
+00:38:11 --> 00:38:15
+OK, so now you can see what the
+algorithm does is extract the
+
+583
+00:38:15 --> 00:38:18
+minimum from the queue.
+And, given our setup,
+
+584
+00:38:18 --> 00:38:21
+we'll definitely choose s,
+or in this case,
+
+585
+00:38:21 --> 00:38:23
+A.
+So, it has a weight of zero.
+
+586
+00:38:23 --> 00:38:26
+Everyone else has quite a bit
+larger weight.
+
+587
+00:38:26 --> 00:38:30
+OK, so we look at s,
+or I'll use A here.
+
+588
+00:38:30 --> 00:38:32
+So, we look at A.
+We add A to our set,
+
+589
+00:38:32 --> 00:38:33
+S.
+So, it's now removed from the
+
+590
+00:38:33 --> 00:38:35
+queue.
+It will never go back in
+
+591
+00:38:35 --> 00:38:38
+because we never add anything to
+the queue, start with all the
+
+592
+00:38:38 --> 00:38:40
+vertices, and extract,
+and decrease keys.
+
+593
+00:38:40 --> 00:38:42
+But we never insert.
+So, A is gone.
+
+594
+00:38:42 --> 00:38:45
+OK, and now I want to update
+the keys of all of the other
+
+595
+00:38:45 --> 00:38:48
+vertices.
+And the claim is I only need to
+
+596
+00:38:48 --> 00:38:50
+look at the vertices that have
+edges from A.
+
+597
+00:38:50 --> 00:38:53
+So, there's an edge from A to
+B, and that has weight ten.
+
+598
+00:38:53 --> 00:38:56
+And so, I compare:
+well, is it a good idea to go
+
+599
+00:38:56 --> 00:38:58
+from A to A, which costs
+nothing, and then to go along
+
+600
+00:38:58 --> 00:39:02
+this edge, AB,
+which costs ten?
+
+601
+00:39:02 --> 00:39:06
+Well, it seems like a pretty
+good idea because that has a
+
+602
+00:39:06 --> 00:39:09
+total weight of zero plus ten,
+which is ten,
+
+603
+00:39:09 --> 00:39:11
+which is much smaller than
+infinity.
+
+604
+00:39:11 --> 00:39:15
+So, I'm going to erase this
+infinity; write ten,
+
+605
+00:39:15 --> 00:39:19
+and over in the queue as well.
+That's the decreased key
+
+606
+00:39:19 --> 00:39:22
+operation.
+So now, I know a path from A to
+
+607
+00:39:22 --> 00:39:22
+B.
+Good.
+
+608
+00:39:22 --> 00:39:27
+A to C is the only other edge.
+Zero plus three is less than
+
+609
+00:39:27 --> 00:39:28
+infinity, so,
+cool.
+
+610
+00:39:28 --> 00:39:33
+I'll put three here for C,
+and C is there.
+
+611
+00:39:33 --> 00:39:35
+OK, the other vertices I don't
+touch.
+
+612
+00:39:35 --> 00:39:38
+I'm going to rewrite them here,
+but the algorithm doesn't have
+
+613
+00:39:38 --> 00:39:41
+to copy them.
+Those keys were already there.
+
+614
+00:39:41 --> 00:39:44
+It's just touching these two.
+OK, that was pretty boring.
+
+615
+00:39:44 --> 00:39:47
+Now we look at our queue,
+and we extract the minimum
+
+616
+00:39:47 --> 00:39:49
+element.
+So, A is no longer in there,
+
+617
+00:39:49 --> 00:39:51
+so the minimum key here is
+three.
+
+618
+00:39:51 --> 00:39:54
+So, the claim is that this is a
+shortest path;
+
+619
+00:39:54 --> 00:39:56
+from A to C,
+here is the shortest path from
+
+620
+00:39:56 --> 00:39:58
+A to C.
+There's no other shorter way.
+
+621
+00:39:58 --> 00:40:03
+You could check that,
+and we'll prove it in a moment.
+
+622
+00:40:03 --> 00:40:05
+Cool, so we'll remove C from
+the list.
+
+623
+00:40:05 --> 00:40:07
+It's gone.
+Then we look at all of the
+
+624
+00:40:07 --> 00:40:10
+outgoing edges from C.
+So, there's one that goes up to
+
+625
+00:40:10 --> 00:40:13
+B, which has weight four,
+four plus three,
+
+626
+00:40:13 --> 00:40:15
+which is the shortest path
+weight from A to C.
+
+627
+00:40:15 --> 00:40:18
+So, going from A to C,
+and C to B should cost three
+
+628
+00:40:18 --> 00:40:21
+plus four, which is seven,
+which is less than ten.
+
+629
+00:40:21 --> 00:40:24
+So, we found an even better
+path to get to B.
+
+630
+00:40:24 --> 00:40:27
+It's better to go like this
+than it is to go like that.
+
+631
+00:40:27 --> 00:40:30
+So, we write seven for B,
+and there's an outgoing edge
+
+632
+00:40:30 --> 00:40:35
+from C to d which costs eight.
+Three plus eight is 11.
+
+633
+00:40:35 --> 00:40:38
+11 is less than infinity last
+time I checked.
+
+634
+00:40:38 --> 00:40:41
+So, we write 11 for d.
+Then we look at E.
+
+635
+00:40:41 --> 00:40:45
+We have three plus two is five,
+which is less than infinity.
+
+636
+00:40:45 --> 00:40:48
+So, we write five for the new
+key for E.
+
+637
+00:40:48 --> 00:40:51
+At this point,
+we have finite shortest paths
+
+638
+00:40:51 --> 00:40:54
+to everywhere,
+but they may not be the best
+
+639
+00:40:54 --> 00:40:56
+ones.
+So, we have to keep looking.
+
+640
+00:40:56 --> 00:40:59
+OK, next round of the
+algorithm, we extract the
+
+641
+00:40:59 --> 00:41:04
+minimum key among all these.
+OK, it's not B,
+
+642
+00:41:04 --> 00:41:07
+which we've seen though
+probably know the answer to.
+
+643
+00:41:07 --> 00:41:09
+But it's E.
+E has the smallest key.
+
+644
+00:41:09 --> 00:41:12
+So, we now declare this to be a
+shortest path.
+
+645
+00:41:12 --> 00:41:16
+The way we got to E was along
+this path: A to C,
+
+646
+00:41:16 --> 00:41:18
+C to E, declare that to be
+shortest.
+
+647
+00:41:18 --> 00:41:22
+We claim we're done with E.
+But we still have to update.
+
+648
+00:41:22 --> 00:41:25
+What about all the outgoing
+edges from E?
+
+649
+00:41:25 --> 00:41:28
+There's only one here.
+It costs five plus nine,
+
+650
+00:41:28 --> 00:41:32
+which is 14,
+which is bigger than 11.
+
+651
+00:41:32 --> 00:41:34
+So, no go.
+That's not an interesting path.
+
+652
+00:41:34 --> 00:41:38
+Our previous path,
+which went like this at a cost
+
+653
+00:41:38 --> 00:41:42
+of the 11, is better than the
+one we are considering now.
+
+654
+00:41:42 --> 00:41:45
+I'm drawing the whole path,
+but the algorithm is only
+
+655
+00:41:45 --> 00:41:48
+adding these two numbers.
+OK, good.
+
+656
+00:41:48 --> 00:41:52
+So, I don't change anything.
+Seven, 11, and five is removed,
+
+657
+00:41:52 --> 00:41:55
+or E is removed.
+Our new keys are seven and 11.
+
+658
+00:41:55 --> 00:41:57
+So, we take the key,
+seven, here,
+
+659
+00:41:57 --> 00:42:01
+which is for element B,
+vertex B.
+
+660
+00:42:01 --> 00:42:04
+We declare the path we
+currently have in our hands from
+
+661
+00:42:04 --> 00:42:06
+A to B, which happens to be this
+one.
+
+662
+00:42:06 --> 00:42:09
+Algorithm can't actually tell
+this, by the way,
+
+663
+00:42:09 --> 00:42:11
+but we're drawing it anyway.
+This path, A,
+
+664
+00:42:11 --> 00:42:14
+C, B, is the candidate shortest
+path.
+
+665
+00:42:14 --> 00:42:16
+The claim is it is indeed
+shortest.
+
+666
+00:42:16 --> 00:42:18
+Now, we look at all the
+outgoing edges.
+
+667
+00:42:18 --> 00:42:22
+There's one that goes back to C
+at a cost of seven plus one,
+
+668
+00:42:22 --> 00:42:24
+which is eight,
+which is bigger than three,
+
+669
+00:42:24 --> 00:42:27
+which is good.
+We already declared C to be
+
+670
+00:42:27 --> 00:42:29
+done.
+But the algorithm checks this
+
+671
+00:42:29 --> 00:42:31
+path and says,
+oh, that's no better.
+
+672
+00:42:31 --> 00:42:34
+And then we look at this other
+edge from B to d.
+
+673
+00:42:34 --> 00:42:36
+That costs seven plus two,
+which is nine,
+
+674
+00:42:36 --> 00:42:41
+which is better than 11.
+So, we, in fact,
+
+675
+00:42:41 --> 00:42:46
+found an even shorter path.
+So, the shortest path weight,
+
+676
+00:42:46 --> 00:42:51
+now, for d, is nine because
+there is this path that goes A,
+
+677
+00:42:51 --> 00:42:55
+C, B, d for a total cost of
+three plus four plus two is
+
+678
+00:42:55 --> 00:42:58
+nine.
+Cool, now there's only one
+
+679
+00:42:58 --> 00:43:02
+element in the queue.
+We remove it.
+
+680
+00:43:02 --> 00:43:04
+d: we look at the outgoing
+edges.
+
+681
+00:43:04 --> 00:43:07
+There's one going here which
+costs nine plus seven,
+
+682
+00:43:07 --> 00:43:09
+which is 16,
+which is way bigger than five.
+
+683
+00:43:09 --> 00:43:12
+So, we're done.
+Don't do anything.
+
+684
+00:43:12 --> 00:43:14
+At this point,
+the queue is empty.
+
+685
+00:43:14 --> 00:43:18
+And the claim is that all these
+numbers that are written here,
+
+686
+00:43:18 --> 00:43:21
+the final values are the
+shortest path weights.
+
+687
+00:43:21 --> 00:43:24
+This looks an awful lot like a
+five, but it's an s.
+
+688
+00:43:24 --> 00:43:27
+It has a weight of zero.
+I've also drawn in here all the
+
+689
+00:43:27 --> 00:43:31
+shortest paths.
+And, this is not hard to do.
+
+690
+00:43:31 --> 00:43:34
+We're not going to talk about
+it too much in this class,
+
+691
+00:43:34 --> 00:43:37
+but it's mentioned in a little
+bit more detail at the end of
+
+692
+00:43:37 --> 00:43:40
+the textbook.
+And it's something called the
+
+693
+00:43:40 --> 00:43:42
+shortest path tree.
+It's just something good to
+
+694
+00:43:42 --> 00:43:46
+know about if you actually want
+to compute shortest paths.
+
+695
+00:43:46 --> 00:43:48
+In this class,
+we mainly worry about the
+
+696
+00:43:48 --> 00:43:50
+weights because it's pretty much
+the same problem.
+
+697
+00:43:50 --> 00:43:55
+The shortest path tree is the
+union of all shortest paths.
+
+698
+00:43:55 --> 00:43:58
+And in particular,
+if you look at each vertex in
+
+699
+00:43:58 --> 00:44:04
+your graph, if you consider the
+last edge into that vertex that
+
+700
+00:44:04 --> 00:44:08
+was relaxed among all vertices,
+u, you look at the edges,
+
+701
+00:44:08 --> 00:44:12
+(u,v), say, was that last one
+to relax?
+
+702
+00:44:12 --> 00:44:15
+So, just look at the last edges
+we relaxed here.
+
+703
+00:44:15 --> 00:44:20
+You put them all together:
+that's called a shortest path
+
+704
+00:44:20 --> 00:44:23
+tree.
+And, it has the property that
+
+705
+00:44:23 --> 00:44:28
+from S to everywhere else,
+there is a unique path down the
+
+706
+00:44:28 --> 00:44:31
+tree.
+And it's the shortest path.
+
+707
+00:44:31 --> 00:44:34
+It's the shortest path that we
+found.
+
+708
+00:44:34 --> 00:44:37
+OK, so you actually get
+shortest paths out of this
+
+709
+00:44:37 --> 00:44:40
+algorithm even though it's not
+explicitly described.
+
+710
+00:44:40 --> 00:44:44
+All we are mainly talking about
+are the shortest path weights.
+
+711
+00:44:44 --> 00:44:48
+Algorithm clear at this point?
+Feels like it's doing the right
+
+712
+00:44:48 --> 00:44:50
+thing?
+You can check all those numbers
+
+713
+00:44:50 --> 00:44:53
+are the best paths.
+And now we're going to prove
+
+714
+00:44:53 --> 00:44:55
+that.
+
+715
+00:44:55 --> 00:45:12
+
+
+716
+00:45:12 --> 00:45:15
+So: correctness.
+
+717
+00:45:15 --> 00:45:25
+
+
+718
+00:45:25 --> 00:45:31
+So the first thing I want to
+prove is that relaxation never
+
+719
+00:45:31 --> 00:45:35
+makes a mistake.
+If it ever sets d of v to be
+
+720
+00:45:35 --> 00:45:42
+something, I want to prove that
+d of v is always an upper bound
+
+721
+00:45:42 --> 00:45:45
+on delta.
+So, we have this variant.
+
+722
+00:45:45 --> 00:45:51
+It's greater than or equal to
+delta of s, v for all v.
+
+723
+00:45:51 --> 00:45:55
+And, this invariant holds at
+all times.
+
+724
+00:45:55 --> 00:45:59
+So, after initialization,
+it doesn't hold before
+
+725
+00:45:59 --> 00:46:06
+initialization because d isn't
+defined then.
+
+726
+00:46:06 --> 00:46:09
+But if you do this
+initialization where you set S
+
+727
+00:46:09 --> 00:46:14
+to zero, and everyone else to
+infinity, and you take any
+
+728
+00:46:14 --> 00:46:19
+sequence of relaxation steps,
+then this variant will hold
+
+729
+00:46:19 --> 00:46:22
+after each relaxation step you
+apply.
+
+730
+00:46:22 --> 00:46:25
+This is actually a very general
+lemma.
+
+731
+00:46:25 --> 00:46:29
+It's also pretty easy to prove.
+It holds not only for
+
+732
+00:46:29 --> 00:46:33
+Dijkstra's algorithm,
+but for a lot of other
+
+733
+00:46:33 --> 00:46:38
+algorithms we'll see.
+Pretty much every algorithm we
+
+734
+00:46:38 --> 00:46:43
+see will involve relaxation.
+And, this is saying no matter
+
+735
+00:46:43 --> 00:46:47
+what relaxations you do,
+you always have a reasonable
+
+736
+00:46:47 --> 00:46:51
+estimate in the sense that it's
+greater than or equal to the
+
+737
+00:46:51 --> 00:46:56
+true shortest path weight.
+So, it should be converging
+
+738
+00:46:56 --> 00:46:58
+from above.
+So, that's the lemma.
+
+739
+00:46:58 --> 00:47:02
+Let's prove it.
+Any suggestions on how we
+
+740
+00:47:02 --> 00:47:07
+should prove this lemma?
+What technique might we use?
+
+741
+00:47:07 --> 00:47:09
+What's that?
+Cut and paste?
+
+742
+00:47:09 --> 00:47:12
+It would be good for optimal
+substructure.
+
+743
+00:47:12 --> 00:47:16
+Cut and paste:
+maybe sort of what's going on
+
+744
+00:47:16 --> 00:47:20
+here but not exactly.
+Something a little more
+
+745
+00:47:20 --> 00:47:22
+general.
+It's just intuition here;
+
+746
+00:47:22 --> 00:47:26
+it doesn't have to be the right
+answer.
+
+747
+00:47:26 --> 00:47:32
+In fact, many answers are
+correct, have plausible proofs.
+
+748
+00:47:32 --> 00:47:34
+Induction, yeah.
+So, I'm not going to write
+
+749
+00:47:34 --> 00:47:36
+induction here,
+but effectively we are using
+
+750
+00:47:36 --> 00:47:38
+induction.
+That's the answer I was
+
+751
+00:47:38 --> 00:47:40
+expecting.
+So, there is sort of an
+
+752
+00:47:40 --> 00:47:42
+induction already in time going
+on here.
+
+753
+00:47:42 --> 00:47:45
+We say after initialization it
+should be true.
+
+754
+00:47:45 --> 00:47:47
+That's our base case.
+And then, every relaxation we
+
+755
+00:47:47 --> 00:47:50
+do, it should still be true.
+So, we're going to assume by
+
+756
+00:47:50 --> 00:47:53
+induction that all the previous
+relaxations worked,
+
+757
+00:47:53 --> 00:47:56
+and then we're going to prove
+that the last relaxation,
+
+758
+00:47:56 --> 00:47:59
+whatever it is,
+works.
+
+759
+00:47:59 --> 00:48:01
+So, first let's do the base
+case.
+
+760
+00:48:01 --> 00:48:04
+So, this is after an
+initialization,
+
+761
+00:48:04 --> 00:48:09
+let's say, initially.
+So, initially we have d of s
+
+762
+00:48:09 --> 00:48:12
+equal to zero.
+And we have d of v equal to
+
+763
+00:48:12 --> 00:48:17
+infinity for all other vertices,
+for all vertices,
+
+764
+00:48:17 --> 00:48:21
+v, not equal to little s.
+OK, now we have to check that
+
+765
+00:48:21 --> 00:48:26
+this inequality holds.
+Well, we have delta of s,
+
+766
+00:48:26 --> 00:48:28
+s.
+We've already argued that
+
+767
+00:48:28 --> 00:48:33
+that's zero.
+You can't get negative when
+
+768
+00:48:33 --> 00:48:36
+there are only nonnegative edge
+weights.
+
+769
+00:48:36 --> 00:48:40
+So, that's the best.
+So, certainly zero is greater
+
+770
+00:48:40 --> 00:48:44
+than or equal to zero.
+And, we have everything else,
+
+771
+00:48:44 --> 00:48:47
+well, I mean,
+delta of S, v is certainly less
+
+772
+00:48:47 --> 00:48:50
+than or equal to infinity.
+So this holds.
+
+773
+00:48:50 --> 00:48:54
+Everything is less than or
+equal to infinity.
+
+774
+00:48:54 --> 00:48:59
+So: base case is done.
+So, now we do an induction.
+
+775
+00:48:59 --> 00:49:06
+And, I'm going to write it as a
+proof by contradiction.
+
+776
+00:49:06 --> 00:49:12
+So, let's say,
+suppose that this fails to hold
+
+777
+00:49:12 --> 00:49:18
+at some point.
+So, suppose for contradiction
+
+778
+00:49:18 --> 00:49:26
+that the invariant is violated.
+So, we'd like to sue the
+
+779
+00:49:26 --> 00:49:32
+violator and find a
+contradiction.
+
+780
+00:49:32 --> 00:49:36
+So, it's going to be violated.
+So, let's look at the first
+
+781
+00:49:36 --> 00:49:39
+violation, the first time it's
+violated.
+
+782
+00:49:39 --> 00:49:41
+So, this is,
+essentially,
+
+783
+00:49:41 --> 00:49:45
+again, a proof by induction.
+So, let's say we have some
+
+784
+00:49:45 --> 00:49:48
+violation, d of v is less than
+delta of s, v.
+
+785
+00:49:48 --> 00:49:53
+That would be bad if we somehow
+got an estimate smaller than the
+
+786
+00:49:53 --> 00:49:56
+shortest path.
+Well, then I think about
+
+787
+00:49:56 --> 00:50:01
+looking at the first violation
+is we know sort of by induction
+
+788
+00:50:01 --> 00:50:05
+that all other values are
+correct.
+
+789
+00:50:05 --> 00:50:09
+OK, d of v is the first one
+where we've screwed up.
+
+790
+00:50:09 --> 00:50:12
+So, the invariant holds
+everywhere else.
+
+791
+00:50:12 --> 00:50:17
+Well, what caused this to fail,
+this invariant to be violated,
+
+792
+00:50:17 --> 00:50:20
+is some relaxation,
+OK, on d of v.
+
+793
+00:50:20 --> 00:50:24
+So, we had some d of v,
+and we replaced it with some
+
+794
+00:50:24 --> 00:50:30
+other d of u plus the weight of
+the edge from u to v.
+
+795
+00:50:30 --> 00:50:34
+And somehow,
+this made it invalid.
+
+796
+00:50:34 --> 00:50:39
+So, d of v is somehow less than
+that.
+
+797
+00:50:39 --> 00:50:46
+We just set d of v to this.
+So, this must be less than
+
+798
+00:50:46 --> 00:50:51
+delta of s, v.
+The claim is that that's not
+
+799
+00:50:51 --> 00:50:59
+possible because,
+let me rewrite a little bit.
+
+800
+00:50:59 --> 00:51:07
+We have d of u plus w of (u,v).
+And, we have our induction
+
+801
+00:51:07 --> 00:51:15
+hypothesis, which holds on u,
+u of some other vertex.
+
+802
+00:51:15 --> 00:51:22
+We know that d of u is at least
+delta of s, u.
+
+803
+00:51:22 --> 00:51:30
+So, this has to be at least
+delta of s, u plus w of u,
+
+804
+00:51:30 --> 00:51:34
+v.
+Now, what about this w of u,
+
+805
+00:51:34 --> 00:51:37
+v?
+Well, that's some path from u
+
+806
+00:51:37 --> 00:51:40
+to v.
+So, it's got to be bigger than
+
+807
+00:51:40 --> 00:51:44
+the shortest path or equal.
+So certainly,
+
+808
+00:51:44 --> 00:51:48
+this is greater than or equal
+to delta of u,
+
+809
+00:51:48 --> 00:51:50
+v.
+OK, it could be larger if
+
+810
+00:51:50 --> 00:51:56
+there's some multi-edged path
+that has a smaller total weight,
+
+811
+00:51:56 --> 00:52:00
+but it's certainly no smaller
+than delta of u,
+
+812
+00:52:00 --> 00:52:04
+v.
+And, this looks like a good
+
+813
+00:52:04 --> 00:52:08
+summation, delta of S to u,
+and u to v is a triangle
+
+814
+00:52:08 --> 00:52:11
+inequality, yeah.
+So, that is,
+
+815
+00:52:11 --> 00:52:15
+it's upside down here.
+But, the triangle S,
+
+816
+00:52:15 --> 00:52:19
+u, u to v, so this is only
+longer than S to v.
+
+817
+00:52:19 --> 00:52:24
+OK, so we have this thing,
+which is simultaneously greater
+
+818
+00:52:24 --> 00:52:29
+than or equal to the shortest
+path weight from S to v,
+
+819
+00:52:29 --> 00:52:34
+and also strictly less than the
+shortest path weight from S to
+
+820
+00:52:34 --> 00:52:37
+v.
+So, that's a contradiction.
+
+821
+00:52:37 --> 00:52:41
+Maybe contradiction is the most
+intuitive way isn't the most
+
+822
+00:52:41 --> 00:52:43
+intuitive way to proceed.
+The intuition,
+
+823
+00:52:43 --> 00:52:47
+here, is whatever you assign d
+of v, you have a path in mind.
+
+824
+00:52:47 --> 00:52:50
+You inductively had a path from
+s to u.
+
+825
+00:52:50 --> 00:52:53
+Then you added this edge.
+So, that was a real path.
+
+826
+00:52:53 --> 00:52:57
+We always know that every path
+has weight greater than or equal
+
+827
+00:52:57 --> 00:53:00
+to the shortest path.
+So, it should be true,
+
+828
+00:53:00 --> 00:53:06
+and here's the inductive proof.
+All right, moving right along,
+
+829
+00:53:06 --> 00:53:14
+so this was an easy warm-up.
+We have greater than or equal
+
+830
+00:53:14 --> 00:53:18
+to.
+Now we have to prove less than
+
+831
+00:53:18 --> 00:53:23
+or equal to at the end of the
+algorithm.
+
+832
+00:53:23 --> 00:53:31
+This is true all the time;
+less than or equal to will only
+
+833
+00:53:31 --> 00:53:37
+be true at the end.
+So, we are not going to prove
+
+834
+00:53:37 --> 00:53:41
+less than or equal to quite yet.
+We're going to prove another
+
+835
+00:53:41 --> 00:53:44
+lemma, which again,
+so both of these lemmas are
+
+836
+00:53:44 --> 00:53:46
+useful for other algorithms,
+too.
+
+837
+00:53:46 --> 00:53:51
+So, we're sort of building some
+shortest path theory that we can
+
+838
+00:53:51 --> 00:53:54
+apply later.
+This one will give you some
+
+839
+00:53:54 --> 00:53:58
+intuition about why relaxation,
+not only is it not bad,
+
+840
+00:53:58 --> 00:54:01
+it's actually good.
+Not only does it not screw up
+
+841
+00:54:01 --> 00:54:07
+anything, but it also makes
+progress in the following sense.
+
+842
+00:54:07 --> 00:54:12
+So, suppose you knew the
+shortest path from s to some
+
+843
+00:54:12 --> 00:54:16
+vertex.
+OK, so you go from s to some
+
+844
+00:54:16 --> 00:54:19
+other vertices.
+Then you go to u.
+
+845
+00:54:19 --> 00:54:25
+Then you go to v.
+Suppose that is a shortest path
+
+846
+00:54:25 --> 00:54:29
+from s to v.
+OK, and also suppose that we
+
+847
+00:54:29 --> 00:54:35
+already know in d of u the
+shortest path weight from s to
+
+848
+00:54:35 --> 00:54:39
+u.
+So, suppose we have this
+
+849
+00:54:39 --> 00:54:43
+equality.
+We now know that we always have
+
+850
+00:54:43 --> 00:54:49
+a greater than or equal to.
+Suppose they are equal for u,
+
+851
+00:54:49 --> 00:54:53
+OK, the vertex just before v in
+the shortest path.
+
+852
+00:54:53 --> 00:54:58
+OK, and suppose we relax that
+edge, (u,v), OK,
+
+853
+00:54:58 --> 00:55:05
+which is exactly this step.
+This is relaxing the edge,
+
+854
+00:55:05 --> 00:55:08
+(u,v).
+But we'll just call it
+
+855
+00:55:08 --> 00:55:13
+relaxation here.
+After that relaxation,
+
+856
+00:55:13 --> 00:55:19
+d of v equals delta of (s,v).
+So, if we had the correct
+
+857
+00:55:19 --> 00:55:23
+answer for u,
+and we relax (u,v),
+
+858
+00:55:23 --> 00:55:29
+then we get the correct answer
+for v.
+
+859
+00:55:29 --> 00:55:32
+OK, this is good news.
+It means, if inductively we can
+
+860
+00:55:32 --> 00:55:36
+somehow get the right answer for
+u, now we know how to get the
+
+861
+00:55:36 --> 00:55:38
+right answer for v.
+In the algorithm,
+
+862
+00:55:38 --> 00:55:42
+we don't actually know what the
+vertex just before v in the
+
+863
+00:55:42 --> 00:55:45
+shortest path is,
+but in the analysis we can
+
+864
+00:55:45 --> 00:55:48
+pretty much know that.
+So, we have to prove this
+
+865
+00:55:48 --> 00:55:50
+lemma.
+This is actually even easier
+
+866
+00:55:50 --> 00:55:53
+than the previous one:
+don't even need induction
+
+867
+00:55:53 --> 00:55:57
+because you just work through
+what's going on in relaxation,
+
+868
+00:55:57 --> 00:56:01
+and it's true.
+So, here we go.
+
+869
+00:56:01 --> 00:56:04
+So, we're interested in this
+value, delta of Ss v.
+
+870
+00:56:04 --> 00:56:07
+And we know what the shortest
+path is.
+
+871
+00:56:07 --> 00:56:12
+So, the shortest path weight is
+the weight of this path.
+
+872
+00:56:12 --> 00:56:15
+OK, so we can write down some
+equality here.
+
+873
+00:56:15 --> 00:56:20
+Well, I'm going to split out
+the first part of the path and
+
+874
+00:56:20 --> 00:56:22
+the last part of the path.
+So, we have,
+
+875
+00:56:22 --> 00:56:27
+I'll say, the weight from s,
+so, this part of the path from
+
+876
+00:56:27 --> 00:56:32
+s to u, plus the weight of this
+edge, u, v.
+
+877
+00:56:32 --> 00:56:40
+Remember, we could write w of a
+path, and that was the total
+
+878
+00:56:40 --> 00:56:46
+weight of all those edges.
+So, what is this,
+
+879
+00:56:46 --> 00:56:51
+the weight of this path from S
+to u?
+
+880
+00:56:51 --> 00:56:59
+Or, what property should I use
+to figure out what that value
+
+881
+00:56:59 --> 00:57:02
+is?
+Yeah?
+
+882
+00:57:02 --> 00:57:05
+s to v is the shortest path,
+right?
+
+883
+00:57:05 --> 00:57:11
+So, by optimal substructure,
+from s to u is also a shortest
+
+884
+00:57:11 --> 00:57:13
+path.
+So, this is delta of s,
+
+885
+00:57:13 --> 00:57:14
+u.
+Cool.
+
+886
+00:57:14 --> 00:57:19
+We'll hold on for now.
+That's all we're going to say.
+
+887
+00:57:19 --> 00:57:24
+On the other hand,
+we know from this lemma that
+
+888
+00:57:24 --> 00:57:28
+matter what we do,
+d of v is greater than or equal
+
+889
+00:57:28 --> 00:57:32
+to delta of s,
+v.
+
+890
+00:57:32 --> 00:57:36
+So, let's write that down.
+So, there's a few cases,
+
+891
+00:57:36 --> 00:57:39
+and this will eliminate some of
+the cases.
+
+892
+00:57:39 --> 00:57:44
+By that lemma correctness one,
+we know that d of v is greater
+
+893
+00:57:44 --> 00:57:46
+than or equal to delta of s,
+v.
+
+894
+00:57:46 --> 00:57:50
+So, it's either equal or
+greater than at all times.
+
+895
+00:57:50 --> 00:57:55
+So, I'm thinking about the time
+before we do the relaxation,
+
+896
+00:57:55 --> 00:57:58
+this (u,v).
+So, at that point,
+
+897
+00:57:58 --> 00:58:02
+this is certainly true.
+So, either they're equal before
+
+898
+00:58:02 --> 00:58:06
+relaxation or it's greater.
+
+899
+00:58:06 --> 00:58:16
+
+
+900
+00:58:16 --> 00:58:19
+OK, if they are equal before
+relaxation, we're happy because
+
+901
+00:58:19 --> 00:58:23
+relaxation only decreases values
+by correctness one.
+
+902
+00:58:23 --> 00:58:26
+It can't get any smaller than
+this, so after relaxation it
+
+903
+00:58:26 --> 00:58:29
+will also be equal.
+OK, so in this case we're done.
+
+904
+00:58:29 --> 00:58:35
+So, that's a trivial case.
+So let's now suppose that d of
+
+905
+00:58:35 --> 00:58:41
+v is greater than delta of s,
+v before relaxation.
+
+906
+00:58:41 --> 00:58:46
+That's perfectly valid.
+Hopefully now we fix it.
+
+907
+00:58:46 --> 00:58:51
+OK, well the point is,
+we know this delta s,
+
+908
+00:58:51 --> 00:58:53
+v.
+It is this sum.
+
+909
+00:58:53 --> 00:58:58
+OK, we also know this.
+So, delta of s,
+
+910
+00:58:58 --> 00:59:03
+u we know is d of u.
+And, we have this w u,
+
+911
+00:59:03 --> 00:59:04
+v.
+So, delta of s,
+
+912
+00:59:04 --> 00:59:07
+v is d of u plus w of (u,v)
+because we are assuming we have
+
+913
+00:59:07 --> 00:59:11
+this shortest path structure
+where you go from s to u,
+
+914
+00:59:11 --> 00:59:13
+and then you follow the edge,
+(u,v).
+
+915
+00:59:13 --> 00:59:16
+So, we know this.
+So, we know d of v is greater
+
+916
+00:59:16 --> 00:59:19
+than d of u plus w of (u,v).
+By golly, that's this condition
+
+917
+00:59:19 --> 00:59:22
+in relaxation.
+So, we're just checking,
+
+918
+00:59:22 --> 00:59:24
+relaxation actually does
+something here.
+
+919
+00:59:24 --> 00:59:26
+OK, if you had the wrong
+distance estimate,
+
+920
+00:59:26 --> 00:59:33
+this if condition is satisfied.
+Therefore, we do this.
+
+921
+00:59:33 --> 00:59:36
+So, in this case,
+we relax.
+
+922
+00:59:36 --> 00:59:44
+So, I'm just relaxing.
+Then, we set d of v to d of u
+
+923
+00:59:44 --> 00:59:52
+plus WUV, which is what we want.
+OK, so we set d of v to d of u
+
+924
+00:59:52 --> 00:59:57
+plus w of (u,v).
+And, this equals,
+
+925
+00:59:57 --> 1:00:01.761
+as we said here,
+delta of S, v,
+
+926
+1:00:01.761 --> 1:00:08
+which is what we wanted to
+prove.
+
+927
+1:00:08 --> 1:00:12.662
+Done.
+OK, I'm getting more and more
+
+928
+1:00:12.662 --> 1:00:18.834
+excited as we get into the meat
+of this proof.
+
+929
+1:00:18.834 --> 1:00:22.4
+Any questions so far?
+Good.
+
+930
+1:00:22.4 --> 1:00:28.982
+Now comes the hard part.
+These are both very easy
+
+931
+1:00:28.982 --> 1:00:35.935
+lemmas, right?
+I'll use these two boards.
+
+932
+1:00:35.935 --> 1:00:41.081
+We don't need these proofs
+anymore.
+
+933
+1:00:41.081 --> 1:00:48.043
+We just need these statements:
+correctness one,
+
+934
+1:00:48.043 --> 1:00:52.583
+correctness lemma;
+great names.
+
+935
+1:00:52.583 --> 1:01:00
+So, now finally we get to
+correctness two.
+
+936
+1:01:00 --> 1:01:03.771
+So, we had one and one and a
+half.
+
+937
+1:01:03.771 --> 1:01:09.485
+So, I guess correctness is,
+itself, a mini-trilogy,
+
+938
+1:01:09.485 --> 1:01:14.4
+the mini-series.
+OK, so correctness two says
+
+939
+1:01:14.4 --> 1:01:20.342
+when the algorithm is done,
+we have the right answer.
+
+940
+1:01:20.342 --> 1:01:26.514
+This is really correctness.
+But, it's going to build on
+
+941
+1:01:26.514 --> 1:01:32
+correctness one and correctness
+lemma.
+
+942
+1:01:32 --> 1:01:35.699
+So, we want d of v to equal
+delta of s, v for all vertices,
+
+943
+1:01:35.699 --> 1:01:39.207
+v at the end of the algorithm.
+That is clearly our goal.
+
+944
+1:01:39.207 --> 1:01:42.779
+Now, this theorem is assuming
+that all of the weights are
+
+945
+1:01:42.779 --> 1:01:46.223
+nonnegative, just to repeat.
+It doesn't assume anything
+
+946
+1:01:46.223 --> 1:01:48.136
+else.
+So, it's going to get the
+
+947
+1:01:48.136 --> 1:01:50.687
+infinities right.
+But, if there are minus
+
+948
+1:01:50.687 --> 1:01:54.004
+infinities, all bets are off.
+OK, even if there's any
+
+949
+1:01:54.004 --> 1:01:57.831
+negative weight edge anywhere,
+it's not going to do the right
+
+950
+1:01:57.831 --> 1:02:02.573
+thing necessarily.
+But, assuming all the weights
+
+951
+1:02:02.573 --> 1:02:06.656
+are nonnegative,
+which is reasonable if they're
+
+952
+1:02:06.656 --> 1:02:10.207
+measuring time.
+Usually it costs money to
+
+953
+1:02:10.207 --> 1:02:14.378
+travel along edges.
+They don't pay you to do it.
+
+954
+1:02:14.378 --> 1:02:18.106
+But who knows?
+So, I need just to say a few
+
+955
+1:02:18.106 --> 1:02:20.769
+things.
+One of the things we've
+
+956
+1:02:20.769 --> 1:02:26.094
+mentioned somewhere along the
+way is when you add a vertex to
+
+957
+1:02:26.094 --> 1:02:32.363
+S, you never change its weight.
+OK, that actually requires
+
+958
+1:02:32.363 --> 1:02:35.272
+proof.
+I'm just going to state it
+
+959
+1:02:35.272 --> 1:02:37.636
+here.
+It's not hard to see.
+
+960
+1:02:37.636 --> 1:02:42
+d of v doesn't change.
+OK, this is essentially an
+
+961
+1:02:42 --> 1:02:47.636
+induction once v is added to S.
+OK, this will actually followed
+
+962
+1:02:47.636 --> 1:02:50.727
+by something we'll say in a
+moment.
+
+963
+1:02:50.727 --> 1:02:56.272
+OK, so all I really care about
+is when a vertex is added to S,
+
+964
+1:02:56.272 --> 1:03:01
+we better have the right
+estimate because after that,
+
+965
+1:03:01 --> 1:03:06
+we're not going to change it,
+let's say.
+
+966
+1:03:06 --> 1:03:10.097
+OK, we could define the
+algorithm that way.
+
+967
+1:03:10.097 --> 1:03:15.365
+We are not, but we could.
+I'll say more about this in a
+
+968
+1:03:15.365 --> 1:03:18.39
+second.
+So, all we care about is
+
+969
+1:03:18.39 --> 1:03:21.804
+whether d of v equals delta of
+s, v.
+
+970
+1:03:21.804 --> 1:03:26.78
+That's what we want to prove.
+So, it's clearly that.
+
+971
+1:03:26.78 --> 1:03:32.536
+It should be true at the end.
+But, it suffices to prove that
+
+972
+1:03:32.536 --> 1:03:38
+it holds when v is added to S,
+to capital S.
+
+973
+1:03:38 --> 1:03:40.327
+OK, this actually implies the
+first statement.
+
+974
+1:03:40.327 --> 1:03:42.086
+It has sort of a funny
+implication.
+
+975
+1:03:42.086 --> 1:03:44.982
+But, if we can prove this,
+that d of v equals delta of s,
+
+976
+1:03:44.982 --> 1:03:47.258
+v, when you add to S,
+we know relaxation only
+
+977
+1:03:47.258 --> 1:03:49.586
+decreases value.
+So, it can't get any smaller.
+
+978
+1:03:49.586 --> 1:03:51.241
+It would be from correctness
+one.
+
+979
+1:03:51.241 --> 1:03:54.137
+Correctness one says we can't
+get any smaller than delta.
+
+980
+1:03:54.137 --> 1:03:57.396
+So, if we get a quality at that
+point, we'll have a quality from
+
+981
+1:03:57.396 --> 1:03:59.362
+then on.
+So, that actually implies d of
+
+982
+1:03:59.362 --> 1:04:02
+v never changes after that
+point.
+
+983
+1:04:02 --> 1:04:06.085
+OK, so we're going to prove
+this.
+
+984
+1:04:06.085 --> 1:04:10.297
+Good.
+Well, suppose it isn't true.
+
+985
+1:04:10.297 --> 1:04:15.787
+So this would be a proof by a
+contradiction.
+
+986
+1:04:15.787 --> 1:04:22.042
+Suppose for contradiction that
+this fails to hold.
+
+987
+1:04:22.042 --> 1:04:26.638
+And, let's look at the first
+failure.
+
+988
+1:04:26.638 --> 1:04:32
+Suppose u is the first vertex
+--
+
+989
+1:04:32 --> 1:04:41
+
+
+990
+1:04:41 --> 1:04:45.053
+-- that's about to be added to
+S.
+
+991
+1:04:45.053 --> 1:04:52.146
+I want to consider the time
+right before it's added to S,
+
+992
+1:04:52.146 --> 1:04:56.706
+for which we don't have what we
+want.
+
+993
+1:04:56.706 --> 1:05:04.166
+These are not equal.
+d of u does not equal delta of
+
+994
+1:05:04.166 --> 1:05:08.611
+s, u.
+Well, if they're not equal,
+
+995
+1:05:08.611 --> 1:05:16.805
+we know from correctness one
+that d of E is strictly greater
+
+996
+1:05:16.805 --> 1:05:20.972
+than delta of s,
+u, so, d of u.
+
+997
+1:05:20.972 --> 1:05:28.472
+So, we have d of u is strictly
+greater than delta of s,
+
+998
+1:05:28.472 --> 1:05:32.852
+u.
+OK, that's the beginning of the
+
+999
+1:05:32.852 --> 1:05:37.453
+proof, nothing too exciting yet,
+just some warm-up.
+
+1000
+1:05:37.453 --> 1:05:41.319
+OK, but this,
+used already correctness one.
+
+1001
+1:05:41.319 --> 1:05:46.564
+I think that's the only time
+that we use it in this proof.
+
+1002
+1:05:46.564 --> 1:05:52.177
+OK, so I sort of just want to
+draw picture of what's going on.
+
+1003
+1:05:52.177 --> 1:05:55.674
+But I need a little bit of
+description.
+
+1004
+1:05:55.674 --> 1:06:00
+So, let's look at the shortest
+path.
+
+1005
+1:06:00 --> 1:06:04.176
+Somehow, d of u is greater than
+the shortest path.
+
+1006
+1:06:04.176 --> 1:06:08.352
+So, consider the shortest path
+or a shortest path.
+
+1007
+1:06:08.352 --> 1:06:12.784
+Let p be a shortest path,
+not just any shortest path,
+
+1008
+1:06:12.784 --> 1:06:15.596
+but the shortest path from s to
+u.
+
+1009
+1:06:15.596 --> 1:06:20.028
+OK, so that means that the
+weight of this path is the
+
+1010
+1:06:20.028 --> 1:06:24.375
+shortest path weight.
+So, we have some equations for
+
+1011
+1:06:24.375 --> 1:06:28.636
+what's going on here.
+So, we care about delta of s,
+
+1012
+1:06:28.636 --> 1:06:32.791
+u.
+Here's a path with that weight.
+
+1013
+1:06:32.791 --> 1:06:37.473
+It's got to be one because
+shortest paths exist here;
+
+1014
+1:06:37.473 --> 1:06:41.796
+slight exceptional cases if
+it's a plus infinity,
+
+1015
+1:06:41.796 --> 1:06:45.127
+but I'm not going to worry
+about that.
+
+1016
+1:06:45.127 --> 1:06:49
+So, let me draw a picture
+somewhere.
+
+1017
+1:06:49 --> 1:07:03
+
+
+1018
+1:07:03 --> 1:07:06.283
+So, we have s.
+We have u.
+
+1019
+1:07:06.283 --> 1:07:11.344
+Here is the shortest path from
+s to u.
+
+1020
+1:07:11.344 --> 1:07:16.542
+That's p.
+No idea what it looks like so
+
+1021
+1:07:16.542 --> 1:07:21.056
+far.
+Now, what we also have is the
+
+1022
+1:07:21.056 --> 1:07:27.759
+notion of capital S.
+So, I'm going to draw capital
+
+1023
+1:07:27.759 --> 1:07:32
+S.
+So, this is big S.
+
+1024
+1:07:32 --> 1:07:34.6
+We know that little s is in big
+S.
+
+1025
+1:07:34.6 --> 1:07:37.279
+We know that u is not yet in
+big S.
+
+1026
+1:07:37.279 --> 1:07:40.195
+So, I haven't screwed up
+anything yet,
+
+1027
+1:07:40.195 --> 1:07:42.638
+right?
+This path starts in S and
+
+1028
+1:07:42.638 --> 1:07:47.445
+leaves it at some point because
+until we are about to add u to
+
+1029
+1:07:47.445 --> 1:07:51.07
+S, so it hasn't happened yet,
+so u is not in S.
+
+1030
+1:07:51.07 --> 1:07:53.671
+Fine.
+What I want to do is look at
+
+1031
+1:07:53.671 --> 1:07:57.375
+the first place here where the
+path, p, exits S.
+
+1032
+1:07:57.375 --> 1:08:02.526
+So, there is some vertex here.
+Let's call it x.
+
+1033
+1:08:02.526 --> 1:08:06.436
+There's some vertex here.
+We'll call it y.
+
+1034
+1:08:06.436 --> 1:08:10.632
+OK, possibly x equals S.
+Possibly y equals u.
+
+1035
+1:08:10.632 --> 1:08:16.26
+But it's got to exit somewhere,
+because it starts inside and
+
+1036
+1:08:16.26 --> 1:08:19.979
+ends up outside.
+And it's a finite path.
+
+1037
+1:08:19.979 --> 1:08:25.893
+OK, so consider the first time
+it happens; not the second time,
+
+1038
+1:08:25.893 --> 1:08:29.803
+the first.
+OK, so consider the first edge,
+
+1039
+1:08:29.803 --> 1:08:37.14
+(x,y), where p exits capital S.
+The shortest path from s to u
+
+1040
+1:08:37.14 --> 1:08:42.014
+exits capital S.
+It's got to happen somewhere.
+
+1041
+1:08:42.014 --> 1:08:46.779
+Cool, now, what do we know?
+Little x is in S.
+
+1042
+1:08:46.779 --> 1:08:53.061
+So, it has the right answer
+because u, we were about to add
+
+1043
+1:08:53.061 --> 1:08:59.776
+u to S, and that was the first
+violation of something in S that
+
+1044
+1:08:59.776 --> 1:09:06.206
+has the wrong d of x estimate.
+So, d of x equals delta of s,
+
+1045
+1:09:06.206 --> 1:09:08.565
+x.
+Because we are looking at the
+
+1046
+1:09:08.565 --> 1:09:11.989
+first violation,
+x is something that got added
+
+1047
+1:09:11.989 --> 1:09:14.423
+before.
+So, by induction on time,
+
+1048
+1:09:14.423 --> 1:09:18.608
+or because we had the first
+violation, d of x equals the
+
+1049
+1:09:18.608 --> 1:09:21.043
+shortest path weight from S to
+x.
+
+1050
+1:09:21.043 --> 1:09:25
+So, that's good news.
+Now we are trying to apply this
+
+1051
+1:09:25 --> 1:09:27.815
+lemma.
+It's the only thing left to do.
+
+1052
+1:09:27.815 --> 1:09:32
+We haven't used this lemma for
+anything.
+
+1053
+1:09:32 --> 1:09:35.358
+So, we have the setup.
+If we already know that one of
+
+1054
+1:09:35.358 --> 1:09:38.974
+the d values is the right
+answer, and we relaxed the edge
+
+1055
+1:09:38.974 --> 1:09:42.009
+that goes out from it,
+then we get another right
+
+1056
+1:09:42.009 --> 1:09:44.399
+answer.
+So that's what I want to argue
+
+1057
+1:09:44.399 --> 1:09:46.982
+over here.
+We know that the d of x equals
+
+1058
+1:09:46.982 --> 1:09:50.017
+this weight because,
+again, subpaths of shortest
+
+1059
+1:09:50.017 --> 1:09:53.504
+paths are shortest paths.
+We have optimal substructure,
+
+1060
+1:09:53.504 --> 1:09:56.023
+so this is a shortest path,
+from S to x.
+
+1061
+1:09:56.023 --> 1:09:58.8
+It might not be the only one,
+but it is one.
+
+1062
+1:09:58.8 --> 1:10:02.029
+So we know that matches.
+Now, I want to think about
+
+1063
+1:10:02.029 --> 1:10:05
+relaxing this edge,
+(x,y).
+
+1064
+1:10:05 --> 1:10:08.536
+Well, x is in capital S.
+And, the algorithm says,
+
+1065
+1:10:08.536 --> 1:10:11.778
+whenever you add a vertex,
+u, to the big set,
+
+1066
+1:10:11.778 --> 1:10:15.389
+S, you relax all the edges that
+go out from there.
+
+1067
+1:10:15.389 --> 1:10:19.368
+OK, so when we added x to S,
+and we now look far in the
+
+1068
+1:10:19.368 --> 1:10:22.61
+future, we're about to add some
+other vertex.
+
+1069
+1:10:22.61 --> 1:10:26.073
+Right after we added x to S,
+we relax this edge,
+
+1070
+1:10:26.073 --> 1:10:30.273
+(x,y), because we relaxed every
+edge that goes out from x,
+
+1071
+1:10:30.273 --> 1:10:36.443
+OK, whatever they were.
+Some of them went into S.
+
+1072
+1:10:36.443 --> 1:10:42.091
+Some of them went out.
+Here's one of them.
+
+1073
+1:10:42.091 --> 1:10:46.913
+So, when we added x to S,
+we got XS.
+
+1074
+1:10:46.913 --> 1:10:52.561
+When we added x to S,
+we relaxed the edge,
+
+1075
+1:10:52.561 --> 1:10:57.382
+(x,y).
+OK, so now we're going to use
+
+1076
+1:10:57.382 --> 1:11:04
+the lemma.
+So, by the correctness lemma --
+
+1077
+1:11:04 --> 1:11:15
+
+
+1078
+1:11:15 --> 1:11:18.863
+What do you get?
+Well, we add this correct
+
+1079
+1:11:18.863 --> 1:11:23.387
+shortest path weight to x now.
+We relax the edge,
+
+1080
+1:11:23.387 --> 1:11:26.403
+(x,y).
+So, now we should have the
+
+1081
+1:11:26.403 --> 1:11:29.607
+correct shortest path weight for
+y.
+
+1082
+1:11:29.607 --> 1:11:33
+d of y equals delta of s,
+y.
+
+1083
+1:11:33 --> 1:11:35.509
+OK, this is sometime in the
+past.
+
+1084
+1:11:35.509 --> 1:11:38.803
+In particular,
+now, it should still be true
+
+1085
+1:11:38.803 --> 1:11:43.588
+because once you get down to the
+right answer you never change
+
+1086
+1:11:43.588 --> 1:11:45.549
+it.
+OK, we should be done.
+
+1087
+1:11:45.549 --> 1:11:49.156
+OK, why are we done?
+Well, what else do we know
+
+1088
+1:11:49.156 --> 1:11:51.431
+here?
+We assumed something for
+
+1089
+1:11:51.431 --> 1:11:54.803
+contradiction,
+so we better contradict that.
+
+1090
+1:11:54.803 --> 1:11:58.647
+We assume somehow,
+d of u is strictly greater than
+
+1091
+1:11:58.647 --> 1:12:03.142
+delta of s, u.
+So, d of u here is strictly
+
+1092
+1:12:03.142 --> 1:12:06.476
+greater than the length of this
+whole path.
+
+1093
+1:12:06.476 --> 1:12:10.047
+Well, we don't really know
+whether u equals y.
+
+1094
+1:12:10.047 --> 1:12:14.015
+It could, could not.
+And, but what do we know about
+
+1095
+1:12:14.015 --> 1:12:18.857
+this shortest path from S to y?
+Well, it could only be shorter
+
+1096
+1:12:18.857 --> 1:12:21.952
+than from S to u because it's a
+subpath.
+
+1097
+1:12:21.952 --> 1:12:26.476
+And it's the shortest path
+because it's the subpath of the
+
+1098
+1:12:26.476 --> 1:12:29.888
+shortest path.
+The shortest path from S to y
+
+1099
+1:12:29.888 --> 1:12:36
+has to be less than or equal to
+the shortest path from S to u.
+
+1100
+1:12:36 --> 1:12:44.627
+OK, S to y: less than or equal
+to s, u, OK, just because the
+
+1101
+1:12:44.627 --> 1:12:47.405
+subpath.
+I'm closer.
+
+1102
+1:12:47.405 --> 1:12:51.207
+I've got delta of s,
+u now.
+
+1103
+1:12:51.207 --> 1:12:56.033
+Somehow, I want to involve d of
+u.
+
+1104
+1:12:56.033 --> 1:13:01.443
+So, I want to relate d of y to
+d of u.
+
+1105
+1:13:01.443 --> 1:13:07.389
+What do I know about d of u?
+Yeah?
+
+1106
+1:13:07.389 --> 1:13:10.814
+d of u is smaller because we
+have a Min heap,
+
+1107
+1:13:10.814 --> 1:13:12.449
+yeah.
+We always chose,
+
+1108
+1:13:12.449 --> 1:13:14.862
+let's erase,
+it's way down here.
+
+1109
+1:13:14.862 --> 1:13:17.664
+We chose u.
+This is the middle of the
+
+1110
+1:13:17.664 --> 1:13:20.778
+algorithm.
+It's the reason I kept this to
+
+1111
+1:13:20.778 --> 1:13:23.736
+be the minimum key.
+This is keyed on d.
+
+1112
+1:13:23.736 --> 1:13:28.095
+So, we know that at this
+moment, when we're trying to add
+
+1113
+1:13:28.095 --> 1:13:30.275
+u to S, right,
+y is not in S,
+
+1114
+1:13:30.275 --> 1:13:35.412
+and u is not in S.
+They might actually be the same
+
+1115
+1:13:35.412 --> 1:13:38.057
+vertex.
+But both of these vertices,
+
+1116
+1:13:38.057 --> 1:13:40.08
+same or not,
+are outside S.
+
+1117
+1:13:40.08 --> 1:13:44.204
+We chose u because d of u has
+the smallest d estimate.
+
+1118
+1:13:44.204 --> 1:13:48.25
+So, d of y has to be greater
+than or equal to d of u.
+
+1119
+1:13:48.25 --> 1:13:51.674
+It might be equal if they're
+the same vertex,
+
+1120
+1:13:51.674 --> 1:13:55.02
+but it's got to be greater than
+or equal to.
+
+1121
+1:13:55.02 --> 1:14:00
+So, d of y here is greater than
+or equal to d of u.
+
+1122
+1:14:00 --> 1:14:03.791
+So, here we're using the fact
+that we actually made a greedy
+
+1123
+1:14:03.791 --> 1:14:06.168
+choice.
+It's the one place we're using
+
+1124
+1:14:06.168 --> 1:14:09.317
+the greedy choice.
+Better use it somewhere because
+
+1125
+1:14:09.317 --> 1:14:13.108
+you can't just take an arbitrary
+vertex and declare it to be
+
+1126
+1:14:13.108 --> 1:14:15.293
+done.
+You've got to take the greedy
+
+1127
+1:14:15.293 --> 1:14:17.477
+one.
+OK, now we have d of u is less
+
+1128
+1:14:17.477 --> 1:14:20.947
+than or equal to delta of s,
+u, which contradicts this.
+
+1129
+1:14:20.947 --> 1:14:24.096
+OK, sort of magical that that
+all just worked out.
+
+1130
+1:14:24.096 --> 1:14:27.566
+But sort of like the previous
+proofs, you just see what
+
+1131
+1:14:27.566 --> 1:14:32
+happens and it works.
+OK, that's the approximation.
+
+1132
+1:14:32 --> 1:14:35.005
+The only real idea here is to
+look at this edge.
+
+1133
+1:14:35.005 --> 1:14:37.563
+In fact, you could look at this
+edge too.
+
+1134
+1:14:37.563 --> 1:14:41.209
+But let's look at some edge
+that comes from S and goes out
+
+1135
+1:14:41.209 --> 1:14:44.151
+of S, and argue that while x has
+to be correct,
+
+1136
+1:14:44.151 --> 1:14:47.156
+and what we made x correct,
+y had to be correct,
+
+1137
+1:14:47.156 --> 1:14:49.779
+and now, why the hell are we
+looking at u?
+
+1138
+1:14:49.779 --> 1:14:52.337
+y is the thing you should have
+looked at.
+
+1139
+1:14:52.337 --> 1:14:55.598
+And, there you get a
+contradiction because y had the
+
+1140
+1:14:55.598 --> 1:14:57.325
+right answer.
+If u equals y,
+
+1141
+1:14:57.325 --> 1:14:59.755
+that's fine,
+or if u and y were sort of
+
+1142
+1:14:59.755 --> 1:15:02.441
+equally good,
+that's also fine if all these
+
+1143
+1:15:02.441 --> 1:15:07.604
+weights were zero.
+So, the picture might actually
+
+1144
+1:15:07.604 --> 1:15:10.469
+look like this.
+But, in that case,
+
+1145
+1:15:10.469 --> 1:15:14.376
+d of u is the correct answer.
+It was delta SU.
+
+1146
+1:15:14.376 --> 1:15:19.064
+We assumed that it wasn't.
+That's where we're getting a
+
+1147
+1:15:19.064 --> 1:15:21.408
+contradiction.
+Pretty clear?
+
+1148
+1:15:21.408 --> 1:15:25.054
+Go over this proof.
+It's a bit complicated,
+
+1149
+1:15:25.054 --> 1:15:28.44
+naturally.
+OK, we have a little bit more
+
+1150
+1:15:28.44 --> 1:15:34.168
+to cover, some easier stuff.
+OK, the first thing is what's
+
+1151
+1:15:34.168 --> 1:15:36.71
+the running time of this
+algorithm?
+
+1152
+1:15:36.71 --> 1:15:41.196
+I'll do this very quick because
+we're actually seen this many
+
+1153
+1:15:41.196 --> 1:15:45.233
+times before last class.
+There was some initialization.
+
+1154
+1:15:45.233 --> 1:15:48.448
+The initialization,
+which is no longer here,
+
+1155
+1:15:48.448 --> 1:15:50.467
+is linear time.
+No big deal.
+
+1156
+1:15:50.467 --> 1:15:53.308
+OK, extract Min.
+Well, that's some data
+
+1157
+1:15:53.308 --> 1:15:56.373
+structure.
+So, we have something like size
+
+1158
+1:15:56.373 --> 1:15:59.065
+of V.
+Every vertex we extract the Min
+
+1159
+1:15:59.065 --> 1:16:01.607
+once, and that's it.
+So, size of V,
+
+1160
+1:16:01.607 --> 1:16:06.634
+extract mins.
+OK, so that's pretty simple.
+
+1161
+1:16:06.634 --> 1:16:12.466
+OK, then we had this main loop.
+This is a completely conceptual
+
+1162
+1:16:12.466 --> 1:16:16.135
+operation.
+S is not actually used in the
+
+1163
+1:16:16.135 --> 1:16:19.24
+algorithm.
+It's just for thinking.
+
+1164
+1:16:19.24 --> 1:16:23.285
+OK, so this takes zero time.
+Got to love it.
+
+1165
+1:16:23.285 --> 1:16:28.742
+OK, and now the heart is here.
+So, how many times does this
+
+1166
+1:16:28.742 --> 1:16:33.324
+loop iterate?
+That's the degree of u.
+
+1167
+1:16:33.324 --> 1:16:38.78
+So, what is the total number of
+times that we execute a
+
+1168
+1:16:38.78 --> 1:16:43.428
+relaxation step?
+It doesn't necessarily mean we
+
+1169
+1:16:43.428 --> 1:16:47.672
+do this, but we at least execute
+this body.
+
+1170
+1:16:47.672 --> 1:16:53.128
+Over the whole algorithm,
+how many times do we do this?
+
+1171
+1:16:53.128 --> 1:16:57.17
+Every vertex,
+we look at all the outgoing
+
+1172
+1:16:57.17 --> 1:17:02
+edges from there.
+So, the total would be?
+
+1173
+1:17:02 --> 1:17:11
+
+
+1174
+1:17:11 --> 1:17:12.615
+Number of edges,
+yeah.
+
+1175
+1:17:12.615 --> 1:17:15.307
+So, this number of edges
+iterations.
+
+1176
+1:17:15.307 --> 1:17:19.615
+OK, this is essentially the
+handshaking lemma we saw last
+
+1177
+1:17:19.615 --> 1:17:24.23
+time, but for directed graphs.
+And we are only looking at the
+
+1178
+1:17:24.23 --> 1:17:27.538
+outgoing edges.
+So, it's not a factor of two
+
+1179
+1:17:27.538 --> 1:17:32
+here because you're only
+outgoing from one side.
+
+1180
+1:17:32 --> 1:17:36.573
+So, we have number of
+reiterations.
+
+1181
+1:17:36.573 --> 1:17:42.358
+In the worst case,
+we do a decreased key for
+
+1182
+1:17:42.358 --> 1:17:45.183
+everyone.
+So, at most:
+
+1183
+1:17:45.183 --> 1:17:50.026
+E decreased keys.
+OK, so the time is,
+
+1184
+1:17:50.026 --> 1:17:57.695
+well, we have v extract Mins,
+so the time to do an extract
+
+1185
+1:17:57.695 --> 1:18:05.771
+Min, whatever that is.
+And we have E decreased keys,
+
+1186
+1:18:05.771 --> 1:18:12.013
+whatever that is,
+and this is exactly the running
+
+1187
+1:18:12.013 --> 1:18:20.336
+time we had for Prim's algorithm
+for a minimum spanning tree last
+
+1188
+1:18:20.336 --> 1:18:24.237
+time.
+And, it depends what data
+
+1189
+1:18:24.237 --> 1:18:31
+structure you use,
+what running time you get.
+
+1190
+1:18:31 --> 1:18:34.688
+So, I'm going to skip the whole
+table here.
+
+1191
+1:18:34.688 --> 1:18:39.518
+But, if you use an array,
+the final running time will be
+
+1192
+1:18:39.518 --> 1:18:44.436
+V^2 because you have order of v
+extract Min, and you have
+
+1193
+1:18:44.436 --> 1:18:49.09
+constant time decreased key.
+If you use a binary heap,
+
+1194
+1:18:49.09 --> 1:18:53.569
+which we know and love,
+then we have order log v for
+
+1195
+1:18:53.569 --> 1:18:57.609
+each operation.
+And so, this is V plus E log V.
+
+1196
+1:18:57.609 --> 1:19:02
+And, so that's what we know how
+to do.
+
+1197
+1:19:02 --> 1:19:06.83
+And, if you use this fancy data
+structure called a Fibonacci
+
+1198
+1:19:06.83 --> 1:19:11.005
+heap, you get constant time
+decreased key amortized.
+
+1199
+1:19:11.005 --> 1:19:16
+And, you get an E plus v log v
+worst case bound on the running
+
+1200
+1:19:16 --> 1:19:18.701
+time.
+So, this is the best we know
+
+1201
+1:19:18.701 --> 1:19:23.368
+how to solve shortest paths
+without any extra assumptions,
+
+1202
+1:19:23.368 --> 1:19:28.116
+single source shortest paths
+with non-negative edge weights
+
+1203
+1:19:28.116 --> 1:19:32.04
+in general.
+OK, this is almost as good and
+
+1204
+1:19:32.04 --> 1:19:34.353
+this is sometimes better than
+that.
+
+1205
+1:19:34.353 --> 1:19:38.163
+But these are essentially
+irrelevant except that you know
+
+1206
+1:19:38.163 --> 1:19:41.02
+how to do these.
+You don't know how to do a
+
+1207
+1:19:41.02 --> 1:19:45.238
+Fibonacci heap unless you read
+that in the chapter of the book.
+
+1208
+1:19:45.238 --> 1:19:48.435
+That's why we mention the top
+two running times.
+
+1209
+1:19:48.435 --> 1:19:51.632
+OK, I want to talk briefly
+about a simpler case,
+
+1210
+1:19:51.632 --> 1:19:55.51
+which you may have seen before.
+And so it's sort of fun to
+
+1211
+1:19:55.51 --> 1:20:00
+connect this up to breadth first
+search in a graph.
+
+1212
+1:20:00 --> 1:20:03.302
+So, I mean that ends Dijkstra,
+so to speak.
+
+1213
+1:20:03.302 --> 1:20:08.176
+But now I want to think about a
+special case where the graph is
+
+1214
+1:20:08.176 --> 1:20:12.737
+unweighted, meaning w of (u,v)
+equals one for all vertices,
+
+1215
+1:20:12.737 --> 1:20:15.174
+u and v.
+OK, suppose we had that
+
+1216
+1:20:15.174 --> 1:20:17.847
+property.
+Can we do any better than
+
+1217
+1:20:17.847 --> 1:20:20.599
+Dijkstra?
+Can we do better than this
+
+1218
+1:20:20.599 --> 1:20:23.98
+running time?
+Well, we probably have to look
+
+1219
+1:20:23.98 --> 1:20:26.889
+at all the edges and all the
+vertices.
+
+1220
+1:20:26.889 --> 1:20:32
+So, the only thing I'm
+questioning is this log v.
+
+1221
+1:20:32 --> 1:20:36.067
+Can I avoid that?
+I gave away the answer a little
+
+1222
+1:20:36.067 --> 1:20:38.779
+bit.
+The answer is called breadth
+
+1223
+1:20:38.779 --> 1:20:42.508
+first search,
+or BFS, which you have probably
+
+1224
+1:20:42.508 --> 1:20:45.813
+seen before.
+Next to depth first search,
+
+1225
+1:20:45.813 --> 1:20:50.05
+it's one of the standard ways
+to look at the graph.
+
+1226
+1:20:50.05 --> 1:20:54.627
+But we can say a little bit
+more than you may have seen
+
+1227
+1:20:54.627 --> 1:20:57.762
+before.
+Breadth for search is actually
+
+1228
+1:20:57.762 --> 1:21:02
+Dijkstra's algorithm:
+kind of nifty.
+
+1229
+1:21:02 --> 1:21:08.607
+There are two changes.
+First change is that breadth
+
+1230
+1:21:08.607 --> 1:21:13.894
+for search does not use a
+priority queue.
+
+1231
+1:21:13.894 --> 1:21:19.048
+I'll just tell you what it uses
+instead.
+
+1232
+1:21:19.048 --> 1:21:26.449
+You can use a queue first in
+first out honest-to-goodness
+
+1233
+1:21:26.449 --> 1:21:32
+queue instead of a priority
+queue.
+
+1234
+1:21:32 --> 1:21:36.728
+OK, it turns out that works.
+Instead of doing extract Min,
+
+1235
+1:21:36.728 --> 1:21:40.295
+you just take the first thing
+off the queue.
+
+1236
+1:21:40.295 --> 1:21:44.692
+Instead of doing decreased key,
+OK, here's a subtlety.
+
+1237
+1:21:44.692 --> 1:21:48.26
+But, this if statement changes
+a little bit.
+
+1238
+1:21:48.26 --> 1:21:50.831
+So, here is the relaxation
+step.
+
+1239
+1:21:50.831 --> 1:21:54.73
+So, in order to relax,
+you say this much simpler
+
+1240
+1:21:54.73 --> 1:21:57.551
+thing.
+If we haven't visited v yet,
+
+1241
+1:21:57.551 --> 1:22:01.782
+then we declare it to have the
+shortest path weight,
+
+1242
+1:22:01.782 --> 1:22:06.511
+say, d of v is d of u plus one,
+which is the weight of the
+
+1243
+1:22:06.511 --> 1:22:12.423
+edge, (u,v).
+And we add v to the end of the
+
+1244
+1:22:12.423 --> 1:22:16.076
+queue.
+So, now, we start with the
+
+1245
+1:22:16.076 --> 1:22:20.869
+queue empty.
+Actually, it will just contain
+
+1246
+1:22:20.869 --> 1:22:25.777
+the vertex, S,
+because that's the only thing
+
+1247
+1:22:25.777 --> 1:22:31.347
+we know the shortest path for.
+So, the queue is just for,
+
+1248
+1:22:31.347 --> 1:22:33.316
+I know the shortest path of
+this thing.
+
+1249
+1:22:33.316 --> 1:22:36.217
+Just deal with it when you
+can't look at all the outgoing
+
+1250
+1:22:36.217 --> 1:22:38.652
+edges when you can.
+So, initially that's just S.
+
+1251
+1:22:38.652 --> 1:22:40.777
+You say, well,
+for all the outgoing edges,
+
+1252
+1:22:40.777 --> 1:22:42.746
+S has zero.
+All the outgoing edges from
+
+1253
+1:22:42.746 --> 1:22:45.388
+there have weight one.
+The shortest path weight from
+
+1254
+1:22:45.388 --> 1:22:47.668
+the source is one.
+You certainly can't do any
+
+1255
+1:22:47.668 --> 1:22:49.896
+better than that if all the
+weights are one.
+
+1256
+1:22:49.896 --> 1:22:52.435
+OK, so we add all those
+vertices to the end of the
+
+1257
+1:22:52.435 --> 1:22:54.093
+queue.
+Then, we process things in
+
+1258
+1:22:54.093 --> 1:22:55.958
+order, and we just keep
+incrementing,
+
+1259
+1:22:55.958 --> 1:22:57.979
+if their value is d of u,
+add one to it.
+
+1260
+1:22:57.979 --> 1:23:02.543
+That's d of v.
+And then we are going to add v
+
+1261
+1:23:02.543 --> 1:23:05.51
+to S what we get to it in the
+queue.
+
+1262
+1:23:05.51 --> 1:23:09.156
+OK, that is breadth for search,
+very simple.
+
+1263
+1:23:09.156 --> 1:23:13.989
+And, you can look at the text
+for the algorithm and for an
+
+1264
+1:23:13.989 --> 1:23:17.973
+example because I don't have
+time to cover that.
+
+1265
+1:23:17.973 --> 1:23:21.704
+But the key thing is that the
+time is faster.
+
+1266
+1:23:21.704 --> 1:23:25.434
+The time is order V plus E
+because as before,
+
+1267
+1:23:25.434 --> 1:23:30.267
+we only look at each edge once
+we look at all the outgoing
+
+1268
+1:23:30.267 --> 1:23:34.93
+edges from all the vertices.
+As soon as we set d of v to
+
+1269
+1:23:34.93 --> 1:23:40.079
+something, it will remain that.
+We never touch it.
+
+1270
+1:23:40.079 --> 1:23:43.136
+We are going to add it to S.
+That only happens once.
+
+1271
+1:23:43.136 --> 1:23:46.193
+So, this if statement,
+and so on, in the in-queuing,
+
+1272
+1:23:46.193 --> 1:23:48.711
+is done order E times,
+or actually E times,
+
+1273
+1:23:48.711 --> 1:23:50.689
+exactly.
+An in-queuing to a queue,
+
+1274
+1:23:50.689 --> 1:23:54.106
+and de-queuing from a queue,
+that's what we use instead of
+
+1275
+1:23:54.106 --> 1:23:57.583
+extract Min, take constant time,
+so the total running time,
+
+1276
+1:23:57.583 --> 1:24:01
+number of vertices plus the
+number of edges.
+
+1277
+1:24:01 --> 1:24:04.58
+OK, not so obvious that this
+works, but you can prove that it
+
+1278
+1:24:04.58 --> 1:24:06.55
+works using the Dijkstra
+analysis.
+
+1279
+1:24:06.55 --> 1:24:09.891
+All you have to do is prove
+that the FIFO priority queue.
+
+1280
+1:24:09.891 --> 1:24:12.816
+Once you know that,
+by the correctness of Dijkstra
+
+1281
+1:24:12.816 --> 1:24:15.501
+you get the correctness of
+breadth for search.
+
+1282
+1:24:15.501 --> 1:24:19.022
+So, not only is breadth for
+search finding all the vertices,
+
+1283
+1:24:19.022 --> 1:24:21.588
+which is maybe what you
+normally use it for,
+
+1284
+1:24:21.588 --> 1:24:25.109
+but it finds the shortest path
+weights from S to every other
+
+1285
+1:24:25.109 --> 1:24:27.198
+vertex when the weights are all
+one.
+
+1286
+1:24:27.198 --> 1:24:30.003
+So, there we go:
+introduction to shortest paths.
+
+1287
+1:24:30.003 --> 1:24:33
+Next time we'll deal with
+negative weights.
+

@@ -1,0 +1,898 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix 
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/ocw-6.046-lec19.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1851953464?i=1573676116">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-21nov2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/Sygq1e0xWnM', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson', 'http://img.youtube.com/vi/Sygq1e0xWnM/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/ocw-6.046-lec19.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered</strong>: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson</p>
+<p><strong>Instructors</strong>: Prof. Erik Demaine, Prof. Charles Leiserson</p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm">
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/lec19.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J2005L19.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 19</strong></p>
+<p>-- shortest paths. This is the finale. Hopefully it was worth waiting for. Remind you there's a quiz coming up soon, you should be studying for it. There's no problem set due at the same time as the quiz because you should be studying now. It's a take-home exam. It's required that you come to class on Monday. Of course, you'll all come, but everyone watching at home should also come next Monday to get the quiz. It's the required lecture. So, we need a bit of a recap in the trilogy so far. So, the last two lectures, the last two episodes, or about single source shortest paths.</p>
+<p>So, we wanted to find the shortest path from a source vertex to every other vertex. And, we saw a few algorithms for this. Here's some recap. We saw in the unweighted case, that was sort of the easiest where all the edge weights were one. Then we could use breadth first search. And this costs what we call linear time in the graph world, the number of vertices plus the number of edges. The next simplest case, perhaps, is nonnegative edge weights. And in that case, what algorithm do we use? Dijkstra, all right, everyone's awake.</p>
+<p>Several answers at once, great. So this takes almost linear time if you use a good heap structure, so, V log V plus E. And, in the general case, general weights, we would use Bellman-Ford which you saw. And that costs VE, good, OK, which is quite a bit worse. This is ignoring log factors. Dijkstra is basically linear time, Bellman-Ford you're quadratic if you have a connected graph. So, in the sparse case, when E is order V, this is about linear. This is about quadratic. In the dense case, when E is about V^2, this is quadratic, and this is cubic.</p>
+<p>So, Dijkstra and Bellman-Ford are separated by about an order of V factor, which is pretty bad. OK, but that's the best we know how to do for single source shortest paths, negative edge weights, Bellman-Ford is the best. We also saw in recitation the case of a DAG. And there, what do you do? Topological sort, yeah. So, you can do a topological sort to get an ordering on the vertices. That you run Bellman-Ford, one round. This is one way to think of what's going on. You run Bellman-Ford in the order given by the topological sort, which is once, and you get a linear time algorithm.</p>
+<p>So, DAG is another case where we know how to do well even with weights. Unweighted, we can also do linear time. But most of the time, though, will be, so you should keep these in mind in the quiz. When you get a shortest path problem, or what you end up determining is the shortest path problem, think about what's the best algorithm you can use in that case? OK, so that's single source shortest paths. And so, in our evolution of the Death Star, initially it was just nonnegative edge weights. Then we got negative edge weights.</p>
+<p>Today, the Death Star challenges us with all pair shortest paths, where we want to know the shortest path weight between every pair of vertices. OK, so let's get some quick results. What could we do with this case? So, for example, suppose I have an unweighted graph. Any suggestions of how I should compute all pair shortest paths? Between every pair of vertices, I want to know the shortest path weight. BFS, a couple more words?</p>
+<p>Yeah? Right, BFS V times. OK, I'll say V times BFS, OK? So, the running time would be V^2 plus V times E, yeah, which is assuming your graph is connected, V times E. OK, good. That's probably about the best algorithm we know for unweighted graphs. So, a lot of these are going to sort of be the obvious answer. You take your single source algorithm, you run it V times. That's the best you can do, OK, or the best we know how to do. This is not so bad. This is like one iteration of Bellman-Ford, for comparison. We definitely need at least, like, V^2 time, because the size of the output is V^2, shortest path weight we have to compute.</p>
+<p>So, this is not perfect, but pretty good. And we are not going to improve on that. So, nonnegative edge weights: the natural thing to do is to run Dijkstra V times, OK, no big surprise. And the running time of that is, well, V times E again, plus V^2, log V, which is also not too bad. I mean, it's basically the same as running BFS. And then, there's the log factor. If you ignore the log factor, this is the dominant term. And, I mean, this had an [added?] V^2 as well. So, these are both pretty good. I mean, this is kind of neat. Essentially, the time it takes to run one Bellman-Ford plus a log factor, you can compute all pair shortest paths if you have nonnegative edge weights.</p>
+<p>So, I mean, comparing all pairs to signal source, this seems a lot better, except we can only handle nonnegative edge weights. OK, so now let's think about the general case. Well, this is the focus of today, and here's where we can actually make an improvement. So the obvious thing is V times Bellman-Ford, which would cost V^2 times E. And that's pretty pitiful, and we're going to try to improve that to something closer to that nonnegative edge weight bound. So it turns out, here, we can actually make an improvement whereas in these special cases, we really can't do much better. OK, I don't have a good intuition why, but it's the case. So, we'll cover something like three algorithms today for this problem.</p>
+<p>The last one will be the best, but along the way we'll see some nice connections between shortest paths and dynamic programming, which we haven't really seen yet. We've seen shortest path, and applying greedy algorithms to it, but today will actually do dynamic programming. The intuition is that with all pair shortest paths, there's more potential subproblem reuse. We've got to compute the shortest path from x to y for all x and y. Maybe we can reuse those shortest paths in computing other shortest paths.</p>
+<p>OK, there's a bit more reusability, let's say. OK, let me quickly define all pair shortest paths formally, because we're going to change our notation slightly. It's because we care about all pairs. So, as usual, the input is directed graph, so, vertices and edges. We're going to say that the vertices are labeled one to n for convenience because with all pairs, we're going to think of things more as an n by n matrix instead of edges in some sense because it doesn't help to think any more in terms of adjacency lists. And, you have edge weights as usual. This is what makes it interesting.</p>
+<p>Some of them are going to be negative. So, w maps to every real number, and the target output is a shortest path matrix. So, this is now an n by n matrix. So, n is just the number of vertices of shortest path weights. So, delta of i, j is the shortest path weight from i to j for all pairs of vertices. So this, you could represent as an n by n matrix in particular. OK, so now let's start doing algorithms.</p>
+<p>So, we have this very simple algorithm, V times Bellman-Ford, V^2 times E, and just for comparison's sake, I'm going to say, let me rewrite that, V times Bellman-Ford gives us this running time of V^2 E, and I'm going to think about the case where, let's just say the graph is dense, meeting that the number of edges is quadratic, and the number of vertices. So in that case, this will take V^4 time, which is pretty slow. We'd like to do better. So, first goal would just be to beat V^4, V hypercubed, I guess. OK, and we are going to use dynamic programming to do that. Or at least that's what the motivation will come from. It will take us a while before we can even beat V^4, which is maybe a bit pathetic, but it takes some clever insights, let's say.</p>
+<p>OK, so I'm going to introduce a bit more notation for this graph. So, I'm going to think about the weighted adjacency matrix. So, I don't think we've really seen this in lecture before, although I think it's in the appendix. What that means, so normally adjacency matrix is like one if there's an edge, and zero if there isn't. And this is in a digraph, so you have to be a little bit careful. Here, these values, the entries in the matrix, are going to be the weights of the edges. OK, this is this if ij is an edge.</p>
+<p>So, if ij is an edge in the graph, and it's going to be infinity if there is no edge. OK, in terms of shortest paths, this is a more useful way to represent the graph. All right, and so this includes everything that we need from here. And now we just have to think about it as a matrix. Matrices will be a useful tool in a little while. OK, so now I'm going to define some sub problems. And, there's different ways that you could define what's going on in the shortest paths problem.</p>
+<p>OK, the natural thing is I want to go from vertex i to vertex j. What's the shortest path? OK, we need to refine the sub problems a little but more than that. Not surprising. And if you think about my analogy to Bellman-Ford, what Bellman-Ford does is it tries to build longer and longer shortest paths. But here, length is in terms of the number of edges. So, first, it builds shortest paths of length one. We've proven the first round it does that.</p>
+<p>The second round, it provides all shortest paths of length two, of count two, and so on. We'd like to do that sort of analogously, and try to reuse things a little bit more. So, I'm going to say d_ij^(m) is the weight of the shortest path from i to j with some restriction involving m. So: shortest path from i to j using at most m edges. OK, for example, if m is zero, then we don't have to really think very hard to find all shortest paths of length zero. OK, they use zero edges, I should say. So, Bellman-Ford sort of tells us how to go from m to m plus one. So, let's just figure that out.</p>
+<p>So one thing we know from the Bellman-Ford analysis is if we look at d_ij^(m-1), we know that in some sense the longest shortest path of relevance, unless you have negative weight cycle, the longest shortest path of relevance is when m equals n minus one because that's the longest simple path you can have. So, this should be a shortest path weight from i to j, and it would be no matter what larger value you put in the superscript.</p>
+<p>This should be delta of i comma j if there's no negative weight cycles. OK, so this feels good for dynamic programming. This will give us the answer if we can compute this for all m. Then we'll have the shortest path weights in particular. We need a way to detect negative weight cycles, but let's not worry about that too much for now. There are negative weights, but let's just assume for now there's no negative weight cycles.</p>
+<p>OK, and we get a recursion recurrence. And the base case is when m equals zero. This is pretty easy. They have the same vertices, the weight of zero, and otherwise it's infinity. OK, and then the actual recursion is for m. OK, if I got this right, this is a pretty easy, intuitive recursion for d_ij^(m) is a min of smaller things in terms of n minus one. I'll just show the picture, and then the proof of that claim should be obvious. So, this is proof by picture. So, we have on the one hand, I over here, and j over here. We want to know the shortest path from i to j. And, we want to use, at most, m edges.</p>
+<p>So, the idea is, well, you could use m minus one edges to get somewhere. So this is, at most, m minus one edges, some other place, and we'll call it k. So this is a candidate for k. And then you could take the edge directly from k to j. So, this costs A_k^j, and this costs DIK m minus one. OK, and that's a candidate path of length that uses, at most, m edges from I to j. And this is essentially just considering all of them. OK, so there's sort of many paths we are considering. All of these are candidate values of k. We are taking them in over all k as intermediate nodes, whatever. So there they are. We take the best such path. That should encompass all shortest paths. And this is essentially sort of what Bellman-Ford is doing, although not exactly. We also sort of want to think about, well, what if I just go directly with, say, m minus one edges?</p>
+<p>What if there is no edge here that I want to use, in some sense? Well, we always think about there being, and the way the A's are defined, there's always this zero weight edge to yourself. So, you could just take a path that's shorter, go from d i to j, and j is a particular value of k that we might consider, and then take a zero weight edge at the end from A and jj. OK, so this really encompasses everything.</p>
+<p>So that's a pretty trivial claim. OK, now once we have such a recursion, we get a dynamic program. I mean, there, this is it in some sense. It's written recursively. You can write a bottom up. And I would like to write it bottom up it little bit because while it doesn't look like it, this is a relaxation. This is yet another relaxation algorithm. So, I'll give you, so, this is sort of the algorithm. This is not a very interesting algorithm.</p>
+<p>So, you don't have to write it all down if you don't feel like it. It's probably not even in the book. This is just an intermediate step. So, we loop over all m. That's sort of the outermost thing to do. I want to build longer and longer paths, and this vaguely corresponds to Bellman-Ford, although it's actually worse than Bellman-Ford. But hey, what the heck? It's a stepping stone. OK, then for all i and j, and then we want to compute this min. So, we'll just loop over all k, and relax. And, here's where we're actually computing the min. And, it's a relaxation, is the point.</p>
+<p>This is our good friend, the relaxation step, relaxing edge. Well, it's not, yeah. I guess we're relaxing edge kj, or something, except we don't have the same clear notion. I mean, it's a particular thing that we're relaxing. It's not just a single edge because we don't have a single source anymore. It's now relative to source I, we are relaxing the edge kj, something like that. But this is clearly a relaxation. We are just making the triangle inequality true if it wasn't before. The tribal inequality has got to hold between all pairs. And that's just implementing this min, right? You're taking d ij. You take the min of what it was before in some sense. That was one of the possibilities we considered when we looked at the zero weight edge. We say, well, or you could go from i to some k in some way that we knew how to before, and then add on the edge, and check whether that's better if it's better, set our current estimate to that.</p>
+<p>And, you do this for all k. In particular, you might actually compute something smaller than this min because I didn't put superscripts up here. But that's just making paths even better. OK, so you have to argue that relaxation is always a good thing to do. So, by not putting superscripts, maybe I do some more relaxation, but more relaxation never hurts us. You can still argue correctness using this claim.</p>
+<p>So, it's not quite the direct implementation, but there you go, dynamic programming algorithm. The main reason I'll write it down: so you see that it's a relaxation, and you see the running time is n^4, OK, which is certainly no better than Bellman-Ford. Bellman-Ford was n^4 even in the dense case, and it's a little better in the sparse case. So: not doing so great. But it's a start. OK, it gets our dynamic programming minds thinking. And, we'll get a better dynamic program in a moment. But first, there's actually something useful we can do with this formulation, and I guess I'll ask, but I'll be really impressed if anyone can see.</p>
+<p>Does this formula look like anything else that you've seen in any context, mathematical or algorithmic? Have you seen that recurrence anywhere else? OK, not exactly as stated, but similar. I'm sure if you thought about it for awhile, you could come up with it. Any answers? I didn't think you would be very intuitive, but the answer is matrix multiplication. And it may now be obvious to you, or it may not. You have to think with the right quirky mind. Then it's obvious that it's matrix multiplication. Remember, matrix multiplication, we have A, B, and C. They're all n by n matrices. And, we want to compute C equals A times B.</p>
+<p>And what that meant was, well, c_ij was a sum over all k of a_ik times b_kj. All right, that was our definition of matrix multiplication. And that formula looks kind of like this one. I mean, notice the subscripts: ik and kj. Now, the operators are a little different. Here, we're multiplying the inside things and adding them all together. There, we're adding the inside things and taking them in. But other than that, it's the same. OK, weird, but here we go. So, the connection to shortest paths is you replace these operators.</p>
+<p>So, let's take matrix multiplication and replace, what should I do first, plus this thing with min. So, why not just change the operators, replace dot with plus? This is just a different algebra to work in, where plus actually means min, and dot actually means plus. So, you have to check that things sort of work out in that context, but if we do that, then we get that c_ij is the min overall k of a_ik plus, a bit messy here, b_kj.</p>
+<p>And that looks like what we actually want to compute, here, for one value of m, you have to sort of do this m times. But this conceptually is d_ij^(m), and this is d_ik^(m-1). So, this is looking like a matrix product, which is kind of cool. So, if we sort of plug in this claim, then, and think about things as matrices, the recurrence gives us, and I'll just write this now at matrix form, that d^(m) is d^(m) minus one, funny product, A.</p>
+<p>All right, so these are the weights. These were the weighted adjacency matrix. This was the previous d value. This is the new d value. So, I'll just rewrite that in matrix form with capital letters. OK, I have the circle up things that are using this funny algebra, so, in particular, circled product. OK, so that's kind of nifty. We know something about computing matrix multiplications. We can do it in n^3 time. If we were a bit fancier, maybe we could do it in sub-cubic time.</p>
+<p>So, we could try to sort of use this connection. And, well, think about what we are computing here. We are saying, well, d to the m is the previous one times A. So, what is d^(m)? Is that some other algebraic notion that we know? Yeah, it's the exponent. We're taking A, and we want to raise it to the power, m, with this funny notion of product. So, in other words, d to the m is really just A to the m in a funny way. So, I'll circle it, OK? So, that sounds good. We also know how to compute powers of things relatively quickly, if you remember how. OK, for this notion, this power notion, to make sense, I should say what A to the zero means. And so, I need some kind of identity matrix.</p>
+<p>And for here, the identity matrix is this one, if I get it right. So, it has zeros along the diagonal, and infinities everywhere else. OK, that sort of just to match this definition. d_ij zero should be zeros on the diagonals and infinity everywhere else. But you can check this is actually an identity. If you multiply it with this funny multiplication against any other matrix, you get the matrix back. Nothing changes.</p>
+<p>This really is a valid identity matrix. And, I should mention that for A to the m to make sense, you really knew that your product operation is associative. So, actually A to the m circled makes sense because circled multiplication is associative, and you can check that; not hard because, I mean, min is associative, and addition is associative, and all sorts of good stuff. And, you have some kind of distributivity property. And, this is, in turn, because the real numbers with, and get the right order here, with min as your addition operation, and plus as your multiplication operation is a closed semi-ring.</p>
+<p>So, if ever you want to know when powers make sense, this is a good rule. If you have a closed semi-ring, then matrix products on that semi-ring will give you an associative operator, and then, good, you can take products. OK, that's just some formalism. So now, we have some intuition. The question is, what's the right. Algorithm? There are many possible answers, some of which are right, some of which are not.</p>
+<p>So, we have this connection to matrix products, and we have a connection to matrix powers. And, we have algorithms for both. The question is, what should we do? So, all we need to do now is to compute A to the funny power, n minus one. n minus one is when we get shortest paths, assuming we have no negative weight cycles. In fact, we could compute a larger power than n minus one. Once you get beyond n minus one, multipling by A doesn't change you anymore. So, how should we do it? OK, you're not giving any smart answers. I'll give the stupid answer. You could say, well, I take A. I multiply it by A. Then I multiply it by A, and I multiply it by A, and I use normal, boring matrix to multiplication.</p>
+<p>So, I do, like, n minus two, standard matrix multiplies. So, standard multiply costs, like, n^3. And I'm doing n of them. So, this gives me an n^4 algorithm, and compute all the shortest pathways in n^4. Woohoo! OK, no improvement. So, how can I do better? Right, natural thing to try which sadly does not work, is to use the sub cubic matrix multiply algorithm. We will, in some sense, get there in a moment with a somewhat simpler problem. But, it's actually not known how to compute shortest paths using fast matrix multiplication like Strassen's system algorithm. But, good suggestion. OK, you have to think about why it doesn't work, and I'll tell you.</p>
+<p>It's not obvious, so it's a perfectly reasonable suggestion. But in this context it doesn't quite work. It will come up in a few moments. The problem is, Strassen requires the notion of subtraction. And here, addition is min. And, there's no inverse to min. Once you take the arguments, you can't sort of undo a min. OK, so there's no notion of subtraction, so it's not known how to pull that off, sadly.</p>
+<p>So, what other tricks do we have up our sleeve? Yeah? Divide and conquer, log n powering, yeah, repeated squaring. That works. Good, we had a fancy way. If you had a number n, you sort of looked at the binary number representation of n, and you either squared the number or squared it and added another factor of A. Here, we don't even have to be smart about it. OK, we can just compute, we really only have to think about powers of two. What we want to know, and I'm going to need a bigger font here because there's multiple levels of subscripts, A to the circled power, two to the ceiling of log n. Actually, n minus one would be enough. But there you go.</p>
+<p>You can write n if you didn't leave yourself enough space like me, n the ceiling, n the circle. This just means the next power of two after n minus one, two to the ceiling log. So, we don't have to go directly to n minus one. We can go further because anything farther than n minus one is still just the shortest pathways. If you look at the definition, and you know that your paths are simple, which is true if you have no negative weight cycles, then fine, just go farther.</p>
+<p>Why not? And so, to compute this, we just do ceiling of log n minus one products, just take A squared, and then take the result and square it; take the result and square it. So, this is order log n squares. And, we don't know how to use Strassen, but we can use the boring, standard multiply of n^3, and that gives us n^3 log n running time, OK, which finally is something that beats Bellman-Ford in the dense case.</p>
+<p>OK, in the dense case, Bellman-Ford was n^4. Here we get n^3 log n, finally something better. In the sparse case, it's about the same, maybe a little worse. E is order V. Then we're going to get, like, V3 for Bellman-Ford. Here, we get n^3 log n. OK, after log factors, this is an improvement some of the time. OK, it's about the same the other times. Another nifty thing that you get for free out of this, is you can detect negative weight cycles. So, here's a bit of a puzzle. How would I detect, after I compute this product, A to the power to ceiling log n minus one, how would I know if I found a negative weight cycle? What would that mean it this matrix of all their shortest paths of, at most, a certain length?</p>
+<p>If I found a cycle, what would have to be in that matrix? Yeah? Right, so I could, for example, take this thing, multiply it by A, see if the matrix changed at all. Right, that works fine. That's what we do in Bellman-Ford. It's an even simpler thing. It's already there. You don't have to multiply. But that's the same running time. That's a good answer. The diagonal would have a negative value, yeah. So, this is just a cute thing.</p>
+<p>Both approaches would work, can detect a negative weight cycle just by looking at the diagonal of the matrix. You just look for a negative value in the diagonal. OK. So, that's algorithm one, let's say. I mean, we've seen several that are all bad, but I'll call this number one. OK, we'll see two more. This is the only one that will, well, I shouldn't say that. Fine, there we go. So, this is one dynamic program that wasn't so helpful, except it showed us a connection to matrix multiplication, which is interesting. We'll see why it's useful a little bit more.</p>
+<p>But, it bled to this nasty four nested loops. And, using this trick, we got down to n^3 log n. Let's try, just for n^3. OK, just get rid of that log. It's annoying. It makes you a little bit worse than Bellman-Ford, and the sparse case. So, let's just erase one of these nested loops. OK, I want to do that. OK, obviously that algorithm doesn't work because it's for first decay, and it's not defined, but, you know, I've got enough variables. Why don't I just define k to the m?</p>
+<p>OK, it turns out that works. I'll do it from scratch, but why not? I don't know if that's how Floyd and Warshall came up with their algorithm, but here you go. Here's Floyd-Warshall. The idea is to define the subproblems a little bit more cleverly so that to compute one of these values, you don't have to take the min of n things. I just want to take the min of two things. If I could do that, and I still only have n^3 subproblems, then I would have n^3 time. So, all right, the running time of dynamic program is number of subproblems times the time to compute the recurrence for one subproblem. So, here's linear times n^3, and we want n^3 times constant. That would be good. So that's Floyd-Warshall. So, here's the way we're going to redefine c_ij.</p>
+<p>Or I guess, there it was called d_ij. Good, so we're going to define something new. So, c_ij superscript k is now going to be the weight of the shortest path from I to j as before. Notice I used the superscript k instead of m because I want k and m to be the same thing. Deep. OK, now, here's the new constraint. I want all intermediate vertices along the path, meeting all vertices except for I and j at the beginning and the end to have a small label. So, they should be in the set from one up to k. And this is where we are really using that our vertices are labeled one up to m. So, I'm going to say, well, first think about the shortest paths that don't use any other vertices. That's when k is zero.</p>
+<p>Then think about all the shortest paths that maybe they use vertex one. And then think about the shortest paths that maybe use vertex one or vertex two. Why not? You could define it in this way. It turns out, then when you increase k, you only have to think about one new vertex. Here, we had to take min over all k. Now we know which k to look at. OK, maybe that made sense. Maybe it's not quite obvious yet. But I'm going to redo this claim, redo a recurrence.</p>
+<p>So, maybe first I should say some obvious things. So, if I want delta of ij of the shortest pathway, well, just take all the vertices. So, take c_ij superscript n. That's everything. And this even works, this is true even if you have a negative weight cycle. Although, again, we're going to sort of ignore negative weight cycles as long as we can detect them. And, another simple case is if you have, well, c_ij to zero.</p>
+<p>Let me put that in the claim to be a little bit more consistent here. So, here's the new claim. If we want to compute c_ij superscript zero, what is it? Superscript zero means I really shouldn't use any intermediate vertices. So, this has a very simple answer, a three letter answer. So, it's not zero. It's four letters. What's that? Nil. No, not working yet. It has some subscripts, too. So, the definition would be, what's the shortest path weight from I to j when you're not allowed to use any intermediate vertices?</p>
+<p>Sorry? So, yeah, it has a very simple name. That's the tricky part. All right, so if i equals j, [LAUGHTER] you're clever, right, open bracket i equals j means one, well, OK. It sort of works, but it's not quite right. In fact, I want infinity if i does not equal j. And I want to zero if i equals j, a_ij, good. I think it's a_ij. It should be, right? Maybe I'm wrong. Right, a_ij. So it's essentially not what I said. That's the point. If i does not equal j, you still have to think about a single edge connecting i to j, right? OK, so that's a bit of a subtlety. This is only intermediate vertices, so you could still go from i to j via a single edge.</p>
+<p>That will cost a_ij. If there is an edge: infinity. If there isn't one: that is a_ij. So, OK, that gets us started. And then, we want a recurrence. And, the recurrence is, well, maybe you get away with all the vertices that you had before. So, if you want to know paths that you had before, so if you want to know paths that use one up to k, maybe I just use one up to k minus one. You could try that. Or, you could try using k. So, either you use k or you don't. If you don't, it's got to be this. If you do, then you've got to go to k. So why not go to k at the end? So, you go from I to k using the previous vertices. Obviously, you don't want to repeat k in there. And then, you go from k to j somehow using vertices that are not k.</p>
+<p>This should be pretty intuitive. Again, I can draw a picture. So, either you never go to k, and that's this wiggly line. You go from i to j using things only one up to k minus one. In other words, here we have to use one up to k. So, this just means don't use k. So, that's this thing. Or, you use k somewhere in the middle there. OK, it's got to be one of the two. And in this case, you go from i to k using only smaller vertices, because you don't want to repeat k.</p>
+<p>And here, you go from k to j using only smaller labeled vertices. So, every path is one of the two. So, we take the shortest of these two subproblems. That's the answer. So, now we have a min of two things. It takes constant time to compute. So, we get a cubic algorithm. So, let me write it down. So, this is the Floyd-Warshall algorithm. I'll write the name again. You give it a matrix A. That's all it really needs to know. It codes everything. You copy C to A. That's the warm up. Right at time zero, C equals A.</p>
+<p>And then you just have these three loops for every value of k, for every value of i, and for every value of j. You compute that min. And if you think about it a little bit, that min is a relaxation. Surprise, surprise. So, that is the Floyd-Warshall algorithm. And, the running time is clearly n^3, three nested loops, constant time inside. So, we're finally getting something that is never worse than Bellman-Ford. In the sparse case, it's the same. And anything denser, the number of edges is super linear. This is strictly better than Bellman-Ford. And, it's better than everything we've seen so far for all pair, shortest paths. And, this handles negative weights; very simple algorithm, even simpler than the one before. It's just relaxation within three loops. What more could you ask for? And we need to check that this is indeed what min we're computing here, except that the superscripts are omitted.</p>
+<p>That's, again, a bit of hand waving a bit. It's OK to omit subscripts because that can only mean that you're doing more relaxation techniques should be. Doing more relaxations can never hurt you. In particular, we do all the ones that we have to. Therefore, we find the shortest path weights. And, again, here, we're assuming that there is no negative weight cycles. It shouldn't be hard to find them, but you have to think about that a little bit.</p>
+<p>OK, you could run another round of Bellman-Ford, see if it relaxes in a new edges again. For example, I think there's no nifty trick for that version. And, we're going to cover, that's our second algorithm for all pairs shortest paths. Before we go up to the third algorithm, which is going to be the cleverest of them all, the one Ring to rule them all, to switch trilogies, we're going to take a little bit of a diversion, side story, whatever, and talk about transitive closure briefly.</p>
+<p>This is just a good thing to know about. And, it relates to the algorithms we've seen so far. So, here's a transitive closure problem. I give you a directed graph, and for all pair vertices, i and j, I want to compute this number. It's one if there's a path from i to j. From i to j, OK, and then zero otherwise. OK, this is sort of like a boring adjacency matrix with no weights, except it's about paths instead of being about edges. OK, so how can I compute this?</p>
+<p>That's very simple. How should I compute this? This gives me a graph in some sense. This is adjacency matrix of a new graph called the transitive closure of my input graph. So, breadth first search, yeah, good. So, all I need to do is find shortest paths, and if the weights come out infinity, then there's no path. If it's less than infinity, that there's a path. And so here, so you are saying maybe I don't care about the weights, so I can run breadth first search n times, and that will work indeed. So, if we do B times B of S, so it's maybe weird that I'm covering here in the middle, but it's just an interlude.</p>
+<p>So, we have, then, something like V times E. OK, you can run any of these algorithms. You could take Floyd-Warshall for example. Why not? OK, then it would just be V^ I mean, you could run in any of these algorithms with weights of one or zero, and just check whether the values are infinity or not. So, I mean, t_ij equals zero, if and only if the shortest path weight from i to j is infinity. So, just solve this. This is an easier problem than shortest paths. It is, in fact, strictly easier in a certain sense, because what's going on with transitive closure, and I just want to mention this out of interest because transitive closure is a useful thing to know about.</p>
+<p>Essentially, what we are doing, let me get this right, is using a different set of operators. We're using or and and, a logical or and and instead of min and plus, OK, because we want to know, if you think about a relaxation, in some sense, maybe I should think about it in terms of this min. So, if I want to know, is there a pathway from I to j that uses vertices labeled one through k in the middle?</p>
+<p>Well, either there is a path that doesn't use the vertex k, or there is a path that uses k, and then it would have to look like that. OK, so there would have to be a path here, and there would have to be a path there. So, the min and plus get replaced with or and and. And if you remember, this used to be plus, and this used to be product in the matrix world. So, plus is now like or. And, multiply is now like and, which sounds very good, right?</p>
+<p>Plus does feel like or, and multiply does feel like and if you live in a zero-one world. So, in fact, this is not quite the field Z mod two, but this is a good, nice, field to work in. This is the Boolean world. So, I'll just write Boole. Good old Boole knows all about this. It's like his master's thesis, I think, talking about Boolean algebra. And, this actually means that you can use fast matrix multiply. You can use Strassen's algorithm, and the fancier algorithms, and you can compute the transitive closure in subcubic time. So, this is sub cubic if the edges are sparse. But, it's cubic in the worst case if there are lots of edges. This is cubic. You can actually do better using Strassen. So, I'll just say you can do it.</p>
+<p>No details here. I think it should be, so in fact, there is a theorem. This is probably not in the textbook, but there's a theorem that says transitive closure is just as hard as matrix multiply. OK, they are equivalent. Their running times are the same. We don't know how long it takes to do a matrix multiply over a field. It's somewhere between n^2 and n^2.3. But, whatever the answer is: same for transitive closure.</p>
+<p>OK, there's the interlude. And that's where we actually get to use Strassen and friends. Remember, Strassen was n to the log base two of seven algorithm. Remember that, especially on the final. Those are things you should have at the tip of your tongue. OK, the last algorithm we're going to cover is really going to build on what we saw last time: Johnson's algorithm. And, I've lost some of the running times here. But, when we had unweighted graphs, we could do all pairs really fast, just as fast as a single source Bellman-Ford. That's kind of nifty. We don't know how to improve Bellman-Ford in the single source case.</p>
+<p>So, we can't really help to get anything better than V times E. And, if you remember running V times Dijkstra, V times Dijkstra was about the same. So, just put this in the recall bubble here: V times Dijkstra would give us V times E plus V^2 log V. And, if you ignore that log factor, this is just VE. OK, so this was really good. Dijkstra was great. And this was for nonnegative edge weights.</p>
+<p>So, with negative edge weights, somehow we'd like to get the same running time. Now, how might I get the same running time? Well, it would be really nice if I could use Dijkstra. Of course, Dijkstra doesn't work with negative weights. So what could I do? What would I hope to do? What could I hope to? Suppose I want, in the middle of the algorithm, it says run Dijkstra n times. Then, what should I do to prepare for that? Make all the weights positive, or nonnegative. Why not, right? We're being wishful thinking. That's what we'll do. So, this is called graph re-weighting. And, what's cool is we actually already know how to do it. We just don't know that we know how to do it. But I know that we know that we know how to do it. You don't yet know that we know that I know that we know how to do it.</p>
+<p>So, it turns out you can re-weight the vertices. So, at the end of the last class someone asked me, can you just, like, add the same weight to all the edges? That doesn't work. Not quite, because different paths have different numbers of edges. What we are going to do is add a particular weight to each vertex. What does that mean? Well, because we really only have weights on the edges, here's what well do.</p>
+<p>We'll re-weight each edge, so, (u,v), let's say, going to go back into graph speak instead of matrix speak, (u,v) instead of I and j, and we'll call this modified weight w_h. h is our function. It gives us a number for every vertex. And, it's just going to be the old weight of that edge plus the weight of the start vertex minus the weight of the terminating vertex. I'm sure these have good names. One of these is the head, and the other is the tail, but I can never remember which. OK, so we've directed edge (u,v). Just add one of them; subtract the other. And, it's a directed edge, so that's a consistent definition. OK, so that's called re-weighting. Now, this is actually a theorem.</p>
+<p>If you do this, then, let's say, for any vertices, u and v in the graph, for any two vertices, all paths from u to v have the same weight as they did before, well, not quite. They have the same re-weighting. So, if you look at all the different paths and you say, well, what's the difference between vh, well, sorry, let's say delta, which is the old shortest paths, and deltas of h, which is the shortest path weights according to this new weight function, then that difference is the same. So, we'll say that all these paths are re-weighted by the same amounts. OK, this is actually a statement about all paths, not just shortest paths.</p>
+<p>There we go. OK, to how many people is this obvious already? A few, yeah, it is. And what's the one word? OK, it's maybe not that obvious. All right, shout out the word when you figure it out. Meanwhile, I'll write out this rather verbose proof. There's a one word proof, still waiting. So, let's just take one of these paths that starts at u and ends at v. Take any path. We're just going to see what its new weight is relative to its old weight. And so, let's just write out w_h of the path, which we define in the usual way as the sum over all edges of the new weight of the edge from v_i to v_i plus one.</p>
+<p>Do you have the word? No? Tough puzzle then, OK. So that's the definition of the weight of a path. And, then we know this thing is just w of v_i, v_i plus one. I'll get it right, plus the weight of the first vertex, plus, sorry, the re-weighting of v_i minus the re-weighting of v_i plus one. This is all in parentheses that's summed over I. Now I need the magic word. Telescopes, good. Now this is obvious: each of these telescopes with an extra previous, except the very beginning and the very end. So, this is the sum of these weights of edges, but then outside the sum, we have plus h of v_1, and minus h of v_k.</p>
+<p>OK, those guys don't quite cancel. We're not looking at a cycle, just a path. And, this thing is just w of the path, as this is the normal weight of the path. And so the change, the difference between w_h of P and w of P is this thing, which is just h of u minus h of v. And, the point is that's the same as long as you fix the endpoints, u and v, of the shortest path, you're changing this path weight by the same thing for all paths. This is for any path from u to v, and that proves the theorem. So, the one word here was telescopes. These change in weights telescope over any path. Therefore, if we want to find shortest paths, you just find the shortest paths in this re-weighted version, and then you just change it by this one amount.</p>
+<p>You subtract off this amount instead of adding it. That will give you the shortest path weight in the original weights. OK, so this is a tool. We now know how to change weights in the graph. But what we really want is to change weights in the graph so that the weights all come out nonnegative. OK, how do we do that? Why in the world would there be a function, h, that makes all the edge weights nonnegative?</p>
+<p>It doesn't make sense. It turns out we already know. So, I should write down this consequence. Let me get this in the right order. So in particular, the shortest path changes by this amount. And if you want to know this value, you just move the stuff to the other side. So, we compute deltas of h, then we can compute delta. That's the consequence here. How many people here pronounce this word corollary?</p>
+<p>OK, and how many people pronounce it corollary? Yeah, we are alone. Usually get at least one other student, and they're usually Canadian or British or something. I think that the accent. So, I always avoid pronouncing his word unless I really think, it's corollary, and get it right. I at least say Z not Zed. OK, here we go. So, what we want to do is find one of these functions. I mean, let's just write down what we could hope to have. We want to find a re-weighted function, h, the signs of weight to each vertex such that w_h of (u,v) is nonnegative. That would be great for all edges, all (u,v) in E.</p>
+<p>OK, then we could run Dijkstra. We could run Dijkstra, get the delta h's, and then just undo the re-weighting, and get what we want. And, that is Johnson's algorithm. The claim is that this is always possible. OK, why should it always be possible? Well, let's look at this constraint. w_h of (u,v) is that. So, it's w of (u,v) plus h of u minus h of V should be nonnegative. Let me rewrite this a little bit. I'm going to put these guys over here. That would be the right thing, h of v minus h of u is less than or equal to w of (u,v). Does that look familiar?</p>
+<p>Did I get it right? It should be right. Anyone seen that inequality before? Yeah, yes, correct answer. OK, where? In a previous lecture? In the previous lecture. What is this called if I replace h with x? Charles knows. Good, anyone else remember all the way back to episode two? I know there was a weekend. What's this operator called? Not subtraction but, I think I heard it, oh man. All right, I'll tell you. It's a difference constraint, all right? This is the difference operator. OK, it's our good friend difference constraints. So, this is what we want to satisfy. We have a system of difference constraints. h of V minus h of u should be, we want to find these. These are our unknowns. Subject to these constraints, we are given the w's.</p>
+<p>Now, we know in these difference constraints are satisfiable. Can someone tell me when these constraints are satisfiable? We know exactly when for any set of difference constraints. You've got to remember the math. Terminology, I can understand. It's hard to remember words unless you're a linguist, perhaps. So, when is the system of different constraints satisfiable? All right, you should definitely, very good. [LAUGHTER] Yes, very good. Someone brought their lecture notes: when the constraint graph has no negative weight cycles. Good, thank you. Now, what is the constraint graph?</p>
+<p>OK, this has a one letter answer more or less. I'll accept the one letter answer. What? A? A: close. G. Yeah, I mean, same thing. Yeah, so the constraint graph is essentially G. Actually, it is G. The constraint graph is G, good. And, we prove this by adding a new source for text, and connecting that to everyone. But that's sort of beside the point. That was in order to actually satisfy them. But this is our characterization. So, if we assume that there are no negative weight cycles in our graph, which we've been doing all the time, then we know that this thing is satisfiable. Therefore, there is an assignment of this h's. There is a re-weighting that makes all the weights nonnegative. Then we can run Dijkstra. OK, we're done. Isn't that cool? And how do we satisfy these constraints? We know how to do that with one run of Bellman-Ford, which costs order VE, which is less than V times Dijkstra.</p>
+<p>So, that's it, write down the details somewhere. So, this is Johnson's algorithm. This is the fanciest of them all. It will be our fastest, all pairs shortest path algorithm. So, the claim is, we can find a function, h, from V to R such that the modified weight of every edge is nonnegative for every edge, (u,v), in our graph. And, we do that using Bellman-Ford to solve the difference constraints.</p>
+<p>These are exactly the different constraints that we were born to solve that we learned to solve last time. The graphs here are corresponding exactly if you look back at the definition. Or, Bellman-Ford will tell us that there is a negative weight cycle. OK, great, so it's not that we really have to assume that there is no negative weight cycle. We'll get to know. And if your fancy, you can actually figure out the minus infinities from this. But, at this point, I just want to think about the case where there is no negative weight cycle.</p>
+<p>But if there is, we can find out that it exists, and that just tell the user. OK, then we'd stop. Otherwise, there is no negative weight cycle. Therefore, there is an assignment that gives is nonnegative edge weights. So, we just use it. We use it to run Dijkstra. So, step two is, oh, I should say the running time of all this is V times E. So, we're just running Bellman-Ford on exactly the input graph. Plus, we add a source, if you recall, to solve a set of difference constraints. You add a source vertex, S, connected to everyone at weight zero, run Bellman-Ford from there because we don't have a source here. We just have a graph. We want to know all pairs. So, this, you can use to find whether there is a negative weight cycle anywhere.</p>
+<p>Or, we get this magic assignment. So now, w_h is nonnegative, so we can run Dijkstra on w_h. We'll say, using w_h, so you compute w_h. That takes linear time. And, we run Dijkstra for each possible source. I'll write this out explicitly. We've had this in our minds several times. But, when we said n times Dijkstra over n times BFS, here it is. We want to compute delta sub h now, of (u,v) for all V, and we do this separately for all u. And so, the running time here is VE plus V^2 log V. This is just V times the running time of Dijkstra, which is E plus V log V.</p>
+<p>OK, it happens that this term is the same as this one, which is nice, because that means step one costs us nothing asymptotically. OK, and then, last step is, well, now we know delta h. We just need to compute delta. So, for each pair of vertices, we'll call it (u,v), we just compute what the original weights would be, so what delta (u,v) is. And we can do that using this corollary. It's just delta sub h of (u,v) minus h of u plus h of v. I got the signs right. Yeah, so this takes V^2 time, also dwarfed by the running time of Dijkstra. So, the overall running time of Johnson's algorithm is just the running time of step two, running Dijkstra n times --</p>
+<p>-- which is pretty cool. When it comes to single source shortest paths, Bellman-Ford is the best thing for general weights. Dijkstra is the best thing for nonnegative weights. But for all pair shortest paths, we can skirt the whole negative weight issue by using this magic we saw from Bellman-Ford. But now, running Dijkstra n times, which is still the best thing we know how to do, pretty much, for the all pairs nonnegative weights, now we can do it for general weights too, which is a pretty nice combination of all the techniques we've seen.</p>
+<p>In the trilogy, and along the way, we saw lots of dynamic programming, which is always good practice. Any questions? This is the last new content lecture before the quiz. On Wednesday it will be quiz review, if I recall correctly. And then it's Thanksgiving, so there's no recitation. And then the quiz starts on Monday. So, study up. See you then. </p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1851953464?i=1573676116">MP4 - 156MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-21nov2005-220k_512kb.mp4">MP4 - 307MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/ocw-6.046-lec19.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>

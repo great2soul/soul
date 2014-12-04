@@ -1,0 +1,900 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, 
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/ocw-6.046-lec18.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://itunes.apple.com/gb/podcast/lecture-18-shortest-paths/id341597754?i=63738846">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-16nov2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/Ttezuzs39nk', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints', 'http://img.youtube.com/vi/Ttezuzs39nk/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/ocw-6.046-lec18.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered:</strong> Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints</p>
+<p><strong>Instructors:</strong> Prof. Erik Demaine, Prof. Charles Leiserson</p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm">
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm">
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/lec18.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J2005L18.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 18</strong></p>
+<p>Good morning, everyone. Glad you are all here bright and early. I'm counting the days till the TA's outnumber the students. They'll show up. We return to a familiar story. This is part two, the Empire Strikes Back. So last time, our adversary, the graph, came to us with a problem. We have a source, and we had a directed graph, and we had weights on the edges, and they were all nonnegative. And there was happiness. And we triumphed over the Empire by designing Dijkstra's algorithm, and very efficiently finding single source shortest paths, shortest path weight from s to every other vertex.</p>
+<p>Today, however, the Death Star has a new trick up its sleeve, and we have negative weights, potentially. And we're going to have to somehow deal with, in particular, negative weight cycles. And we saw that when we have a negative weight cycle, we can just keep going around, and around, and around, and go back in time farther, and farther, and farther. And we can get to be arbitrarily far back in the past. And so there's no shortest path, because whatever path you take you can get a shorter one. So we want to address that issue today, and we're going to come up with a new algorithm actually simpler than Dijkstra, but not as fast, called the Bellman-Ford algorithm.</p>
+<p>And, it's going to allow negative weights, and in some sense allow negative weight cycles, although maybe not as much as you might hope. We have to leave room for a sequel, of course. OK, so the Bellman-Ford algorithm, invented by two guys, as you might expect, it computes the shortest path weights. So, it makes no assumption about the weights. Weights are arbitrary, and it's going to compute the shortest path weights. So, remember this notation: delta of s, v is the weight of the shortest path from s to v. s was called a source vertex.</p>
+<p>And, we want to compute these weights for all vertices, little v. The claim is that computing from s to everywhere is no harder than computing s to a particular location. So, we're going to do for all them. It's still going to be the case here. And, it allows negative weights. And this is the good case, but there's an alternative, which is that Bellman-Ford may just say, oops, there's a negative weight cycle.</p>
+<p>And in that case it will just say so. So, they say a negative weight cycle exists. Therefore, some of these deltas are minus infinity. And that seems weird. So, Bellman-Ford as we'll present it today is intended for the case, but there are no negative weights cycles, which is more intuitive. It sort of allows them, but it will just report them. In that case, it will not give you delta values. You can change the algorithm to give you delta values in that case, but we are not going to see it here. So, in exercise, after you see the algorithm, exercise is: compute these deltas in all cases.</p>
+<p>So, it's not hard to do. But we don't have time for it here. So, here's the algorithm. It's pretty straightforward. As I said, it's easier than Dijkstra. It's a relaxation algorithm. So the main thing that it does is relax edges just like Dijkstra. So, we'll be able to use a lot of dilemmas from Dijkstra. And proof of correctness will be three times shorter because the first two thirds we already have from Dijkstra. But I'm jumping ahead a bit. So, the first part is initialization. Again, d of v will represent the estimated distance from s to v.</p>
+<p>And we're going to be updating those estimates as the algorithm goes along. And initially, d of s is zero, which now may not be the right answer conceivably. Everyone else is infinity, which is certainly an upper bound. OK, these are both upper bounds on the true distance. So that's fine. That's initialization just like before. And now we have a main loop which happens v minus one times. We're not actually going to use the index i. It's just a counter.</p>
+<p>And we're just going to look at every edge and relax it. It's a very simple idea. If you learn about relaxation, this is the first thing you might try. The question is when do you stop. It's sort of like I have this friend to what he was like six years old he would claim, oh, I know how to spell banana. I just don't know when to stop. OK, same thing with relaxation. This is our relaxation step just as before. We look at the edge; we see whether it violates the triangle inequality according to our current estimates we know the distance from s to v should be at most distance from s to plus the weight of that edge from u to v. If it isn't, we set it equal. We've proved that this is always an OK thing to do.</p>
+<p>We never violate, I mean, these d of v's never get too small if we do a bunch of relaxations. So, the idea is you take every edge. You relax it. I don't care which order. Just relax every edge, one each. And that do that V minus one times. The claim is that that should be enough if you have no negative weights cycles. So, if there's a negative weight cycle, we need to figure it out. And, we'll do that in a fairly straightforward way, which is we're going to do exactly the same thing. So this is outside before loop here. We'll have the same four loops for each edge in our graph. We'll try to relax it. And if you can relax it, the claim is that there has to be a negative weight cycle.</p>
+<p>So this is the main thing that needs proof. OK, and that's the algorithm. So the claim is that at the ends we should have d of v, let's see, L's so to speak. d of v equals delta of s comma v for every vertex, v. If we don't find a negative weight cycle according to this rule, that we should have all the shortest path weights. That's the claim. Now, the first question is, in here, the running time is very easy to analyze. So let's start with the running time. We can compare it to Dijkstra, which is over here.</p>
+<p>What is the running time of this algorithm? V times E, exactly. OK, I'm going to assume, because it's pretty reasonable, that V and E are both positive. Then it's V times E. So, this is a little bit slower, or a fair amount slower, than Dijkstra's algorithm. There it is: E plus V log V is essentially, ignoring the logs is pretty much linear time. Here we have something that's at least quadratic in V, assuming your graph is connected. So, it's slower, but it's going to handle these negative weights. Dijkstra can't handle negative weights at all. So, let's do an example, make it clear why you might hope this algorithm works.</p>
+<p>And then we'll prove that it works, of course. But the proof will be pretty easy. So, I'm going to draw a graph that has negative weights, but no negative weight cycles so that I get an interesting answer. Good. The other thing I need in order to make the output of this algorithm well defined, it depends in which order you visit the edges. So I'm going to assign an arbitrary order to these edges. I could just ask you for an order, but to be consistent with the notes, I'll put an ordering on it. Let's say I put number four, say that's the fourth edge I'll visit. It doesn't matter. But it will affect what happens during the algorithm for a particular graph.</p>
+<p>Do they get them all? One, two, three, four, five, six, seven, eight, OK. And my source is going to be A. And, that's it. So, I want to run this algorithm. I'm just going to initialize everything. So, I set the estimates for s to be zero, and everyone else to be infinity. And to give me some notion of time, over here I'm going to draw or write down what all of these d values are as the algorithm proceeds because I'm going to start crossing them out and rewriting them that the figure will get a little bit messier. But we can keep track of it over here. It's initially zero and infinities. Yeah?</p>
+<p>It doesn't matter. So, for the algorithm you can go to the edges in a different order every time if you want. We'll prove that, but here I'm going to go through the same order every time. Good question. It turns out it doesn't matter here. OK, so here's the starting point. Now I'm going to relax every edge. So, there's going to be a lot of edges here that don't do anything. I try to relax n minus one. I'd say, well, I know how to get from s to B with weight infinity.</p>
+<p>Infinity plus two I can get to from s to E. Well, infinity plus two is not much better than infinity. OK, so I don't do anything, don't update this to infinity. I mean, infinity plus two sounds even worse. But infinity plus two is infinity. OK, that's the edge number one. So, no relaxation edge number two, same deal as number three, same deal, edge number four we start to get something interesting because I have a finite value here that says I can get from A to B using a total weight of minus one.</p>
+<p>So that seems good. I'll write down minus one here, and update B to minus one. The rest stay the same. So, I'm just going to keep doing this over and over. That was edge number four. Number five, we also get a relaxation. Four is better than infinity. So, c gets a number of four. Then we get to edge number six. That's infinity plus five is worse than four. OK, so no relaxation there. Edge number seven is interesting because I have a finite value here minus one plus the weight of this edge, which is three. That's a total of two, which is actually better than four. So, this route, A, B, c is actually better than the route I just found a second ago. So, this is now a two. This is all happening in one iteration of the main loop.</p>
+<p>We actually found two good paths to c. We found one better than the other. OK, and that was edge number seven, and edge number eight is over here. It doesn't matter. OK, so that was round one of this outer loop, so, the first value of i. i equals one. OK, now we continue. Just keep going. So, we start with edge number one. Now, minus one plus two is one. That's better than infinity. It'll start speeding up. It's repetitive. It's actually not too much longer until we're done. Number two, this is an infinity so we don't do anything. Number three: minus one plus two is one; better than infinity. This is vertex d, and it's number three. Number four we've already done.</p>
+<p>Nothing changed. Number five: this is where we see the path four again, but that's worse than two. So, we don't update anything. Number six: one plus five is six, which is bigger than two, so no good. Go around this way. Number seven: same deal. Number eight is interesting. So, we have a weight of one here, a weight of minus three here. So, the total is minus two, which is better than one. So, that was d. And, I believe that's it. So that was definitely the end of that round. So, it's I plus two because we just looked at the eighth edge. And, I'll cheat and check. Indeed, that is the last thing that happens.</p>
+<p>We can check the couple of outgoing edges from d because that's the only one whose value just changed. And, there are no more relaxations possible. So, that was in two rounds. The claim is we got all the shortest path weights. The algorithm would actually loop four times to guarantee correctness because we have five vertices here and one less than that. So, in fact, in the execution here there are two more blank rounds at the bottom. Nothing happens. But, what the hell?</p>
+<p>OK, so that is Bellman-Ford. I mean, it's certainly not doing anything wrong. The question is, why is it guaranteed to converge in V minus one steps unless there is a negative weight cycle? Question? Right, so that's an optimization. If you discover a whole round, and nothing happens, so you can keep track of that in the algorithm thing, you can stop. In the worst case, it won't make a difference. But in practice, you probably want to do that. Yeah? Good question. All right, so some simple observations, I mean, we're only doing relaxation. So, we can use a lot of our analysis from before. In particular, the d values are only decreasing monotonically. As we cross out values here, we are always making it smaller, which is good. Another nifty thing about this algorithm is that you can run it even in a distributed system.</p>
+<p>If this is some actual network, some computer network, and these are machines, and they're communicating by these links, I mean, it's a purely local thing. Relaxation is a local thing. You don't need any global strategy, and you're asking about, can we do a different order in each step? Well, yeah, you could just keep relaxing edges, and keep relaxing edges, and just keep going for the entire lifetime of the network. And eventually, you will find shortest paths. So, this algorithm is guaranteed to finish in V rounds in a distributed system. It might be more asynchronous. And, it's a little harder to analyze.</p>
+<p>But it will still work eventually. It's guaranteed to converge. And so, Bellman-Ford is used in the Internet for finding shortest paths. OK, so let's finally prove that it works. This should only take a couple of boards. So let's suppose we have a graph and some edge weights that have no negative weight cycles. Then the claim is that we terminate with the correct answer. So, Bellman-Ford terminates with all of these d of v values set to the delta values for every vertex.</p>
+<p>OK, the proof is going to be pretty immediate using the lemmas that we had from before if you remember them. So, we're just going to look at every vertex separately. So, I'll call the vertex v. The claim is that this holds by the end of the algorithm. So, remember what we need to prove is that at some point, d of v equals delta of s comma v because we know it decreases monotonically, and we know that it never gets any smaller than the correct value because relaxations are always safe.</p>
+<p>So, we just need to show at some point this holds, and that it will hold at the end. So, by monotonicity of the d values, and by correctness part one, which was that the d of v's are always greater than or equal to the deltas, we only need to show that at some point we have equality. So that's our goal. So what we're going to do is just look at v, and the shortest path to v, and see what happens to the algorithm relative to that path.</p>
+<p>So, I'm going to name the path. Let's call it p. It starts at vertex v_0 and goes to v_1, v_2, whatever, and ends at v_k. And, this is not just any shortest path, but it's one that starts at s. So, v_0's s, and it ends at v. So, I'm going to give a couple of names to s and v so I can talk about the path more uniformly. So, this is a shortest path from s to v. Now, I also want it to be not just any shortest path from s to v, but among all shortest paths from s to v I want it to be one with the fewest possible edges.</p>
+<p>OK, so shortest here means in terms of the total weight of the path. Subject to being shortest in weight, I wanted to also be shortest in the number of edges. And, the reason I want that is to be able to conclude that p is a simple path, meaning that it doesn't repeat any vertices. Now, can anyone tell me why I need to assume that the number of edges is the smallest possible in order to guarantee that p is simple?</p>
+<p>The claim is that not all shortest paths are necessarily simple. Yeah? Right, I can have a zero weight cycle, exactly. So, we are hoping, I mean, in fact in the theorem here, we're assuming that there are no negative weight cycles. But there might be zero weight cycles still. As a zero weight cycle, you can put that in the middle of any shortest path to make it arbitrarily long, repeat vertices over and over. That's going to be annoying. What I want is that p is simple.</p>
+<p>And, I can guarantee that essentially by shortcutting. If ever I take a zero weight cycle, I throw it away. And this is one mathematical way of doing that. OK, now what else do we know about this shortest path? Well, we know that subpaths are shortest paths are shortest paths. That's optimal substructure. So, we know what the shortest path from s to v_i is sort of inductively. It's the shortest path, I mean, it's the weight of that path, which is, in particular, the shortest path from s to v minus one plus the weight of the last edge, v minus one to v_i.</p>
+<p>So, this is by optimal substructure as we proved last time. OK, and I think that's pretty much the warm-up. So, I want to sort of do this inductively in I, start out with v zero, and go up to v_k. So, the first question is, what is d of v_0, which is s? What is d of the source? Well, certainly at the beginning of the algorithm, it's zero. So, let's say equals zero initially because that's what we set it to. And it only goes down from there. So, it certainly, at most, zero.</p>
+<p>The real question is, what is delta of s comma v_0. What is the shortest path weight from s to s? It has to be zero, otherwise you have a negative weight cycle, exactly. My favorite answer, zero. So, if we had another path from s to s, I mean, that is a cycle. So, it's got to be zero. So, these are actually equal at the beginning of the algorithm, which is great. That means they will be for all time because we just argued up here, only goes down, never can get too small. So, we have d of v_0 set to the right thing. Great: good for the base case of the induction. Of course, what we really care about is v_k, which is v. So, let's talk about the v_i inductively, and then we will get v_k as a result.</p>
+<p>So, yeah, let's do it by induction. That's more fun. Let's say that d of v_i is equal to delta of s v_i after I rounds of the algorithm. So, this is actually referring to the I that is in the algorithm here. These are rounds. So, one round is an entire execution of all the edges, relaxation of all the edges. So, this is certainly true for I equals zero. We just proved that. After zero rounds, at the beginning of the algorithm, d of v_0 equals delta of s, v_0.</p>
+<p>OK, so now, that's not really what I wanted, but OK, fine. Now we'll prove it for d of v_i plus one. Generally, I recommend you assume something. In fact, why don't I follow my own advice and change it? It's usually nicer to think of induction as recursion. So, you assume that this is true, let's say, for j less than the i that you care about, and then you prove it for d of v_i. It's usually a lot easier to think about it that way. In particular, you can use strong induction for all less than i. Here, we're only going to need it for one less. We have some relation between I and I minus one here in terms of the deltas. And so, we want to argue something about the d values.</p>
+<p>OK, well, let's think about what's going on here. We know that, let's say, after I minus one rounds, we have this inductive hypothesis, d of v_i minus one equals delta of s v_i minus one. And, we want to conclude that after i rounds, so we have one more round to do this. We want to conclude that d of v_i has the right answer, delta of s comma v_i. Does that look familiar at all? So we want to relax every edge in this round. In particular, at some point, we have to relax the edge from v_i minus one to v_i. We know that this path consists of edges. That's the definition of a path.</p>
+<p>So, during the i'th round, we relax every edge. So, we better relax v_i minus one v_i. And, what happens then? It's a test of memory. Quick, the Death Star is approaching. So, if we have the correct value for v_i minus one, that we relax an outgoing edge from there, and that edge is an edge of the shortest path from s to v_i. What do we know? d of v_i becomes the correct value, delta of s comma v_i. This was called correctness lemma last time. One of the things we proved about Dijkstra's algorithm, but it was really just a fact about relaxation. And it was a pretty simple proof.</p>
+<p>And it comes from this fact. We know the shortest path weight is this. So, certainly d of v_i was at least this big, and let's suppose it's greater, or otherwise we were done. We know d of v_i minus one is set to this. And so, this is exactly the condition that's being checked in the relaxation step. And, the d of v_i value will be greater than this, let's suppose. And then, we'll set it equal to this. And that's exactly d of s v_i.</p>
+<p>So, when we relax that edge, we've got to set it to the right value. So, this is the end of the proof, right? It's very simple. The point is, you look at your shortest path. Here it is. And if we assume there's no negative weight cycles, this has the correct value initially. d of s is going to be zero. After the first round, you've got to relax this edge. And then you get the right value for that vertex. After the second round, you've got to relax this edge, which gets you the right d value for this vertex and so on.</p>
+<p>And so, no matter which shortest path you take, you can apply this analysis. And you know that by, if the length of this path, here we assumed it was k edges, then after k rounds you've got to be done. OK, so this was not actually the end of the proof. Sorry. So this means after k rounds, we have the right answer for v_k, which is v. So, the only question is how big could k be? And, it better be the right answer, at most, v minus one is the claim by the algorithm that you only need to do v minus one steps. And indeed, the number of edges in a simple path in a graph is, at most, the number of vertices minus one.</p>
+<p>k is, at most, v minus one because p is simple. So, that's why we had to assume that it wasn't just any shortest path. It had to be a simple one so it didn't repeat any vertices. So there are, at most, V vertices in the path, so at most, V minus one edges in the path. OK, and that's all there is to Bellman-Ford. So: pretty simple in correctness. Of course, we're using a lot of the lemmas that we proved last time, which makes it easier. OK, a consequence of this theorem, or of this proof is that if Bellman-Ford fails to converge, and that's what the algorithm is checking is whether this relaxation still requires work after these d minus one steps.</p>
+<p>Right, the end of this algorithm is run another round, a V'th round, see whether anything changes. So, we'll say that the algorithm fails to converge after V minus one steps or rounds. Then, there has to be a negative weight cycle. OK, this is just a contrapositive of what we proved. We proved that if you assume there's no negative weight cycle, then we know that d of s is zero, and then all this argument says is you've got to converge after v minus one rounds. There can't be anything left to do once you've reached the shortest path weights because you're going monotonically; you can never hit the bottom.</p>
+<p>You can never go to the floor. So, if you fail to converge somehow after V minus one rounds, you've got to have violated the assumption. The only assumption we made was there's no negative weight cycle. So, this tells us that Bellman-Ford is actually correct. When it says that there is a negative weight cycle, it indeed means it. It's true. OK, and you can modify Bellman-Ford in that case to sort of run a little longer, and find where all the minus infinities are.</p>
+<p>And that is, in some sense, one of the things you have to do in your problem set, I believe. So, I won't cover it here. But, it's a good exercise in any case to figure out how you would find where the minus infinities are. What are all the vertices reachable from negative weight cycle? Those are the ones that have minus infinities. OK, so you might say, well, that was awfully fast. Actually, it's not over yet. The episode is not yet ended. We're going to use Bellman-Ford to solve the even bigger and greater shortest path problems.</p>
+<p>And in the remainder of today's lecture, we will see it applied to a more general problem, in some sense, called linear programming. And the next lecture, we'll really use it to do some amazing stuff with all pairs shortest paths. Let's go over here. So, our goal, although it won't be obvious today, is to be able to compute the shortest paths between every pair of vertices, which we could certainly do at this point just by running Bellman-Ford v times.</p>
+<p>OK, but we want to do better than that, of course. And, that will be the climax of the trilogy. OK, today we just discovered who Luke's father is. So, it turns out the father of shortest paths is linear programming. Actually, simultaneously the father and the mother because programs do not have gender. OK, my father likes to say, we both took improv comedy lessons so we have degrees in improvisation.</p>
+<p>And he said, you know, we went to improv classes in order to learn how to make our humor better. And, the problem is, it didn't actually make our humor better. It just made us less afraid to use it. [LAUGHTER] So, you are subjected to all this improv humor. I didn't see the connection of Luke's father, but there you go. OK, so, linear programming is a very general problem, a very big tool. Has anyone seen linear programming before? OK, one person. And, I'm sure you will, at some time in your life, do anything vaguely computing optimization related, linear programming comes up at some point. It's a very useful tool. You're given a matrix and two vectors: not too exciting yet. What you want to do is find a vector. This is a very dry description.</p>
+<p>We'll see what makes it so interesting in a moment. So, you want to maximize some objective, and you have some constraints. And they're all linear. So, the objective is a linear function in the variables x, and your constraints are a bunch of linear constraints, inequality constraints, that's one makes an interesting. It's not just solving a linear system as you've seen in linear algebra, or whatever. Or, of course, it could be that there is no such x. OK: vaguely familiar you might think to the theorem about Bellman-Ford. And, we'll show that there's some kind of connection here that either you want to find something, or show that it doesn't exist.</p>
+<p>Well, that's still a pretty vague connection, but I also want to maximize something, or are sort of minimize the shortest paths, OK, somewhat similar. We have these constraints. So, yeah. This may be intuitive to you, I don't know. I prefer a more geometric picture, and I will try to draw such a geometric picture, and I've never tried to do this on a blackboard, so it should be interesting. I think I'm going to fail miserably. It sort of looks like a dodecahedron, right? Sort of, kind of, not really. A bit rough on the bottom, OK. So, if you have a bunch of linear constraints, this is supposed to be in 3-D. Now I labeled it. It's now in 3-D. Good.</p>
+<p>So, you have these linear constraints. That turns out to define hyperplanes in n dimensions. OK, so you have this base here that's three-dimensional space. So, n equals three. And, these hyperplanes, if you're looking at one side of the hyperplane, that's the less than or equal to, if you take the intersection, you get some convex polytope or polyhedron. In 3-D, you might get a dodecahedron or whatever. And, your goal, you have some objective vector c, let's say, up. Suppose that's the c vector.</p>
+<p>Your goal is to find the highest point in this polytope. So here, it's maybe this one. OK, this is the target. This is the optimal, x. That is the geometric view. If you prefer the algebraic view, you want to maximize the c transpose times x. So, this is m. This is n. Check out the dimensions work out. So that's saying you want to maximize the dot product. You want to maximize the extent to which x is in the direction c. And, you want to maximize that subject to some constraints, which looks something like this, maybe. So, this is A, and it's m by n. You want to multiply it by, it should be something of height n.</p>
+<p>That's x. Let me put x down here, n by one. And, it should be less than or equal to something of this height, which is B, the right hand side. OK, that's the algebraic view, which is to check out all the dimensions are working out. But, you can read these off in each row here, when multiplied by this column, gives you one value here. And as just a linear constraints on all the x sides. So, you want to maximize this linear function of x_1 up to x_n subject to these constraints, OK? Pretty simple, but pretty powerful in general. So, it turns out that with, you can formulate a huge number of problems such as shortest paths as a linear program. So, it's a general tool.</p>
+<p>And in this class, we will not cover any algorithms for solving linear programming. It's a bit tricky. I'll just mention that they are out there. So, there's many efficient algorithms, and lots of code that does this. It's a very practical setup. So, lots of algorithms to solve LP's, linear programs. Linear programming is usually called LP. And, I'll mention a few of them. There's the simplex algorithm. This is one of the first. I think it is the first, the ellipsoid algorithm. There's interior point methods, and there's random sampling. I'll just say a little bit about each of these because we're not going to talk about any of them in depth.</p>
+<p>The simplex algorithm, this is, I mean, one of the first algorithms in the world in some sense, certainly one of the most popular. It's still used today. Almost all linear programming code uses the simplex algorithm. It happens to run an exponential time in the worst-case, so it's actually pretty bad theoretically. But in practice, it works really well. And there is some recent work that tries to understand this. It's still exponential in the worst case.</p>
+<p>But, it's practical. There's actually an open problem whether there exists a variation of simplex that runs in polynomial time. But, I won't go into that. That's a major open problem in this area of linear programming. The ellipsoid algorithm was the first algorithm to solve linear programming in polynomial time. So, for a long time, people didn't know. Around this time, people started realizing polynomial time is a good thing. That happened around the late 60s. Polynomial time is good. And, the ellipsoid algorithm is the first one to do it. It's a very general algorithm, and very powerful, theoretically: completely impractical. But, it's cool. It lets you do things like you can solve a linear program that has exponentially many constraints in polynomial time. You've got all sorts of crazy things. So, I'll just say it's polynomial time.</p>
+<p>I can't say something nice about it; don't say it at all. It's impractical. Interior point methods are sort of the mixture. They run in polynomial time. You can guarantee that. And, they are also pretty practical, and there's sort of this competition these days about whether simplex or interior point is better. And, I don't know what it is today but a few years ago they were neck and neck. And, random sampling is a brand new approach. This is just from a couple years ago by two MIT professors, Dimitris Bertsimas and Santosh Vempala, I guess the other is in applied math.</p>
+<p>So, just to show you, there's active work in this area. People are still finding new ways to solve linear programs. This is completely randomized, and very simple, and very general. It hasn't been implemented, so we don't know how practical it is yet. But, it has potential. OK: pretty neat. OK, we're going to look at a somewhat simpler version of linear programming. The first restriction we are going to make is actually not much of a restriction. But, nonetheless we will consider it, it's a little bit easier to think about. So here, we had some polytope we wanted to maximize some objective. In a feasibility problem, I just want to know, is the polytope empty? Can you find any point in that polytope? Can you find any set of values, x, that satisfy these constraints?</p>
+<p>OK, so there's no objective. c, just find x such that AX is less than or equal to B. OK, it turns out you can prove a very general theorem that if you can solve linear feasibility, you can also solve linear programming. We won't prove that here, but this is actually no easier than the original problem even though it feels easier, and it's easier to think about. I was just saying actually no easier than LP. OK, the next restriction we're going to make is a real restriction. And it simplifies the problem quite a bit.</p>
+<p>And that's to look at different constraints. And, if all this seemed a bit abstract so far, we will now ground ourselves little bit. A system of different constraints is a linear feasibility problem. So, it's an LP where there's no objective. And, it's with a restriction, so, where each row of the matrix, so, the matrix, A, has one one, and it has one minus one, and everything else in the row is zero.</p>
+<p>OK, in other words, each constraint has its very simple form. It involves two variables and some number. So, we have something like x_j minus x_i is less than or equal to w_ij. So, this is just a number. These are two variables. There's a minus sign, no values up here, no coefficients, no other of the X_k's appear, just two of them. And, you have a bunch of constraints of this form, one per row of the matrix. Geometrically, I haven't thought about what this means. I think it means the hyperplanes are pretty simple. Sorry I can't do better than that. It's a little hard to see this in high dimensions.</p>
+<p>But, it will start to correspond to something we've seen, namely the board that its next to, very shortly. OK, so let's do a very quick example mainly to have something to point at. Here's a very simple system of difference constraints -- -- OK, and a solution. Why not? It's not totally trivial to solve this, but here's a solution. And the only thing to check is that each of these constraints is satisfied. x_1 minus x_2 is three, which is less than or equal to three, and so on.</p>
+<p>There could be negative values. There could be positive values. It doesn't matter. I'd like to transform this system of difference constraints into a graph because we know a lot about graphs. So, we're going to call this the constraint graph. And, it's going to represent these constraints. How'd I do it? Well, I take every constraint, which in general looks like this, and I convert it into an edge. OK, so if I write it as x_j minus x_i is less than or equal to some w_ij, w seems suggestive of weights.</p>
+<p>That's exactly why I called it w. I'm going to make that an edge from v_i to v_j. So, the order flips a little bit. And, the weight of that edge is w_ij. So, just do that. Make n vertices. So, you have the number of vertices equals n. The number of edges equals the number of constraints, which is m, the height of the matrix, and just transform. So, for example, here we have three variables. So, we have three vertices, v_1, v_2, v_3. We have x_1 minus x_2. So, we have an edge from v_2 to v_1 of weight three. We have x_2 minus x_3. So, we have an edge from v_3 to v_2 of weight minus two. And, we have x_1 minus x_3. So, we have an edge from v_3 to v_1 of weight two. I hope I got the directions right.</p>
+<p>Yep. So, there it is, a graph: currently no obvious connection to shortest paths, right? But in fact, this constraint is closely related to shortest paths. So let me just rewrite it. You could say, well, an x_j is less than or equal to x_i plus w_ij. Or, you could think of it as d[j] less than or equal to d[i] plus w_ij. This is a conceptual balloon. Look awfully familiar? A lot like the triangle inequality, a lot like relaxation. So, there's a very close connection between these two problems as we will now prove.</p>
+<p>So, we're going to have two theorems. And, they're going to look similar to the correctness of Bellman-Ford in that they talk about negative weight cycles. Here we go. It turns out, I mean, we have this constraint graph. It can have negative weights. It can have positive weights. It turns out what matters is if you have a negative weight cycle. So, the first thing to prove is that if you have a negative weight cycle that something bad happens. OK, what could happen bad? Well, we're just trying to satisfy this system of constraints. So, the bad thing is that there might not be any solution. These constraints may be infeasible. And that's the claim. The claim is that this is actually an if and only if.</p>
+<p>But first we'll proved the if. If you have a negative weight cycle, you're doomed. The difference constraints are unsatisfiable. That's a more intuitive way to say it. In the LP world, they call it infeasible. But unsatisfiable makes a lot more sense. There's no way to assign the x_i's in order to satisfy all the constraints simultaneously. So, let's just take a look. Consider a negative weight cycle. It starts at some vertex, goes through some vertices, and at some point comes back. I don't care whether it repeats vertices, just as long as this cycle, from v_1 to v_1 is a negative weight cycle strictly negative weight.</p>
+<p>OK, and what I'm going to do is just write down all the constraints. Each of these edges corresponds to a constraint, which must be in the set of constraints because we had that graph. So, these are all edges. Let's look at what they give us. So, we have an edge from v_1 to v_2. That corresponds to x_2 minus x_1 is, at most, something, w_12. Then we have x_3 minus x_2. That's the weight w_23, and so on.</p>
+<p>And eventually we get up to something like x_k minus x_(k-1). That's this edge: w_(k-1),k , and lastly we have this edge, which wraps around. So, it's x_1 minus x_k, w_k1 if I've got the signs right. Good, so here's a bunch of constraints. What do you suggest I do with them? Anything interesting about these constraints, say, the left hand sides? Sorry? It sounded like the right word. What was it?</p>
+<p>Telescopes, yes, good. Everything cancels. If I added these up, there's an x_2 and a minus x_2. There's a minus x_1 and an x_1. There's a minus XK and an XK. Everything here cancels if I add up the left hand sides. So, what happens if I add up the right hand sides? Over here I get zero, my favorite answer. And over here, we get all the weights of all the edges in the negative weight cycle, which is the weight of the cycle, which is negative.</p>
+<p>So, zero is strictly less than zero: contradiction. Contradiction: wait a minute, we didn't assume anything that was false. So, it's not really a contradiction in the mathematical sense. We didn't contradict the world. We just said that these constraints are contradictory. In other words, if you pick any values of the x_i's, there is no way that these can all be true because that you would get a contradiction. So, it's impossible for these things to be satisfied by some real x_i's. So, these must be unsatisfiable.</p>
+<p>Let's say there's no satisfying assignment, a little more precise, x_1 up to x_m, no weights. Can we satisfy those constraints? Because they add up to zero on the left-hand side, and negative on the right-hand side. OK, so that's an easy proof. The reverse direction will be only slightly harder. OK, so, cool. We have this connection. So motivation is, suppose you'd want to solve these difference constraints. And we'll see one such application. I Googled around for difference constraints. There is a fair number of papers that care about difference constraints. And, they all use shortest paths to solve them. So, if we can prove a connection between shortest paths, which we know how to compute, and difference constraints, then we'll have something cool. And, next class will see even more applications of difference constraints.</p>
+<p>It turns out they're really useful for all pairs shortest paths. OK, but for now let's just prove this equivalence and finish it off. So, the reverse direction is if there's no negative weight cycle in this constraint graph, then the system better be satisfiable. The claim is that these negative weight cycles are the only barriers for finding a solution to these difference constraints. I have this feeling somewhere here. I had to talk about the constraint graph.</p>
+<p>Good. Satisfied, good. So, here we're going to see a technique that is very useful when thinking about shortest paths. And, it's a bit hard to guess, especially if you haven't seen it before. This is useful in problem sets, and in quizzes, and finals, and everything. So, keep this in mind. I mean, I'm using it to prove this rather simple theorem, but the idea of changing the graph, so I'm going to call this constraint graph G. Changing the graph is a very powerful idea. So, we're going to add a new vertex, s, or source, use the source, Luke, and we're going to add a bunch of edges from s because being a source, it better be connected to some things.</p>
+<p>So, we are going to add a zero weight edge, or weight zero edge from s to everywhere, so, to every other vertex in the constraint graph. Those vertices are called v_i, v_1 up to v_n. So, I have my constraint graph. But I'll copy this one so I can change it. It's always good to backup your work before you make changes, right? So now, I want to add a new vertex, s, over here, my new source. I just take my constraint graph, whatever it looks like, add in weight zero edges to all the other vertices.</p>
+<p>Simple enough. Now, what did I do? What did you do? Well, I have a candidate source now which can reach all the vertices. So, shortest path from s, hopefully, well, paths from s exist. I can get from s to everywhere in weight at most zero. OK, maybe less. Could it be less? Well, you know, like v_2, I can get to it by zero minus two. So, that's less than zero. So I've got to be a little careful. What if there's a negative weight cycle? Oh no? Then there wouldn't be any shortest paths. Fortunately, we assume that there's no negative weight cycle in the original graph. And if you think about it, if there's no negative weight cycle in the original graph, we add an edge from s to everywhere else. We're not making any new negative weight cycles because you can start at s and go somewhere at a cost of zero, which doesn't affect any weights.</p>
+<p>And then, you are forced to stay in the old graph. So, there can't be any new negative weight cycles. So, the modified graph has no negative weight cycles. That's good because it also has paths from s, and therefore it also has shortest paths from s. The modified graph has no negative weight because it didn't before. And, it has paths from s. There's a path from s to every vertex. There may not have been before. Before, I couldn't get from v_2 to v_3, for example. Well, that's still true. But from s I can get to everywhere. So, that means that this graph, this modified graph, has shortest paths.</p>
+<p>Shortest paths exist from s. In other words, if I took all the shortest path weights, like I ran Bellman-Ford from s, then, I would get a bunch of finite numbers, d of v, for every value, for every vertex. That seems like a good idea. Let's do it. So, shortest paths exist. Let's just assign x_i to be the shortest path weight from s to v_i. Why not? That's a good choice for a number, the shortest path weight from s to v_i. This is finite because it's less than infinity, and it's greater than minus infinity, so, some finite number. That's what we need to do in order to satisfy these constraints.</p>
+<p>The claim is that this is a satisfying assignment. Why? Triangle inequality. Somewhere here we wrote triangle inequality. This looks a lot like the triangle inequality. In fact, I think that's the end of the proof. Let's see here. What we want to be true with this assignment is that x_j minus x_i is less than or equal to w_ij whenever ij is an edge. Or, let's say v_i, v_j, for every such constraint, so, for v_i, v_j in the edge set.</p>
+<p>OK, so what is this true? Well, let's just expand it out. So, x_i is this delta, and x_j is some other delta. So, we have delta of s, vj minus delta of s_vi. And, on the right-hand side, well, w_ij, that was the weight of the edge from I to J. So, this is the weight of v_i to v_j. OK, I will rewrite this slightly. Delta s, vj is less than or equal to delta s, vi plus w of v_i, v_j. And that's the triangle inequality more or less. The shortest path from s to v_j is, at most, shortest path from s to v_i plus a particular path from v_i to v_j, namely the single edge v_i to v_j. This could only be longer than the shortest path.</p>
+<p>And so, that makes the right-hand side bigger, which makes this inequality more true, meaning it was true before. And now it's still true. And, that proves it. This is true. And, these were all equivalent statements. This we know to be true by triangle inequality. Therefore, these constraints are all satisfied. Magic. I'm so excited here. So, we've proved that having a negative weight cycle is exactly when these system of difference constraints are unsatisfiable.</p>
+<p>So, if we want to satisfy them, if we want to find the right answer to x, we run Bellman-Ford. Either it says, oh, no negative weight cycle. Then you are hosed. Then, there is no solution. But that's the best you could hope to know. Otherwise, it says, oh, there was no negative weight cycle, and here are your shortest path weights. You just plug them in, and bam, you have your x_i's that satisfy the constraints. Awesome. Now, it wasn't just any graph.</p>
+<p>I mean, we started with constraints, algebra, we converted it into a graph by this transform. Then we added a source vertex, s. So, I mean, we had to build a graph to solve our problem, very powerful idea. Cool. This is the idea of reduction. You can reduce the problem you want to solve into some problem you know how to solve. You know how to solve shortest paths when there are no negative weight cycles, or find out that there is a negative weight cycle by Bellman-Ford.</p>
+<p>So, now we know how to solve difference constraints. It turns out you can do even more. Bellman-Ford does a little bit more than just solve these constraints. But first let me write down what I've been jumping up and down about. The corollary is you can use Bellman-Ford. I mean, you make this graph. Then you apply Bellman-Ford, and it will solve your system of difference constraints. So, let me put in some numbers here. You have m difference constraints. And, you have n variables. And, it will solve them in order m times n time.</p>
+<p>Actually, these numbers go up slightly because we are adding n edges, and we're adding one vertex, but assuming all of these numbers are nontrivial, m is at least n. It's order MN time. OK, trying to avoid cases where some of them are close to zero. Good. So, some other facts, that's what I just said. And we'll leave these as exercises because they're not too essential. The main thing we need is this. But, some other cool facts is that Bellman-Ford actually optimizes some objective functions. So, we are saying it's just a feasibility problem. We just want to know whether these constraints are satisfiable. In fact, you can add a particular objective function. So, you can't give it an arbitrary objective function, but here's one of interest.</p>
+<p>x_1 plus x_2 plus x_n, OK, but not just that. We have some constraints. OK, this is a linear program. I want to maximize the sum of the x_i's subject to all the x_i's being nonpositive and the difference constraints. So, this we had before. This is fine. We noticed at some point you could get from s to everywhere with cost, at most, zero. So, we know that in this assignment all of the x_i's are negative. That's not necessary, but it's true when you run Bellman-Ford. So if you solve your system using Bellman-Ford, which is no less general than anything else, you happen to get nonpositive x_i's. And so, subject to that constraint, it actually makes them is close to zero as possible in the L1 norm.</p>
+<p>In the sum of these values, it tries to make the sum as close to zero, it tries to make the values as small as possible in absolute value in this sense. OK, it does more than that. It cooks, it cleans, it finds shortest paths. It also minimizes the spread, the maximum over all i of x_i minus the minimum over all i of x_i. So, I mean, if you have your real line, and here are the x_i's wherever they are. It minimizes this distance. And zero is somewhere over here. So, it tries to make the x_i's as compact as possible. This is actually the L infinity norm, if you know stuff about norms from your linear algebra class. OK, this is the L1 norm. I think it minimizes every LP norm.</p>
+<p>Good, so let's use this for something. Yeah, let's solve a real problem, and then we'll be done for today. Next class we'll see the really cool stuff, the really cool application of all of this. For now, and we'll see a cool but relatively simple application, which is VLSI layout. We talked a little bit about VLSI way back and divide and conquer. You have a bunch of chips, or you want to arrange them, and minimize some objectives. So, here's a particular, tons of problems that come out of VLSI layout. Here's one of them. You have a bunch of features of an integrated circuit.</p>
+<p>You want to somehow arrange them on your circuit without putting any two of them too close to each other. You have some minimum separation like at least they should not get top of each other. Probably, you also need some separation to put wires in between, and so on, so, without putting any two features too close together. OK, so just to give you an idea, so I have some objects and I'm going to be a little bit vague about how this works. You have some features. This is stuff, some chips, whatever. We don't really care what their shapes look like. I just want to be able to move them around so that the gap at any point, so let me just think about this gap. This gap should be at least some delta. Or, I don't want to use delta. Let's say epsilon, good, small number.</p>
+<p>So, I just need some separation between all of my parts. And for this problem, I'm going to be pretty simple, just say that the parts are only allowed to slide horizontally. So, it's a one-dimensional problem. These objects are in 2-d, or whatever, but I can only slide them an x coordinate. So, to model that, I'm going to look at the left edge of every part and say, well, these two left edges should be at least some separation.</p>
+<p>So, I think of it as whatever the distance is plus some epsilon. But, you know, if you have some funky 2-d shapes you have to compute, well, this is a little bit too close because these come into alignment. But, there's some constraint, well, for any two pieces, I could figure out how close they can get. They should get no closer. So, I'm going to call this x_1. I'll call this x_2. So, we have some constraint like x_2 minus x_1 is at least d plus epsilon, or whatever you compute that weight to be.</p>
+<p>OK, so for every pair of pieces, I can do this, compute some constraint on how far apart they have to be. And, now I'd like to assign these x coordinates. Right now, I'm assuming they're just variables. I want to slide these pieces around horizontally in order to compactify them as much as possible so they fit in the smallest chip that I can make because it costs money, and time, and everything, and power, everything. You always want your chip small.</p>
+<p>So, Bellman-Ford does that. All right, so Bellman-Ford solves these constraints because it's just a bunch of difference constraints. And we know that they are solvable because you could spread all the pieces out arbitrarily far. And, it minimizes the spread, minimizes the size of the chip I need, a max of x_i minus the min of x_i. So, this is it maximizes compactness, or minimizes size of the chip. OK, this is a one-dimensional problem, so it may seem a little artificial, but the two dimensional problem is really hard to solve. And this is, in fact, the best you can do with a nice polynomial time algorithm.</p>
+<p>There are other applications if you're scheduling events in, like, a multimedia environment, and you want to guarantee that this audio plays at least two seconds after this video, but then there are things that are playing at the same time, and they have to be within some gap of each other, so, lots of papers about using Bellman-Ford, solve difference constraints to enable multimedia environments. OK, so there you go. And next class we'll see more applications of Bellman-Ford to all pairs shortest paths. Questions? Great. </p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://itunes.apple.com/gb/podcast/lecture-18-shortest-paths/id341597754?i=63738846">MP4 - 160MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-16nov2005-220k_512kb.mp4">MP4 - 316MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/ocw-6.046-lec18.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>

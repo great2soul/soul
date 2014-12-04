@@ -10,14 +10,17 @@ void merge(struct simarr *, struct simarr *, struct simarr *);
 int main ()
 {
 	// 初始化A，B；
-	struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
-	struct simarr B = {4, {60,80,100,170, '\0'}};
+	// struct simarr A = {6, {1,2,20,24,50,60, '\0'}};
+	// struct simarr B = {4, {60,80,100,170, '\0'}};
 
 	// struct simarr A = {4, {1,3,4,6, '\0'}};
 	// struct simarr B = {4, {2,8,3,2, '\0'}};
 
 	// struct simarr A = {7, {3,5,7,10,15,50,60, '\0'}};
 	// struct simarr B = {4, {60,80,100,170, '\0'}};
+
+	struct simarr A = {1, {5, '\0'}};
+	struct simarr B = {4, {4,3,3,3, '\0'}};
 
 
 	// 调用min_sum；

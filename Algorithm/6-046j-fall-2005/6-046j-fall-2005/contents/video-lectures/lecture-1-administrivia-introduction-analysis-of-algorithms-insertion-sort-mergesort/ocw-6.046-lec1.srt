@@ -1,0 +1,5418 @@
+1
+00:00:10 --> 00:00:14
+We're going to get started.
+Handouts are the by the door if
+
+2
+00:00:14 --> 00:00:18
+anybody didn't pick one up.
+My name is Charles Leiserson.
+
+3
+00:00:18 --> 00:00:23
+I will be lecturing this course
+this term, Introduction to
+
+4
+00:00:23 --> 00:00:26
+Algorithms, with Erik Demaine.
+In addition,
+
+5
+00:00:26 --> 00:00:30
+this is an SMA course,
+a Singapore MIT Alliance course
+
+6
+00:00:30 --> 00:00:35
+which will be run in Singapore
+by David Hsu.
+
+7
+00:00:35 --> 00:00:40
+And so all the lectures will be
+videotaped and made available on
+
+8
+00:00:40 --> 00:00:45
+the Web for the Singapore
+students, as well as for MIT
+
+9
+00:00:45 --> 00:00:49
+students who choose to watch
+them on the Web.
+
+10
+00:00:49 --> 00:00:55
+If you have an issue of not
+wanting to be on the videotape,
+
+11
+00:00:55 --> 00:00:58
+you should sit in the back row.
+OK?
+
+12
+00:00:58 --> 00:01:03
+Otherwise, you will be on it.
+There is a video recording
+
+13
+00:01:03 --> 00:01:06
+policy, but it seems like they
+ran out.
+
+14
+00:01:06 --> 00:01:10
+If anybody wants to see it,
+people, if they could just sort
+
+15
+00:01:10 --> 00:01:14
+of pass them around maybe a
+little bit, once you're done
+
+16
+00:01:14 --> 00:01:18
+reading it, or you can come up.
+I did secure one copy.
+
+17
+00:01:18 --> 00:01:21
+Before we get into the content
+of the course,
+
+18
+00:01:21 --> 00:01:25
+let's briefly go over the
+course information because there
+
+19
+00:01:25 --> 00:01:30
+are some administrative things
+that we sort of have to do.
+
+20
+00:01:30 --> 00:01:33
+As you can see,
+this term we have a big staff.
+
+21
+00:01:33 --> 00:01:35
+Take a look at the handout
+here.
+
+22
+00:01:35 --> 00:01:40
+Including this term six TAs,
+which is two more TAs than we
+
+23
+00:01:40 --> 00:01:45
+normally get for this course.
+That means recitations will be
+
+24
+00:01:45 --> 00:01:48
+particularly small.
+There is a World Wide Web page,
+
+25
+00:01:48 --> 00:01:53
+and you should bookmark that
+and go there regularly because
+
+26
+00:01:53 --> 00:01:58
+that is where everything will be
+distributed.
+
+27
+00:01:58 --> 00:02:00
+Email.
+You should not be emailing
+
+28
+00:02:00 --> 00:02:04
+directly to, even though we give
+you our email addresses,
+
+29
+00:02:04 --> 00:02:06
+to the individual members of
+the staff.
+
+30
+00:02:06 --> 00:02:10
+You should email us generally.
+And the reason is you will get
+
+31
+00:02:10 --> 00:02:13
+much faster response.
+And also, for any
+
+32
+00:02:13 --> 00:02:16
+communications,
+generally we like to monitor
+
+33
+00:02:16 --> 00:02:20
+what the communications are so
+it's helpful to have emails
+
+34
+00:02:20 --> 00:02:23
+coming to everybody on the
+course staff.
+
+35
+00:02:23 --> 00:02:26
+As I mentioned,
+we will be doing distance
+
+36
+00:02:26 --> 00:02:29
+learning this term.
+And so you can watch lectures
+
+37
+00:02:29 --> 00:02:34
+online if you choose to do that.
+I would recommend,
+
+38
+00:02:34 --> 00:02:38
+for people who have the
+opportunity to watch,
+
+39
+00:02:38 --> 00:02:40
+to come live.
+It's better live.
+
+40
+00:02:40 --> 00:02:44
+You get to interact.
+There's an intangible that
+
+41
+00:02:44 --> 00:02:48
+comes with having it live.
+In fact, in addition to the
+
+42
+00:02:48 --> 00:02:53
+videos, I meet weekly with the
+Singapore students so that they
+
+43
+00:02:53 --> 00:02:58
+have a live session as well.
+Prerequisites.
+
+44
+00:02:58 --> 00:03:01
+The prerequisites for this
+course are 6.042,
+
+45
+00:03:01 --> 00:03:05
+which is Math for Computer
+Science, and 6.001.
+
+46
+00:03:05 --> 00:03:09
+You basically need discrete
+mathematics and probability,
+
+47
+00:03:09 --> 00:03:13
+as well as programming
+experience to take this course
+
+48
+00:03:13 --> 00:03:16
+successfully.
+People do not have that
+
+49
+00:03:16 --> 00:03:19
+background should not be in the
+class.
+
+50
+00:03:19 --> 00:03:22
+We will be checking
+prerequisites.
+
+51
+00:03:22 --> 00:03:27
+If you have any questions,
+please come to talk to us after
+
+52
+00:03:27 --> 00:03:29
+class.
+Let's see.
+
+53
+00:03:29 --> 00:03:32
+Lectures are here.
+For SMA students,
+
+54
+00:03:32 --> 00:03:36
+they have the videotapes and
+they will also have a weekly
+
+55
+00:03:36 --> 00:03:39
+meeting.
+Students must attend a one-hour
+
+56
+00:03:39 --> 00:03:44
+recitation session each week.
+There will be new material
+
+57
+00:03:44 --> 00:03:47
+presented in the recitation.
+Unlike the lectures,
+
+58
+00:03:47 --> 00:03:51
+they will not be online.
+Unlike the lectures,
+
+59
+00:03:51 --> 00:03:55
+there will not be lecture notes
+distributed for the recitations
+
+60
+00:03:55 --> 00:03:59
+in general.
+And, yet, there will be
+
+61
+00:03:59 --> 00:04:03
+material there that is directly
+on the exams.
+
+62
+00:04:03 --> 00:04:07
+And so every term we say oh,
+when did you cover that?
+
+63
+00:04:07 --> 00:04:10
+That was in recitation.
+You missed that one.
+
+64
+00:04:10 --> 00:04:14
+So, recitations are mandatory.
+And, in particular,
+
+65
+00:04:14 --> 00:04:18
+also let me just mention your
+recitation instructor is the one
+
+66
+00:04:18 --> 00:04:23
+who assigns your final grade.
+So we have a grade meeting and
+
+67
+00:04:23 --> 00:04:27
+keep everybody normal,
+but your recitation has the
+
+68
+00:04:27 --> 00:04:30
+final say on your grade.
+Handouts.
+
+69
+00:04:30 --> 00:04:34
+Handouts are available on the
+course Web page.
+
+70
+00:04:34 --> 00:04:38
+We will not generally,
+except for this one,
+
+71
+00:04:38 --> 00:04:42
+first handout,
+be bringing handouts to class.
+
+72
+00:04:42 --> 00:04:46
+Textbook is this book,
+Introduction to Algorithms.
+
+73
+00:04:46 --> 00:04:50
+MIT students can get it any of
+the local bookstores,
+
+74
+00:04:50 --> 00:04:55
+including the MIT Coop.
+There is also a new online
+
+75
+00:04:55 --> 00:05:01
+service that provides textbooks.
+You can also get a discount if
+
+76
+00:05:01 --> 00:05:04
+you buy it at the MIT Press
+Bookstore.
+
+77
+00:05:04 --> 00:05:10
+There is a coupon in the MIT
+Student Telephone Directory for
+
+78
+00:05:10 --> 00:05:14
+a discount on MIT Press books.
+And you can use that to
+
+79
+00:05:14 --> 00:05:17
+purchase this book at a
+discount.
+
+80
+00:05:17 --> 00:05:21
+Course website.
+This is the course website.
+
+81
+00:05:21 --> 00:05:25
+It links to the Stellar
+website, which is where,
+
+82
+00:05:25 --> 00:05:30
+actually, everything will be
+kept.
+
+83
+00:05:30 --> 00:05:33
+And SMA students have their own
+website.
+
+84
+00:05:33 --> 00:05:37
+Some students find this course
+particularly challenges so we
+
+85
+00:05:37 --> 00:05:41
+will have extra help.
+We will post weekly office
+
+86
+00:05:41 --> 00:05:44
+hours on the course website for
+the TAs.
+
+87
+00:05:44 --> 00:05:49
+And then as an experiment this
+term, we are going to offer
+
+88
+00:05:49 --> 00:05:53
+homework labs for this class.
+What a homework lab is,
+
+89
+00:05:53 --> 00:05:58
+is it's a place and a time you
+can go where other people in the
+
+90
+00:05:58 --> 00:06:04
+course will go to do homework.
+And there will be typically two
+
+91
+00:06:04 --> 00:06:07
+TAs who staff the lab.
+And so, as you're working on
+
+92
+00:06:07 --> 00:06:10
+your homework,
+you can get help from the TAs
+
+93
+00:06:10 --> 00:06:13
+if you need it.
+And it's generally a place,
+
+94
+00:06:13 --> 00:06:17
+we're going to schedule those,
+and they will be on the course
+
+95
+00:06:17 --> 00:06:21
+calendar for where it is and
+when it is that they will be
+
+96
+00:06:21 --> 00:06:26
+held, but usually Sundays 2:00
+to 4:00 pm, or else it will be
+
+97
+00:06:26 --> 00:06:28
+some evening.
+I think the first one is an
+
+98
+00:06:28 --> 00:06:33
+evening, right?
+Near to when the homework is
+
+99
+00:06:33 --> 00:06:36
+due.
+Your best bet is try to do the
+
+100
+00:06:36 --> 00:06:39
+homework in advance of the
+homework lab.
+
+101
+00:06:39 --> 00:06:43
+But then, if you want extra
+help, if you want to talk over
+
+102
+00:06:43 --> 00:06:48
+your solutions with people
+because as we will talk about
+
+103
+00:06:48 --> 00:06:53
+problem sets you can solve in
+collaboration with other people
+
+104
+00:06:53 --> 00:06:55
+in the class.
+In addition,
+
+105
+00:06:55 --> 00:07:00
+there are several peer
+assistance programs.
+
+106
+00:07:00 --> 00:07:04
+Also the office of Minority
+Education has an assistance
+
+107
+00:07:04 --> 00:07:08
+program, and those usually get
+booked up pretty quickly.
+
+108
+00:07:08 --> 00:07:12
+If you're interested in those,
+good idea to make an
+
+109
+00:07:12 --> 00:07:15
+appointment to get there and get
+help soon.
+
+110
+00:07:15 --> 00:07:19
+The homework labs,
+I hope a lot of people will try
+
+111
+00:07:19 --> 00:07:21
+that out.
+We've never done this.
+
+112
+00:07:21 --> 00:07:24
+I don't know of any other
+course.
+
+113
+00:07:24 --> 00:07:28
+Do other people know of courses
+at MIT that have done this?
+
+114
+00:07:28 --> 00:07:31
+6.011 did it,
+OK.
+
+115
+00:07:31 --> 00:07:34
+Good.
+And was it successful in that
+
+116
+00:07:34 --> 00:07:36
+class?
+It never went,
+
+117
+00:07:36 --> 00:07:36
+OK.
+Good.
+
+118
+00:07:36 --> 00:07:42
+[LAUGHTER] We will see.
+If it's not paying off then we
+
+119
+00:07:42 --> 00:07:47
+will just return to ordinary
+office hours for those TAs,
+
+120
+00:07:47 --> 00:07:52
+but I think for some students
+that is a good opportunity.
+
+121
+00:07:52 --> 00:07:58
+If you wish to be registered in
+this course, you must sign up on
+
+122
+00:07:58 --> 00:08:04
+the course Web page.
+So, that is requirement one.
+
+123
+00:08:04 --> 00:08:09
+It must be done today.
+You will find it difficult to
+
+124
+00:08:09 --> 00:08:13
+pass the course if you are not
+in the class.
+
+125
+00:08:13 --> 00:08:19
+And you should notify your TA
+if you decide to drop so that we
+
+126
+00:08:19 --> 00:08:23
+can get you off and stop the
+mailings, stop the spam.
+
+127
+00:08:23 --> 00:08:29
+And you should register today
+before 7:00 PM.
+
+128
+00:08:29 --> 00:08:33
+And then we're going to email
+your recitation assignment to
+
+129
+00:08:33 --> 00:08:36
+you before Noon tomorrow.
+And if you don't receive this
+
+130
+00:08:36 --> 00:08:41
+information by Thursday Noon,
+please send us an email to the
+
+131
+00:08:41 --> 00:08:44
+course staff generally,
+not to me individually,
+
+132
+00:08:44 --> 00:08:48
+saying that you didn't receive
+your recitation assignment.
+
+133
+00:08:48 --> 00:08:52
+And so if you haven't received
+it by Thursday Noon you want to.
+
+134
+00:08:52 --> 00:08:56
+I think generally they are
+going to send them out tonight
+
+135
+00:08:56 --> 00:09:00
+or at least by tomorrow morning.
+Yeah.
+
+136
+00:09:00 --> 00:09:02
+OK.
+SMA students don't have to
+
+137
+00:09:02 --> 00:09:03
+worry about this.
+Problem sets.
+
+138
+00:09:03 --> 00:09:07
+We have nine problem sets that
+we project will be assigned
+
+139
+00:09:07 --> 00:09:10
+during the semester.
+A couple things about problem
+
+140
+00:09:10 --> 00:09:12
+sets.
+Homeworks won't generally be
+
+141
+00:09:12 --> 00:09:15
+accepted, if you have
+extenuating circumstances you
+
+142
+00:09:15 --> 00:09:18
+should make prior arrangements
+with your recitation instructor.
+
+143
+00:09:18 --> 00:09:21
+In fact, almost all of the
+administrative stuff,
+
+144
+00:09:21 --> 00:09:25
+you shouldn't come to me to ask
+and say can I hand in something
+
+145
+00:09:25 --> 00:09:27
+late?
+You should be talking to your
+
+146
+00:09:27 --> 00:09:32
+recitation instructor.
+You can read the other things
+
+147
+00:09:32 --> 00:09:35
+about the form,
+but let me just mention that
+
+148
+00:09:35 --> 00:09:40
+there are exercises that should
+be solved but not handed in as
+
+149
+00:09:40 --> 00:09:43
+well to give you drill on the
+material.
+
+150
+00:09:43 --> 00:09:46
+I highly recommend you doing
+the exercises.
+
+151
+00:09:46 --> 00:09:50
+They both test your
+understanding of the material,
+
+152
+00:09:50 --> 00:09:55
+and exercises have this way of
+finding themselves on quizzes.
+
+153
+00:09:55 --> 00:10:00
+You're often asked to describe
+algorithms.
+
+154
+00:10:00 --> 00:10:06
+And here is a little outline of
+what you can use to describe an
+
+155
+00:10:06 --> 00:10:09
+algorithm.
+The grading policy is something
+
+156
+00:10:09 --> 00:10:15
+that somehow I cover.
+And always every term there are
+
+157
+00:10:15 --> 00:10:20
+at least a couple of students
+who pretend like I never showed
+
+158
+00:10:20 --> 00:10:24
+them this.
+If you skip problems it has a
+
+159
+00:10:24 --> 00:10:30
+nonlinear effect on your grade.
+Nonlinear, OK?
+
+160
+00:10:30 --> 00:10:34
+If you don't skip any problems,
+no effect on your grade.
+
+161
+00:10:34 --> 00:10:38
+If you skip one problem,
+a hundredth of a letter grade,
+
+162
+00:10:38 --> 00:10:42
+we can handle that.
+But two problems it's a tenth.
+
+163
+00:10:42 --> 00:10:46
+And, as you see,
+by the time you have skipped
+
+164
+00:10:46 --> 00:10:50
+like five letter grades,
+it is already five problems.
+
+165
+00:10:50 --> 00:10:53
+This is not problem sets,
+by the way.
+
+166
+00:10:53 --> 00:10:54
+This is problems,
+OK?
+
+167
+00:10:54 --> 00:10:59
+You're down a third of a letter
+grade.
+
+168
+00:10:59 --> 00:11:03
+And if you don't do nine or
+more, so that's typically about
+
+169
+00:11:03 --> 00:11:07
+three to four problem sets,
+you don't pass the class.
+
+170
+00:11:07 --> 00:11:11
+I always have some students
+coming at the end of the year
+
+171
+00:11:11 --> 00:11:14
+saying oh, I didn't do any of my
+problems.
+
+172
+00:11:14 --> 00:11:18
+Can you just pass me because I
+did OK on the exams?
+
+173
+00:11:18 --> 00:11:23
+Answer no, a very simple answer
+because we've said it upfront.
+
+174
+00:11:23 --> 00:11:27
+So, the problem sets are an
+integral part of the course.
+
+175
+00:11:27 --> 00:11:32
+Collaboration policy.
+This is extremely important so
+
+176
+00:11:32 --> 00:11:35
+everybody pay attention.
+If you are asleep now wake up.
+
+177
+00:11:35 --> 00:11:39
+Like that's going to wake
+anybody up, right?
+
+178
+00:11:39 --> 00:11:41
+[LAUGHTER] The goal of
+homework.
+
+179
+00:11:41 --> 00:11:45
+Professor Demaine and my
+philosophy is that the goal of
+
+180
+00:11:45 --> 00:11:48
+homework is to help you learn
+the material.
+
+181
+00:11:48 --> 00:11:52
+And one way of helping to learn
+is not to just be stuck and
+
+182
+00:11:52 --> 00:11:56
+unable to solve something
+because then you're in no better
+
+183
+00:11:56 --> 00:12:00
+shape when the exam roles
+around, which is where we're
+
+184
+00:12:00 --> 00:12:04
+actually evaluating you.
+So, you're encouraged to
+
+185
+00:12:04 --> 00:12:07
+collaborate.
+But there are some commonsense
+
+186
+00:12:07 --> 00:12:11
+things about collaboration.
+If you go and you collaborate
+
+187
+00:12:11 --> 00:12:15
+to the extent that all you're
+doing is getting the information
+
+188
+00:12:15 --> 00:12:18
+from somebody else,
+you're not learning the
+
+189
+00:12:18 --> 00:12:22
+material and you're not going to
+do well on the exams.
+
+190
+00:12:22 --> 00:12:25
+In our experience,
+students who collaborate
+
+191
+00:12:25 --> 00:12:30
+generally do better than
+students who work alone.
+
+192
+00:12:30 --> 00:12:33
+But you owe it to yourself,
+if you're going to work in a
+
+193
+00:12:33 --> 00:12:37
+study group, to be prepared for
+your study group meeting.
+
+194
+00:12:37 --> 00:12:40
+And specifically you should
+spend a half an hour to 45
+
+195
+00:12:40 --> 00:12:44
+minutes on each problem before
+you go to group so you're up to
+
+196
+00:12:44 --> 00:12:47
+speed and you've tried out your
+ideas.
+
+197
+00:12:47 --> 00:12:50
+And you may have solutions to
+some, you may be stuck on some
+
+198
+00:12:50 --> 00:12:54
+other ones, but at least you
+applied yourself to it.
+
+199
+00:12:54 --> 00:12:57
+After 30 to 45 minutes,
+if you cannot get the problem,
+
+200
+00:12:57 --> 00:13:01
+just sitting there and banging
+your head against it makes no
+
+201
+00:13:01 --> 00:13:04
+sense.
+It's not a productive use of
+
+202
+00:13:04 --> 00:13:07
+your time.
+And I know most of you have
+
+203
+00:13:07 --> 00:13:09
+issues with having time on your
+hands, right?
+
+204
+00:13:09 --> 00:13:13
+Like it's not there.
+So, don't go banging your head
+
+205
+00:13:13 --> 00:13:16
+against problems that are too
+hard or where you don't
+
+206
+00:13:16 --> 00:13:18
+understand what's going on or
+whatever.
+
+207
+00:13:18 --> 00:13:21
+That's when the study group can
+help out.
+
+208
+00:13:21 --> 00:13:24
+And, as I mentioned,
+we'll have homework labs which
+
+209
+00:13:24 --> 00:13:28
+will give you an opportunity to
+go and do that and coordinate
+
+210
+00:13:28 --> 00:13:32
+with other students rather than
+necessarily having to form your
+
+211
+00:13:32 --> 00:13:35
+own group.
+And the TAs will be there.
+
+212
+00:13:35 --> 00:13:40
+If your group is unable to
+solve the problem then talk to
+
+213
+00:13:40 --> 00:13:43
+other groups or ask your
+recitation instruction.
+
+214
+00:13:43 --> 00:13:46
+And, that's how you go about
+solving them.
+
+215
+00:13:46 --> 00:13:51
+Writing up the problem sets,
+however, is your individual
+
+216
+00:13:51 --> 00:13:54
+responsibility and should be
+done alone.
+
+217
+00:13:54 --> 00:13:58
+You don't write up your problem
+solutions with other students,
+
+218
+00:13:58 --> 00:14:04
+you write them up on your own.
+And you should on your problem
+
+219
+00:14:04 --> 00:14:07
+sets, because this is an
+academic place,
+
+220
+00:14:07 --> 00:14:12
+we understand that the source
+of academic information is very
+
+221
+00:14:12 --> 00:14:17
+important, if you collaborated
+on solutions you should write a
+
+222
+00:14:17 --> 00:14:22
+list of the collaborators.
+Say I worked with so and so on
+
+223
+00:14:22 --> 00:14:25
+this solution.
+It does not affect your grade.
+
+224
+00:14:25 --> 00:14:30
+It's just a question of being
+scholarly.
+
+225
+00:14:30 --> 00:14:34
+It is a violation of this
+policy to submit a problem
+
+226
+00:14:34 --> 00:14:38
+solution that you cannot orally
+explain to a member of the
+
+227
+00:14:38 --> 00:14:41
+course staff.
+You say oh, well,
+
+228
+00:14:41 --> 00:14:44
+my write-up is similar to that
+other person's.
+
+229
+00:14:44 --> 00:14:48
+I didn't copy them.
+We may ask you to orally
+
+230
+00:14:48 --> 00:14:51
+explain your solution.
+If you are unable,
+
+231
+00:14:51 --> 00:14:55
+according to this policy,
+the presumption is that you
+
+232
+00:14:55 --> 00:14:58
+cheated.
+So, do not write up stuff that
+
+233
+00:14:58 --> 00:15:04
+you don't understand.
+You should be able to write up
+
+234
+00:15:04 --> 00:15:08
+the stuff that you understand.
+Understand why you're putting
+
+235
+00:15:08 --> 00:15:12
+down what you're putting down.
+If it isn't obvious,
+
+236
+00:15:12 --> 00:15:15
+no collaboration whatsoever is
+permitted on exams.
+
+237
+00:15:15 --> 00:15:20
+Exams is when we evaluate you.
+And now we're not interested in
+
+238
+00:15:20 --> 00:15:23
+evaluating other people,
+we're interested in evaluating
+
+239
+00:15:23 --> 00:15:26
+you.
+So, no collaboration on exams.
+
+240
+00:15:26 --> 00:15:31
+We will have a take-home exam
+for the second quiz.
+
+241
+00:15:31 --> 00:15:33
+You should look at the
+schedule.
+
+242
+00:15:33 --> 00:15:36
+If there are problems with the
+schedule of that,
+
+243
+00:15:36 --> 00:15:39
+we want to know early.
+And we will give you more
+
+244
+00:15:39 --> 00:15:43
+details about the collaboration
+in the lecture on Monday,
+
+245
+00:15:43 --> 00:15:45
+November 28th.
+Now, generally,
+
+246
+00:15:45 --> 00:15:49
+the lectures here,
+they're mandatory and you have
+
+247
+00:15:49 --> 00:15:52
+to know them,
+but I know that some people say
+
+248
+00:15:52 --> 00:15:55
+gee, 9:30 is kind of early,
+especially on a Monday or
+
+249
+00:15:55 --> 00:15:58
+whatever.
+It can be kind of early to get
+
+250
+00:15:58 --> 00:16:01
+up.
+However, on Monday,
+
+251
+00:16:01 --> 00:16:05
+November 28th,
+you fail the exam if you do not
+
+252
+00:16:05 --> 00:16:10
+show up to lecture on time.
+That one day you must show up.
+
+253
+00:16:10 --> 00:16:14
+Any questions about that?
+That one day you must show up
+
+254
+00:16:14 --> 00:16:18
+here, even if you've been
+watching them on the Web.
+
+255
+00:16:18 --> 00:16:21
+And generally,
+if you think you have
+
+256
+00:16:21 --> 00:16:24
+transgressed,
+the best is to come to us to
+
+257
+00:16:24 --> 00:16:28
+talk about it.
+We can usually work something
+
+258
+00:16:28 --> 00:16:32
+out.
+It's when we find somebody has
+
+259
+00:16:32 --> 00:16:37
+transgressed from a third-party
+or from obvious analyses that we
+
+260
+00:16:37 --> 00:16:41
+do with homeworks,
+that's when things get messy.
+
+261
+00:16:41 --> 00:16:45
+So, if you think,
+for some reason or other,
+
+262
+00:16:45 --> 00:16:49
+oh, I may have done something
+wrong, please come and talk to
+
+263
+00:16:49 --> 00:16:52
+us.
+We actually were students once,
+
+264
+00:16:52 --> 00:16:56
+too, albeit many years ago.
+Any questions?
+
+265
+00:16:56 --> 00:17:00
+So, this class has great
+material.
+
+266
+00:17:00 --> 00:17:06
+Fabulous material.
+And it's really fun,
+
+267
+00:17:06 --> 00:17:16
+but you do have to work hard.
+Let's talk content.
+
+268
+00:17:16 --> 00:17:29
+
+
+269
+00:17:29 --> 00:17:32
+This is the topic of the first
+part of the course.
+
+270
+00:17:32 --> 00:17:35
+The first part of the course is
+focused on analysis.
+
+271
+00:17:35 --> 00:17:39
+The second part of the course
+is focused on design.
+
+272
+00:17:39 --> 00:17:43
+Before you can do design,
+you have to master a bunch of
+
+273
+00:17:43 --> 00:17:45
+techniques for analyzing
+algorithms.
+
+274
+00:17:45 --> 00:17:49
+And then you'll be in a
+position to design algorithms
+
+275
+00:17:49 --> 00:17:52
+that you can analyze and that
+which are efficient.
+
+276
+00:17:52 --> 00:17:57
+The analysis of algorithm is
+the theoretical study --
+
+277
+00:17:57 --> 00:18:05
+
+
+278
+00:18:05 --> 00:18:13
+-- of computer program
+performance --
+
+279
+00:18:13 --> 00:18:19
+
+
+280
+00:18:19 --> 00:18:24
+-- and resource usage.
+And a particular focus on
+
+281
+00:18:24 --> 00:18:28
+performance.
+We're studying how to make
+
+282
+00:18:28 --> 00:18:31
+things fast.
+In particular,
+
+283
+00:18:31 --> 00:18:36
+computer programs.
+We also will discover and talk
+
+284
+00:18:36 --> 00:18:40
+about other resources such as
+communication,
+
+285
+00:18:40 --> 00:18:44
+such as memory,
+whether RAM memory or disk
+
+286
+00:18:44 --> 00:18:48
+memory.
+There are other resources that
+
+287
+00:18:48 --> 00:18:52
+we may care about,
+but predominantly we focus on
+
+288
+00:18:52 --> 00:18:57
+performance.
+Because this is a course about
+
+289
+00:18:57 --> 00:19:02
+performance, I like to put
+things in perspective a little
+
+290
+00:19:02 --> 00:19:07
+bit by starting out and asking,
+in programming,
+
+291
+00:19:07 --> 00:19:13
+what is more important than
+performance?
+
+292
+00:19:13 --> 00:19:18
+If you're in an engineering
+situation and writing code,
+
+293
+00:19:18 --> 00:19:23
+writing software,
+what's more important than
+
+294
+00:19:23 --> 00:19:26
+performance?
+Correctness.
+
+295
+00:19:26 --> 00:19:26
+Good.
+OK.
+
+296
+00:19:26 --> 00:19:31
+What else?
+Simplicity can be.
+
+297
+00:19:31 --> 00:19:32
+Very good.
+Yeah.
+
+298
+00:19:32 --> 00:19:40
+Maintainability often much more
+important than performance.
+
+299
+00:19:40 --> 00:19:44
+Cost.
+And what type of cost are you
+
+300
+00:19:44 --> 00:19:49
+thinking?
+No, I mean cost of what?
+
+301
+00:19:49 --> 00:19:53
+We're talking software here,
+right?
+
+302
+00:19:53 --> 00:20:00
+What type of cost do you have
+in mind?
+
+303
+00:20:00 --> 00:20:05
+There are some costs that are
+involved when programming like
+
+304
+00:20:05 --> 00:20:08
+programmer time.
+So, programmer time is another
+
+305
+00:20:08 --> 00:20:11
+thing also that might be.
+Stability.
+
+306
+00:20:11 --> 00:20:16
+Robustness of the software.
+Does it break all the time?
+
+307
+00:20:16 --> 00:20:18
+What else?
+
+308
+00:20:18 --> 00:20:25
+
+
+309
+00:20:25 --> 00:20:28
+Come on.
+We've got a bunch of engineers
+
+310
+00:20:28 --> 00:20:30
+here.
+A lot of things.
+
+311
+00:20:30 --> 00:20:33
+How about features?
+Features can be more important.
+
+312
+00:20:33 --> 00:20:37
+Having a wider collection of
+features than your competitors.
+
+313
+00:20:37 --> 00:20:39
+Functionality.
+Modularity.
+
+314
+00:20:39 --> 00:20:44
+Is it designed in a way where
+you can make changes in a local
+
+315
+00:20:44 --> 00:20:48
+part of the code and you don't
+have to make changes across the
+
+316
+00:20:48 --> 00:20:52
+code in order to affect a simple
+change in the functionality?
+
+317
+00:20:52 --> 00:20:56
+There is one big one which
+definitely, especially in the
+
+318
+00:20:56 --> 00:21:01
+`90s, was like the big thing in
+computers.
+
+319
+00:21:01 --> 00:21:03
+The big thing.
+Well, security actually.
+
+320
+00:21:03 --> 00:21:06
+Good.
+I don't even have that one
+
+321
+00:21:06 --> 00:21:08
+down.
+Security is excellent.
+
+322
+00:21:08 --> 00:21:11
+That's actually been more in
+the 2000.
+
+323
+00:21:11 --> 00:21:14
+Security has been far more
+important often than
+
+324
+00:21:14 --> 00:21:17
+performance.
+Scalability has been important,
+
+325
+00:21:17 --> 00:21:20
+although scalability,
+in some sense,
+
+326
+00:21:20 --> 00:21:24
+is performance related.
+But, yes, scalability is good.
+
+327
+00:21:24 --> 00:21:29
+What was the big breakthrough
+and why do people use Macintosh
+
+328
+00:21:29 --> 00:21:32
+rather than Windows,
+those people who are of that
+
+329
+00:21:32 --> 00:21:36
+religion?
+User-friendliness.
+
+330
+00:21:36 --> 00:21:38
+Wow.
+If you look at the number of
+
+331
+00:21:38 --> 00:21:43
+cycles of computers that went
+into user-friendliness in the
+
+332
+00:21:43 --> 00:21:47
+`90s, it grew from almost
+nothing to where it's now the
+
+333
+00:21:47 --> 00:21:52
+vast part of the computation
+goes into user-friendly.
+
+334
+00:21:52 --> 00:21:56
+So, all those things are more
+important than performance.
+
+335
+00:21:56 --> 00:22:00
+This is a course on
+performance.
+
+336
+00:22:00 --> 00:22:05
+Then you can say OK,
+well, why do we bother and why
+
+337
+00:22:05 --> 00:22:12
+study algorithms and performance
+if it's at the bottom of the
+
+338
+00:22:12 --> 00:22:15
+heap?
+Almost always people would
+
+339
+00:22:15 --> 00:22:20
+rather have these other things
+than performance.
+
+340
+00:22:20 --> 00:22:26
+You go off and you say to
+somebody, would I rather have
+
+341
+00:22:26 --> 00:22:32
+performance or more
+user-friendliness?
+
+342
+00:22:32 --> 00:22:36
+It's almost always more
+important than performance.
+
+343
+00:22:36 --> 00:22:39
+Why do we care then?
+Yeah?
+
+344
+00:22:39 --> 00:22:44
+
+
+345
+00:22:44 --> 00:22:47
+That wasn't user-friendly.
+Sometimes performance is
+
+346
+00:22:47 --> 00:22:50
+correlated with
+user-friendliness,
+
+347
+00:22:50 --> 00:22:52
+absolutely.
+Nothing is more frustrating
+
+348
+00:22:52 --> 00:22:55
+than sitting there waiting,
+right?
+
+349
+00:22:55 --> 00:22:58
+So, that's a good reason.
+What are some other reasons
+
+350
+00:22:58 --> 00:23:02
+why?
+Sometimes they have real-time
+
+351
+00:23:02 --> 00:23:07
+constraints so they don't
+actually work unless they
+
+352
+00:23:07 --> 00:23:10
+perform adequately.
+Yeah?
+
+353
+00:23:10 --> 00:23:14
+Hard to get,
+well, we don't usually quantify
+
+354
+00:23:14 --> 00:23:19
+user-friendliness so I'm not
+sure, but I understand what
+
+355
+00:23:19 --> 00:23:23
+you're saying.
+He said we don't get
+
+356
+00:23:23 --> 00:23:26
+exponential performance
+improvements in
+
+357
+00:23:26 --> 00:23:32
+user-friendliness.
+We often don't get that in
+
+358
+00:23:32 --> 00:23:34
+performance either,
+by the way.
+
+359
+00:23:34 --> 00:23:38
+[LAUGHTER] Sometimes we do,
+but that's good.
+
+360
+00:23:38 --> 00:23:42
+There are several reasons that
+I think are important.
+
+361
+00:23:42 --> 00:23:47
+Once is that often performance
+measures the line between the
+
+362
+00:23:47 --> 00:23:51
+feasible and the infeasible.
+We have heard some of these
+
+363
+00:23:51 --> 00:23:53
+things.
+For example,
+
+364
+00:23:53 --> 00:23:56
+when there are real-time
+requirements,
+
+365
+00:23:56 --> 00:24:02
+if it's not fast enough it's
+simply not functional.
+
+366
+00:24:02 --> 00:24:05
+Or, if it uses too much memory
+it's simply not going to work
+
+367
+00:24:05 --> 00:24:07
+for you.
+And, as a consequence,
+
+368
+00:24:07 --> 00:24:10
+what you find is algorithms are
+on the cutting edge of
+
+369
+00:24:10 --> 00:24:13
+entrepreneurship.
+If you're talking about just
+
+370
+00:24:13 --> 00:24:16
+re-implementing stuff that
+people did ten years ago,
+
+371
+00:24:16 --> 00:24:19
+performance isn't that
+important at some level.
+
+372
+00:24:19 --> 00:24:23
+But, if you're talking about
+doing stuff that nobody has done
+
+373
+00:24:23 --> 00:24:27
+before, one of the reasons often
+that they haven't done it is
+
+374
+00:24:27 --> 00:24:31
+because it's too time-consuming.
+Things don't scale and so
+
+375
+00:24:31 --> 00:24:34
+forth.
+So, that's one reason,
+
+376
+00:24:34 --> 00:24:36
+is the feasible versus
+infeasible.
+
+377
+00:24:36 --> 00:24:40
+Another thing is that
+algorithms give you a language
+
+378
+00:24:40 --> 00:24:44
+for talking about program
+behavior, and that turns out to
+
+379
+00:24:44 --> 00:24:48
+be a language that has been
+pervasive through computer
+
+380
+00:24:48 --> 00:24:53
+science, is that the theoretical
+language is what gets adopted by
+
+381
+00:24:53 --> 00:24:57
+all the practitioners because
+it's a clean way of thinking
+
+382
+00:24:57 --> 00:25:02
+about things.
+A good way I think about
+
+383
+00:25:02 --> 00:25:07
+performance, and the reason it's
+on the bottom of the heap,
+
+384
+00:25:07 --> 00:25:13
+is sort of like performance is
+like money, it's like currency.
+
+385
+00:25:13 --> 00:25:18
+You say what good does a stack
+of hundred dollar bills do for
+
+386
+00:25:18 --> 00:25:21
+you?
+Would you rather have food or
+
+387
+00:25:21 --> 00:25:27
+water or shelter or whatever?
+And you're willing to pay those
+
+388
+00:25:27 --> 00:25:31
+hundred dollar bills,
+if you have hundred dollar
+
+389
+00:25:31 --> 00:25:37
+bills, for that commodity.
+Even though water is far more
+
+390
+00:25:37 --> 00:25:40
+important to your living.
+Well, similarly,
+
+391
+00:25:40 --> 00:25:44
+performance is what you use to
+pay for user-friendliness.
+
+392
+00:25:44 --> 00:25:48
+It's what you pay for security.
+And you hear people say,
+
+393
+00:25:48 --> 00:25:50
+for example,
+that I want greater
+
+394
+00:25:50 --> 00:25:53
+functionality,
+so people will program in Java,
+
+395
+00:25:53 --> 00:25:58
+even though it's much slower
+than C, because they'll say it
+
+396
+00:25:58 --> 00:26:02
+costs me maybe a factor of three
+or something in performance to
+
+397
+00:26:02 --> 00:26:06
+program in Java.
+But Java is worth it because
+
+398
+00:26:06 --> 00:26:10
+it's got all these
+object-oriented features and so
+
+399
+00:26:10 --> 00:26:12
+forth, exception mechanisms and
+so on.
+
+400
+00:26:12 --> 00:26:16
+And so people are willing to
+pay a factor of three in
+
+401
+00:26:16 --> 00:26:18
+performance.
+So, that's why you want
+
+402
+00:26:18 --> 00:26:22
+performance because you can use
+it to pay for these other things
+
+403
+00:26:22 --> 00:26:24
+that you want.
+And that's why,
+
+404
+00:26:24 --> 00:26:27
+in some sense,
+it's on the bottom of the heap,
+
+405
+00:26:27 --> 00:26:32
+because it's the universal
+thing that you quantify.
+
+406
+00:26:32 --> 00:26:37
+Do you want to spend a factor
+of two on this or spend a factor
+
+407
+00:26:37 --> 00:26:39
+of three on security,
+et cetera?
+
+408
+00:26:39 --> 00:26:43
+And, in addition,
+the lessons generalize to other
+
+409
+00:26:43 --> 00:26:46
+resource measures like
+communication,
+
+410
+00:26:46 --> 00:26:50
+like memory and so forth.
+And the last reason we study
+
+411
+00:26:50 --> 00:26:54
+algorithm performance is it's
+tons of fun.
+
+412
+00:26:54 --> 00:26:56
+Speed is always fun,
+right?
+
+413
+00:26:56 --> 00:26:59
+Why do people drive fast cars,
+race horses,
+
+414
+00:26:59 --> 00:27:03
+whatever?
+Rockets, et cetera,
+
+415
+00:27:03 --> 00:27:06
+why do we do that?
+Because speed is fun.
+
+416
+00:27:06 --> 00:27:07
+Ski.
+Who likes to ski?
+
+417
+00:27:07 --> 00:27:10
+I love to ski.
+I like going fast on those
+
+418
+00:27:10 --> 00:27:11
+skis.
+It's fun.
+
+419
+00:27:11 --> 00:27:13
+Hockey, fast sports,
+right?
+
+420
+00:27:13 --> 00:27:16
+We all like the fast sports.
+Not all of us,
+
+421
+00:27:16 --> 00:27:18
+I mean.
+Some people say he's not
+
+422
+00:27:18 --> 00:27:20
+talking to me.
+OK, let's move on.
+
+423
+00:27:20 --> 00:27:24
+That's sort of a little bit of
+a notion as to why we study
+
+424
+00:27:24 --> 00:27:27
+this, is that it does,
+in some sense,
+
+425
+00:27:27 --> 00:27:30
+form a common basis for all
+these other things we care
+
+426
+00:27:30 --> 00:27:35
+about.
+And so we want to understand
+
+427
+00:27:35 --> 00:27:40
+how can we generate money for
+ourselves in computation?
+
+428
+00:27:40 --> 00:27:44
+We're going to start out with a
+very simple problem.
+
+429
+00:27:44 --> 00:27:49
+It's one of the oldest problems
+that has been studied in
+
+430
+00:27:49 --> 00:27:52
+algorithms, is the problem of
+sorting.
+
+431
+00:27:52 --> 00:27:57
+We're going to actually study
+this for several lectures
+
+432
+00:27:57 --> 00:28:03
+because sorting contains many
+algorithmic techniques.
+
+433
+00:28:03 --> 00:28:10
+The sorting problem is the
+following.
+
+434
+00:28:10 --> 00:28:20
+We have a sequence a_1,
+a_2 up to a_n of numbers as
+
+435
+00:28:20 --> 00:28:28
+input.
+And our output is a permutation
+
+436
+00:28:28 --> 00:28:33
+of those numbers.
+
+437
+00:28:33 --> 00:28:42
+
+
+438
+00:28:42 --> 00:28:47
+A permutation is a
+rearrangement of the numbers.
+
+439
+00:28:47 --> 00:28:53
+Every number appears exactly
+once in the rearrangement such
+
+440
+00:28:53 --> 00:28:59
+that, I sometimes use a dollar
+sign to mean "such that," a_1 is
+
+441
+00:28:59 --> 00:29:06
+less than or equal to a_2 prime.
+Such that they are
+
+442
+00:29:06 --> 00:29:11
+monotonically increasing in
+size.
+
+443
+00:29:11 --> 00:29:17
+Take a bunch of numbers,
+put them in order.
+
+444
+00:29:17 --> 00:29:27
+Here's an algorithm to do it.
+It's called insertion sort.
+
+445
+00:29:27 --> 00:29:40
+
+
+446
+00:29:40 --> 00:29:44
+And we will write this
+algorithm in what we call
+
+447
+00:29:44 --> 00:29:47
+pseudocode.
+It's sort of a programming
+
+448
+00:29:47 --> 00:29:51
+language, except it's got
+English in there often.
+
+449
+00:29:51 --> 00:29:57
+And it's just a shorthand for
+writing for being precise.
+
+450
+00:29:57 --> 00:30:06
+So this sorts A from 1 to n.
+And here is the code for it.
+
+451
+00:30:06 --> 00:30:59
+
+
+452
+00:30:59 --> 00:31:01
+This is what we call
+pseudocode.
+
+453
+00:31:01 --> 00:31:06
+And if you don't understand the
+pseudocode then you should ask
+
+454
+00:31:06 --> 00:31:09
+questions about any of the
+notations.
+
+455
+00:31:09 --> 00:31:13
+You will start to get used to
+it as we go on.
+
+456
+00:31:13 --> 00:31:18
+One thing is that in the
+pseudocode we use indentation,
+
+457
+00:31:18 --> 00:31:23
+where in most languages they
+have some kind of begin-end
+
+458
+00:31:23 --> 00:31:27
+delimiters like curly braces or
+something in Java or C,
+
+459
+00:31:27 --> 00:31:31
+for example.
+We just use indentation.
+
+460
+00:31:31 --> 00:31:35
+The whole idea of the
+pseudocode is to try to get the
+
+461
+00:31:35 --> 00:31:39
+algorithms as short as possible
+while still understanding what
+
+462
+00:31:39 --> 00:31:42
+the individual steps are.
+In practice,
+
+463
+00:31:42 --> 00:31:46
+there actually have been
+languages that use indentation
+
+464
+00:31:46 --> 00:31:49
+as a means of showing the
+nesting of things.
+
+465
+00:31:49 --> 00:31:52
+It's generally a bad idea,
+because if things go over one
+
+466
+00:31:52 --> 00:31:54
+page to another,
+for example,
+
+467
+00:31:54 --> 00:31:59
+you cannot tell what level of
+nesting it is.
+
+468
+00:31:59 --> 00:32:03
+Whereas, with explicit braces
+it's much easier to tell.
+
+469
+00:32:03 --> 00:32:09
+So, there are reasons why this
+is a bad notation if you were
+
+470
+00:32:09 --> 00:32:14
+doing software engineering.
+But it's a good one for us
+
+471
+00:32:14 --> 00:32:19
+because it just keeps things
+short and makes fewer things to
+
+472
+00:32:19 --> 00:32:23
+write down.
+So, this is insertion sort.
+
+473
+00:32:23 --> 00:32:29
+Let's try to figure out a
+little bit what this does.
+
+474
+00:32:29 --> 00:32:36
+It basically takes an array A
+and at any point the thing to
+
+475
+00:32:36 --> 00:32:42
+understand is,
+we're setting basically,
+
+476
+00:32:42 --> 00:32:48
+we're running the outer loop
+from j is 2 to n,
+
+477
+00:32:48 --> 00:32:56
+and the inner loop that starts
+at j minus 1 and then goes down
+
+478
+00:32:56 --> 00:33:02
+until it's zero.
+Basically, if we look at any
+
+479
+00:33:02 --> 00:33:06
+point in the algorithm,
+we essentially are looking at
+
+480
+00:33:06 --> 00:33:10
+some element here j.
+A of j, the jth element.
+
+481
+00:33:10 --> 00:33:16
+And what we do essentially is
+we pull a value out here that we
+
+482
+00:33:16 --> 00:33:19
+call the key.
+And at this point the important
+
+483
+00:33:19 --> 00:33:24
+thing to understand,
+and we'll talk more about this
+
+484
+00:33:24 --> 00:33:28
+in recitation on Friday,
+is that there is an invariant
+
+485
+00:33:28 --> 00:33:35
+that is being maintained by this
+loop each time through.
+
+486
+00:33:35 --> 00:33:40
+And the invariant is that this
+part of the array is sorted.
+
+487
+00:33:40 --> 00:33:45
+And the goal each time through
+the loop is to increase,
+
+488
+00:33:45 --> 00:33:51
+is to add one to the length of
+the things that are sorted.
+
+489
+00:33:51 --> 00:33:56
+And the way we do that is we
+pull out the key and we just
+
+490
+00:33:56 --> 00:34:02
+copy values up like this.
+And keep copying up until we
+
+491
+00:34:02 --> 00:34:07
+find the place where this key
+goes, and then we insert it in
+
+492
+00:34:07 --> 00:34:10
+that place.
+And that's why it's called
+
+493
+00:34:10 --> 00:34:14
+insertion sort.
+We just sort of move the
+
+494
+00:34:14 --> 00:34:19
+things, copy the things up until
+we find where it goes,
+
+495
+00:34:19 --> 00:34:24
+and then we put it into place.
+And now we have it from A from
+
+496
+00:34:24 --> 00:34:28
+one to j is sorted,
+and now we can work on j plus
+
+497
+00:34:28 --> 00:34:33
+one.
+Let's give an example of that.
+
+498
+00:34:33 --> 00:34:38
+Imagine we are doing 8,
+2, 4, 9, 3, 6.
+
+499
+00:34:38 --> 00:34:45
+We start out with j equals 2.
+And we figure out that we want
+
+500
+00:34:45 --> 00:34:49
+to insert it there.
+Now we have 2,
+
+501
+00:34:49 --> 00:34:54
+8, 4, 9, 3, 6.
+Then we look at the four and
+
+502
+00:34:54 --> 00:35:00
+say oh, well,
+that goes over here.
+
+503
+00:35:00 --> 00:35:03
+We get 2, 4,
+8, 9, 3, 6 after the second
+
+504
+00:35:03 --> 00:35:09
+iteration of the outer loop.
+Then we look at 9 and discover
+
+505
+00:35:09 --> 00:35:12
+immediately it just goes right
+there.
+
+506
+00:35:12 --> 00:35:15
+Very little work to do on that
+step.
+
+507
+00:35:15 --> 00:35:20
+So, we have exactly the same
+output after that iteration.
+
+508
+00:35:20 --> 00:35:26
+Then we look at the 3 and
+that's going to be inserted over
+
+509
+00:35:26 --> 00:35:30
+there.
+2, 3, 4, 8, 9,
+
+510
+00:35:30 --> 6.
+
+
+511
+6. --> 00:35:34
+And finally we look at the 6
+
+512
+00:35:34 --> 00:35:39
+and that goes in there.
+2, 3, 4, 6, 8,
+
+513
+00:35:39 --> 9.
+
+
+514
+9. --> 00:35:44
+And at that point we are done.
+
+515
+00:35:44 --> 00:35:47
+Question?
+
+516
+00:35:47 --> 00:35:58
+
+
+517
+00:35:58 --> 00:36:01
+The array initially starts at
+one, yes.
+
+518
+00:36:01 --> 00:36:05
+A[1...n], OK?
+So, this is the insertion sort
+
+519
+00:36:05 --> 00:36:09
+algorithm.
+And it's the first algorithm
+
+520
+00:36:09 --> 00:36:15
+that we're going to analyze.
+And we're going to pull out
+
+521
+00:36:15 --> 00:36:20
+some tools that we have from our
+math background to help to
+
+522
+00:36:20 --> 00:36:23
+analyze it.
+First of all,
+
+523
+00:36:23 --> 00:36:29
+let's take a look at the issue
+of running time.
+
+524
+00:36:29 --> 00:36:36
+The running time depends,
+of this algorithm depends on a
+
+525
+00:36:36 --> 00:36:41
+lot of things.
+One thing it depends on is the
+
+526
+00:36:41 --> 00:36:44
+input itself.
+For example,
+
+527
+00:36:44 --> 00:36:50
+if the input is already sorted
+--
+
+528
+00:36:50 --> 00:36:55
+
+
+529
+00:36:55 --> 00:37:00
+-- then insertion sort has very
+little work to do.
+
+530
+00:37:00 --> 00:37:04
+Because every time through it's
+going to be like this case.
+
+531
+00:37:04 --> 00:37:08
+It doesn't have to shuffle too
+many guys over because they're
+
+532
+00:37:08 --> 00:37:11
+already in place.
+Whereas, in some sense,
+
+533
+00:37:11 --> 00:37:14
+what's the worst case for
+insertion sort?
+
+534
+00:37:14 --> 00:37:19
+If it is reverse sorted then
+it's going to have to do a lot
+
+535
+00:37:19 --> 00:37:23
+of work because it's going to
+have to shuffle everything over
+
+536
+00:37:23 --> 00:37:29
+on each step of the outer loop.
+In addition to the actual input
+
+537
+00:37:29 --> 00:37:32
+it depends, of course,
+on the input size.
+
+538
+00:37:32 --> 00:37:38
+
+
+539
+00:37:38 --> 00:37:41
+Here, for example,
+we did six elements.
+
+540
+00:37:41 --> 00:37:46
+It's going to take longer if
+we, for example,
+
+541
+00:37:46 --> 00:37:50
+do six times ten to the ninth
+elements.
+
+542
+00:37:50 --> 00:37:56
+If we were sorting a lot more
+stuff, it's going to take us a
+
+543
+00:37:56 --> 00:38:00
+lot longer.
+Typically, the way we handle
+
+544
+00:38:00 --> 00:38:06
+that is we are going to
+parameterize things in the input
+
+545
+00:38:06 --> 00:38:10
+size.
+We are going to talk about time
+
+546
+00:38:10 --> 00:38:16
+as a function of the size of
+things that we are sorting so we
+
+547
+00:38:16 --> 00:38:19
+can look at what is the behavior
+of that.
+
+548
+00:38:19 --> 00:38:24
+And the last thing I want to
+say about running time is
+
+549
+00:38:24 --> 00:38:30
+generally we want upper bonds on
+the running time.
+
+550
+00:38:30 --> 00:38:34
+We want to know that the time
+is no more than a certain
+
+551
+00:38:34 --> 00:38:37
+amount.
+And the reason is because that
+
+552
+00:38:37 --> 00:38:40
+represents a guarantee to the
+user.
+
+553
+00:38:40 --> 00:38:43
+If I say it's not going to run,
+for example,
+
+554
+00:38:43 --> 00:38:48
+if I tell you here's a program
+and it won't run more than three
+
+555
+00:38:48 --> 00:38:53
+seconds, that gives you real
+information about how you could
+
+556
+00:38:53 --> 00:38:58
+use it, for example,
+in a real-time setting.
+
+557
+00:38:58 --> 00:39:02
+Whereas, if I said here's a
+program and it goes at least
+
+558
+00:39:02 --> 00:39:06
+three seconds,
+you don't know if it's going to
+
+559
+00:39:06 --> 00:39:10
+go for three years.
+It doesn't give you that much
+
+560
+00:39:10 --> 00:39:13
+guarantee if you are a user of
+it.
+
+561
+00:39:13 --> 00:39:17
+Generally we want upper bonds
+because it represents a
+
+562
+00:39:17 --> 00:39:20
+guarantee to the user.
+
+563
+00:39:20 --> 00:39:30
+
+
+564
+00:39:30 --> 00:39:33
+There are different kinds of
+analyses that people do.
+
+565
+00:39:33 --> 00:39:44
+
+
+566
+00:39:44 --> 00:39:53
+The one we're mostly going to
+focus on is what's called
+
+567
+00:39:53 --> 00:40:01
+worst-case analysis.
+And this is what we do usually
+
+568
+00:40:01 --> 00:40:11
+where we define T of n to be the
+maximum time on any input of
+
+569
+00:40:11 --> 00:40:15
+size n.
+So, it's the maximum input,
+
+570
+00:40:15 --> 00:40:19
+the maximum it could possibly
+cost us on an input of size n.
+
+571
+00:40:19 --> 00:40:22
+What that does is,
+if you look at the fact that
+
+572
+00:40:22 --> 00:40:26
+sometimes the inputs are better
+and sometimes they're worse,
+
+573
+00:40:26 --> 00:40:30
+we're looking at the worst case
+of those because that's the way
+
+574
+00:40:30 --> 00:40:34
+we're going to be able to make a
+guarantee.
+
+575
+00:40:34 --> 00:40:37
+It always does something rather
+than just sometimes does
+
+576
+00:40:37 --> 00:40:40
+something.
+So, we're looking at the
+
+577
+00:40:40 --> 00:40:42
+maximum.
+Notice that if I didn't have
+
+578
+00:40:42 --> 00:40:46
+maximum then T(n) in some sense
+is a relation,
+
+579
+00:40:46 --> 00:40:49
+not a function,
+because the time on an input of
+
+580
+00:40:49 --> 00:40:52
+size n depends on which input of
+size n.
+
+581
+00:40:52 --> 00:40:56
+I could have many different
+times, but by putting the
+
+582
+00:40:56 --> 00:40:59
+maximum at it,
+it turns that relation into a
+
+583
+00:40:59 --> 00:41:03
+function because there's only
+one maximum time that it will
+
+584
+00:41:03 --> 00:41:11
+take.
+Sometimes we will talk about
+
+585
+00:41:11 --> 00:41:21
+average case.
+Sometimes we will do this.
+
+586
+00:41:21 --> 00:41:35
+Here T of n is then the
+expected time over all inputs of
+
+587
+00:41:35 --> 00:41:39
+size n.
+It's the expected time.
+
+588
+00:41:39 --> 00:41:45
+Now, if I talk about expected
+time, what else do I need to say
+
+589
+00:41:45 --> 00:41:47
+here?
+What does that mean,
+
+590
+00:41:47 --> 00:41:49
+expected time?
+I'm sorry.
+
+591
+00:41:49 --> 00:41:52
+Raise your hand.
+Expected inputs.
+
+592
+00:41:52 --> 00:41:56
+What does that mean,
+expected inputs?
+
+593
+00:41:56 --> 00:42:05
+
+
+594
+00:42:05 --> 00:42:10
+I need more math.
+What do I need by expected time
+
+595
+00:42:10 --> 00:42:14
+here, math?
+You have to take the time of
+
+596
+00:42:14 --> 00:42:18
+every input and then average
+them, OK.
+
+597
+00:42:18 --> 00:42:22
+That's kind of what we mean by
+expected time.
+
+598
+00:42:22 --> 00:42:24
+Good.
+Not quite.
+
+599
+00:42:24 --> 00:42:28
+I mean, what you say is
+completely correct,
+
+600
+00:42:28 --> 00:42:33
+except is not quite enough.
+Yeah?
+
+601
+00:42:33 --> 00:42:39
+It's the time of every input
+times the probability that it
+
+602
+00:42:39 --> 00:42:44
+will be that input.
+It's a way of taking a weighted
+
+603
+00:42:44 --> 00:42:49
+average, exactly right.
+How do I know what the
+
+604
+00:42:49 --> 00:42:54
+probability of every input is?
+How do I know what the
+
+605
+00:42:54 --> 00:43:02
+probability a particular input
+occurs is in a given situation?
+
+606
+00:43:02 --> 00:43:06
+I don't.
+I have to make an assumption.
+
+607
+00:43:06 --> 00:43:12
+What's that assumption called?
+What kind of assumption do I
+
+608
+00:43:12 --> 00:43:17
+have to meet?
+I need an assumption --
+
+609
+00:43:17 --> 00:43:24
+
+
+610
+00:43:24 --> 00:43:28
+-- of the statistical
+distribution of inputs.
+
+611
+00:43:28 --> 00:43:33
+Otherwise, expected time
+doesn't mean anything because I
+
+612
+00:43:33 --> 00:43:38
+don't know what the probability
+of something is.
+
+613
+00:43:38 --> 00:43:43
+In order to do probability,
+you need some assumptions and
+
+614
+00:43:43 --> 00:43:48
+you've got to state those
+assumptions clearly.
+
+615
+00:43:48 --> 00:43:53
+One of the most common
+assumptions is that all inputs
+
+616
+00:43:53 --> 00:43:57
+are equally likely.
+That's called the uniform
+
+617
+00:43:57 --> 00:44:01
+distribution.
+Every input of size n is
+
+618
+00:44:01 --> 00:44:04
+equally likely,
+that kind of thing.
+
+619
+00:44:04 --> 00:44:09
+But there are other ways that
+you could make that assumption,
+
+620
+00:44:09 --> 00:44:14
+and they may not all be true.
+This is much more complicated,
+
+621
+00:44:14 --> 00:44:16
+as you can see.
+Fortunately,
+
+622
+00:44:16 --> 00:44:20
+all of you have a strong
+probability background.
+
+623
+00:44:20 --> 00:44:24
+And so we will not have any
+trouble addressing these
+
+624
+00:44:24 --> 00:44:30
+probabilistic issues of dealing
+with expectations and such.
+
+625
+00:44:30 --> 00:44:34
+If you don't,
+time to go and say gee,
+
+626
+00:44:34 --> 00:44:40
+maybe I should take that
+Probability class that is a
+
+627
+00:44:40 --> 00:44:46
+prerequisite for this class.
+The last one I am going to
+
+628
+00:44:46 --> 00:44:53
+mention is best-case analysis.
+And this I claim is bogus.
+
+629
+00:44:53 --> 00:44:55
+Bogus.
+No good.
+
+630
+00:44:55 --> 00:45:00
+Why is best-case analysis
+bogus?
+
+631
+00:45:00 --> 00:45:02
+Yeah?
+The best-case probably doesn't
+
+632
+00:45:02 --> 00:45:05
+ever happen.
+Actually, it's interesting
+
+633
+00:45:05 --> 00:45:10
+because for the sorting problem,
+the most common things that get
+
+634
+00:45:10 --> 00:45:15
+sorted are things that are
+already sorted interestingly,
+
+635
+00:45:15 --> 00:45:18
+or at least almost sorted.
+For example,
+
+636
+00:45:18 --> 00:45:23
+one of the most common things
+that are sorted is check numbers
+
+637
+00:45:23 --> 00:45:25
+by banks.
+They tend to come in,
+
+638
+00:45:25 --> 00:45:30
+in the same order that they are
+written.
+
+639
+00:45:30 --> 00:45:36
+They're sorting things that are
+almost always sorted.
+
+640
+00:45:36 --> 00:45:41
+I mean, it's good.
+When upper bond,
+
+641
+00:45:41 --> 00:45:46
+not lower bound?
+Yeah, you want to make a
+
+642
+00:45:46 --> 00:45:50
+guarantee.
+And so why is this not a
+
+643
+00:45:50 --> 00:45:55
+guarantee?
+You're onto something there,
+
+644
+00:45:55 --> 00:46:02
+but we need a little more
+precision here.
+
+645
+00:46:02 --> 00:46:04
+How can I cheat?
+Yeah?
+
+646
+00:46:04 --> 00:46:07
+Yeah, you can cheat.
+You cheat.
+
+647
+00:46:07 --> 00:46:14
+You take any slow algorithm
+that you want and just check for
+
+648
+00:46:14 --> 00:46:19
+some particular input,
+and if it's that input,
+
+649
+00:46:19 --> 00:46:25
+then you say immediately yeah,
+OK, here is the answer.
+
+650
+00:46:25 --> 00:46:30
+And then it's got a good
+best-case.
+
+651
+00:46:30 --> 00:46:37
+But I didn't tell you anything
+about the vast majority of what
+
+652
+00:46:37 --> 00:46:42
+is going on.
+So, you can cheat with a slow
+
+653
+00:46:42 --> 00:46:46
+algorithm that works fast on
+some input.
+
+654
+00:46:46 --> 00:46:53
+It doesn't really do much for
+you so we normally don't worry
+
+655
+00:46:53 --> 00:46:56
+about that.
+Let's see.
+
+656
+00:46:56 --> 00:47:02
+What is insertion sorts
+worst-case time?
+
+657
+00:47:02 --> 00:47:07
+Now we get into some sort of
+funny issues.
+
+658
+00:47:07 --> 00:47:12
+First of all,
+it sort of depends on the
+
+659
+00:47:12 --> 00:47:17
+computer you're running on.
+Whose computer,
+
+660
+00:47:17 --> 00:47:22
+right?
+Is it a big supercomputer or is
+
+661
+00:47:22 --> 00:47:27
+it your wristwatch?
+They have different
+
+662
+00:47:27 --> 00:47:34
+computational abilities.
+And when we compare algorithms,
+
+663
+00:47:34 --> 00:47:37
+we compare them typically for
+relative speed.
+
+664
+00:47:37 --> 00:47:42
+This is if you compared two
+algorithms on the same machine.
+
+665
+00:47:42 --> 00:47:45
+You could argue,
+well, it doesn't really matter
+
+666
+00:47:45 --> 00:47:50
+what the machine is because I
+will just look at their relative
+
+667
+00:47:50 --> 00:47:52
+speed.
+But, of course,
+
+668
+00:47:52 --> 00:47:55
+I may also be interested in
+absolute speed.
+
+669
+00:47:55 --> 00:47:59
+Is one algorithm actually
+better no matter what machine
+
+670
+00:47:59 --> 00:48:02
+it's run on?
+
+671
+00:48:02 --> 00:48:08
+
+
+672
+00:48:08 --> 00:48:13
+And so this kind of gets sort
+of confusing as to how I can
+
+673
+00:48:13 --> 00:48:18
+talk about the worst-case time
+of an algorithm of a piece of
+
+674
+00:48:18 --> 00:48:23
+software when I am not talking
+about the hardware because,
+
+675
+00:48:23 --> 00:48:27
+clearly, if I had run on a
+faster machine,
+
+676
+00:48:27 --> 00:48:30
+my algorithms are going to go
+faster.
+
+677
+00:48:30 --> 00:48:36
+So, this is where you get the
+big idea of algorithms.
+
+678
+00:48:36 --> 00:48:39
+Which is why algorithm is such
+a huge field,
+
+679
+00:48:39 --> 00:48:43
+why it spawns companies like
+Google, like Akamai,
+
+680
+00:48:43 --> 00:48:46
+like Amazon.
+Why algorithmic analysis,
+
+681
+00:48:46 --> 00:48:50
+throughout the history of
+computing, has been such a huge
+
+682
+00:48:50 --> 00:48:55
+success, is our ability to
+master and to be able to take
+
+683
+00:48:55 --> 00:49:00
+what is apparently a really
+messy, complicated situation and
+
+684
+00:49:00 --> 00:49:05
+reduce it to being able to do
+some mathematics.
+
+685
+00:49:05 --> 00:49:09
+And that idea is called
+asymptotic analysis.
+
+686
+00:49:09 --> 00:49:17
+
+
+687
+00:49:17 --> 00:49:21
+And the basic idea of
+asymptotic analysis is to ignore
+
+688
+00:49:21 --> 00:49:25
+machine-dependent constants --
+
+689
+00:49:25 --> 00:49:34
+
+
+690
+00:49:34 --> 00:49:38
+-- and, instead of the actual
+running time,
+
+691
+00:49:38 --> 00:49:43
+look at the growth of the
+running time.
+
+692
+00:49:43 --> 00:49:59
+
+
+693
+00:49:59 --> 00:50:02
+So, we don't look at the actual
+running time.
+
+694
+00:50:02 --> 00:50:07
+We look at the growth.
+Let's see what we mean by that.
+
+695
+00:50:07 --> 00:50:10
+This is a huge idea.
+It's not a hard idea,
+
+696
+00:50:10 --> 00:50:16
+otherwise I wouldn't be able to
+teach it in the first lecture,
+
+697
+00:50:16 --> 00:50:20
+but it's a huge idea.
+We are going to spend a couple
+
+698
+00:50:20 --> 00:50:25
+of lectures understanding the
+implications of that and will
+
+699
+00:50:25 --> 00:50:30
+basically be doing it throughout
+the term.
+
+700
+00:50:30 --> 00:50:33
+And if you go on to be
+practicing engineers,
+
+701
+00:50:33 --> 00:50:36
+you will be doing it all the
+time.
+
+702
+00:50:36 --> 00:50:40
+In order to do that,
+we adopt some notations that
+
+703
+00:50:40 --> 00:50:43
+are going to help us.
+In particular,
+
+704
+00:50:43 --> 00:50:46
+we will adopt asymptotic
+notation.
+
+705
+00:50:46 --> 00:50:51
+Most of you have seen some kind
+of asymptotic notation.
+
+706
+00:50:51 --> 00:50:55
+Maybe a few of you haven't,
+but mostly you should have seen
+
+707
+00:50:55 --> 00:50:59
+a little bit.
+The one we're going to be using
+
+708
+00:50:59 --> 00:51:05
+in this class predominantly is
+theta notation.
+
+709
+00:51:05 --> 00:51:12
+And theta notation is pretty
+easy notation to master because
+
+710
+00:51:12 --> 00:51:16
+all you do is,
+from a formula,
+
+711
+00:51:16 --> 00:51:24
+just drop low order terms and
+ignore leading constants.
+
+712
+00:51:24 --> 00:51:30
+
+
+713
+00:51:30 --> 00:51:35
+For example,
+if I have a formula like 3n^3 =
+
+714
+00:51:35 --> 00:51:39
+90n^2 - 5n + 6046,
+I say, well,
+
+715
+00:51:39 --> 00:51:48
+what low-order terms do I drop?
+Well, n^3 is a bigger term n^2
+
+716
+00:51:48 --> 00:51:52
+than.
+I am going to drop all these
+
+717
+00:51:52 --> 00:52:00
+terms and ignore the leading
+constant, so I say that's
+
+718
+00:52:00 --> 00:52:04
+Theta(n^3).
+That's pretty easy.
+
+719
+00:52:04 --> 00:52:09
+So, that's theta notation.
+Now, this is an engineering way
+
+720
+00:52:09 --> 00:52:13
+of manipulating theta notation.
+There is actually a
+
+721
+00:52:13 --> 00:52:18
+mathematical definition for
+this, which we are going to talk
+
+722
+00:52:18 --> 00:52:22
+about next time,
+which is a definition in terms
+
+723
+00:52:22 --> 00:52:25
+of sets of functions.
+And, you are going to be
+
+724
+00:52:25 --> 00:52:30
+responsible, this is both a math
+and a computer science
+
+725
+00:52:30 --> 00:52:34
+engineering class.
+Throughout the course you are
+
+726
+00:52:34 --> 00:52:39
+going to be responsible both for
+mathematical rigor as if it were
+
+727
+00:52:39 --> 00:52:43
+a math course and engineering
+commonsense because it's an
+
+728
+00:52:43 --> 00:52:46
+engineering course.
+We are going to be doing both.
+
+729
+00:52:46 --> 00:52:50
+This is the engineering way of
+understanding what you do,
+
+730
+00:52:50 --> 00:52:54
+so you're responsible for being
+able to do these manipulations.
+
+731
+00:52:54 --> 00:52:57
+You're also going to be
+responsible for understanding
+
+732
+00:52:57 --> 00:53:01
+the mathematical definition of
+theta notion and of its related
+
+733
+00:53:01 --> 00:53:07
+O notation and omega notation.
+If I take a look as n
+
+734
+00:53:07 --> 00:53:14
+approached infinity,
+a Theta(n^2) algorithm always
+
+735
+00:53:14 --> 00:53:20
+beats, eventually,
+a Theta(n^3) algorithm.
+
+736
+00:53:20 --> 00:53:26
+As n gets bigger,
+it doesn't matter what these
+
+737
+00:53:26 --> 00:53:34
+other terms were if I were
+describing the absolute precise
+
+738
+00:53:34 --> 00:53:41
+behavior in terms of a formula.
+If I had a Theta(n^2)
+
+739
+00:53:41 --> 00:53:46
+algorithm, it would always be
+faster for sufficiently large n
+
+740
+00:53:46 --> 00:53:50
+than a Theta(n^3) algorithm.
+It wouldn't matter what those
+
+741
+00:53:50 --> 00:53:54
+low-order terms were.
+It wouldn't matter what the
+
+742
+00:53:54 --> 00:53:59
+leading constant was.
+This one will always be faster.
+
+743
+00:53:59 --> 00:54:05
+Even if you ran the Theta(n^2)
+algorithm on a slow computer and
+
+744
+00:54:05 --> 00:54:09
+the Theta(n^3) algorithm on a
+fast computer.
+
+745
+00:54:09 --> 00:54:13
+The great thing about
+asymptotic notation is it
+
+746
+00:54:13 --> 00:54:19
+satisfies our issue of being
+able to compare both relative
+
+747
+00:54:19 --> 00:54:24
+and absolute speed,
+because we are able to do this
+
+748
+00:54:24 --> 00:54:29
+no matter what the computer
+platform.
+
+749
+00:54:29 --> 00:54:34
+On different platforms we may
+get different constants here,
+
+750
+00:54:34 --> 00:54:39
+machine-dependent constants for
+the actual running time,
+
+751
+00:54:39 --> 00:54:45
+but if I look at the growth as
+the size of the input gets
+
+752
+00:54:45 --> 00:54:49
+larger, the asymptotics
+generally won't change.
+
+753
+00:54:49 --> 00:54:53
+For example,
+I will just draw that as a
+
+754
+00:54:53 --> 00:54:57
+picture.
+If I have n on this axis and
+
+755
+00:54:57 --> 00:55:01
+T(n) on this axis.
+This may be,
+
+756
+00:55:01 --> 00:55:04
+for example,
+a Theta(n^3) algorithm and this
+
+757
+00:55:04 --> 00:55:09
+may be a Theta(n^2) algorithm.
+There is always going to be
+
+758
+00:55:09 --> 00:55:14
+some point n_o where for
+everything larger the Theta(n^2)
+
+759
+00:55:14 --> 00:55:19
+algorithm is going to be cheaper
+than the Theta(n^3) algorithm
+
+760
+00:55:19 --> 00:55:24
+not matter how much advantage
+you give it at the beginning in
+
+761
+00:55:24 --> 00:55:30
+terms of the speed of the
+computer you are running on.
+
+762
+00:55:30 --> 00:55:34
+Now, from an engineering point
+of view, there are some issues
+
+763
+00:55:34 --> 00:55:38
+we have to deal with because
+sometimes it could be that that
+
+764
+00:55:38 --> 00:55:42
+n_o is so large that the
+computers aren't big enough to
+
+765
+00:55:42 --> 00:55:45
+run the problem.
+That's why we,
+
+766
+00:55:45 --> 00:55:48
+nevertheless,
+are interested in some of the
+
+767
+00:55:48 --> 00:55:51
+slower algorithms,
+because some of the slower
+
+768
+00:55:51 --> 00:55:55
+algorithms, even though they may
+not asymptotically be slower,
+
+769
+00:55:55 --> 00:56:00
+I mean asymptotically they will
+be slower.
+
+770
+00:56:00 --> 00:56:03
+They may still be faster on
+reasonable sizes of things.
+
+771
+00:56:03 --> 00:56:07
+And so we have to both balance
+our mathematical understanding
+
+772
+00:56:07 --> 00:56:12
+with our engineering commonsense
+in order to do good programming.
+
+773
+00:56:12 --> 00:56:15
+So, just having done analysis
+of algorithms doesn't
+
+774
+00:56:15 --> 00:56:18
+automatically make you a good
+programmer.
+
+775
+00:56:18 --> 00:56:22
+You also need to learn how to
+program and use these tools in
+
+776
+00:56:22 --> 00:56:26
+practice to understand when they
+are relevant and when they are
+
+777
+00:56:26 --> 00:56:30
+not relevant.
+There is a saying.
+
+778
+00:56:30 --> 00:56:34
+If you want to be a good
+program, you just program ever
+
+779
+00:56:34 --> 00:56:38
+day for two years,
+you will be an excellent
+
+780
+00:56:38 --> 00:56:42
+programmer.
+If you want to be a world-class
+
+781
+00:56:42 --> 00:56:46
+programmer, you can program
+every day for ten years,
+
+782
+00:56:46 --> 00:56:51
+or you can program every day
+for two years and take an
+
+783
+00:56:51 --> 00:56:55
+algorithms class.
+Let's get back to what we were
+
+784
+00:56:55 --> 00:57:00
+doing, which is analyzing
+insertion sort.
+
+785
+00:57:00 --> 00:57:02
+We are going to look at the
+worse-case.
+
+786
+00:57:02 --> 00:57:16
+
+
+787
+00:57:16 --> 00:57:21
+Which, as we mentioned before,
+is when the input is reverse
+
+788
+00:57:21 --> 00:57:24
+sorted.
+The biggest element comes first
+
+789
+00:57:24 --> 00:57:29
+and the smallest last because
+now every time you do the
+
+790
+00:57:29 --> 00:57:35
+insertion you've got to shuffle
+everything over.
+
+791
+00:57:35 --> 00:57:38
+You can write down the running
+time by looking at the nesting
+
+792
+00:57:38 --> 00:57:40
+of loops.
+What we do is we sum up.
+
+793
+00:57:40 --> 00:57:43
+What we assume is that every
+operation, every elemental
+
+794
+00:57:43 --> 00:57:47
+operation is going to take some
+constant amount of time.
+
+795
+00:57:47 --> 00:57:50
+But we don't have to worry
+about what that constant is
+
+796
+00:57:50 --> 00:57:53
+because we're going to be doing
+asymptotic analysis.
+
+797
+00:57:53 --> 00:57:56
+As I say, the beautify of the
+method is that it causes all
+
+798
+00:57:56 --> 00:58:01
+these things that are real
+distinctions to sort of vanish.
+
+799
+00:58:01 --> 00:58:05
+We sort of look at them from
+30,000 feet rather than from
+
+800
+00:58:05 --> 00:58:09
+three millimeters or something.
+Each of these operations is
+
+801
+00:58:09 --> 00:58:12
+going to sort of be a basic
+operation.
+
+802
+00:58:12 --> 00:58:16
+One way to think about this,
+in terms of counting
+
+803
+00:58:16 --> 00:58:19
+operations, is counting memory
+references.
+
+804
+00:58:19 --> 00:58:23
+How many times do you actually
+access some variable?
+
+805
+00:58:23 --> 00:58:29
+That's another way of sort of
+thinking about this model.
+
+806
+00:58:29 --> 00:58:33
+When we do that,
+well, we're going to go through
+
+807
+00:58:33 --> 00:58:39
+this loop, j is going from 2 to
+n, and then we're going to add
+
+808
+00:58:39 --> 00:58:43
+up the work that we do within
+the loop.
+
+809
+00:58:43 --> 00:58:49
+We can sort of write that in
+math as summation of j equals 2
+
+810
+00:58:49 --> 00:58:53
+to n.
+And then what is the work that
+
+811
+00:58:53 --> 00:58:58
+is going on in this loop?
+Well, the work that is going on
+
+812
+00:58:58 --> 00:59:03
+in this loop varies,
+but in the worst case how many
+
+813
+00:59:03 --> 00:59:10
+operations are going on here for
+each value of j?
+
+814
+00:59:10 --> 00:59:17
+For a given value of j,
+how much work goes on in this
+
+815
+00:59:17 --> 00:59:20
+loop?
+Can somebody tell me?
+
+816
+00:59:20 --> 00:59:26
+Asymptotically.
+It's j times some constant,
+
+817
+00:59:26 --> 00:59:33
+so it's theta j.
+So, there is theta j work going
+
+818
+00:59:33 --> 00:59:38
+on here because this loop starts
+out with i being j minus 1,
+
+819
+00:59:38 --> 00:59:44
+and then it's doing just a
+constant amount of stuff for
+
+820
+00:59:44 --> 00:59:49
+each step of the value of i,
+and i is running from j minus
+
+821
+00:59:49 --> 00:59:54
+one down to zero.
+So, we can say that is theta j
+
+822
+00:59:54 --> 1:00:00
+work that is going on.
+Do people follow that?
+
+823
+1:00:00 --> 1:00:02.643
+OK.
+And now we have a formula we
+
+824
+1:00:02.643 --> 1:00:05.713
+can evaluate.
+What is the evaluation?
+
+825
+1:00:05.713 --> 1:00:11
+If I want to simplify this
+formula, what is that equal to?
+
+826
+1:00:11 --> 1:00:20
+
+
+827
+1:00:20 --> 1:00:22
+Sorry. In the back there.
+
+828
+1:00:22 --> 1:00:28
+
+
+829
+1:00:28 --> 1:00:33.705
+Yeah. OK.
+That's just Theta(n^2),
+
+830
+1:00:33.705 --> 1:00:36.227
+good.
+Because when you're saying is
+
+831
+1:00:36.227 --> 1:00:39.564
+the sum of consecutive numbers,
+you mean what?
+
+832
+1:00:39.564 --> 1:00:43.421
+What's the mathematic term we
+have for that so we can
+
+833
+1:00:43.421 --> 1:00:46.61
+communicate?
+You've got to know these things
+
+834
+1:00:46.61 --> 1:00:50.095
+so you can communicate.
+It's called what type of
+
+835
+1:00:50.095 --> 1:00:52.468
+sequence?
+It's actually a series,
+
+836
+1:00:52.468 --> 1:00:55.509
+but that's OK.
+What type of series is this
+
+837
+1:00:55.509 --> 1:00:57.363
+called?
+Arithmetic series,
+
+838
+1:00:57.363 --> 1:00:59.588
+good.
+Wow, we've got some sharp
+
+839
+1:00:59.588 --> 1:01:05.943
+people who can communicate.
+This is an arithmetic series.
+
+840
+1:01:05.943 --> 1:01:11.627
+You're basically summing 1 + 2
++ 3 + 4, some constants in
+
+841
+1:01:11.627 --> 1:01:17.21
+there, but basically it's 1 + 2
++ 3 + 4 + 5 + 6 up to n.
+
+842
+1:01:17.21 --> 1:01:21.879
+That's Theta(n^2).
+If you don't know this math,
+
+843
+1:01:21.879 --> 1:01:27.766
+there is a chapter in the book,
+or you could have taken the
+
+844
+1:01:27.766 --> 1:01:31.39
+prerequisite.
+Erythematic series.
+
+845
+1:01:31.39 --> 1:01:33.951
+People have this vague
+recollection.
+
+846
+1:01:33.951 --> 1:01:34.975
+Oh, yeah.
+Good.
+
+847
+1:01:34.975 --> 1:01:38.048
+Now, you have to learn these
+manipulations.
+
+848
+1:01:38.048 --> 1:01:42.512
+We will talk about a bit next
+time, but you have to learn your
+
+849
+1:01:42.512 --> 1:01:45.804
+theta manipulations for what
+works with theta.
+
+850
+1:01:45.804 --> 1:01:49.756
+And you have to be very careful
+because theta is a weak
+
+851
+1:01:49.756 --> 1:01:52.609
+notation.
+A strong notation is something
+
+852
+1:01:52.609 --> 1:01:56.853
+like Leibniz notation from
+calculus where the chain rule is
+
+853
+1:01:56.853 --> 1:02:01.869
+just canceling two things.
+It's just fabulous that you can
+
+854
+1:02:01.869 --> 1:02:04.885
+cancel in the chain rule.
+And Leibniz notation just
+
+855
+1:02:04.885 --> 1:02:07.599
+expresses that so directly you
+can manipulate.
+
+856
+1:02:07.599 --> 1:02:09.468
+Theta notation is not like
+that.
+
+857
+1:02:09.468 --> 1:02:12.303
+If you think it is like that
+you are in trouble.
+
+858
+1:02:12.303 --> 1:02:15.861
+You really have to think of
+what is going on under the theta
+
+859
+1:02:15.861 --> 1:02:18.274
+notation.
+And it is more of a descriptive
+
+860
+1:02:18.274 --> 1:02:20.867
+notation than it is a
+manipulative notation.
+
+861
+1:02:20.867 --> 1:02:24.305
+There are manipulations you can
+do with it, but unless you
+
+862
+1:02:24.305 --> 1:02:28.044
+understand what is really going
+on under the theta notation you
+
+863
+1:02:28.044 --> 1:02:33.177
+will find yourself in trouble.
+And next time we will talk a
+
+864
+1:02:33.177 --> 1:02:35.977
+little bit more about theta
+notation.
+
+865
+1:02:35.977 --> 1:02:38
+Is insertion sort fast?
+
+866
+1:02:38 --> 1:02:49
+
+
+867
+1:02:49 --> 1:02:53
+Well, it turns out for small n
+it is moderately fast.
+
+868
+1:02:53 --> 1:03:02
+
+
+869
+1:03:02 --> 1:03:11
+But it is not at all for large
+n.
+
+870
+1:03:11 --> 1:03:18
+
+
+871
+1:03:18 --> 1:03:21.626
+So, I am going to give you an
+algorithm that is faster.
+
+872
+1:03:21.626 --> 1:03:24.917
+It's called merge sort.
+I wonder if I should leave
+
+873
+1:03:24.917 --> 1:03:27
+insertion sort up.
+Why not.
+
+874
+1:03:27 --> 1:03:46
+
+
+875
+1:03:46 --> 1:03:52.127
+I am going to write on this
+later, so if you are taking
+
+876
+1:03:52.127 --> 1:03:56.099
+notes, leave some space on the
+left.
+
+877
+1:03:56.099 --> 1:04:02
+Here is merge sort of an array
+A from 1 up to n.
+
+878
+1:04:02 --> 1:04:05.963
+And it is basically three
+steps.
+
+879
+1:04:05.963 --> 1:04:11.844
+If n equals 1 we are done.
+Sorting one element,
+
+880
+1:04:11.844 --> 1:04:15.808
+it is already sorted.
+All right.
+
+881
+1:04:15.808 --> 1:04:21.817
+Recursive algorithm.
+Otherwise, what we do is we
+
+882
+1:04:21.817 --> 1:04:30
+recursively sort A from 1 up to
+the ceiling of n over 2.
+
+883
+1:04:30 --> 1:04:39.102
+And the array A of the ceiling
+of n over 2 plus one up to n.
+
+884
+1:04:39.102 --> 1:04:44.502
+So, we sort two halves of the
+input.
+
+885
+1:04:44.502 --> 1:04:51.754
+And then, three,
+we take those two lists that we
+
+886
+1:04:51.754 --> 1:04:57
+have done and we merge them.
+
+887
+1:04:57 --> 1:05:03
+
+
+888
+1:05:03 --> 1:05:05.892
+And, to do that,
+we use a merge subroutine which
+
+889
+1:05:05.892 --> 1:05:07
+I will show you.
+
+890
+1:05:07 --> 1:05:14
+
+
+891
+1:05:14 --> 1:05:20.492
+The key subroutine here is
+merge, and it works like this.
+
+892
+1:05:20.492 --> 1:05:25.71
+I have two lists.
+Let's say one of them is 20.
+
+893
+1:05:25.71 --> 1:05:30
+I am doing this in reverse
+order.
+
+894
+1:05:30 --> 1:05:35.368
+I have sorted this like this.
+And then I sort another one.
+
+895
+1:05:35.368 --> 1:05:39.795
+I don't know why I do it this
+order, but anyway.
+
+896
+1:05:39.795 --> 1:05:44.786
+Here is my other list.
+I have my two lists that I have
+
+897
+1:05:44.786 --> 1:05:48.083
+sorted.
+So, this is A[1] to A[|n/2|]
+
+898
+1:05:48.083 --> 1:05:53.639
+and A[|n/2|+1] to A[n] for the
+way it will be called in this
+
+899
+1:05:53.639 --> 1:05:56.936
+program.
+And now to merge these two,
+
+900
+1:05:56.936 --> 1:06:04
+what I want to do is produce a
+sorted list out of both of them.
+
+901
+1:06:04 --> 1:06:08.688
+What I do is first observe
+where is the smallest element of
+
+902
+1:06:08.688 --> 1:06:11.679
+any two lists that are already
+sorted?
+
+903
+1:06:11.679 --> 1:06:16.125
+It's in one of two places,
+the head of the first list or
+
+904
+1:06:16.125 --> 1:06:20.652
+the head of the second list.
+I look at those two elements
+
+905
+1:06:20.652 --> 1:06:24.613
+and say which one is smaller?
+This one is smaller.
+
+906
+1:06:24.613 --> 1:06:29.383
+Then what I do is output into
+my output array the smaller of
+
+907
+1:06:29.383 --> 1:06:32.464
+the two.
+And I cross it off.
+
+908
+1:06:32.464 --> 1:06:35.702
+And now where is the next
+smallest element?
+
+909
+1:06:35.702 --> 1:06:40.482
+And the answer is it's going to
+be the head of one of these two
+
+910
+1:06:40.482 --> 1:06:43.181
+lists.
+Then I cross out this guy and
+
+911
+1:06:43.181 --> 1:06:45.648
+put him here and circle this
+one.
+
+912
+1:06:45.648 --> 1:06:50.274
+Now I look at these two guys.
+This one is smaller so I output
+
+913
+1:06:50.274 --> 1:06:54.437
+that and circle that one.
+Now I look at these two guys,
+
+914
+1:06:54.437 --> 1:06:57.213
+output 9.
+So, every step here is some
+
+915
+1:06:57.213 --> 1:07:01.839
+fixed number of operations that
+is independent of the size of
+
+916
+1:07:01.839 --> 1:07:08.202
+the arrays at each step.
+Each individual step is just me
+
+917
+1:07:08.202 --> 1:07:13.884
+looking at two elements and
+picking out the smallest and
+
+918
+1:07:13.884 --> 1:07:20.289
+advancing some pointers into the
+array so that I know where the
+
+919
+1:07:20.289 --> 1:07:25.144
+current head of that list is.
+And so, therefore,
+
+920
+1:07:25.144 --> 1:07:30
+the time is order n on n total
+elements.
+
+921
+1:07:30 --> 1:07:34.628
+The time to actually go through
+this and merge two lists is
+
+922
+1:07:34.628 --> 1:07:37.581
+order n.
+We sometimes call this linear
+
+923
+1:07:37.581 --> 1:07:41.012
+time because it's not quadratic
+or whatever.
+
+924
+1:07:41.012 --> 1:07:45.401
+It is proportional to n,
+proportional to the input size.
+
+925
+1:07:45.401 --> 1:07:49.072
+It's linear time.
+I go through and just do this
+
+926
+1:07:49.072 --> 1:07:52.663
+simple operation,
+just working up these lists,
+
+927
+1:07:52.663 --> 1:07:56.733
+and in the end I have done
+essentially n operations,
+
+928
+1:07:56.733 --> 1:08:02
+order n operations each of
+which cost constant time.
+
+929
+1:08:02 --> 1:08:06.935
+That's a total of order n time.
+Everybody with me?
+
+930
+1:08:06.935 --> 1:08:09.553
+OK.
+So, this is a recursive
+
+931
+1:08:09.553 --> 1:08:13.381
+program.
+We can actually now write what
+
+932
+1:08:13.381 --> 1:08:17.309
+is called a recurrence for this
+program.
+
+933
+1:08:17.309 --> 1:08:23.553
+The way we do that is say let's
+let the time to sort n elements
+
+934
+1:08:23.553 --> 1:08:27.582
+to be T(n).
+Then how long does it take to
+
+935
+1:08:27.582 --> 1:08:30
+do step one?
+
+936
+1:08:30 --> 1:08:35
+
+
+937
+1:08:35 --> 1:08:39.228
+That's just constant time.
+We just check to see if n is 1,
+
+938
+1:08:39.228 --> 1:08:43.16
+and if it is we return.
+That's independent of the size
+
+939
+1:08:43.16 --> 1:08:47.611
+of anything that we are doing.
+It just takes a certain number
+
+940
+1:08:47.611 --> 1:08:51.765
+of machine instructions on
+whatever machine and we say it
+
+941
+1:08:51.765 --> 1:08:54.732
+is constant time.
+We call that theta one.
+
+942
+1:08:54.732 --> 1:09:00
+This is actually a little bit
+of an abuse if you get into it.
+
+943
+1:09:00 --> 1:09:04.464
+And the reason is because
+typically in order to say it you
+
+944
+1:09:04.464 --> 1:09:07.206
+need to say what it is growing
+with.
+
+945
+1:09:07.206 --> 1:09:10.574
+Nevertheless,
+we use this as an abuse of the
+
+946
+1:09:10.574 --> 1:09:13.55
+notation just to mean it is a
+constant.
+
+947
+1:09:13.55 --> 1:09:16.605
+So, that's an abuse just so
+people know.
+
+948
+1:09:16.605 --> 1:09:20.835
+But it simplifies things if I
+can just write theta one.
+
+949
+1:09:20.835 --> 1:09:23.733
+And it basically means the same
+thing.
+
+950
+1:09:23.733 --> 1:09:26.866
+Now we recursively sort these
+two things.
+
+951
+1:09:26.866 --> 1:09:32.542
+How can I describe that?
+The time to do this,
+
+952
+1:09:32.542 --> 1:09:40.55
+I can describe recursively as T
+of ceiling of n over 2 plus T of
+
+953
+1:09:40.55 --> 1:09:48.05
+n minus ceiling of n over 2.
+That is actually kind of messy,
+
+954
+1:09:48.05 --> 1:09:54.915
+so what we will do is just be
+sloppy and write 2T(n/2).
+
+955
+1:09:54.915 --> 1:10:00
+So, this is just us being
+sloppy.
+
+956
+1:10:00 --> 1:10:04.12
+And we will see on Friday in
+recitation that it is OK to be
+
+957
+1:10:04.12 --> 1:10:06.606
+sloppy.
+That's the great thing about
+
+958
+1:10:06.606 --> 1:10:09.59
+algorithms.
+As long as you are rigorous and
+
+959
+1:10:09.59 --> 1:10:12.502
+precise, you can be as sloppy as
+you want.
+
+960
+1:10:12.502 --> 1:10:16.267
+[LAUGHTER] This is sloppy
+because I didn't worry about
+
+961
+1:10:16.267 --> 1:10:19.748
+what was going on,
+because it turns out it doesn't
+
+962
+1:10:19.748 --> 1:10:23.158
+make any difference.
+And we are going to actually
+
+963
+1:10:23.158 --> 1:10:26.68
+see that that is the case.
+And, finally,
+
+964
+1:10:26.68 --> 1:10:29.767
+I have to merge the two sorted
+lists which have a total of n
+
+965
+1:10:29.767 --> 1:10:31.808
+elements.
+And we just analyze that using
+
+966
+1:10:31.808 --> 1:10:34.372
+the merge subroutine.
+And that takes us to theta n
+
+967
+1:10:34.372 --> 1:10:35
+time.
+
+968
+1:10:35 --> 1:10:40
+
+
+969
+1:10:40 --> 1:10:43.933
+That allows us now to write a
+recurrence for the performance
+
+970
+1:10:43.933 --> 1:10:45
+of merge sort.
+
+971
+1:10:45 --> 1:10:57
+
+
+972
+1:10:57 --> 1:11:04.888
+Which is to say that T of n is
+equal to theta 1 if n equals 1
+
+973
+1:11:04.888 --> 1:11:12.25
+and 2T of n over 2 plus theta of
+n if n is bigger than 1.
+
+974
+1:11:12.25 --> 1:11:20.402
+Because either I am doing step
+one or I am doing all steps one,
+
+975
+1:11:20.402 --> 1:11:26.187
+two and three.
+Here I am doing step one and I
+
+976
+1:11:26.187 --> 1:11:32.326
+return and I am done.
+Or else I am doing step one,
+
+977
+1:11:32.326 --> 1:11:35.9
+I don't return,
+and then I also do steps two
+
+978
+1:11:35.9 --> 1:11:38.808
+and three.
+So, I add those together.
+
+979
+1:11:38.808 --> 1:11:43.795
+I could say theta n plus theta
+1, but theta n plus theta 1 is
+
+980
+1:11:43.795 --> 1:11:48.947
+just theta n because theta 1 is
+a lower order term than theta n
+
+981
+1:11:48.947 --> 1:11:53.351
+and I can throw it away.
+It is either theta 1 or it is
+
+982
+1:11:53.351 --> 1:11:57.839
+2T of n over 2 plus theta n.
+Now, typically we won't be
+
+983
+1:11:57.839 --> 1:12:01.478
+writing this.
+Usually we omit this.
+
+984
+1:12:01.478 --> 1:12:05.631
+If it makes no difference to
+the solution of the recurrence,
+
+985
+1:12:05.631 --> 1:12:08.446
+we will usually omit constant
+base cases.
+
+986
+1:12:08.446 --> 1:12:11.262
+In algorithms,
+it's not true generally in
+
+987
+1:12:11.262 --> 1:12:15.555
+mathematics, but in algorithms
+if you are running something on
+
+988
+1:12:15.555 --> 1:12:19.145
+a constant size input it takes
+constant time always.
+
+989
+1:12:19.145 --> 1:12:22.172
+So, we don't worry about what
+this value is.
+
+990
+1:12:22.172 --> 1:12:26.043
+And it turns out it has no real
+impact on the asymptotic
+
+991
+1:12:26.043 --> 1:12:31.363
+solution of the recurrence.
+How do we solve a recurrence
+
+992
+1:12:31.363 --> 1:12:34.739
+like this?
+I now have T of n expressed in
+
+993
+1:12:34.739 --> 1:12:39.043
+terms of T of n over 2.
+That's in the book and it is
+
+994
+1:12:39.043 --> 1:12:43.179
+also in Lecture 2.
+We are going to do Lecture 2 to
+
+995
+1:12:43.179 --> 1:12:48.242
+solve that, but in the meantime
+what I am going to do is give
+
+996
+1:12:48.242 --> 1:12:52.378
+you a visual way of
+understanding what this costs,
+
+997
+1:12:52.378 --> 1:12:57.526
+which is one of the techniques
+we will elaborate on next time.
+
+998
+1:12:57.526 --> 1:13:02
+It is called a recursion tree
+technique.
+
+999
+1:13:02 --> 1:13:07.681
+And I will use it for the
+actual recurrence that is almost
+
+1000
+1:13:07.681 --> 1:13:11.966
+the same 2T(n/2),
+but I am going to actually
+
+1001
+1:13:11.966 --> 1:13:17.249
+explicitly, because I want you
+to see where it occurs,
+
+1002
+1:13:17.249 --> 1:13:22.73
+plus some constant times n
+where c is a constant greater
+
+1003
+1:13:22.73 --> 1:13:26.418
+than zero.
+So, we are going to look at
+
+1004
+1:13:26.418 --> 1:13:32
+this recurrence with a base case
+of order one.
+
+1005
+1:13:32 --> 1:13:36.35
+I am just making the constant
+in here, the upper bound on the
+
+1006
+1:13:36.35 --> 1:13:39.322
+constant be explicit rather than
+implicit.
+
+1007
+1:13:39.322 --> 1:13:43.092
+And the way you do a recursion
+tree is the following.
+
+1008
+1:13:43.092 --> 1:13:47.007
+You start out by writing down
+the left-hand side of the
+
+1009
+1:13:47.007 --> 1:13:50.052
+recurrence.
+And then what you do is you say
+
+1010
+1:13:50.052 --> 1:13:53.677
+well, that is equal to,
+and now let's write it as a
+
+1011
+1:13:53.677 --> 1:13:56.215
+tree.
+I do c of n work plus now I am
+
+1012
+1:13:56.215 --> 1:14:01
+going to have to do work on each
+of my two children.
+
+1013
+1:14:01 --> 2.
+T of n over 2 and T of n over
+
+1014
+2. --> 1:14:04.549
+
+
+1015
+1:14:04.549 --> 1:14:11.305
+If I sum up what is in here,
+I get this because that is what
+
+1016
+1:14:11.305 --> 1:14:15.427
+the recurrence says,
+T(n)=2T(n/2)+cn.
+
+1017
+1:14:15.427 --> 1:14:19.664
+I have 2T(n/2)+cn.
+Then I do it again.
+
+1018
+1:14:19.664 --> 1:14:23.786
+I have cn here.
+I now have here cn/2.
+
+1019
+1:14:23.786 --> 1:14:28.824
+And here is cn/2.
+And each of these now has a
+
+1020
+1:14:28.824 --> 1:14:31
+T(n/4).
+
+1021
+1:14:31 --> 1:14:36
+
+
+1022
+1:14:36 --> 1:14:43.285
+And these each have a T(n/4).
+And this has a T(n/4).
+
+1023
+1:14:43.285 --> 1:14:49
+And I keep doing that,
+the dangerous dot,
+
+1024
+1:14:49 --> 1:14:54.142
+dot, dots.
+And, if I keep doing that,
+
+1025
+1:14:54.142 --> 1:15:00
+I end up with it looking like
+this.
+
+1026
+1:15:00 --> 1:15:18
+
+
+1027
+1:15:18 --> 1:15:23.319
+And I keep going down until I
+get to a leaf.
+
+1028
+1:15:23.319 --> 1:15:27.896
+And a leaf, I have essentially
+a T(1).
+
+1029
+1:15:27.896 --> 1:15:33.922
+That is T(1).
+And so the first question I ask
+
+1030
+1:15:33.922 --> 1:15:38.983
+here is, what is the height of
+this tree?
+
+1031
+1:15:38.983 --> 1:15:41.008
+Yeah.
+It's log n.
+
+1032
+1:15:41.008 --> 1:15:47.714
+It's actually very close to
+exactly log n because I am
+
+1033
+1:15:47.714 --> 1:15:55.559
+starting out at the top with n
+and then I go to n/2 and n/4 and
+
+1034
+1:15:55.559 --> 1.
+all the way down until I get to
+
+1035
+1. --> 1:16:01
+
+
+1036
+1:16:01 --> 1:16:05.44
+The number of halvings of n
+until I get to 1 is log n so the
+
+1037
+1:16:05.44 --> 1:16:09.354
+height here is log n.
+It's OK if it is constant times
+
+1038
+1:16:09.354 --> 1:16:11.161
+log n.
+It doesn't matter.
+
+1039
+1:16:11.161 --> 1:16:15
+How many leaves are in this
+tree, by the way?
+
+1040
+1:16:15 --> 1:16:25
+
+
+1041
+1:16:25 --> 1:16:28.333
+How many leaves does this tree
+have?
+
+1042
+1:16:28.333 --> 1:16:30.809
+Yeah.
+The number of leaves,
+
+1043
+1:16:30.809 --> 1:16:34.238
+once again, is actually pretty
+close.
+
+1044
+1:16:34.238 --> 1:16:38.238
+It's actually n.
+If you took it all the way
+
+1045
+1:16:38.238 --> 1:16:41.285
+down.
+Let's make some simplifying
+
+1046
+1:16:41.285 --> 1:16:44.809
+assumption.
+n is a perfect power of 2,
+
+1047
+1:16:44.809 --> 1:16:50.523
+so it is an integer power of 2.
+Then this is exactly log n to
+
+1048
+1:16:50.523 --> 1:16:54.809
+get down to T(1).
+And then there are exactly n
+
+1049
+1:16:54.809 --> 1:17:00.619
+leaves, because the number of
+leaves here, the number of nodes
+
+1050
+1:17:00.619 --> 1:17:05
+at this level is 1,
+2, 4, 8.
+
+1051
+1:17:05 --> 1:17:10.643
+And if I go down height h,
+I have 2 to the h leaves,
+
+1052
+1:17:10.643 --> 1:17:13.963
+2 to the log n,
+that is just n.
+
+1053
+1:17:13.963 --> 1:17:17.172
+We are doing math here,
+right?
+
+1054
+1:17:17.172 --> 1:17:23.479
+Now let's figure out how much
+work, if I look at adding up
+
+1055
+1:17:23.479 --> 1:17:28.569
+everything in this tree I am
+going to get T(n),
+
+1056
+1:17:28.569 --> 1:17:35.652
+so let's add that up.
+Well, let's add it up level by
+
+1057
+1:17:35.652 --> 1:17:39.547
+level.
+How much do we have in the
+
+1058
+1:17:39.547 --> 1:17:41.982
+first level?
+Just cn.
+
+1059
+1:17:41.982 --> 1:17:47.826
+If I add up the second level,
+how much do I have?
+
+1060
+1:17:47.826 --> 1:17:51.965
+cn.
+How about if I add up the third
+
+1061
+1:17:51.965 --> 1:17:53.06
+level?
+cn.
+
+1062
+1:17:53.06 --> 1:17:57.443
+How about if I add up all the
+leaves?
+
+1063
+1:17:57.443 --> 1:18:02.855
+Theta n.
+It is not necessarily cn
+
+1064
+1:18:02.855 --> 1:18:09.397
+because the boundary case may
+have a different constant.
+
+1065
+1:18:09.397 --> 1:18:14.988
+It is actually theta n,
+but cn all the way here.
+
+1066
+1:18:14.988 --> 1:18:21.888
+If I add up the total amount,
+that is equal to cn times log
+
+1067
+1:18:21.888 --> 1:18:28.669
+n, because that's the height,
+that is how many cn's I have
+
+1068
+1:18:28.669 --> 1:18:35.724
+here, plus theta n.
+And this is a higher order term
+
+1069
+1:18:35.724 --> 1:18:42.213
+than this, so this goes away,
+get rid of the constants,
+
+1070
+1:18:42.213 --> 1:18:48.341
+that is equal to theta(n lg n).
+And theta(n lg n) is
+
+1071
+1:18:48.341 --> 1:18:52.786
+asymptotically faster than
+theta(n^2).
+
+1072
+1:18:52.786 --> 1:18:58.073
+So, merge sort,
+on a large enough input size,
+
+1073
+1:18:58.073 --> 1:19:03
+is going to beat insertion
+sort.
+
+1074
+1:19:03 --> 1:19:07.292
+Merge sort is going to be a
+faster algorithm.
+
+1075
+1:19:07.292 --> 1:19:11.682
+Sorry, you guys,
+I didn't realize you couldn't
+
+1076
+1:19:11.682 --> 1:19:15.682
+see over there.
+You should speak up if you
+
+1077
+1:19:15.682 --> 1:19:19.682
+cannot see.
+So, this is a faster algorithm
+
+1078
+1:19:19.682 --> 1:19:25.048
+because theta(n lg n) grows more
+slowly than theta(n^2).
+
+1079
+1:19:25.048 --> 1:19:31
+And merge sort asymptotically
+beats insertion sort.
+
+1080
+1:19:31 --> 1:19:35.424
+Even if you ran insertion sort
+on a supercomputer,
+
+1081
+1:19:35.424 --> 1:19:40.842
+somebody running on a PC with
+merge sort for sufficient large
+
+1082
+1:19:40.842 --> 1:19:46.441
+input will clobber them because
+actually n^2 is way bigger than
+
+1083
+1:19:46.441 --> 1:19:50.053
+n log n once you get the n's to
+be large.
+
+1084
+1:19:50.053 --> 1:19:54.117
+And, in practice,
+merge sort tends to win here
+
+1085
+1:19:54.117 --> 1:19:58
+for n bigger than,
+say, 30 or so.
+
+1086
+1:19:58 --> 1:20:02.092
+If you have a very small input
+like 30 elements,
+
+1087
+1:20:02.092 --> 1:20:06.272
+insertion sort is a perfectly
+decent sort to use.
+
+1088
+1:20:06.272 --> 1:20:11.497
+But merge sort is going to be a
+lot faster even for something
+
+1089
+1:20:11.497 --> 1:20:14.37
+that is only a few dozen
+elements.
+
+1090
+1:20:14.37 --> 1:20:18.289
+It is going to actually be a
+faster algorithm.
+
+1091
+1:20:18.289 --> 1:20:20.901
+That's sort of the lessons,
+OK?
+
+1092
+1:20:20.901 --> 1:20:25.342
+Remember that to get your
+recitation assignments and
+
+1093
+1:20:25.342 --> 1:20:31.25
+attend recitation on Friday.
+Because we are going to be
+
+1094
+1:20:31.25 --> 1:20:36.271
+going through a bunch of the
+things that I have left on the
+
+1095
+1:20:36.271 --> 1:20:39
+table here.
+And see you next Monday.
+

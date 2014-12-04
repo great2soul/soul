@@ -1,0 +1,5819 @@
+1
+00:00:11 --> 00:00:17
+So, we're going to talk today
+about binary search trees.
+
+2
+00:00:17 --> 00:00:23
+It's something called randomly
+built binary search trees.
+
+3
+00:00:23 --> 00:00:29
+And, I'll abbreviate binary
+search trees as BST's throughout
+
+4
+00:00:29 --> 00:00:33
+the lecture.
+And, you of all seen binary
+
+5
+00:00:33 --> 00:00:39
+search trees in one place or
+another, in particular,
+
+6
+00:00:39 --> 00:00:45
+recitation on Friday.
+So, we're going to build up the
+
+7
+00:00:45 --> 00:00:49
+basic ideas presented there,
+and talk about how to randomize
+
+8
+00:00:49 --> 00:00:54
+them, and make them good.
+So, you know that there are
+
+9
+00:00:54 --> 00:00:58
+good binary search trees,
+which are relatively balanced,
+
+10
+00:00:58 --> 00:01:02
+something like this.
+The height is log n.
+
+11
+00:01:02 --> 00:01:04
+We called unbalanced,
+and that's good.
+
+12
+00:01:04 --> 00:01:06
+Anything order log n will be
+fine.
+
+13
+00:01:06 --> 00:01:10
+In terms of searching,
+it will then cost order log n.
+
+14
+00:01:10 --> 00:01:14
+And, there are bad binary
+search trees which have really
+
+15
+00:01:14 --> 00:01:16
+large height,
+possibly as big as n.
+
+16
+00:01:16 --> 00:01:19
+So, this is good,
+and this is bad.
+
+17
+00:01:19 --> 00:01:22
+We'd sort of like to know,
+we'd like to build binary
+
+18
+00:01:22 --> 00:01:26
+search trees in such a way that
+they are good all the time,
+
+19
+00:01:26 --> 00:01:31
+or at least most of the time.
+There are lots of ways to do
+
+20
+00:01:31 --> 00:01:36
+this, and in the next couple of
+weeks, we will see four of them,
+
+21
+00:01:36 --> 00:01:39
+if you count the problem set,
+I believe.
+
+22
+00:01:39 --> 00:01:42
+Today, we are going to use
+randomization to make them
+
+23
+00:01:42 --> 00:01:45
+balanced most of the time in a
+certain sense.
+
+24
+00:01:45 --> 00:01:49
+And then, in your problem set,
+you will make that in a broader
+
+25
+00:01:49 --> 00:01:52
+sense.
+But, one way to motivate this
+
+26
+00:01:52 --> 00:01:56
+topic, so I'm not going to
+define randomly built binary
+
+27
+00:01:56 --> 00:02:00
+search trees for a little bit.
+One way to motivate the topic
+
+28
+00:02:00 --> 00:02:04
+is through sorting,
+our good friend.
+
+29
+00:02:04 --> 00:02:09
+So, there's a natural way to
+sort n numbers using binary
+
+30
+00:02:09 --> 00:02:13
+search trees.
+So, if I give you an array,
+
+31
+00:02:13 --> 00:02:18
+A, how would you sort that
+array using binary search tree
+
+32
+00:02:18 --> 00:02:23
+operations as a black box?
+Build the binary search tree,
+
+33
+00:02:23 --> 00:02:27
+and then traverse it in order.
+Exactly.
+
+34
+00:02:27 --> 00:02:30
+So, let's say we have some
+initial tree,
+
+35
+00:02:30 --> 00:02:35
+which is empty,
+and then for each element of
+
+36
+00:02:35 --> 00:02:40
+the array, we insert it into the
+tree.
+
+37
+00:02:40 --> 00:02:46
+That's what you meant by
+building the search tree.
+
+38
+00:02:46 --> 00:02:53
+So, we insert AI into the tree.
+This is the binary search tree
+
+39
+00:02:53 --> 00:03:00
+insertion, standard insertion.
+And then, we do an in order
+
+40
+00:03:00 --> 00:03:09
+traversal, which in the book is
+called in order tree walk.
+
+41
+00:03:09 --> 00:03:11
+OK, you should know these
+algorithms are,
+
+42
+00:03:11 --> 00:03:14
+but just for very quick
+reminder, tree insert basically
+
+43
+00:03:14 --> 00:03:18
+searches for that element AI
+until it finds the place where
+
+44
+00:03:18 --> 00:03:21
+it should have been if it was in
+the tree already,
+
+45
+00:03:21 --> 00:03:24
+and then adds a new leaf there
+to insert that value.
+
+46
+00:03:24 --> 00:03:27
+Tree walk recursively walks the
+left subtree,
+
+47
+00:03:27 --> 00:03:30
+then prints out the root,
+and then recursively walks the
+
+48
+00:03:30 --> 00:03:33
+right subtree.
+And, by the binary search tree
+
+49
+00:03:33 --> 00:03:38
+property, that will print the
+elements out in sorted order.
+
+50
+00:03:38 --> 00:03:43
+So, let's do a quick example
+because this turns out to be
+
+51
+00:03:43 --> 00:03:48
+related to another sorting
+algorithm we've seen already.
+
+52
+00:03:48 --> 00:03:52
+So, while the example is
+probably pretty trivial,
+
+53
+00:03:52 --> 00:03:55
+the connection is pretty
+surprising.
+
+54
+00:03:55 --> 00:04:02
+At least, it was to me the
+first time I taught this class.
+
+55
+00:04:02 --> 00:04:04
+So, my array is three,
+one, eight, two,
+
+56
+00:04:04 --> 00:04:08
+six, seven, five.
+And, I'm going to visit these
+
+57
+00:04:08 --> 00:04:12
+elements in order from left to
+right, and just build a tree.
+
+58
+00:04:12 --> 00:04:15
+So, the first element I see is
+three.
+
+59
+00:04:15 --> 00:04:18
+So, I insert three into an
+empty tree.
+
+60
+00:04:18 --> 00:04:21
+That requires no comparisons.
+Then I insert one.
+
+61
+00:04:21 --> 00:04:24
+I see, is one bigger or less
+than three?
+
+62
+00:04:24 --> 00:04:27
+It's smaller.
+So, I put it over here.
+
+63
+00:04:27 --> 00:04:31
+Then I insert eight.
+That's bigger than three,
+
+64
+00:04:31 --> 00:04:35
+so it get's a new leaf over
+here.
+
+65
+00:04:35 --> 00:04:38
+Then I insert two.
+That sits between one and
+
+66
+00:04:38 --> 00:04:41
+three.
+And so, it would fall off this
+
+67
+00:04:41 --> 00:04:44
+right child of one.
+So, I add two there.
+
+68
+00:04:44 --> 00:04:48
+Six is bigger than three,
+and less than eight.
+
+69
+00:04:48 --> 00:04:51
+So, it goes here.
+Seven is bigger than three,
+
+70
+00:04:51 --> 00:04:54
+and less than eight,
+bigger than six.
+
+71
+00:04:54 --> 00:04:58
+So, it goes here,
+and five fits in between three
+
+72
+00:04:58 --> 00:05:03
+and five, three and six rather.
+And so, that's the binary
+
+73
+00:05:03 --> 00:05:06
+search tree that again.
+Then I run an in order
+
+74
+00:05:06 --> 00:05:10
+traversal, which will print one,
+two, three, five,
+
+75
+00:05:10 --> 00:05:13
+six, seven, eight.
+OK, I can run I quickly in my
+
+76
+00:05:13 --> 00:05:15
+head because I've got a big
+stack.
+
+77
+00:05:15 --> 00:05:18
+I've got to be a little bit
+careful.
+
+78
+00:05:18 --> 00:05:22
+Of course, you should check
+that they come out in sorted
+
+79
+00:05:22 --> 00:05:24
+order: one, two,
+three, five,
+
+80
+00:05:24 --> 00:05:27
+six, seven, eight.
+And, if you don't have a big
+
+81
+00:05:27 --> 00:05:32
+stack, you can go and buy one.
+That's always useful.
+
+82
+00:05:32 --> 00:05:36
+Memory costs are going up a bit
+these days, or going down.
+
+83
+00:05:36 --> 00:05:40
+They should be because of
+politics, but price-fixing,
+
+84
+00:05:40 --> 00:05:43
+or whatever.
+So, the question is,
+
+85
+00:05:43 --> 00:05:46
+what's the running time of the
+algorithm?
+
+86
+00:05:46 --> 00:05:50
+Here, this is one of those
+answers where it depends.
+
+87
+00:05:50 --> 00:05:53
+The parts that are easy to
+analyze are, well,
+
+88
+00:05:53 --> 00:05:56
+initialization.
+The in order tree walk,
+
+89
+00:05:56 --> 00:06:00
+how long does that take?
+n, good.
+
+90
+00:06:00 --> 00:06:05
+So, it's order n for the walk,
+and for the initialization,
+
+91
+00:06:05 --> 00:06:08
+which is constant.
+The question is,
+
+92
+00:06:08 --> 00:06:13
+how long does it take me to do
+n tree inserts?
+
+93
+00:06:13 --> 00:06:21
+
+
+94
+00:06:21 --> 00:06:26
+Anyone want to guess any kind
+of answer to that question,
+
+95
+00:06:26 --> 00:06:32
+other than it depends?
+I've already stolen the thunder
+
+96
+00:06:32 --> 00:06:34
+there.
+Yeah?
+
+97
+00:06:34 --> 00:06:38
+Big Omega of n log n,
+that's good.
+
+98
+00:06:38 --> 00:06:42
+It's at least n log n.
+Why?
+
+99
+00:06:42 --> 00:06:56
+
+
+100
+00:06:56 --> 00:06:58
+Right.
+So, you gave two reasons.
+
+101
+00:06:58 --> 00:07:02
+The first one is because of the
+decision tree lower bound.
+
+102
+00:07:02 --> 00:07:04
+That doesn't actually prove
+this.
+
+103
+00:07:04 --> 00:07:07
+You have to be a little bit
+careful.
+
+104
+00:07:07 --> 00:07:10
+This is a claim that it's omega
+n log n all the time.
+
+105
+00:07:10 --> 00:07:14
+It's certainly omega n log n in
+the worst case.
+
+106
+00:07:14 --> 00:07:18
+Every comparison-based sorting
+algorithm is omega n log n in
+
+107
+00:07:18 --> 00:07:21
+the worst case.
+It's also n log n every single
+
+108
+00:07:21 --> 00:07:25
+time, omega n log n because of
+the second reason you gave,
+
+109
+00:07:25 --> 00:07:29
+which is the best thing that
+could happen is we have a
+
+110
+00:07:29 --> 00:07:33
+perfectly balanced tree.
+So, this is the figure that I
+
+111
+00:07:33 --> 00:07:36
+have drawn the most on a
+blackboard in my life,
+
+112
+00:07:36 --> 00:07:41
+the perfect tree on 15 nodes,
+I guess.
+
+113
+00:07:41 --> 00:07:42
+So, if we're lucky,
+we have this.
+
+114
+00:07:42 --> 00:07:45
+And if you add up all the
+depths of the nodes here,
+
+115
+00:07:45 --> 00:07:48
+which gives you the search tree
+cost, in particular,
+
+116
+00:07:48 --> 00:07:52
+these n over two nodes in the
+bottom, each have depth log n.
+
+117
+00:07:52 --> 00:07:54
+And, therefore,
+you're going to have to pay it
+
+118
+00:07:54 --> 00:07:57
+least n log n for those.
+And, if you're less balanced,
+
+119
+00:07:57 --> 00:08:02
+it's going to be even worse.
+That takes some proving,
+
+120
+00:08:02 --> 00:08:08
+but it's true.
+So, it's actually omega n log n
+
+121
+00:08:08 --> 00:08:13
+all the time.
+OK, there are some cases,
+
+122
+00:08:13 --> 00:08:19
+like you do know that the
+elements are almost already in
+
+123
+00:08:19 --> 00:08:25
+order, you can do it in linear
+number comparisons.
+
+124
+00:08:25 --> 00:08:32
+But here, you can't.
+Any other guesses at an answer
+
+125
+00:08:32 --> 00:08:34
+to this question?
+Yeah?
+
+126
+00:08:34 --> 00:08:39
+Big O n^2?
+Good, why?
+
+127
+00:08:39 --> 00:08:41
+Right.
+We are doing n things,
+
+128
+00:08:41 --> 00:08:44
+and each node has depth,
+at most, n.
+
+129
+00:08:44 --> 00:08:49
+So, the number of comparisons
+we're making per element we
+
+130
+00:08:49 --> 00:08:51
+insert, is, at most,
+n.
+
+131
+00:08:51 --> 00:08:53
+So that's, at most,
+n^2.
+
+132
+00:08:53 --> 00:08:56
+Any other answers?
+Is it possible for this
+
+133
+00:08:56 --> 00:09:03
+algorithm to take n^2 time?
+Are there instances where it
+
+134
+00:09:03 --> 00:09:08
+takes theta n^2?
+If it's already sorted,
+
+135
+00:09:08 --> 00:09:14
+that would be pretty bad.
+So, if it's already sorted or
+
+136
+00:09:14 --> 00:09:21
+if it's reverse sorted,
+you are in bad shape because
+
+137
+00:09:21 --> 00:09:27
+then you get a tree like this.
+This is the sorted case.
+
+138
+00:09:27 --> 00:09:32
+And, you compute.
+So, the total cost,
+
+139
+00:09:32 --> 00:09:38
+the time in general is going to
+be the sum of the depths of the
+
+140
+00:09:38 --> 00:09:41
+nodes for each node,
+X, in the tree.
+
+141
+00:09:41 --> 00:09:45
+And in this case,
+it's one plus two plus three
+
+142
+00:09:45 --> 00:09:48
+plus four, this arithmetic
+series.
+
+143
+00:09:48 --> 00:09:52
+There's n of them,
+so this is theta n squared.
+
+144
+00:09:52 --> 00:09:56
+It's like n^2 over two.
+So, that's bad news.
+
+145
+00:09:56 --> 00:10:03
+The worst-case running time of
+this algorithm is n^2.
+
+146
+00:10:03 --> 00:10:08
+Does that sound familiar at
+all, and algorithms worst-case
+
+147
+00:10:08 --> 00:10:11
+running time is n^2,
+in particular,
+
+148
+00:10:11 --> 00:10:16
+in the already-sorted case?
+But if we're lucky,
+
+149
+00:10:16 --> 00:10:20
+at the lucky case,
+as we said, it's a balanced
+
+150
+00:10:20 --> 00:10:23
+tree.
+Wouldn't that be great?
+
+151
+00:10:23 --> 00:10:28
+Anything with omega log n
+height would give us a sorting
+
+152
+00:10:28 --> 00:10:36
+algorithm that runs in n log n.
+So, in the lucky case,
+
+153
+00:10:36 --> 00:10:43
+we are n log n.
+But in the unlucky case,
+
+154
+00:10:43 --> 00:10:48
+we are n^2 and unlucky use
+sorted.
+
+155
+00:10:48 --> 00:10:57
+Does it remind you of any
+algorithm we've seen before?
+
+156
+00:10:57 --> 00:11:02
+Quicksort.
+It turns out the running time
+
+157
+00:11:02 --> 00:11:09
+of this algorithm is the same as
+the running time of quicksort in
+
+158
+00:11:09 --> 00:11:13
+a very strong sense.
+It turns out the comparisons
+
+159
+00:11:13 --> 00:11:19
+that this algorithm makes are
+exactly the same comparisons
+
+160
+00:11:19 --> 00:11:24
+that quicksort makes.
+It makes them in a different
+
+161
+00:11:24 --> 00:11:29
+order, but it's really the same
+algorithm in disguise.
+
+162
+00:11:29 --> 00:11:34
+That's the surprise here.
+So, in particular,
+
+163
+00:11:34 --> 00:11:36
+we've already analyzed
+quicksort.
+
+164
+00:11:36 --> 00:11:40
+We should get something for
+free out of that analysis.
+
+165
+00:11:40 --> 00:11:54
+
+
+166
+00:11:54 --> 00:12:05
+So, the relation is,
+BST sort and quicksort make the
+
+167
+00:12:05 --> 00:12:15
+same comparisons but in a
+different order.
+
+168
+00:12:15 --> 00:12:25
+
+
+169
+00:12:25 --> 00:12:29
+So, let me walk through the
+same example we did before:
+
+170
+00:12:29 --> 00:12:33
+three, one, eight,
+two, six, seven,
+
+171
+00:12:33 --> 00:12:35
+five.
+So, there is an array.
+
+172
+00:12:35 --> 00:12:40
+We are going to run a
+particular version of quicksort.
+
+173
+00:12:40 --> 00:12:43
+I have to be a little bit
+careful here.
+
+174
+00:12:43 --> 00:12:47
+It's sort of the obvious
+version of quicksort.
+
+175
+00:12:47 --> 00:12:52
+Remember, our standard,
+boring quicksort is you take
+
+176
+00:12:52 --> 00:12:56
+the first element as the
+partition element.
+
+177
+00:12:56 --> 00:13:01
+So, I'll take three here.
+And, I split into the elements
+
+178
+00:13:01 --> 00:13:04
+less than three,
+which is one and two.
+
+179
+00:13:04 --> 00:13:07
+And, the elements bigger than
+three, which is eight,
+
+180
+00:13:07 --> 00:13:09
+six, seven, five.
+And, in this version of
+
+181
+00:13:09 --> 00:13:12
+quicksort, I don't change the
+order of the elements,
+
+182
+00:13:12 --> 00:13:13
+eight, six, seven,
+five.
+
+183
+00:13:13 --> 00:13:17
+So, let's say the order is
+preserved because only then will
+
+184
+00:13:17 --> 00:13:20
+this equivalence hold.
+So, this is sort of a stable
+
+185
+00:13:20 --> 00:13:22
+partition algorithm.
+It's easy enough to do.
+
+186
+00:13:22 --> 00:13:25
+It's a particular version of
+quicksort.
+
+187
+00:13:25 --> 00:13:27
+And soon, we're going to
+randomize it.
+
+188
+00:13:27 --> 00:13:32
+And after we randomize,
+this difference doesn't matter.
+
+189
+00:13:32 --> 00:13:35
+OK, then on the left recursion,
+we split in the partition
+
+190
+00:13:35 --> 00:13:38
+element.
+There is things less than one,
+
+191
+00:13:38 --> 00:13:41
+which is nothing,
+things bigger than one,
+
+192
+00:13:41 --> 00:13:44
+which is two.
+And then, that's our partition
+
+193
+00:13:44 --> 00:13:45
+element.
+We are done.
+
+194
+00:13:45 --> 00:13:48
+Over here, we partition on
+eight.
+
+195
+00:13:48 --> 00:13:51
+Everything is less than eight.
+So, we get six,
+
+196
+00:13:51 --> 00:13:53
+seven, five,
+nothing on the right.
+
+197
+00:13:53 --> 00:13:57
+Then we partition at six.
+We get things less than six,
+
+198
+00:13:57 --> 00:13:59
+mainly five,
+things bigger than six,
+
+199
+00:13:59 --> 00:14:03
+mainly seven.
+And, those are sort of
+
+200
+00:14:03 --> 00:14:06
+partition elements in a trivial
+way.
+
+201
+00:14:06 --> 00:14:11
+Now, this tree that we get on
+the partition elements looks an
+
+202
+00:14:11 --> 00:14:16
+awful lot like this tree.
+OK, it should be exactly the
+
+203
+00:14:16 --> 00:14:19
+same tree.
+And, you can walk through,
+
+204
+00:14:19 --> 00:14:22
+what comparisons does quicksort
+make?
+
+205
+00:14:22 --> 00:14:25
+Well, first,
+it compares everything to
+
+206
+00:14:25 --> 00:14:30
+three, OK, except three itself.
+Now, if you look over here,
+
+207
+00:14:30 --> 00:14:32
+what happens when we are
+inserting elements?
+
+208
+00:14:32 --> 00:14:35
+Well, each time we insert an
+element, the first thing we do
+
+209
+00:14:35 --> 00:14:37
+is compare with three.
+If it's less than,
+
+210
+00:14:37 --> 00:14:40
+we go to the left branch.
+If it's greater than,
+
+211
+00:14:40 --> 00:14:43
+we go to the right branch.
+So, we are making all these
+
+212
+00:14:43 --> 00:14:44
+comparisons with three in both
+cases.
+
+213
+00:14:44 --> 00:14:47
+Then, if we have an element
+less than three,
+
+214
+00:14:47 --> 00:14:49
+it's either one or two.
+If it's one,
+
+215
+00:14:49 --> 00:14:51
+we're done.
+No comparisons happen here one
+
+216
+00:14:51 --> 00:14:52
+to one.
+But, we compare two to one.
+
+217
+00:14:52 --> 00:14:56
+And indeed, when we insert two
+over there after comparing it to
+
+218
+00:14:56 --> 00:14:59
+three, we compare it to one.
+And then we figure out that it
+
+219
+00:14:59 --> 00:15:01
+happens here.
+Same thing happens in
+
+220
+00:15:01 --> 00:15:04
+quicksort.
+For elements greater than
+
+221
+00:15:04 --> 00:15:08
+three, we compare everyone to
+eight here because we are
+
+222
+00:15:08 --> 00:15:12
+partitioning with respect to
+eight, and here because that's
+
+223
+00:15:12 --> 00:15:16
+the next node after three.
+As soon as eight is inserted,
+
+224
+00:15:16 --> 00:15:20
+we compare everything with
+eight to see in fact that's less
+
+225
+00:15:20 --> 00:15:23
+than eight, and so on:
+so, all of the same
+
+226
+00:15:23 --> 00:15:25
+comparisons, just in a different
+order.
+
+227
+00:15:25 --> 00:15:29
+So, we turn 90°.
+Kind of cool.
+
+228
+00:15:29 --> 00:15:34
+So, this has various
+consequences in the analysis.
+
+229
+00:15:34 --> 00:15:50
+
+
+230
+00:15:50 --> 00:15:54
+So, in particular,
+the worst-case running time is
+
+231
+00:15:54 --> 00:15:58
+theta n^2, which is not so
+exciting.
+
+232
+00:15:58 --> 00:16:04
+What we really care about is
+the randomized version because
+
+233
+00:16:04 --> 00:16:10
+that's what performs well.
+So, randomized BST sort is just
+
+234
+00:16:10 --> 00:16:16
+like randomized quicksort.
+So, the first thing you do is
+
+235
+00:16:16 --> 00:16:21
+randomly permute the array
+uniformly, picking all
+
+236
+00:16:21 --> 00:16:24
+permutations with equal
+probability.
+
+237
+00:16:24 --> 00:16:31
+And then, we call BST sort.
+OK, this is basically what
+
+238
+00:16:31 --> 00:16:35
+randomized quicksort could be
+formulated as.
+
+239
+00:16:35 --> 00:16:40
+And then, randomized BST sort
+is going to make exactly the
+
+240
+00:16:40 --> 00:16:43
+same comparisons as randomized
+quicksort.
+
+241
+00:16:43 --> 00:16:48
+Here, we are picking the root
+essentially randomly.
+
+242
+00:16:48 --> 00:16:52
+And here in quicksort,
+you are picking the partition
+
+243
+00:16:52 --> 00:16:56
+elements randomly.
+It's the same difference.
+
+244
+00:16:56 --> 00:17:00
+OK, so the time of this
+algorithm equals the time of
+
+245
+00:17:00 --> 00:17:08
+randomized quicksort because we
+are making the same comparisons.
+
+246
+00:17:08 --> 00:17:10
+So, the number of comparisons
+is equal.
+
+247
+00:17:10 --> 00:17:11
+And this is true as random
+variables.
+
+248
+00:17:11 --> 00:17:13
+The random variable,
+the running time,
+
+249
+00:17:13 --> 00:17:16
+this algorithm is equal to the
+random variable of this
+
+250
+00:17:16 --> 00:17:17
+algorithm.
+In particular,
+
+251
+00:17:17 --> 00:17:20
+the expectations are the same.
+
+252
+00:17:20 --> 00:17:33
+
+
+253
+00:17:33 --> 00:17:37
+OK, and we know that the
+expected running time of
+
+254
+00:17:37 --> 00:17:40
+randomized quicksort on n
+elements is?
+
+255
+00:17:40 --> 00:17:42
+Oh boy.
+n log n.
+
+256
+00:17:42 --> 00:17:45
+Good.
+I was a little worried there.
+
+257
+00:17:45 --> 00:17:49
+OK, so in particular,
+the expected running time of
+
+258
+00:17:49 --> 00:17:53
+BST sort is n log n.
+Obviously, this is not too
+
+259
+00:17:53 --> 00:17:57
+exciting from a sorting point of
+view.
+
+260
+00:17:57 --> 00:18:03
+Sorting was just sort of to see
+this connection.
+
+261
+00:18:03 --> 00:18:05
+What we actually care about,
+and the reason I've introduced
+
+262
+00:18:05 --> 00:18:08
+this BST sort is what the tree
+looks like.
+
+263
+00:18:08 --> 00:18:10
+What we really want is that
+search tree.
+
+264
+00:18:10 --> 00:18:11
+The search tree can do more
+than sort.
+
+265
+00:18:11 --> 00:18:14
+n order traversals are a pretty
+boring thing to do with the
+
+266
+00:18:14 --> 00:18:16
+search tree.
+You can search in a search
+
+267
+00:18:16 --> 00:18:18
+tree.
+So, OK, that's still not so
+
+268
+00:18:18 --> 00:18:20
+exciting.
+You could sort the elements and
+
+269
+00:18:20 --> 00:18:22
+then put them in an array and do
+binary search.
+
+270
+00:18:22 --> 00:18:26
+But, the point of binary search
+trees, instead of binary search
+
+271
+00:18:26 --> 00:18:28
+arrays, is that you can update
+them dynamically.
+
+272
+00:18:28 --> 00:18:31
+We won't be updating them
+dynamically in this lecture,
+
+273
+00:18:31 --> 00:18:35
+and we will in Wednesday and on
+your problem set.
+
+274
+00:18:35 --> 00:18:36
+For now, it's just sort of
+warm-up.
+
+275
+00:18:36 --> 00:18:39
+Let's say that the elements
+aren't changing.
+
+276
+00:18:39 --> 00:18:41
+We are building one tree from
+the beginning.
+
+277
+00:18:41 --> 00:18:43
+We have all n elements ahead of
+time.
+
+278
+00:18:43 --> 00:18:45
+We are going to build it
+randomly.
+
+279
+00:18:45 --> 00:18:49
+We randomly permute that array.
+Then we throw all the elements
+
+280
+00:18:49 --> 00:18:52
+into a binary search tree.
+That's what BST sort does.
+
+281
+00:18:52 --> 00:18:54
+Then it calls n order
+traversal.
+
+282
+00:18:54 --> 00:18:56
+I don't really care about n
+order traversal.
+
+283
+00:18:56 --> 00:19:00
+What I want,
+because we've just analyzed it.
+
+284
+00:19:00 --> 00:19:04
+It would be a short lecture if
+I were done.
+
+285
+00:19:04 --> 00:19:11
+What we want is this randomly
+built BST, which is what we get
+
+286
+00:19:11 --> 00:19:18
+out of this algorithm.
+So, this is the tree resulting
+
+287
+00:19:18 --> 00:19:24
+from randomized BST sort,
+OK, resulting from randomly
+
+288
+00:19:24 --> 00:19:30
+permute in the array of just
+inserting those elements using
+
+289
+00:19:30 --> 00:19:36
+the simple tree insert
+algorithm.
+
+290
+00:19:36 --> 00:19:40
+The question is,
+what does that tree look like?
+
+291
+00:19:40 --> 00:19:45
+And in particular,
+is there anything we can
+
+292
+00:19:45 --> 00:19:50
+conclude out of this fact?
+The expected running time of
+
+293
+00:19:50 --> 00:19:55
+BST sort is n log n.
+OK, I've mentioned cursorily
+
+294
+00:19:55 --> 00:20:02
+what the running time of BST
+sort is, several times.
+
+295
+00:20:02 --> 00:20:06
+It was the sum.
+So, this is the time of BST
+
+296
+00:20:06 --> 00:20:11
+sort on n elements.
+It's the sum over all nodes,
+
+297
+00:20:11 --> 00:20:17
+X, of the depth of that node.
+OK, depth starts at zero and
+
+298
+00:20:17 --> 00:20:21
+works its way down because the
+root element,
+
+299
+00:20:21 --> 00:20:27
+you don't make any comparisons
+beyond that, you are making
+
+300
+00:20:27 --> 00:20:32
+whatever the depth is
+comparisons.
+
+301
+00:20:32 --> 00:20:40
+OK, so we know that this thing
+is, in expectation we know that
+
+302
+00:20:40 --> 00:20:47
+this is n log n.
+What does that tell us about
+
+303
+00:20:47 --> 00:20:52
+the tree?
+This is for all nodes,
+
+304
+00:20:52 --> 00:20:58
+X, in the tree.
+Does it tell us anything about
+
+305
+00:20:58 --> 00:21:03
+the height of the tree,
+for example?
+
+306
+00:21:03 --> 00:21:07
+Yeah?
+Right, intuitively,
+
+307
+00:21:07 --> 00:21:11
+it says that the height of the
+tree is theta log n,
+
+308
+00:21:11 --> 00:21:13
+and not n.
+But, in fact,
+
+309
+00:21:13 --> 00:21:17
+it doesn't show that.
+And that's why if you feel that
+
+310
+00:21:17 --> 00:21:21
+that's just intuition,
+but it may not be quite right.
+
+311
+00:21:21 --> 00:21:24
+Indeed it's not.
+Let me tell you what it does
+
+312
+00:21:24 --> 00:21:27
+say.
+So, if we take expectation of
+
+313
+00:21:27 --> 00:21:31
+both sides, here we get n log n.
+So, the expected value of that
+
+314
+00:21:31 --> 00:21:35
+is n log n.
+So, over here,
+
+315
+00:21:35 --> 00:21:41
+well, we get the expected total
+depth, which is not so exciting.
+
+316
+00:21:41 --> 00:21:45
+Let's look at the expected
+average depth.
+
+317
+00:21:45 --> 00:21:51
+So, if I look at one over n,
+the sum over all n nodes in the
+
+318
+00:21:51 --> 00:21:57
+tree of the depth of X,
+that would be the average depth
+
+319
+00:21:57 --> 00:22:02
+over all the nodes.
+And what I should get is theta
+
+320
+00:22:02 --> 00:22:06
+n log n over n because I divided
+n on both sides.
+
+321
+00:22:06 --> 00:22:10
+And, I'm using,
+here, linearity of expectation,
+
+322
+00:22:10 --> 00:22:14
+which is log n.
+So, what this fact about the
+
+323
+00:22:14 --> 00:22:19
+expected running time tells me
+is that the average depth in the
+
+324
+00:22:19 --> 00:22:23
+tree is log n,
+which is not quite the height
+
+325
+00:22:23 --> 00:22:26
+of the tree being log n.
+
+326
+00:22:26 --> 00:22:35
+
+
+327
+00:22:35 --> 00:22:39
+OK, remember the height of the
+tree is the maximum depth of any
+
+328
+00:22:39 --> 00:22:41
+node.
+Here, we are just bounding the
+
+329
+00:22:41 --> 00:22:43
+average depth.
+
+330
+00:22:43 --> 00:23:04
+
+
+331
+00:23:04 --> 00:23:08
+Let's look at an example of a
+tree.
+
+332
+00:23:08 --> 00:23:14
+I'll draw my favorite picture.
+So, here we have a nice
+
+333
+00:23:14 --> 00:23:20
+balanced tree,
+let's say, on half of the nodes
+
+334
+00:23:20 --> 00:23:25
+or a little more.
+And then, I have one really
+
+335
+00:23:25 --> 00:23:30
+long path hanging off one
+particular leaf.
+
+336
+00:23:30 --> 00:23:37
+It doesn't matter which one.
+And, I'm going to say that this
+
+337
+00:23:37 --> 00:23:41
+path has length,
+with a total height here,
+
+338
+00:23:41 --> 00:23:45
+I want to make root n,
+which is a lot bigger than log
+
+339
+00:23:45 --> 00:23:47
+n.
+This is roughly log n.
+
+340
+00:23:47 --> 00:23:51
+It's going to be log of n minus
+root n, or so,
+
+341
+00:23:51 --> 00:23:54
+roughly.
+So, most of the nodes have
+
+342
+00:23:54 --> 00:23:58
+logarithmic height and,
+sorry, logarithmic depth.
+
+343
+00:23:58 --> 00:24:03
+If you compute the average
+depth in this particular tree,
+
+344
+00:24:03 --> 00:24:06
+for most of the nodes,
+let's say it's,
+
+345
+00:24:06 --> 00:24:12
+at most, n of the nodes have
+height log n.
+
+346
+00:24:12 --> 00:24:15
+And then, there are root n
+nodes, at most,
+
+347
+00:24:15 --> 00:24:19
+down here, which have depth,
+at most, root n.
+
+348
+00:24:19 --> 00:24:22
+So, it's, at most,
+root n times root n.
+
+349
+00:24:22 --> 00:24:26
+In fact, it's like half that,
+but not a big deal.
+
+350
+00:24:26 --> 00:24:29
+So, this is n.
+So, this is n log n,
+
+351
+00:24:29 --> 00:24:34
+or, sorry, average depth:
+I have to divide everything by
+
+352
+00:24:34 --> 00:24:38
+n.
+n log n would be rather large
+
+353
+00:24:38 --> 00:24:42
+for an average height,
+average depth.
+
+354
+00:24:42 --> 00:24:48
+So, the average depth here is
+log n, but the height of the
+
+355
+00:24:48 --> 00:24:53
+tree is square root of n.
+So, this is not enough.
+
+356
+00:24:53 --> 00:24:59
+Just to know that the average
+depth is log n doesn't mean that
+
+357
+00:24:59 --> 00:25:04
+the height is log n.
+OK, but the claim is this
+
+358
+00:25:04 --> 00:25:10
+theorem for today is that the
+expected height of a randomly
+
+359
+00:25:10 --> 00:25:16
+built binary search tree is
+indeed log n.
+
+360
+00:25:16 --> 00:25:21
+BST is order log n.
+This is what we like to know
+
+361
+00:25:21 --> 00:25:26
+because that tells us,
+if we just build a binary
+
+362
+00:25:26 --> 00:25:31
+search tree randomly,
+then we can search in it in log
+
+363
+00:25:31 --> 00:25:34
+n time.
+OK, for sorting,
+
+364
+00:25:34 --> 00:25:38
+it's not as big a deal.
+We just care about the expected
+
+365
+00:25:38 --> 00:25:41
+running time of creating the
+thing.
+
+366
+00:25:41 --> 00:25:44
+Here, now we know that once we
+prove this theorem,
+
+367
+00:25:44 --> 00:25:48
+we know that we can search
+quickly in expectation,
+
+368
+00:25:48 --> 00:25:53
+in fact, most of the time.
+So, the rest of today's lecture
+
+369
+00:25:53 --> 00:25:56
+will be proving this theorem.
+It's quite tricky,
+
+370
+00:25:56 --> 00:26:00
+as you might imagine.
+It's another big probability
+
+371
+00:26:00 --> 00:26:06
+analysis along the lines of
+quicksort and everything.
+
+372
+00:26:06 --> 00:26:22
+
+
+373
+00:26:22 --> 00:26:26
+So, I'm going to start with an
+outline of the proof,
+
+374
+00:26:26 --> 00:26:31
+unless there are any questions
+about the theorem.
+
+375
+00:26:31 --> 00:26:35
+It should be pretty clear what
+we want to prove.
+
+376
+00:26:35 --> 00:26:40
+This is even weirder than most
+of the analyses we've seen.
+
+377
+00:26:40 --> 00:26:45
+It's going to use a fancy
+trick, which is exponentiating a
+
+378
+00:26:45 --> 00:26:50
+random variable.
+And to do that we need a tool
+
+379
+00:26:50 --> 00:26:54
+called Jenson's inequality.
+We are going to prove that
+
+380
+00:26:54 --> 00:26:57
+tool.
+Usually, we don't prove
+
+381
+00:26:57 --> 00:27:01
+probability tools.
+But this one we are going to
+
+382
+00:27:01 --> 00:27:03
+prove.
+It's not too hard.
+
+383
+00:27:03 --> 00:27:09
+It's also basic analysis.
+So, the lemma,
+
+384
+00:27:09 --> 00:27:13
+says that if we have what's
+called to a convex function,
+
+385
+00:27:13 --> 00:27:17
+f, and you should all know what
+that means, but I'll define it
+
+386
+00:27:17 --> 00:27:21
+soon in case you have forgotten.
+If you have a convex function,
+
+387
+00:27:21 --> 00:27:25
+f, and you have a random
+variable, X, you take f of the
+
+388
+00:27:25 --> 00:27:27
+expectation.
+That's, at most,
+
+389
+00:27:27 --> 00:27:32
+the expectation of f of that
+random variable.
+
+390
+00:27:32 --> 00:27:40
+Think about it enough and draw
+a convex function that is fairly
+
+391
+00:27:40 --> 00:27:46
+intuitive, I guess.
+But we will prove it.
+
+392
+00:27:46 --> 00:27:54
+What that allows us to do is
+instead of analyzing the random
+
+393
+00:27:54 --> 00:28:00
+variable that tells us the
+height of a tree,
+
+394
+00:28:00 --> 00:28:06
+so, X_n I'll call the random
+variable, RV,
+
+395
+00:28:06 --> 00:28:13
+of the height of a BST,
+randomly constructed BST on n
+
+396
+00:28:13 --> 00:28:21
+nodes we will analyze.
+Well, instead of analyzing this
+
+397
+00:28:21 --> 00:28:27
+desired random variable,
+X_n, sorry, this should have
+
+398
+00:28:27 --> 00:28:32
+been in capital X.
+We can analyze any convex
+
+399
+00:28:32 --> 00:28:35
+function of X_n.
+And, we're going to analyze the
+
+400
+00:28:35 --> 00:28:39
+exponentiation.
+So, I'm going to define Y_n to
+
+401
+00:28:39 --> 00:28:43
+be two to the power of X_n.
+OK, the big question here is
+
+402
+00:28:43 --> 00:28:47
+why bother doing this?
+The answer is because it works
+
+403
+00:28:47 --> 00:28:50
+and it wouldn't work if we
+analyze X_n.
+
+404
+00:28:50 --> 00:28:54
+We will see some intuition of
+that later on,
+
+405
+00:28:54 --> 00:28:59
+but it's not very intuitive.
+This is our analysis where you
+
+406
+00:28:59 --> 00:29:03
+need this extra trick.
+So, we're going to bound the
+
+407
+00:29:03 --> 00:29:05
+expectation of Y_n,
+and from that,
+
+408
+00:29:05 --> 00:29:09
+and using Jensen's inequality,
+we're going to get a bound on
+
+409
+00:29:09 --> 00:29:12
+the expectation of X_n,
+a pretty tight bound,
+
+410
+00:29:12 --> 00:29:16
+actually, because if we can
+bound the exponent up to
+
+411
+00:29:16 --> 00:29:18
+constant factors,
+the exponentiation up to
+
+412
+00:29:18 --> 00:29:21
+constant factors,
+we can bound X_n even better
+
+413
+00:29:21 --> 00:29:23
+because you take logs to get
+X_n.
+
+414
+00:29:23 --> 00:29:28
+So, we will even figure out
+what the constant is.
+
+415
+00:29:28 --> 00:29:33
+So, what we will prove,
+this is the heart of the proof,
+
+416
+00:29:33 --> 00:29:37
+is that the expected value of
+Y_n is order n^3.
+
+417
+00:29:37 --> 00:29:42
+Here, we won't really know what
+the constant is.
+
+418
+00:29:42 --> 00:29:46
+We don't need to.
+And then, we put these pieces
+
+419
+00:29:46 --> 00:29:49
+together.
+So, let's do that.
+
+420
+00:29:49 --> 00:29:54
+What we really care about is
+the expectation of X_n,
+
+421
+00:29:54 --> 00:29:57
+which is the height of our
+tree.
+
+422
+00:29:57 --> 00:30:02
+What we find out about is this
+fact.
+
+423
+00:30:02 --> 00:30:05
+So, leave some horizontal space
+here.
+
+424
+00:30:05 --> 00:30:09
+We get the expectation of two
+to the X_n.
+
+425
+00:30:09 --> 00:30:14
+That's the expectation of Y_n.
+So, we learned that that's
+
+426
+00:30:14 --> 00:30:18
+order n^3.
+And, Jensen's inequality tells
+
+427
+00:30:18 --> 00:30:23
+us that if we take this
+function, two to the X,
+
+428
+00:30:23 --> 00:30:27
+we plug it in here,
+that on the left-hand side we
+
+429
+00:30:27 --> 00:30:33
+get two to the E of X.
+So, we get two to the E of X_n
+
+430
+00:30:33 --> 00:30:38
+is at most E of two to the X_n.
+So, that's where we use
+
+431
+00:30:38 --> 00:30:43
+Jensen's inequality,
+because what we care about is E
+
+432
+00:30:43 --> 00:30:46
+of X_n.
+So now, we have a bound.
+
+433
+00:30:46 --> 00:30:50
+We say, well,
+two to the E of X_n is,
+
+434
+00:30:50 --> 00:30:54
+at most, n^3.
+So, if we take the log of both
+
+435
+00:30:54 --> 00:31:00
+sides, we get E of X_n is,
+at most, the log of n^3.
+
+436
+00:31:00 --> 00:31:05
+OK, I will write it in this
+funny way, log of order n^3,
+
+437
+00:31:05 --> 00:31:09
+which will actually tell us the
+constant.
+
+438
+00:31:09 --> 00:31:12
+This is three log n plus order
+one.
+
+439
+00:31:12 --> 00:31:18
+So, we will prove that the
+expected height of a randomly
+
+440
+00:31:18 --> 00:31:24
+constructed binary search tree
+on n nodes is roughly three log
+
+441
+00:31:24 --> 00:31:28
+n, at most.
+OK, I will say more about that
+
+442
+00:31:28 --> 00:31:31
+later.
+So, you've now seen the end of
+
+443
+00:31:31 --> 00:31:35
+the proof.
+That's the foreshadowing.
+
+444
+00:31:35 --> 00:31:38
+And now, this is the top-down
+approach.
+
+445
+00:31:38 --> 00:31:41
+So, you sort of see what the
+steps are.
+
+446
+00:31:41 --> 00:31:44
+Now, we just have to do the
+steps.
+
+447
+00:31:44 --> 00:31:46
+OK, step one:
+take a bit of work,
+
+448
+00:31:46 --> 00:31:50
+but it's easy because it's
+pretty basic stuff.
+
+449
+00:31:50 --> 00:31:54
+Step two is just a definition
+and we are done.
+
+450
+00:31:54 --> 00:31:57
+Step three is probably the
+hardest part.
+
+451
+00:31:57 --> 00:32:03
+Step four, we've already done.
+So, let's start with step one.
+
+452
+00:32:03 --> 00:32:16
+
+
+453
+00:32:16 --> 00:32:22
+So, the first thing I need to
+do is define a convex function
+
+454
+00:32:22 --> 00:32:29
+because we are going to
+manipulate the definition a fair
+
+455
+00:32:29 --> 00:32:33
+amount.
+So, this is a notion from real
+
+456
+00:32:33 --> 00:32:36
+analysis.
+Analysis is a fancy word for
+
+457
+00:32:36 --> 00:32:40
+calculus if you haven't taken
+the proper analysis class.
+
+458
+00:32:40 --> 00:32:44
+You should have seen convexity
+in any calculus class.
+
+459
+00:32:44 --> 00:32:47
+A convex function is one that
+looks like this.
+
+460
+00:32:47 --> 00:32:50
+OK, good.
+One way to formalize that
+
+461
+00:32:50 --> 00:32:53
+notion is to consider any two
+points on this curve.
+
+462
+00:32:53 --> 00:32:57
+So, I'm only interested in
+functions from reals to reals.
+
+463
+00:32:57 --> 00:33:01
+So, it looks like this.
+This is f of something.
+
+464
+00:33:01 --> 00:33:05
+And, this is the something.
+If I take two points on this
+
+465
+00:33:05 --> 00:33:08
+curve, and I draw a line segment
+connecting them,
+
+466
+00:33:08 --> 00:33:11
+that line segment is always
+above the curve.
+
+467
+00:33:11 --> 00:33:13
+That's the meaning of
+convexity.
+
+468
+00:33:13 --> 00:33:16
+It has a geometric notion,
+which is basically the same.
+
+469
+00:33:16 --> 00:33:19
+But for functions,
+this line segment should stay
+
+470
+00:33:19 --> 00:33:22
+above the curve.
+The line does not stay above
+
+471
+00:33:22 --> 00:33:24
+the curve.
+If I extended it farther,
+
+472
+00:33:24 --> 00:33:26
+it goes beneath the curve,
+of course.
+
+473
+00:33:26 --> 00:33:31
+But, that segment should.
+So, I'm going to formalize that
+
+474
+00:33:31 --> 00:33:33
+a little bit.
+I'll call this x,
+
+475
+00:33:33 --> 00:33:37
+and then this is f of x.
+And, I'll call this y,
+
+476
+00:33:37 --> 00:33:41
+and this is f of y.
+So, the claim is that I take
+
+477
+00:33:41 --> 00:33:44
+any number between x and y,
+and I look up,
+
+478
+00:33:44 --> 00:33:48
+and I say, OK,
+here's the point on the curve.
+
+479
+00:33:48 --> 00:33:50
+Here's the point on the line
+segment.
+
+480
+00:33:50 --> 00:33:54
+The value of that point on the
+y value, here,
+
+481
+00:33:54 --> 00:33:58
+should be greater than or equal
+to the y value here,
+
+482
+00:33:58 --> 00:34:01
+OK?
+To figure out what the point
+
+483
+00:34:01 --> 00:34:06
+is, we need some,
+I would call it geometry.
+
+484
+00:34:06 --> 00:34:08
+I'm sure it's an analysis
+concept, too.
+
+485
+00:34:08 --> 00:34:12
+But, I'm a geometer,
+so I get to call it geometry.
+
+486
+00:34:12 --> 00:34:16
+If you have two points,
+p and q, and you want to
+
+487
+00:34:16 --> 00:34:19
+parameterize this line segment
+between them,
+
+488
+00:34:19 --> 00:34:24
+so, I want to parameterize some
+points here, the way to do it is
+
+489
+00:34:24 --> 00:34:29
+to take a linear combination.
+And, if you should have taken
+
+490
+00:34:29 --> 00:34:32
+some linear algebra,
+linear combination look
+
+491
+00:34:32 --> 00:34:35
+something like this.
+And, in fact,
+
+492
+00:34:35 --> 00:34:39
+we're going to take something
+called an affine combination
+
+493
+00:34:39 --> 00:34:41
+where alpha plus beta equals
+one.
+
+494
+00:34:41 --> 00:34:43
+It turns out,
+if you take all such points,
+
+495
+00:34:43 --> 00:34:45
+some number,
+alpha, times the point,
+
+496
+00:34:45 --> 00:34:48
+p, plus some number,
+beta times the point,
+
+497
+00:34:48 --> 00:34:50
+q, where alpha plus beta equals
+one.
+
+498
+00:34:50 --> 00:34:53
+If you take all those points,
+you get the entire line here,
+
+499
+00:34:53 --> 00:34:56
+which is nifty.
+But, we don't want the entire
+
+500
+00:34:56 --> 00:34:58
+line.
+If you also constrained alpha
+
+501
+00:34:58 --> 00:35:01
+and beta to be nonnegative,
+you just get this line segment.
+
+502
+00:35:01 --> 00:35:05
+So, this forces alpha and beta
+to be between zero and one
+
+503
+00:35:05 --> 00:35:10
+because they have to sum to one,
+and they are nonnegative.
+
+504
+00:35:10 --> 00:35:14
+So, what we are going to do
+here is take alpha times x plus
+
+505
+00:35:14 --> 00:35:17
+beta times y.
+That's going to be our point
+
+506
+00:35:17 --> 00:35:22
+between with these constraints:
+alpha plus beta equals one.
+
+507
+00:35:22 --> 00:35:26
+Alpha and beta are greater than
+or equal to zero.
+
+508
+00:35:26 --> 00:35:31
+Then, this point is f of that.
+This is f of alpha x plus beta,
+
+509
+00:35:31 --> 00:35:34
+y.
+And, this point is the linear
+
+510
+00:35:34 --> 00:35:38
+interpolation between f of x and
+f of y, the same one.
+
+511
+00:35:38 --> 00:35:42
+So, it's alpha times f of x
+plus beta times f of y.
+
+512
+00:35:42 --> 00:35:46
+OK, that's the intuition.
+If you didn't follow it,
+
+513
+00:35:46 --> 00:35:51
+it's not too big a deal because
+all we care about are the
+
+514
+00:35:51 --> 00:35:54
+symbolic answer for proving
+things.
+
+515
+00:35:54 --> 00:35:56
+But, that's where this comes
+from.
+
+516
+00:35:56 --> 00:36:03
+So, here's the definition.
+Its function is convex.
+
+517
+00:36:03 --> 00:36:09
+If, for all x and y,
+and all alpha and beta are
+
+518
+00:36:09 --> 00:36:16
+greater than or equal to zero,
+whose sum is one,
+
+519
+00:36:16 --> 00:36:25
+we have f of alpha x plus beta
+y is less than or equal to alpha
+
+520
+00:36:25 --> 00:36:32
+f of x plus beta f of y.
+So, that's just saying that
+
+521
+00:36:32 --> 00:36:38
+this y coordinate here is less
+than or equal to this y
+
+522
+00:36:38 --> 00:36:41
+coordinate.
+OK, but that's the symbolism
+
+523
+00:36:41 --> 00:36:46
+behind that picture.
+OK, so now we want to prove
+
+524
+00:36:46 --> 00:36:51
+Jensen's inequality.
+OK, we're not quite there yet.
+
+525
+00:36:51 --> 00:36:57
+We are going to prove a simple
+lemma, from which it will be
+
+526
+00:36:57 --> 00:37:02
+easy to derive Jenson's
+equality.
+
+527
+00:37:02 --> 00:37:07
+So, this is the theorem we are
+proving.
+
+528
+00:37:07 --> 00:37:13
+So, here's a lemma about convex
+functions.
+
+529
+00:37:13 --> 00:37:22
+You may have seen it before.
+It will be crucial to Jensen's
+
+530
+00:37:22 --> 00:37:25
+inequality.
+So, suppose,
+
+531
+00:37:25 --> 00:37:34
+this is a statement about
+affine combinations of n things
+
+532
+00:37:34 --> 00:37:41
+instead of two things.
+So, this will say that
+
+533
+00:37:41 --> 00:37:46
+convexity can be generalized to
+taking n things.
+
+534
+00:37:46 --> 00:37:52
+So, suppose we have n real
+numbers, and we have n values
+
+535
+00:37:52 --> 00:37:55
+alpha i, alpha one up to alpha
+n.
+
+536
+00:37:55 --> 00:38:00
+They are all nonnegative.
+And, their sum is one.
+
+537
+00:38:00 --> 00:38:06
+So, the sum of alpha k,
+I guess, k equals one to n,
+
+538
+00:38:06 --> 00:38:11
+is one.
+So, those are the assumptions.
+
+539
+00:38:11 --> 00:38:18
+The conclusion is the same
+thing, but summing over all k.
+
+540
+00:38:18 --> 00:38:22
+So, k equals one to n,
+alpha_k * x_k.
+
+541
+00:38:22 --> 00:38:29
+Take f of that versus taking
+the sum of the alphas times the
+
+542
+00:38:29 --> 00:38:32
+f's.
+k equals one to n.
+
+543
+00:38:32 --> 00:38:37
+So, the definition of convexity
+is exactly that statement,
+
+544
+00:38:37 --> 00:38:42
+but where n equals two.
+OK, alpha one and alpha two are
+
+545
+00:38:42 --> 00:38:46
+alpha and beta.
+This is just a statement for
+
+546
+00:38:46 --> 00:38:50
+general n.
+And, you can interpret this in
+
+547
+00:38:50 --> 00:38:53
+some funnier way,
+which I won't get into.
+
+548
+00:38:53 --> 00:38:56
+Oh, sure, why not?
+I'm a geometer.
+
+549
+00:38:56 --> 00:39:03
+So, this is saying you take
+several points on this curve.
+
+550
+00:39:03 --> 00:39:05
+You take the polygon that they
+define.
+
+551
+00:39:05 --> 00:39:07
+So, these are straight-line
+segments.
+
+552
+00:39:07 --> 00:39:10
+You take the interior.
+If you take an affine
+
+553
+00:39:10 --> 00:39:13
+combination like that,
+you will get a point inside
+
+554
+00:39:13 --> 00:39:16
+that polygon,
+or possibly on the boundary.
+
+555
+00:39:16 --> 00:39:20
+The claim is that all those
+points are above the curve.
+
+556
+00:39:20 --> 00:39:23
+Again, intuitively:
+true if you draw a nice,
+
+557
+00:39:23 --> 00:39:25
+canonical convex curve,
+but in fact,
+
+558
+00:39:25 --> 00:39:27
+it's true algebraically,
+too.
+
+559
+00:39:27 --> 00:39:33
+It's always a good thing.
+Any suggestions on how we might
+
+560
+00:39:33 --> 00:39:36
+prove this theorem,
+this lemma?
+
+561
+00:39:36 --> 00:39:40
+It's pretty easy.
+So, what technique might we use
+
+562
+00:39:40 --> 00:39:44
+to prove it?
+One word: induction.
+
+563
+00:39:44 --> 00:39:46
+Always a good answer,
+yeah.
+
+564
+00:39:46 --> 00:39:52
+Induction should shout out at
+you here because we already know
+
+565
+00:39:52 --> 00:40:00
+that this is true by definition
+of convexity for n equals two.
+
+566
+00:40:00 --> 00:40:04
+So, the base case is clear.
+In fact, there's an even
+
+567
+00:40:04 --> 00:40:08
+simpler base case,
+which is when n equals one.
+
+568
+00:40:08 --> 00:40:13
+If n equals one,
+then you have one number that
+
+569
+00:40:13 --> 00:40:16
+sums to one.
+So, alpha one is one.
+
+570
+00:40:16 --> 00:40:19
+And so, nothing is going on
+here.
+
+571
+00:40:19 --> 00:40:23
+This is just saying that f of
+one times x_1 is,
+
+572
+00:40:23 --> 00:40:28
+at most, one times f of x_1:
+so, not terribly exciting
+
+573
+00:40:28 --> 00:40:33
+because that holds with the
+quality.
+
+574
+00:40:33 --> 00:40:37
+OK, so we don't even need the n
+equals two base case.
+
+575
+00:40:37 --> 00:40:42
+So, the interesting part,
+although still not terribly
+
+576
+00:40:42 --> 00:40:45
+interesting, is the induction
+step.
+
+577
+00:40:45 --> 00:40:48
+This is good practice in
+induction.
+
+578
+00:40:48 --> 00:40:53
+So, what we care about is this
+f of this linear combination,
+
+579
+00:40:53 --> 00:40:57
+f on combination,
+x_k times x_k summed over all
+
+580
+00:40:57 --> 00:41:01
+k.
+Now, what I would like to do is
+
+581
+00:41:01 --> 00:41:05
+apply induction.
+What I know about inductively,
+
+582
+00:41:05 --> 00:41:09
+is say f of this sum,
+if it's summed only up to n
+
+583
+00:41:09 --> 00:41:12
+minus one instead of all the way
+up to n.
+
+584
+00:41:12 --> 00:41:16
+Any smaller sum I can deal with
+by induction.
+
+585
+00:41:16 --> 00:41:20
+So, I'm going to try and get
+rid of the nth term.
+
+586
+00:41:20 --> 00:41:24
+I want to separate it out.
+And, this is fairly natural if
+
+587
+00:41:24 --> 00:41:28
+you've played with affine
+combinations before.
+
+588
+00:41:28 --> 00:41:35
+But it's just some algebra.
+So, I want to separate out the
+
+589
+00:41:35 --> 00:41:40
+alpha_n*x_n term.
+And, I'd also like to make it
+
+590
+00:41:40 --> 00:41:45
+an affine combination.
+This is the trick.
+
+591
+00:41:45 --> 00:41:50
+Sorry, no f here.
+If I just removed the last
+
+592
+00:41:50 --> 00:41:57
+term, the alpha k's from one up
+to n minus one wouldn't sum to
+
+593
+00:41:57 --> 00:42:02
+one anymore.
+They'd sum to something
+
+594
+00:42:02 --> 00:42:05
+smaller.
+So, I can't just take out this
+
+595
+00:42:05 --> 00:42:08
+term.
+I'm going to have to do some
+
+596
+00:42:08 --> 00:42:10
+trickery here,
+x_k plus the f.
+
+597
+00:42:10 --> 00:42:13
+Good.
+So, you should see why this is
+
+598
+00:42:13 --> 00:42:17
+true, because the one minus
+alpha n's cancel.
+
+599
+00:42:17 --> 00:42:22
+And then, I'm just getting the
+sum of alpha_k*x_k,
+
+600
+00:42:22 --> 00:42:28
+k equals one to n minus one,
+plus the alpha_n*x_n term.
+
+601
+00:42:28 --> 00:42:30
+So, I haven't done anything
+here.
+
+602
+00:42:30 --> 00:42:32
+These are equal.
+But now, I have this nifty
+
+603
+00:42:32 --> 00:42:36
+feature, that on the one hand,
+these two numbers,
+
+604
+00:42:36 --> 00:42:38
+alpha n and one minus alpha n
+sum to one.
+
+605
+00:42:38 --> 00:42:41
+And on the other hand,
+if I did it right,
+
+606
+00:42:41 --> 00:42:45
+these numbers should sum up to
+one just going from one up to n
+
+607
+00:42:45 --> 00:42:47
+minus one.
+Why do they sum up to one?
+
+608
+00:42:47 --> 00:42:51
+Well, these numbers summed up
+to one minus alpha n.
+
+609
+00:42:51 --> 00:42:54
+And so, I'm dividing everything
+by one minus alpha n.
+
+610
+00:42:54 --> 00:42:57
+So, they will sum to one.
+So now, I have two affine
+
+611
+00:42:57 --> 00:43:02
+combinations.
+I just apply the two things
+
+612
+00:43:02 --> 00:43:07
+that I know.
+I know this affine combination
+
+613
+00:43:07 --> 00:43:10
+will work because,
+well, why?
+
+614
+00:43:10 --> 00:43:16
+Why can I say that this is
+alpha n f of x_n plus one minus
+
+615
+00:43:16 --> 00:43:20
+alpha n f of this crazy sum?
+
+616
+00:43:20 --> 00:43:35
+
+
+617
+00:43:35 --> 00:43:41
+Shout it out.
+There are two possible answers.
+
+618
+00:43:41 --> 00:43:47
+One is correct,
+and one is incorrect.
+
+619
+00:43:47 --> 00:43:55
+So, which will it be?
+This should have been less than
+
+620
+00:43:55 --> 00:44:01
+or equal to.
+That's important.
+
+621
+00:44:01 --> 00:44:04
+It's on the board.
+It can't be too difficult.
+
+622
+00:44:04 --> 00:44:17
+
+
+623
+00:44:17 --> 00:44:21
+So, I'm treating this as just
+one big X value.
+
+624
+00:44:21 --> 00:44:26
+So, I have some x_n,
+and I have some crazy X.
+
+625
+00:44:26 --> 00:44:31
+I want f of the affine
+combination of those two X
+
+626
+00:44:31 --> 00:44:36
+values is, at most,
+the affine combinations of the
+
+627
+00:44:36 --> 00:44:40
+f's of those X values.
+This is?
+
+628
+00:44:40 --> 00:44:43
+It is the inductive hypothesis
+where n equals two.
+
+629
+00:44:43 --> 00:44:45
+Unfortunately,
+we didn't prove the n equals
+
+630
+00:44:45 --> 00:44:49
+two case is a special base case.
+So, we can't use induction here
+
+631
+00:44:49 --> 00:44:52
+the way that I've stated the
+base case.
+
+632
+00:44:52 --> 00:44:55
+If you did n equals two base
+case, you can do that.
+
+633
+00:44:55 --> 00:44:58
+Here, we can't.
+So, the other answer is by
+
+634
+00:44:58 --> 00:45:02
+convexity, good.
+That's right here.
+
+635
+00:45:02 --> 00:45:08
+So, f is convex.
+We know that this is true for
+
+636
+00:45:08 --> 00:45:15
+any two X values,
+and provided these two sum to
+
+637
+00:45:15 --> 00:45:20
+one.
+So, we know that this is true.
+
+638
+00:45:20 --> 00:45:28
+Now is when we apply induction.
+So, now we are going to
+
+639
+00:45:28 --> 00:45:35
+manipulate this right term by
+induction.
+
+640
+00:45:35 --> 00:45:40
+See, before we didn't
+necessarily know that n was
+
+641
+00:45:40 --> 00:45:44
+bigger than two.
+But, we know that n is bigger
+
+642
+00:45:44 --> 00:45:49
+than n minus one.
+That much, I can be sure of.
+
+643
+00:45:49 --> 00:45:53
+So, this is one minus alpha n
+times the sum,
+
+644
+00:45:53 --> 00:46:00
+k equals one to n minus one of
+alpha k over one minus alpha n
+
+645
+00:46:00 --> 00:46:05
+times f of x_k,
+if I got that right.
+
+646
+00:46:05 --> 00:46:09
+This is by induction,
+the induction hypothesis,
+
+647
+00:46:09 --> 00:46:16
+because these alpha k's over
+one minus alpha n sum to one.
+
+648
+00:46:16 --> 00:46:22
+Now, these one minus alpha n's
+cancel, and we just get what we
+
+649
+00:46:22 --> 00:46:26
+want.
+This is sum k equals one to n
+
+650
+00:46:26 --> 00:46:31
+of alpha k, f of x_k.
+So, we get f of the sum is,
+
+651
+00:46:31 --> 00:46:37
+at most, sum of the f's.
+That proves the lemma.
+
+652
+00:46:37 --> 00:46:43
+OK, a bit tedious,
+but each step is pretty
+
+653
+00:46:43 --> 00:46:46
+straightforward.
+Do you agree?
+
+654
+00:46:46 --> 00:46:53
+Now, it turns out to be
+relatively straightforward to
+
+655
+00:46:53 --> 00:47:00
+prove Jensen's inequality.
+That's the magic.
+
+656
+00:47:00 --> 00:47:04
+And then, we get to do the
+expectation analysis.
+
+657
+00:47:04 --> 00:47:09
+So, we use our good friends,
+indicator random variables.
+
+658
+00:47:09 --> 00:47:13
+OK, but for now,
+we just want to prove this
+
+659
+00:47:13 --> 00:47:16
+statement.
+If we have a convex function,
+
+660
+00:47:16 --> 00:47:21
+f of the expectation is,
+at most, expectation of f of
+
+661
+00:47:21 --> 00:47:26
+that random variable.
+OK, this is a random variable,
+
+662
+00:47:26 --> 00:47:29
+right?
+If you want to sample from this
+
+663
+00:47:29 --> 00:47:33
+random variable,
+you sample from X,
+
+664
+00:47:33 --> 00:47:39
+and then you apply f to it.
+That's the meaning of this
+
+665
+00:47:39 --> 00:47:45
+notation, f of X because X is a
+random variable.
+
+666
+00:47:45 --> 00:47:51
+We get to use that f is convex.
+OK, it turns out this is not
+
+667
+00:47:51 --> 00:47:57
+hard, if you remember the
+definition of expectation,
+
+668
+00:47:57 --> 00:48:01
+oh, I want to make one more
+assumption here,
+
+669
+00:48:01 --> 00:48:08
+which is that X is integral.
+So, it's an integer random
+
+670
+00:48:08 --> 00:48:11
+variable, meaning it takes
+integer values.
+
+671
+00:48:11 --> 00:48:16
+OK, that's all we care about
+because we're looking at running
+
+672
+00:48:16 --> 00:48:19
+times.
+This statement is true for
+
+673
+00:48:19 --> 00:48:24
+continuous random variables,
+too, but I would like to do the
+
+674
+00:48:24 --> 00:48:29
+discrete case because then I get
+to write down what U of X is.
+
+675
+00:48:29 --> 00:48:34
+So, what is the definition of E
+of X?
+
+676
+00:48:34 --> 00:48:40
+X only takes on integer values.
+This is easy,
+
+677
+00:48:40 --> 00:48:47
+but you have to remember it.
+It's a good drill.
+
+678
+00:48:47 --> 00:48:55
+I don't really know much about
+X except that it takes on
+
+679
+00:48:55 --> 00:49:02
+integer values.
+Any suggestions on how I should
+
+680
+00:49:02 --> 00:49:10
+expand the expectation of X?
+How many people know this by
+
+681
+00:49:10 --> 00:49:14
+heart?
+OK, it's not too easy then.
+
+682
+00:49:14 --> 00:49:20
+Well, expectation has something
+to do with probability,
+
+683
+00:49:20 --> 00:49:23
+right?
+So, I should be looking at
+
+684
+00:49:23 --> 00:49:29
+something like the probability
+that X equals some value,
+
+685
+00:49:29 --> 00:49:32
+x.
+That would seem like a good
+
+686
+00:49:32 --> 00:49:36
+thing to do.
+What else goes here?
+
+687
+00:49:36 --> 00:49:39
+A sum, yeah.
+The sum, well,
+
+688
+00:49:39 --> 00:49:44
+X could be somewhere between
+minus infinity and infinity.
+
+689
+00:49:44 --> 00:49:49
+That's certainly true.
+And, we have some more.
+
+690
+00:49:49 --> 00:49:54
+There's something missing here.
+What is this sum?
+
+691
+00:49:54 --> 00:49:58
+What does it come out to for
+any random variable,
+
+692
+00:49:58 --> 00:50:03
+X, that takes on integer
+values?
+
+693
+00:50:03 --> 00:50:06
+One, good.
+So, I need to add in something
+
+694
+00:50:06 --> 00:50:10
+here, namely X.
+OK, that's the definition of
+
+695
+00:50:10 --> 00:50:13
+the expectation.
+Now, f of a sum of things,
+
+696
+00:50:13 --> 00:50:18
+where these coefficients sum to
+one looks an awful lot like the
+
+697
+00:50:18 --> 00:50:23
+lemma that we just proved.
+OK, we proved it in the finite
+
+698
+00:50:23 --> 00:50:25
+case.
+It turns out,
+
+699
+00:50:25 --> 00:50:30
+it holds just as well if you
+take all integers.
+
+700
+00:50:30 --> 00:50:33
+So, I'm just going to assume
+that.
+
+701
+00:50:33 --> 00:50:39
+So, I have these probabilities,
+these alpha values sum to one.
+
+702
+00:50:39 --> 00:50:44
+Therefore, I can use this
+inequality, that this is,
+
+703
+00:50:44 --> 00:50:49
+at most, let me get this right,
+I have the alphas,
+
+704
+00:50:49 --> 00:50:53
+so I have a sum,
+x equals minus infinity to
+
+705
+00:50:53 --> 00:50:58
+infinity of the alphas,
+which are a probability;
+
+706
+00:50:58 --> 00:51:03
+capital X equals little x times
+f of the value,
+
+707
+00:51:03 --> 00:51:09
+f of little x.
+OK, so there it is.
+
+708
+00:51:09 --> 00:51:16
+I've used the lemma.
+So, maybe now I'll erase the
+
+709
+00:51:16 --> 00:51:21
+lemma.
+OK, I cheated by using the
+
+710
+00:51:21 --> 00:51:31
+countable version of the lemma
+while only proving the finite
+
+711
+00:51:31 --> 00:51:36
+case.
+It's all I can do in lecture.
+
+712
+00:51:36 --> 00:51:42
+So, this is by a lemma.
+Now, what I'd like to prove and
+
+713
+00:51:42 --> 00:51:47
+leave some blank space here is
+this is, at most,
+
+714
+00:51:47 --> 00:51:51
+E of f of X,
+so that this summation is,
+
+715
+00:51:51 --> 00:51:56
+at most, E of f of X.
+Actually, it's equal to E of f
+
+716
+00:51:56 --> 00:52:00
+of X.
+And, it really looks kind of
+
+717
+00:52:00 --> 00:52:05
+equal, right?
+You've got sum of some
+
+718
+00:52:05 --> 00:52:09
+probabilities times f of X.
+It almost looks like the
+
+719
+00:52:09 --> 00:52:13
+definition of E of f of X,
+but it isn't.
+
+720
+00:52:13 --> 00:52:18
+You've got to be a little bit
+careful because E of f of X
+
+721
+00:52:18 --> 00:52:23
+should talk about the
+probability that f of X equals a
+
+722
+00:52:23 --> 00:52:28
+particular value.
+We can relate these as follows.
+
+723
+00:52:28 --> 00:52:32
+It's not too hard.
+You can look at each value that
+
+724
+00:52:32 --> 00:52:37
+f takes on, and then look at all
+the values, k,
+
+725
+00:52:37 --> 00:52:41
+that map to that value,
+x.
+
+726
+00:52:41 --> 00:52:48
+So all the k's where f of X
+equals x, the probability that X
+
+727
+00:52:48 --> 00:52:54
+equals k, OK,
+this is another way of writing
+
+728
+00:52:54 --> 00:53:00
+the probability that f of X
+equals x.
+
+729
+00:53:00 --> 00:53:04
+OK, so, in other words,
+I'm grouping the terms in a
+
+730
+00:53:04 --> 00:53:07
+particular way.
+I'm saying, well,
+
+731
+00:53:07 --> 00:53:12
+f of X takes on various values.
+Clever me to switch.
+
+732
+00:53:12 --> 00:53:18
+I used to use k's unannounced,
+so I better call this something
+
+733
+00:53:18 --> 00:53:20
+else.
+Let's call this Y,
+
+734
+00:53:20 --> 00:53:25
+sorry, switch notation here.
+It makes sense.
+
+735
+00:53:25 --> 00:53:31
+I should look at the
+probability that X equals x.
+
+736
+00:53:31 --> 00:53:35
+So, what I really care about is
+what this f of X value takes on.
+
+737
+00:53:35 --> 00:53:38
+Let's just call it Y,
+look at all the values,
+
+738
+00:53:38 --> 00:53:41
+Y, that f could take on.
+That's the range of f.
+
+739
+00:53:41 --> 00:53:46
+And then, I'll look at all the
+different values of X where f of
+
+740
+00:53:46 --> 00:53:47
+X equals Y.
+If I add up those
+
+741
+00:53:47 --> 00:53:50
+probabilities,
+because these are different
+
+742
+00:53:50 --> 00:53:53
+values of X.
+Those are sort of independent
+
+743
+00:53:53 --> 00:53:56
+events.
+So, this summation will be the
+
+744
+00:53:56 --> 00:53:58
+probability that f of X equals
+Y.
+
+745
+00:53:58 --> 00:54:02
+This is capital X.
+This is little y.
+
+746
+00:54:02 --> 00:54:09
+And then, if I multiply that by
+y, I'm getting the expectation
+
+747
+00:54:09 --> 00:54:12
+of f of X.
+So, think about this,
+
+748
+00:54:12 --> 00:54:18
+these two inequalities hold.
+This may be a bit bizarre here
+
+749
+00:54:18 --> 00:54:22
+because these sums are
+potentially infinite.
+
+750
+00:54:22 --> 00:54:26
+But, it's true.
+OK, this proves Jensen's
+
+751
+00:54:26 --> 00:54:30
+inequality.
+So, it wasn't very hard,
+
+752
+00:54:30 --> 00:54:35
+just a couple of boards,
+once we had this powerful
+
+753
+00:54:35 --> 00:54:41
+convexity lemma.
+So, we just used convexity.
+
+754
+00:54:41 --> 00:54:43
+We used the definition of E of
+X.
+
+755
+00:54:43 --> 00:54:47
+We used convexity.
+That lets us put the f's
+
+756
+00:54:47 --> 00:54:50
+inside.
+Then we do this regrouping of
+
+757
+00:54:50 --> 00:54:54
+terms, and we figure out,
+oh, that's just E of f of X.
+
+758
+00:54:54 --> 00:54:58
+So, the only inequality here is
+coming from convexity.
+
+759
+00:54:58 --> 00:55:01
+All right, now comes the
+algorithms.
+
+760
+00:55:01 --> 00:55:05
+So, this was just some basic
+probability stuff,
+
+761
+00:55:05 --> 00:55:10
+which is good to practice.
+OK, we could see in the quiz,
+
+762
+00:55:10 --> 00:55:13
+which is not surprising.
+This is the case for me,
+
+763
+00:55:13 --> 00:55:15
+too.
+You have a lot of intuition
+
+764
+00:55:15 --> 00:55:17
+with algorithms.
+Whenever it's algorithmic,
+
+765
+00:55:17 --> 00:55:21
+it makes a lot of sense because
+you're sort of grounded in some
+
+766
+00:55:21 --> 00:55:24
+things that you know because you
+are computer scientists,
+
+767
+00:55:24 --> 00:55:27
+or something of that ilk.
+For the purposes of this class,
+
+768
+00:55:27 --> 00:55:32
+you are computer scientists.
+But, with sort of the basic
+
+769
+00:55:32 --> 00:55:36
+probability, unless you happen
+to be a mathematician,
+
+770
+00:55:36 --> 00:55:40
+it's less intuitive,
+and therefore harder to get
+
+771
+00:55:40 --> 00:55:42
+fast.
+And, in quiz one,
+
+772
+00:55:42 --> 00:55:45
+speed is pretty important.
+On the final,
+
+773
+00:55:45 --> 00:55:50
+speed will also be important.
+The take home certainly doesn't
+
+774
+00:55:50 --> 00:55:53
+hurt.
+So, the take home is more
+
+775
+00:55:53 --> 00:55:56
+interesting because it requires
+being clever.
+
+776
+00:55:56 --> 00:56:01
+You have to actually be
+creative.
+
+777
+00:56:01 --> 00:56:03
+And, that really tests
+algorithmic design.
+
+778
+00:56:03 --> 00:56:06
+So far, we've mainly tested
+analysis, and just,
+
+779
+00:56:06 --> 00:56:09
+can you work through
+probability?
+
+780
+00:56:09 --> 00:56:12
+Can you figure out what the,
+can you remember what your
+
+781
+00:56:12 --> 00:56:15
+running time of randomized
+quicksort is,
+
+782
+00:56:15 --> 00:56:17
+and so on?
+Quiz two will actually test
+
+783
+00:56:17 --> 00:56:20
+creativity because you have more
+time.
+
+784
+00:56:20 --> 00:56:22
+It's hard to be creative in two
+hours.
+
+785
+00:56:22 --> 00:56:26
+OK, so we want to analyze the
+expected height of a randomly
+
+786
+00:56:26 --> 00:56:32
+constructed binary search tree.
+So, I've defined this before,
+
+787
+00:56:32 --> 00:56:38
+but let me repeat it because it
+was a while ago almost at the
+
+788
+00:56:38 --> 00:56:42
+beginning of lecture.
+I'm going to take the random
+
+789
+00:56:42 --> 00:56:48
+variable of the height of a
+randomly built binary search
+
+790
+00:56:48 --> 00:56:51
+tree on n nodes.
+So, that was randomized,
+
+791
+00:56:51 --> 00:56:55
+the n values.
+Take a random permutation,
+
+792
+00:56:55 --> 00:57:02
+insert them one by one from
+left to right with tree insert.
+
+793
+00:57:02 --> 00:57:05
+What is the height of the tree
+that you get?
+
+794
+00:57:05 --> 00:57:08
+What is the maximum depth of
+any node?
+
+795
+00:57:08 --> 00:57:11
+I'm not going to look so much
+at X_n.
+
+796
+00:57:11 --> 00:57:14
+I'm going to look at the
+exponentiation of X_n.
+
+797
+00:57:14 --> 00:57:17
+And, still we have no intuition
+why.
+
+798
+00:57:17 --> 00:57:20
+But, two to the X is a convex
+function.
+
+799
+00:57:20 --> 00:57:23
+OK, it looks like that.
+It's very sharp.
+
+800
+00:57:23 --> 00:57:27
+That's the best I can do for
+drawing, two to the X.
+
+801
+00:57:27 --> 00:57:31
+You saw how I drew my
+histogram.
+
+802
+00:57:31 --> 00:57:34
+So, we want to somehow write
+this random variable as
+
+803
+00:57:34 --> 00:57:36
+something, OK,
+in some algebra.
+
+804
+00:57:36 --> 00:57:39
+The main thing here is to split
+into cases.
+
+805
+00:57:39 --> 00:57:42
+That's how we usually go
+because there's lots of
+
+806
+00:57:42 --> 00:57:45
+different scenarios on what
+happens.
+
+807
+00:57:45 --> 00:57:48
+So, I mean, how do we construct
+a tree from the beginning?
+
+808
+00:57:48 --> 00:57:51
+First thing we do is we take
+the first node.
+
+809
+00:57:51 --> 00:57:54
+We throw it in,
+make it the root.
+
+810
+00:57:54 --> 00:57:58
+OK, so whatever the first value
+happens to be in the array,
+
+811
+00:57:58 --> 00:58:02
+which we don't really know how
+that falls into sorted order,
+
+812
+00:58:02 --> 00:58:06
+we put it at the root.
+And, it stays the root.
+
+813
+00:58:06 --> 00:58:08
+We never change the root from
+then on.
+
+814
+00:58:08 --> 00:58:12
+Now, of all the remaining
+elements, some of them are less
+
+815
+00:58:12 --> 00:58:14
+than this value,
+and they go over here.
+
+816
+00:58:14 --> 00:58:17
+So, let's call this r at the
+root.
+
+817
+00:58:17 --> 00:58:19
+And, some of them are greater
+than r.
+
+818
+00:58:19 --> 00:58:22
+So, they go over here.
+Maybe there's more over here.
+
+819
+00:58:22 --> 00:58:25
+Maybe there's more over here.
+Who knows?
+
+820
+00:58:25 --> 00:58:28
+Arbitrary partition,
+in fact, uniformly random
+
+821
+00:58:28 --> 00:58:31
+partition, which should sound
+familiar, whether there are k
+
+822
+00:58:31 --> 00:58:34
+elements over here,
+and n minus k minus one
+
+823
+00:58:34 --> 00:58:36
+elements over here,
+for any value of k,
+
+824
+00:58:36 --> 00:58:42
+that's equally likely because
+this is chosen uniformly.
+
+825
+00:58:42 --> 00:58:44
+The root is chosen uniformly.
+It's the first element in a
+
+826
+00:58:44 --> 00:58:47
+random permutation.
+So, what I'm going to do is
+
+827
+00:58:47 --> 00:58:49
+parameterize by that.
+How many elements are over
+
+828
+00:58:49 --> 00:58:51
+here, and how many elements are
+over here?
+
+829
+00:58:51 --> 00:58:54
+Because this thing is,
+again, a randomly built binary
+
+830
+00:58:54 --> 00:58:57
+search tree on however many
+nodes are in there because after
+
+831
+00:58:57 --> 00:59:00
+I pick r, it's determined who is
+to the left and who is to the
+
+832
+00:59:00 --> 00:59:03
+right.
+And so, I can just partition.
+
+833
+00:59:03 --> 00:59:07
+It's like running quicksort.
+I partition the elements left
+
+834
+00:59:07 --> 00:59:11
+of r, the elements right of r,
+and I'm sort of recursively
+
+835
+00:59:11 --> 00:59:15
+constructing a randomly built
+binary search tree on those two
+
+836
+00:59:15 --> 00:59:18
+sub-permutations because
+sub-permutations of uniform
+
+837
+00:59:18 --> 00:59:22
+permutations are uniform.
+OK, so these are essentially
+
+838
+00:59:22 --> 00:59:25
+recursive problems.
+And, we know how to analyze
+
+839
+00:59:25 --> 00:59:28
+recursive problems.
+All we need to know is that
+
+840
+00:59:28 --> 00:59:31
+there are k minus one elements
+over here, and n minus k
+
+841
+00:59:31 --> 00:59:38
+elements over here.
+And, that would mean that r has
+
+842
+00:59:38 --> 00:59:45
+rank k, remember,
+rank in the sense of the index
+
+843
+00:59:45 --> 00:59:52
+in assorted order.
+So, where should I go?
+
+844
+00:59:52 --> 1:00:08
+
+
+845
+1:00:08 --> 1:00:11.034
+So, if the root,
+r, has rank,
+
+846
+1:00:11.034 --> 1:00:17.318
+k, so if this is a statement
+about condition on this event,
+
+847
+1:00:17.318 --> 1:00:23.278
+which is a random event,
+then what we have is X_n equals
+
+848
+1:00:23.278 --> 1:00:29.888
+one plus the max of X_(k minus
+one), X_(n minus k) because the
+
+849
+1:00:29.888 --> 1:00:35.848
+height of this tree is the max
+of the heights of the two
+
+850
+1:00:35.848 --> 1:00:43
+subtrees plus one because we
+have one more level up top.
+
+851
+1:00:43 --> 1:00:46.728
+OK, so that's the natural thing
+to do.
+
+852
+1:00:46.728 --> 1:00:51.263
+What we are trying to analyze,
+though, is Y_n.
+
+853
+1:00:51.263 --> 1:00:55.193
+So, for Y_n,
+we have to take two to this
+
+854
+1:00:55.193 --> 1:00:58.72
+power.
+So, it's two times the max of
+
+855
+1:00:58.72 --> 1:01:03.961
+two to the X_(k minus one),
+which is Y_(k minus one),
+
+856
+1:01:03.961 --> 1:01:09
+and two to this,
+which is Y_(n minus k).
+
+857
+1:01:09 --> 1:01:12.536
+And, now you start to see,
+maybe, why we are interested in
+
+858
+1:01:12.536 --> 1:01:16.26
+Y's instead of X's in the sense
+that it's what we know how to
+
+859
+1:01:16.26 --> 1:01:18.059
+do.
+When we solve a recursion,
+
+860
+1:01:18.059 --> 1:01:20.541
+when we solve,
+like, the expected running
+
+861
+1:01:20.541 --> 1:01:22.713
+time, we haven't taken
+expectations,
+
+862
+1:01:22.713 --> 1:01:24.823
+yet, here.
+But, when we compute the
+
+863
+1:01:24.823 --> 1:01:28.05
+expected running time of
+quicksort, we have something
+
+864
+1:01:28.05 --> 1:01:30.656
+like two times,
+I mean, we have a couple of
+
+865
+1:01:30.656 --> 1:01:35
+recursive subproblems,
+which are being added together.
+
+866
+1:01:35 --> 1:01:37.015
+OK, here, we have a factor of
+two.
+
+867
+1:01:37.015 --> 1:01:39.276
+Here, we have a max.
+But, intuitively,
+
+868
+1:01:39.276 --> 1:01:43.002
+we know how to multiply random
+variables by a constant because
+
+869
+1:01:43.002 --> 1:01:45.079
+that's, like,
+there's two recursive
+
+870
+1:01:45.079 --> 1:01:48.5
+subproblems of the size is equal
+to the max of these two,
+
+871
+1:01:48.5 --> 1:01:50.576
+which we don't happen to know
+here.
+
+872
+1:01:50.576 --> 1:01:52.653
+But, there it is,
+whereas one plus,
+
+873
+1:01:52.653 --> 1:01:54.791
+we don't know how to handle so
+well.
+
+874
+1:01:54.791 --> 1:01:57.357
+And, indeed,
+our techniques are really good
+
+875
+1:01:57.357 --> 1:02:00.289
+at solving recurrences,
+except up to the constant
+
+876
+1:02:00.289 --> 1:02:03.355
+factors.
+And, this one plus really
+
+877
+1:02:03.355 --> 1:02:05.685
+doesn't affect the constant
+factor too much,
+
+878
+1:02:05.685 --> 1:02:07.745
+it would seem.
+OK, but it's a big deal.
+
+879
+1:02:07.745 --> 1:02:09.859
+In exponentiation,
+it's a factor of two.
+
+880
+1:02:09.859 --> 1:02:13.112
+So here, it's really hard to
+see what this one plus is doing.
+
+881
+1:02:13.112 --> 1:02:14.9
+And, our analysis,
+if we tried it,
+
+882
+1:02:14.9 --> 1:02:18.099
+and it's a good idea to try it
+at home and see what happens,
+
+883
+1:02:18.099 --> 1:02:20.7
+if you tried to do what I'm
+about to do with X_n,
+
+884
+1:02:20.7 --> 1:02:24.007
+the one plus will sort of get
+lost, and you won't get a bound.
+
+885
+1:02:24.007 --> 1:02:26.771
+You just can't prove anything.
+With a factor of two,
+
+886
+1:02:26.771 --> 1:02:29.319
+we're in good shape.
+We sort of know how to deal
+
+887
+1:02:29.319 --> 1:02:33.98
+with that.
+We'll say more when we've
+
+888
+1:02:33.98 --> 1:02:41.015
+actually done the proof about
+why we use Y_n instead of X_n.
+
+889
+1:02:41.015 --> 1:02:44.353
+But for now,
+we're using Y_n.
+
+890
+1:02:44.353 --> 1:02:49.48
+So, this is sort of a
+recursion, except it's
+
+891
+1:02:49.48 --> 1:02:56.038
+conditioned on this event.
+So, how do I turn this into a
+
+892
+1:02:56.038 --> 1:02:59.973
+statement that holds all the
+time?
+
+893
+1:02:59.973 --> 1:03:04.896
+Sorry?
+Divide by the probability of
+
+894
+1:03:04.896 --> 1:03:07.275
+the event?
+More or less.
+
+895
+1:03:07.275 --> 1:03:11
+Indeed, these events are
+independent.
+
+896
+1:03:11 --> 1:03:15.551
+Or, they're all equally likely,
+I should say.
+
+897
+1:03:15.551 --> 1:03:21.241
+They're not independent.
+In fact, one determines all the
+
+898
+1:03:21.241 --> 1:03:24.241
+others.
+So, how do I generally
+
+899
+1:03:24.241 --> 1:03:30.137
+represent an event in algebra?
+Indicator random variables:
+
+900
+1:03:30.137 --> 1:03:34.995
+good.
+Remember your friends,
+
+901
+1:03:34.995 --> 1:03:42.076
+indicator random variables.
+All of these analyses use
+
+902
+1:03:42.076 --> 1:03:49.565
+indicator random variables.
+So, they will just represent
+
+903
+1:03:49.565 --> 1:03:54.195
+this event, and we'll call it
+Z_nk.
+
+904
+1:03:54.195 --> 1:03:59.778
+It's going to be one if the
+root has rank,
+
+905
+1:03:59.778 --> 1:04:05.415
+k, and zero otherwise.
+So, in particular,
+
+906
+1:04:05.415 --> 1:04:09.11
+the probability of,
+these things are all equally
+
+907
+1:04:09.11 --> 1:04:13.828
+likely for, a particular value
+of n if you try all the values
+
+908
+1:04:13.828 --> 1:04:16.186
+of k.
+The probability that this
+
+909
+1:04:16.186 --> 1:04:20.746
+equals one, which is also the
+expectation of that indicator
+
+910
+1:04:20.746 --> 1:04:23.734
+random variable,
+which you should know,
+
+911
+1:04:23.734 --> 1:04:26.486
+is it only takes values one or
+zero.
+
+912
+1:04:26.486 --> 1:04:29.788
+The zero doesn't matter in the
+expectation.
+
+913
+1:04:29.788 --> 1:04:34.034
+So, this is going to be,
+hopefully, one over n if I got
+
+914
+1:04:34.034 --> .
+right.
+
+915
+. --> 1:04:36
+
+
+916
+1:04:36 --> 1:04:43.013
+So, there are n possibility of
+what the rank of the root could
+
+917
+1:04:43.013 --> 1:04:46.922
+be.
+Each of them are equally likely
+
+918
+1:04:46.922 --> 1:04:51.176
+because we have a uniform
+permutation.
+
+919
+1:04:51.176 --> 1:04:57.04
+So, now, I can rewrite this
+condition statement as a
+
+920
+1:04:57.04 --> 1:05:04.168
+summation where the Z_nk's will
+let me choose what case I'm in.
+
+921
+1:05:04.168 --> 1:05:10.836
+So, we have Y_n is the sum,
+k equals one to n of Z_nk times
+
+922
+1:05:10.836 --> 1:05:16.01
+two times the max of X,
+sorry, Y, k minus one,
+
+923
+1:05:16.01 --> 1:05:20.478
+Y_n minus k.
+So, now we have our good
+
+924
+1:05:20.478 --> 1:05:23.126
+friend, the recurrence.
+We need to solve it.
+
+925
+1:05:23.126 --> 1:05:26.329
+OK, we can't really solve it
+because this is a random
+
+926
+1:05:26.329 --> 1:05:29.963
+variable, and it's talking about
+recursive random variables.
+
+927
+1:05:29.963 --> 1:05:32.858
+So, we first take the
+expectation of both sides.
+
+928
+1:05:32.858 --> 1:05:36
+That's the only thing we can
+really bound.
+
+929
+1:05:36 --> 1:05:40.074
+Y_n could be n^2 in an unlucky
+case, sorry, not n^2.
+
+930
+1:05:40.074 --> 1:05:43.19
+It could be n^2.
+It could be two to the,
+
+931
+1:05:43.19 --> 1:05:47.903
+boy, two to the n if you are
+unlucky because X_n could be as
+
+932
+1:05:47.903 --> 1:05:50.46
+big as n, the height of the
+tree.
+
+933
+1:05:50.46 --> 1:05:54.694
+And, Y_n is two to that.
+So, it could be two to the n.
+
+934
+1:05:54.694 --> 1:05:58.688
+What we want to prove is that
+it's polynomial in n.
+
+935
+1:05:58.688 --> 1:06:02.203
+If it's n to some constant,
+and we take logs,
+
+936
+1:06:02.203 --> 1:06:07.341
+it'll be order log n.
+OK, so we'll take the
+
+937
+1:06:07.341 --> 1:06:14.254
+expectation, and hopefully that
+will guarantee that this holds.
+
+938
+1:06:14.254 --> 1:06:20.163
+OK, so we have expectation of
+this summation of random
+
+939
+1:06:20.163 --> 1:06:24.846
+variables times recursive random
+variables.
+
+940
+1:06:24.846 --> 1:06:30.198
+So, what is the first,
+woops, I forgot a bracket.
+
+941
+1:06:30.198 --> 1:06:37
+What is the first thing that we
+do in this analysis?
+
+942
+1:06:37 --> 1:06:41.3
+This should,
+yeah, linearity of expectation.
+
+943
+1:06:41.3 --> 1:06:45.9
+That one's easy to remember.
+OK, we have a sum.
+
+944
+1:06:45.9 --> 1:06:49
+So, let's put the E inside.
+
+945
+1:06:49 --> 1:07:04
+
+
+946
+1:07:04 --> 1:07:08.842
+OK, now we have the expectation
+of our product.
+
+947
+1:07:08.842 --> 1:07:12.21
+What should we use?
+Independence.
+
+948
+1:07:12.21 --> 1:07:15.684
+Hopefully, things are
+independent.
+
+949
+1:07:15.684 --> 1:07:21.052
+And then, we could write this.
+Then, it would be the
+
+950
+1:07:21.052 --> 1:07:26.842
+expectation of the product.
+And, heck, let's put the two
+
+951
+1:07:26.842 --> 1:07:34
+outside, because it's not,
+no sense in keeping it in here.
+
+952
+1:07:34 --> 1:07:37.956
+Y is there starting to look
+like X's?
+
+953
+1:07:37.956 --> 1:07:42.351
+I can't even read them.
+Sorry about that.
+
+954
+1:07:42.351 --> 1:07:46.417
+This should all be Y's.
+OK, very wise,
+
+955
+1:07:46.417 --> 1:07:48.615
+random variables.
+So.
+
+956
+1:07:48.615 --> 1:07:54.769
+Why are these independent?
+So, here we are looking at the
+
+957
+1:07:54.769 --> 1:08:00.703
+choice of what the root is,
+what rank the root has in a
+
+958
+1:08:00.703 --> 1:08:05.608
+problem of size n.
+In here, we're looking at what
+
+959
+1:08:05.608 --> 1:08:08.02
+the root, I mean,
+there are various choices of
+
+960
+1:08:08.02 --> 1:08:11.29
+what the search tree looks like
+in the stuff left of the root,
+
+961
+1:08:11.29 --> 1:08:13.112
+and in the stuff right of the
+root.
+
+962
+1:08:13.112 --> 1:08:16.221
+Those are independent choices
+because everything is uniform
+
+963
+1:08:16.221 --> 1:08:18.097
+here.
+So, the choice of this guy was
+
+964
+1:08:18.097 --> 1:08:20.081
+uniform.
+And then, that determines who
+
+965
+1:08:20.081 --> 1:08:22.011
+partitions in the left and the
+right.
+
+966
+1:08:22.011 --> 1:08:24.798
+Those are completely
+independent recursive choices of
+
+967
+1:08:24.798 --> 1:08:26.621
+who's the root in the left
+subtree?
+
+968
+1:08:26.621 --> 1:08:29.086
+Who's the root in the left of
+the left subtree,
+
+969
+1:08:29.086 --> 1:08:31.177
+and so on?
+So, this is a little trickier
+
+970
+1:08:31.177 --> 1:08:36.385
+than usual.
+Before, it was random choices
+
+971
+1:08:36.385 --> 1:08:41.871
+in the algorithm.
+Now, it's in some construction
+
+972
+1:08:41.871 --> 1:08:47.474
+where we choose the random
+numbers ahead of time.
+
+973
+1:08:47.474 --> 1:08:52.961
+It's a bit funny,
+but this is still independent.
+
+974
+1:08:52.961 --> 1:08:58.214
+So, we get this just like we
+did in quicksort,
+
+975
+1:08:58.214 --> 1:08:59.731
+and so on.
+OK.
+
+976
+1:08:59.731 --> 1:09:05.374
+Now, we continue.
+And, now it's time to be a bit
+
+977
+1:09:05.374 --> 1:09:08.143
+sloppy.
+Well, one of these things we
+
+978
+1:09:08.143 --> 1:09:09.568
+know.
+OK, E of ZNK,
+
+979
+1:09:09.568 --> 1:09:12.812
+that, we wrote over here.
+It's one over n.
+
+980
+1:09:12.812 --> 1:09:15.899
+So, that's cool.
+So, we get a two over n
+
+981
+1:09:15.899 --> 1:09:20.489
+outside, and we get this sum of
+the expectation of a max of
+
+982
+1:09:20.489 --> 1:09:23.812
+these two things.
+Normally, we would write,
+
+983
+1:09:23.812 --> 1:09:27.136
+well, I think sometimes you
+write T of max,
+
+984
+1:09:27.136 --> 1:09:30.143
+or Y of the max of the two
+things here.
+
+985
+1:09:30.143 --> 1:09:36
+You've got to write it as the
+max of these two variables.
+
+986
+1:09:36 --> 1:09:41.547
+And, the trick,
+I mean, it's not too much of a
+
+987
+1:09:41.547 --> 1:09:46.849
+trick, is that the max is,
+at most, the sum.
+
+988
+1:09:46.849 --> 1:09:53.506
+So, we have nonnegative things.
+So, we have two over n,
+
+989
+1:09:53.506 --> 1:10:00.657
+sum k equals one to n of the
+expectation of the sum instead
+
+990
+1:10:00.657 --> 1:10:03.944
+of the max.
+OK, this is,
+
+991
+1:10:03.944 --> 1:10:07.014
+in some sense,
+the key step where we are
+
+992
+1:10:07.014 --> 1:10:11.344
+losing something in our bound.
+So far, we've been exact.
+
+993
+1:10:11.344 --> 1:10:15.437
+Now, we're being pretty sloppy.
+It's true the max is,
+
+994
+1:10:15.437 --> 1:10:19.137
+at most, the sum.
+But, it's a pretty loose upper
+
+995
+1:10:19.137 --> 1:10:22.758
+bound as things go.
+We'll keep that in mind for
+
+996
+1:10:22.758 --> 1:10:25.434
+later.
+What else can we do with the
+
+997
+1:10:25.434 --> 1:10:27.166
+summation?
+This should,
+
+998
+1:10:27.166 --> 1:10:33.47
+again, look familiar.
+Now that we have a sum of a sum
+
+999
+1:10:33.47 --> 1:10:38.283
+of two things,
+I'm trying to like it to be a
+
+1000
+1:10:38.283 --> 1:10:40.858
+sum of one thing.
+Sorry?
+
+1001
+1:10:40.858 --> 1:10:45.559
+You can use linearity of
+expectation, good.
+
+1002
+1:10:45.559 --> 1:10:49.813
+So, that's the first thing I
+should do.
+
+1003
+1:10:49.813 --> 1:10:55.41
+So, linearity of expectation
+lets me separate that.
+
+1004
+1:10:55.41 --> 1:11:02.079
+Now I have a sum of 2n things.
+Right, I could break that into
+
+1005
+1:11:02.079 --> 1:11:05.405
+the sum of these guys,
+and the sum of these guys.
+
+1006
+1:11:05.405 --> 1:11:08.247
+Do you know anything about
+those two sums?
+
+1007
+1:11:08.247 --> 1:11:11.019
+Do we know anything about those
+two sums?
+
+1008
+1:11:11.019 --> 1:11:14.069
+They're the same.
+In fact, every term here is
+
+1009
+1:11:14.069 --> 1:11:17.326
+appearing exactly twice.
+One says a k minus one.
+
+1010
+1:11:17.326 --> 1:11:20.722
+One says an n minus k,
+and that even works if it's
+
+1011
+1:11:20.722 --> 1:11:22.455
+odd, I think.
+So, in fact,
+
+1012
+1:11:22.455 --> 1:11:26.267
+we can just take one of the
+sums and multiply it by two.
+
+1013
+1:11:26.267 --> 1:11:30.356
+So, this is four over n times
+the sum, and I'll rewrite it a
+
+1014
+1:11:30.356 --> 1:11:35
+little bit from zero to n minus
+one of E of Y_k.
+
+1015
+1:11:35 --> 1:11:40.425
+Just check the number of times
+each Y_k appears from zero up to
+
+1016
+1:11:40.425 --> 1:11:45.237
+n minus one is exactly two.
+So, now I have a recurrence.
+
+1017
+1:11:45.237 --> 1:11:48.649
+I have E of Y_n is,
+at most, this thing.
+
+1018
+1:11:48.649 --> 1:11:51.8
+Let's just write that for our
+memory.
+
+1019
+1:11:51.8 --> 1:11:53.55
+So, how's that?
+Cool.
+
+1020
+1:11:53.55 --> 1:11:57.05
+Now, I just have to solve the
+recurrence.
+
+1021
+1:11:57.05 --> 1:12:03
+How should I solve an ugly,
+hairy, recurrence like this?
+
+1022
+1:12:03 --> 1:12:05.125
+Substitution:
+yea!
+
+1023
+1:12:05.125 --> 1:12:10.75
+Not the master method.
+OK, it's a pretty nasty
+
+1024
+1:12:10.75 --> 1:12:15.875
+recurrence.
+So, I'm going to make a guess,
+
+1025
+1:12:15.875 --> 1:12:22.125
+and I've already told you the
+guess, that it's n^3.
+
+1026
+1:12:22.125 --> 1:12:29.375
+I think n^3 is pretty much
+exactly where this proof will be
+
+1027
+1:12:29.375 --> 1:12:34.239
+obtainable.
+So, substitution method,
+
+1028
+1:12:34.239 --> 1:12:38.72
+substitution method is just a
+proof by induction.
+
+1029
+1:12:38.72 --> 1:12:44.506
+And, there are two things every
+proof by induction should have,
+
+1030
+1:12:44.506 --> 1:12:49.826
+well, almost every proof by
+induction, unless you're being
+
+1031
+1:12:49.826 --> 1:12:52.906
+fancy.
+It should have a base case,
+
+1032
+1:12:52.906 --> 1:12:57.013
+and the base case here is n
+equals order one.
+
+1033
+1:12:57.013 --> 1:13:00.093
+I didn't write it,
+but, of course,
+
+1034
+1:13:00.093 --> 1:13:05.319
+if you have a constant size
+tree, it has constant height.
+
+1035
+1:13:05.319 --> 1:13:10.64
+So, this thing will be true as
+long as we set true if c is
+
+1036
+1:13:10.64 --> 1:13:15.684
+sufficiently large.
+OK, so, don't forget that.
+
+1037
+1:13:15.684 --> 1:13:18.08
+A lot of people forgot it on
+the quiz.
+
+1038
+1:13:18.08 --> 1:13:20.089
+We even mentioned the base
+case.
+
+1039
+1:13:20.089 --> 1:13:22.939
+Usually, we don't even mention
+the base case.
+
+1040
+1:13:22.939 --> 1:13:25.854
+And, you should assume that
+there's one there.
+
+1041
+1:13:25.854 --> 1:13:30
+And, you have to say this in
+any proof by substitution.
+
+1042
+1:13:30 --> 1:13:33.107
+OK, now, we have the induction
+step.
+
+1043
+1:13:33.107 --> 1:13:37.279
+So, I claim that E of Y_n is,
+at most, Ccof n^3,
+
+1044
+1:13:37.279 --> 1:13:40.563
+assuming that it's true for
+smaller n.
+
+1045
+1:13:40.563 --> 1:13:44.647
+You should write the induction
+hypothesis here,
+
+1046
+1:13:44.647 --> 1:13:49.618
+but I'm going to skip it
+because I'm running out of time.
+
+1047
+1:13:49.618 --> 1:13:53.613
+Now, we have this recurrence
+that E of Y_n is,
+
+1048
+1:13:53.613 --> 1:13:56.809
+at most, this thing.
+So, E of Y_n is,
+
+1049
+1:13:56.809 --> 1:14:01.159
+at most, four over n,
+sum k equals zero to n minus
+
+1050
+1:14:01.159 --> 1:14:07.223
+one of E of Y_k.
+Now, notice that k is always
+
+1051
+1:14:07.223 --> 1:14:12.059
+smaller than n.
+So, we can apply induction.
+
+1052
+1:14:12.059 --> 1:14:15.858
+So, this is,
+at most, four over n,
+
+1053
+1:14:15.858 --> 1:14:21.269
+sum k equals zero to n minus
+one of c times k^3.
+
+1054
+1:14:21.269 --> 1:14:24.838
+That's the induction
+hypothesis.
+
+1055
+1:14:24.838 --> 1:14:28.753
+Cool.
+Now, I need an upper bound on
+
+1056
+1:14:28.753 --> 1:14:35.43
+this sum, if you have a good
+memory, then you know a closed
+
+1057
+1:14:35.43 --> 1:14:40.801
+form for this sum.
+But, I don't have such a good
+
+1058
+1:14:40.801 --> 1:14:43.97
+memory as I used to.
+I never memorized this sum when
+
+1059
+1:14:43.97 --> 1:14:47.884
+I was a kid, so I don't remember
+everything when I memorize when
+
+1060
+1:14:47.884 --> 1:14:51.612
+I was less than 12 years old.
+I still remember all the digits
+
+1061
+1:14:51.612 --> 1:14:54.532
+of pi, whatever.
+But, anything I try to memorize
+
+1062
+1:14:54.532 --> 1:14:57.079
+now just doesn't quite stick the
+same way.
+
+1063
+1:14:57.079 --> 1:15:00
+So, I don't happen to know this
+sum.
+
+1064
+1:15:00 --> 1:15:03.169
+What's a good way to
+approximate this sum?
+
+1065
+1:15:03.169 --> 1:15:05.256
+Integral: good.
+So, in fact,
+
+1066
+1:15:05.256 --> 1:15:07.653
+I'm going to take the c
+outside.
+
+1067
+1:15:07.653 --> 1:15:10.9
+So, this is 4c over n.
+The sum is, at most,
+
+1068
+1:15:10.9 --> 1:15:13.992
+the integral.
+If you get the range right,
+
+1069
+1:15:13.992 --> 1:15:18.089
+so, you have to go one larger.
+Instead of n minus one,
+
+1070
+1:15:18.089 --> 1:15:21.104
+you go up to n.
+This is in the textbook.
+
+1071
+1:15:21.104 --> 1:15:24.274
+It's intuitive,
+too, as long as you have a
+
+1072
+1:15:24.274 --> 1:15:26.516
+monotone function.
+That's key.
+
+1073
+1:15:26.516 --> 1:15:31
+So, you have something that's
+like this.
+
+1074
+1:15:31 --> 1:15:34.075
+And, you know,
+the sum is taking each of these
+
+1075
+1:15:34.075 --> 1:15:36.671
+and weighting them with a value
+of one.
+
+1076
+1:15:36.671 --> 1:15:40.157
+The integral is computing the
+area under this curve.
+
+1077
+1:15:40.157 --> 1:15:42.685
+So, in particular,
+if you look at this
+
+1078
+1:15:42.685 --> 1:15:45.624
+approximation of the integral,
+then, I mean,
+
+1079
+1:15:45.624 --> 1:15:49.382
+this thing is certainly,
+this would be the sum if you go
+
+1080
+1:15:49.382 --> 1:15:52.252
+one larger at the end,
+and that's, at most,
+
+1081
+1:15:52.252 --> 1:15:55.054
+the integral.
+So, that's proof by picture.
+
+1082
+1:15:55.054 --> 1:15:57.309
+But, you can see this in the
+book.
+
+1083
+1:15:57.309 --> 1:16:01
+You should know it from 042 I
+guess.
+
+1084
+1:16:01 --> 1:16:04.448
+Now, integrals,
+hopefully, you can solve.
+
+1085
+1:16:04.448 --> 1:16:07.206
+Integral of x^3 is x^4 over
+four.
+
+1086
+1:16:07.206 --> 1:16:11.172
+I got it right.
+And then, we're valuing that at
+
+1087
+1:16:11.172 --> 1:16:12.637
+n.
+And, it's zero.
+
+1088
+1:16:12.637 --> 1:16:17.293
+Subtracting the zero doesn't
+matter because zero to the
+
+1089
+1:16:17.293 --> 1:16:21.517
+fourth power is zero.
+So, it's just n^4 over four.
+
+1090
+1:16:21.517 --> 1:16:25.051
+So, this is 4c over n times n^4
+over four.
+
+1091
+1:16:25.051 --> 1:16:28.931
+And, conveniently,
+this four cancels with this
+
+1092
+1:16:28.931 --> 1:16:31.689
+four.
+The four turns into a three
+
+1093
+1:16:31.689 --> 1:16:36
+because of this,
+and we get n^3.
+
+1094
+1:16:36 --> 1:16:38.159
+We get cn^3.
+Damn convenient,
+
+1095
+1:16:38.159 --> 1:16:41.089
+because that's what we wanted
+to prove.
+
+1096
+1:16:41.089 --> 1:16:44.404
+OK, so this proof is just
+barely snaking by:
+
+1097
+1:16:44.404 --> 1:16:48.028
+no residual term.
+We've been sloppy all over the
+
+1098
+1:16:48.028 --> 1:16:50.727
+place, and yet we were really
+lucky.
+
+1099
+1:16:50.727 --> 1:16:54.12
+And, we were just sloppy in the
+right places.
+
+1100
+1:16:54.12 --> 1:16:56.51
+So, this is a very tricky
+proof.
+
+1101
+1:16:56.51 --> 1:17:01.214
+If you just tried to do it by
+hand, it's pretty easy to be too
+
+1102
+1:17:01.214 --> 1:17:04.453
+sloppy, and not get quite the
+right answer.
+
+1103
+1:17:04.453 --> 1:17:09.869
+But, this just barely works.
+So, let me say a couple of
+
+1104
+1:17:09.869 --> 1:17:12.89
+things about it in my remaining
+one minute.
+
+1105
+1:17:12.89 --> 1:17:15.407
+So, we can do the conclusion,
+again.
+
+1106
+1:17:15.407 --> 1:17:18.428
+I won't write it because I
+don't have time,
+
+1107
+1:17:18.428 --> 1:17:21.664
+but here it is.
+We just proved a bound on Y_n,
+
+1108
+1:17:21.664 --> 1:17:25.907
+which was two to the power X_n.
+What we cared about was X_n.
+
+1109
+1:17:25.907 --> 1:17:29
+So, we used Jensen's
+inequality.
+
+1110
+1:17:29 --> 1:17:32.35
+We get the two to the E of X_n
+is, at most, E of two to the
+
+1111
+1:17:32.35 --> 1:17:34.083
+X_n.
+This is what we know about
+
+1112
+1:17:34.083 --> 1:17:36.74
+because that's Y_n.
+So, we know E of Y_n is now
+
+1113
+1:17:36.74 --> 1:17:39.108
+order n^3.
+OK, we had to set this constant
+
+1114
+1:17:39.108 --> 1:17:41.187
+sufficiently large for the base
+case.
+
+1115
+1:17:41.187 --> 1:17:44.306
+We didn't really figure out
+what the constant was here.
+
+1116
+1:17:44.306 --> 1:17:47.599
+It didn't matter because now
+we're taking the logs of both
+
+1117
+1:17:47.599 --> 1:17:49.043
+sides.
+We get E of X_n is,
+
+1118
+1:17:49.043 --> 1:17:51.584
+at most, log of order n^3.
+This constant is a
+
+1119
+1:17:51.584 --> 1:17:54.241
+multiplicative constant.
+So, you take the logs.
+
+1120
+1:17:54.241 --> 1:17:57.072
+It becomes additive.
+This constant is an exponent.
+
+1121
+1:17:57.072 --> 1:18:01
+So, it would take logs.
+It becomes a multiple.
+
+1122
+1:18:01 --> 1:18:07.361
+Three log n plus order one.
+This is a pretty damn tight
+
+1123
+1:18:07.361 --> 1:18:13.486
+bound on the height of a
+randomly built binary search
+
+1124
+1:18:13.486 --> 1:18:18.081
+tree, the expected height,
+I should say.
+
+1125
+1:18:18.081 --> 1:18:23.617
+In fact, the expected height of
+X_n is equal to,
+
+1126
+1:18:23.617 --> 1:18:28.447
+well, roughly,
+I'll just say it's roughly,
+
+1127
+1:18:28.447 --> 1:18:34.926
+I don't want to be too precise
+here, 2.9882 times log n.
+
+1128
+1:18:34.926 --> 1:18:40.934
+This is the result by a friend
+of mine, Luke Devroy,
+
+1129
+1:18:40.934 --> 1:18:46
+if I spell it right,
+in 1986.
+
+1130
+1:18:46 --> 1:18:49.572
+He's a professor at McGill
+University in Montreal.
+
+1131
+1:18:49.572 --> 1:18:52.27
+So, we're pretty close,
+three to 2.98.
+
+1132
+1:18:52.27 --> 1:18:56.572
+And, I won't prove this here.
+The hard part here is actually
+
+1133
+1:18:56.572 --> 1:19:00
+the lower bound,
+but it's only that much.
+
+1134
+1:19:00 --> 1:19:04.274
+I should say a little bit more
+about why we use Y_n instead of
+
+1135
+1:19:04.274 --> 1:19:06.166
+X_n.
+And, it's all about the
+
+1136
+1:19:06.166 --> 1:19:08.268
+sloppiness.
+And, in particular,
+
+1137
+1:19:08.268 --> 1:19:12.193
+this step, where we said that
+the max of these two random
+
+1138
+1:19:12.193 --> 1:19:14.295
+variables is,
+at most, the sum.
+
+1139
+1:19:14.295 --> 1:19:18.359
+And, while that's true for X
+just as well as it is true for
+
+1140
+1:19:18.359 --> 1:19:21.653
+Y, it's more true for Y.
+OK, this is a bit weird
+
+1141
+1:19:21.653 --> 1:19:24.876
+because, remember,
+what we're analyzing here is
+
+1142
+1:19:24.876 --> 1:19:28.801
+all possible values of k.
+This has to work no matter what
+
+1143
+1:19:28.801 --> 1:19:32.234
+k is, in some sense.
+I mean, we're bounding all of
+
+1144
+1:19:32.234 --> 1:19:37
+those cases simultaneously,
+the sum of them all.
+
+1145
+1:19:37 --> 1:19:41.576
+So, here we're looking at k
+minus one versus n minus k.
+
+1146
+1:19:41.576 --> 1:19:44.881
+And, in fact,
+here, there's a polynomial
+
+1147
+1:19:44.881 --> 1:19:48.186
+version.
+But, so, if you take two values
+
+1148
+1:19:48.186 --> 1:19:51.576
+a and b, and you say,
+well, max of ab is,
+
+1149
+1:19:51.576 --> 1:19:55.728
+at most, a plus b.
+And, on the other hand you say,
+
+1150
+1:19:55.728 --> 1:19:59.542
+well, max of two to the a and
+two to the b is,
+
+1151
+1:19:59.542 --> 1:20:02.847
+at most, two to the a plus two
+to the b.
+
+1152
+1:20:02.847 --> 1:20:07
+Doesn't this feel better than
+that?
+
+1153
+1:20:07 --> 1:20:09.82
+Well, they are,
+of course, the same.
+
+1154
+1:20:09.82 --> 1:20:13.367
+But, if you look at a minus b,
+as that grows,
+
+1155
+1:20:13.367 --> 1:20:17.719
+this becomes a tighter bound
+faster than this becomes a
+
+1156
+1:20:17.719 --> 1:20:22.716
+tighter bound because here we're
+looking at absolute difference
+
+1157
+1:20:22.716 --> 1:20:26.504
+between a minus b.
+So, that's why this is pretty
+
+1158
+1:20:26.504 --> 1:20:31.259
+good and this is pretty bad.
+We're still really bad if a and
+
+1159
+1:20:31.259 --> 1:20:35.812
+b are almost the same.
+But, we're trying to solve this
+
+1160
+1:20:35.812 --> 1:20:38.677
+for all partitions into k minus
+one and n minus k.
+
+1161
+1:20:38.677 --> 1:20:42.127
+So, it's OK if we get a few of
+the cases wrong in the middle
+
+1162
+1:20:42.127 --> 1:20:45.284
+where it evenly partitions.
+But, as soon as we get some
+
+1163
+1:20:45.284 --> 1:20:49.026
+skew, this will be very close to
+this, whereas this will be still
+
+1164
+1:20:49.026 --> 1:20:52.066
+pretty far from this.
+You have to get pretty close to
+
+1165
+1:20:52.066 --> 1:20:54.58
+the edge before you're not
+losing much here,
+
+1166
+1:20:54.58 --> 1:20:57.504
+whereas pretty quickly you're
+not losing much here.
+
+1167
+1:20:57.504 --> 1:21:00.368
+That's the intuition.
+Try it, and see what happens
+
+1168
+1:21:00.368 --> 1:21:03
+with X_n, and it won't work.
+See you Wednesday.
+

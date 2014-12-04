@@ -1,0 +1,5091 @@
+1
+00:00:10 --> 00:00:13
+My name is Erik Demaine.
+You should call me Erik.
+
+2
+00:00:13 --> 00:00:16
+Welcome back to 6.046.
+This is Lecture 2.
+
+3
+00:00:16 --> 00:00:20
+And today we are going to
+essentially fill in some of the
+
+4
+00:00:20 --> 00:00:23
+more mathematical underpinnings
+of Lecture 1.
+
+5
+00:00:23 --> 00:00:26
+So, Lecture 1,
+we just sort of barely got our
+
+6
+00:00:26 --> 00:00:31
+feet wet with some analysis of
+algorithms, insertion sort and
+
+7
+00:00:31 --> 00:00:34
+mergesort.
+And we needed a couple of
+
+8
+00:00:34 --> 00:00:36
+tools.
+We had this big idea of
+
+9
+00:00:36 --> 00:00:40
+asymptotics and forgetting about
+constants, just looking at the
+
+10
+00:00:40 --> 00:00:41
+lead term.
+And so, today,
+
+11
+00:00:41 --> 00:00:44
+we're going to develop
+asymptotic notation so that we
+
+12
+00:00:44 --> 00:00:47
+know that mathematically.
+And we also ended up with a
+
+13
+00:00:47 --> 00:00:51
+recurrence with mergesort,
+the running time of mergesort,
+
+14
+00:00:51 --> 00:00:53
+so we need to see how to solve
+recurrences.
+
+15
+00:00:53 --> 00:00:55
+And we will do those two things
+today.
+
+16
+00:00:55 --> 00:00:58
+Question?
+Yes, I will speak louder.
+
+17
+00:00:58 --> 00:01:00
+Thanks.
+Good.
+
+18
+00:01:00 --> 00:01:03
+Even though I have a
+microphone, I am not amplified.
+
+19
+00:01:03 --> 00:01:07
+OK, so let's start with
+asymptotic notation.
+
+20
+00:01:07 --> 00:01:16
+
+
+21
+00:01:16 --> 00:01:19
+We have seen some basic
+asymptotic notation.
+
+22
+00:01:19 --> 00:01:22
+I am sure you have seen it in
+other classes before,
+
+23
+00:01:22 --> 00:01:26
+things like big O-notation.
+And today we are going to
+
+24
+00:01:26 --> 00:01:30
+really define this rigorously so
+we know what is true and what is
+
+25
+00:01:30 --> 00:01:34
+not, what is valid and what is
+not.
+
+26
+00:01:34 --> 00:01:40
+
+
+27
+00:01:40 --> 00:01:43
+We are going to define,
+and unfortunately today is
+
+28
+00:01:43 --> 00:01:48
+going to be really mathematical
+and really no algorithms today,
+
+29
+00:01:48 --> 00:01:52
+which is sort of an anticlimax.
+But next lecture we will talk
+
+30
+00:01:52 --> 00:01:57
+about real algorithms and will
+apply all the things we learned
+
+31
+00:01:57 --> 00:02:04
+today to real algorithms.
+This is big O-notation,
+
+32
+00:02:04 --> 00:02:12
+capital O-notation.
+We have f(n)=O[g(n)].
+
+33
+00:02:12 --> 00:02:21
+This means that there are some
+suitable constants,
+
+34
+00:02:21 --> 00:02:30
+c and n_o, such that f is
+bounded by cg(n) for all
+
+35
+00:02:30 --> 00:02:38
+sufficiently large n.
+So, this is pretty intuitive
+
+36
+00:02:38 --> 00:02:42
+notion.
+We have seen it before.
+
+37
+00:02:42 --> 00:02:47
+We are going to assume that
+f(n) is non-negative here.
+
+38
+00:02:47 --> 00:02:52
+And I just want f(n) to be
+bounded above by g(n).
+
+39
+00:02:52 --> 00:02:57
+We have seen a bunch of
+examples, but something like
+
+40
+00:02:57 --> 00:03:02
+2n^2=O(n^3) defined.
+And roughly this means if you
+
+41
+00:03:02 --> 00:03:07
+drop leading constants and low
+order terms then this is less
+
+42
+00:03:07 --> 00:03:10
+than or equal to that.
+So, big O corresponds roughly
+
+43
+00:03:10 --> 00:03:14
+to less than or equal to.
+But this is the formalization.
+
+44
+00:03:14 --> 00:03:18
+Another way to think of it
+formally, a funny thing about
+
+45
+00:03:18 --> 00:03:20
+this notation is it is
+asymmetric.
+
+46
+00:03:20 --> 00:03:23
+Normally, you think of
+equality being symmetric.
+
+47
+00:03:23 --> 00:03:26
+If A=B then B=A.
+But it's not true here.
+
+48
+00:03:26 --> 00:03:30
+We do not have n^3 being big O
+of n^2.
+
+49
+00:03:30 --> 00:03:33
+We don't even have big O of n^3
+equaling n^2.
+
+50
+00:03:33 --> 00:03:38
+So, we will see exactly what
+that means in a second.
+
+51
+00:03:38 --> 00:03:43
+But before we get there,
+this is a bit bizarre notation
+
+52
+00:03:43 --> 00:03:47
+and you should always think
+about what it really means.
+
+53
+00:03:47 --> 00:03:53
+Another way to think about what
+it really means is that f(n) is
+
+54
+00:03:53 --> 00:03:58
+in some set of functions that
+are like g.
+
+55
+00:03:58 --> 00:04:04
+You could define big O[g(n)] to
+be a set of functions,
+
+56
+00:04:04 --> 00:04:10
+let's call it f(n),
+such that there exist
+
+57
+00:04:10 --> 00:04:15
+constants.
+They are the same definition,
+
+58
+00:04:15 --> 00:04:21
+I think, fancy here,
+c and n_o, such that we have
+
+59
+00:04:21 --> 00:04:28
+the bound f(n) is between zero
+and cg(n).
+
+60
+00:04:28 --> 00:04:34
+
+
+61
+00:04:34 --> 00:04:37
+It is a bit of a long
+definition, and that is why we
+
+62
+00:04:37 --> 00:04:41
+use the notation,
+to avoid having to write this
+
+63
+00:04:41 --> 00:04:44
+over and over.
+You can think of instead of n^2
+
+64
+00:04:44 --> 00:04:48
+being equal to big O of n^3,
+what we really mean is that
+
+65
+00:04:48 --> 00:04:52
+2n^2 is in the set big O(n^3).
+When we write equal sign,
+
+66
+00:04:52 --> 00:04:56
+we in some sense mean this in
+the set, but we are going to use
+
+67
+00:04:56 --> 00:05:00
+equal sign.
+You could write this.
+
+68
+00:05:00 --> 00:05:03
+And occasionally you see papers
+that write this,
+
+69
+00:05:03 --> 00:05:08
+but this is the notation that
+we are going to use.
+
+70
+00:05:08 --> 00:05:12
+That has the consequence the
+equal sign is asymmetric,
+
+71
+00:05:12 --> 00:05:17
+just like this operator.
+We have some nifty ways that we
+
+72
+00:05:17 --> 00:05:20
+actually use big O-notation.
+
+73
+00:05:20 --> 00:05:29
+
+
+74
+00:05:29 --> 00:05:33
+And it is using it as a macro.
+By the way, we have a lot to
+
+75
+00:05:33 --> 00:05:37
+cover today, so I am going to go
+relatively fast.
+
+76
+00:05:37 --> 00:05:41
+If anything is unclear,
+just stop, ask questions,
+
+77
+00:05:41 --> 00:05:45
+then I will slow down.
+Otherwise, I will take this as
+
+78
+00:05:45 --> 00:05:50
+all completely obvious and I can
+keep going at full speed.
+
+79
+00:05:50 --> 00:05:52
+The convention,
+this is intuitive,
+
+80
+00:05:52 --> 00:05:57
+I guess, if you do some macro
+programming or something,
+
+81
+00:05:57 --> 00:06:01
+but it's a bit more
+mathematical.
+
+82
+00:06:01 --> 00:06:09
+
+
+83
+00:06:09 --> 00:06:13
+We have defined big O-notation
+and it equals big O of
+
+84
+00:06:13 --> 00:06:16
+something.
+And so we have only defined big
+
+85
+00:06:16 --> 00:06:20
+O when on the equal sign we have
+big O of some function.
+
+86
+00:06:20 --> 00:06:24
+But it is useful to have some
+general expression on the
+
+87
+00:06:24 --> 00:06:28
+right-hand side that involves
+big O.
+
+88
+00:06:28 --> 00:06:34
+For example,
+let's say we have f(n) = n^3 +
+
+89
+00:06:34 --> 00:06:39
+O(n^2).
+This is attempting to get an
+
+90
+00:06:39 --> 00:06:45
+error bound.
+This is saying f(n) is
+
+91
+00:06:45 --> 00:06:54
+basically n^3 but there are
+these lower order terms that are
+
+92
+00:06:54 --> 00:07:00
+O(n^2).
+And so this means that there is
+
+93
+00:07:00 --> 00:07:08
+a function, shorthand for a
+function, h(n) which is in
+
+94
+00:07:08 --> 00:07:18
+O(n^2) or equals O(n^2) such
+that f(n) = n^3 + h(n).
+
+95
+00:07:18 --> 00:07:21
+It is saying that there are
+some lower order terms that are
+
+96
+00:07:21 --> 00:07:25
+bounded above by some constant
+times n^2 for sufficiently large
+
+97
+00:07:25 --> 00:07:28
+n, and that is what is here.
+And then f(n) equals,
+
+98
+00:07:28 --> 00:07:32
+now this is a true equality,
+n^3 plus that error term.
+
+99
+00:07:32 --> 00:07:34
+This is very useful here.
+Essentially,
+
+100
+00:07:34 --> 00:07:37
+I am expressing what the lead
+constant is and then saying
+
+101
+00:07:37 --> 00:07:40
+well, there is other stuff and
+it's all at most n^2.
+
+102
+00:07:40 --> 00:07:42
+Saying that f(n) therefore is
+also order n^3,
+
+103
+00:07:42 --> 00:07:44
+but that is a bit weaker of a
+statement.
+
+104
+00:07:44 --> 00:07:47
+This is a bit more refined.
+We won't need to use this too
+
+105
+00:07:47 --> 00:07:50
+often, but it is useful.
+Sometimes we will see,
+
+106
+00:07:50 --> 00:07:53
+like in last class we even had
+a big O inside a summation.
+
+107
+00:07:53 --> 00:07:55
+So, you can use them all over
+the place.
+
+108
+00:07:55 --> 00:08:00
+The point is they represent
+some function in that set.
+
+109
+00:08:00 --> 00:08:04
+A bit less intuitive,
+and this is more subtle,
+
+110
+00:08:04 --> 00:08:10
+is what it means to have big O
+on the left-hand side.
+
+111
+00:08:10 --> 00:08:15
+It means the same thing,
+but there is some convention
+
+112
+00:08:15 --> 00:08:20
+what equality means.
+And this is why equal sign is
+
+113
+00:08:20 --> 00:08:24
+asymmetric.
+You should read equals like
+
+114
+00:08:24 --> 00:08:27
+"is".
+Is means that everything over
+
+115
+00:08:27 --> 00:08:34
+here is something over here.
+So, there is an implicit for
+
+116
+00:08:34 --> 00:08:39
+all on the left-hand side and
+there exists on the right-hand
+
+117
+00:08:39 --> 00:08:41
+side.
+This is a true statement.
+
+118
+00:08:41 --> 00:08:47
+Anything that is n^2 + O(n) is
+also O(n^2), but not the other
+
+119
+00:08:47 --> 00:08:50
+way around.
+So, this is a bit asymmetric.
+
+120
+00:08:50 --> 00:08:55
+If you think about it,
+this is pretty intuitive but it
+
+121
+00:08:55 --> 00:08:59
+is subtle so you should be
+careful.
+
+122
+00:08:59 --> 00:09:15
+
+
+123
+00:09:15 --> 00:09:20
+This says for any expansion of
+the macro on the left-hand side,
+
+124
+00:09:20 --> 00:09:24
+which should be f(n),
+there is an expansion of the
+
+125
+00:09:24 --> 00:09:30
+macro on the right-hand side
+such that we get equality.
+
+126
+00:09:30 --> 00:09:34
+And what this allows you to do
+is if you have a chain of equal
+
+127
+00:09:34 --> 00:09:36
+signs relations,
+a chain of "is"s,
+
+128
+00:09:36 --> 00:09:40
+then the very first one is
+equal to or bounded by the very
+
+129
+00:09:40 --> 00:09:42
+last one.
+So, you can chain equal signs
+
+130
+00:09:42 --> 00:09:45
+the way you normally would.
+You just cannot flip them
+
+131
+00:09:45 --> 00:09:46
+around.
+Good.
+
+132
+00:09:46 --> 00:09:51
+So, that's big O-notation.
+Any questions about that?
+
+133
+00:09:51 --> 00:09:58
+
+
+134
+00:09:58 --> 00:10:01
+So, big O is great for
+expressing upper bounds.
+
+135
+00:10:01 --> 00:10:04
+But we also want to talk about
+lower bounds.
+
+136
+00:10:04 --> 00:10:06
+For algorithms,
+we usually care about upper
+
+137
+00:10:06 --> 00:10:11
+bounds on their running time.
+Running times at most n^2 is at
+
+138
+00:10:11 --> 00:10:14
+most n log n up to big O,
+but sometimes we need to
+
+139
+00:10:14 --> 00:10:17
+express functions that are at
+least some quantity.
+
+140
+00:10:17 --> 00:10:20
+For example,
+we will show that sorting
+
+141
+00:10:20 --> 00:10:23
+requires at least n log n time
+in some model.
+
+142
+00:10:23 --> 00:10:26
+So, we need some other notation
+for that.
+
+143
+00:10:26 --> 00:10:30
+And the notation is big
+Omega-notation.
+
+144
+00:10:30 --> 00:10:35
+And it is pretty symmetric.
+I will just write out the set
+
+145
+00:10:35 --> 00:10:40
+definition here.
+And we are going to write f(n)=
+
+146
+00:10:40 --> 00:10:46
+big Omega[g(n)] to mean f(n) is
+at least some constant times
+
+147
+00:10:46 --> 00:10:48
+g(n) --
+
+148
+00:10:48 --> 00:10:55
+
+
+149
+00:10:55 --> 00:10:57
+-- for sufficiently large n.
+
+150
+00:10:57 --> 00:11:09
+
+
+151
+00:11:09 --> 00:11:12
+So, I am basically just
+reversing the inequality
+
+152
+00:11:12 --> 00:11:16
+relation between f and g,
+nothing surprising,
+
+153
+00:11:16 --> 00:11:19
+just to have it there.
+A random example,
+
+154
+00:11:19 --> 00:11:24
+and now we will get a little
+bit more sophisticated,
+
+155
+00:11:24 --> 00:11:29
+root n= big Omega(lg n).
+And you should read this that
+
+156
+00:11:29 --> 00:11:34
+up to constant factors root n is
+at least log n for sufficiently
+
+157
+00:11:34 --> 00:11:38
+large n.
+So, omega sort of corresponds
+
+158
+00:11:38 --> 00:11:43
+to greater than or equal to.
+Let me give you some analogies.
+
+159
+00:11:43 --> 00:11:46
+We have big O,
+we have big omega,
+
+160
+00:11:46 --> 00:11:51
+this is less than or equal to,
+this is greater than or equal
+
+161
+00:11:51 --> 00:11:53
+to.
+And I am going to fill in some
+
+162
+00:11:53 --> 00:11:57
+more here in a moment.
+
+163
+00:11:57 --> 00:12:10
+
+
+164
+00:12:10 --> 00:12:12
+It's nice to have all the usual
+operators we have.
+
+165
+00:12:12 --> 00:12:16
+Normally we have strict less
+than, strict greater than and
+
+166
+00:12:16 --> 00:12:18
+equal sign.
+And we want those sort of
+
+167
+00:12:18 --> 00:12:22
+analogs in the asymptotic world
+where we ignore constant factors
+
+168
+00:12:22 --> 00:12:25
+and ignore lower order terms.
+We have, for example,
+
+169
+00:12:25 --> 00:12:28
+big Theta[g(n)].
+This is a capital theta which
+
+170
+00:12:28 --> 00:12:31
+means you write the horizontal
+bar in the middle as opposed to
+
+171
+00:12:31 --> 00:12:35
+all the way through.
+I didn't invent Greek,
+
+172
+00:12:35 --> 00:12:40
+so that is the way it is.
+Theta means that you are less
+
+173
+00:12:40 --> 00:12:44
+than or equal to and you are
+greater than or equal to up to
+
+174
+00:12:44 --> 00:12:48
+constant factors,
+so it is the inner section of
+
+175
+00:12:48 --> 00:12:51
+these two sets,
+big O and big Omega.
+
+176
+00:12:51 --> 00:12:55
+That is sort of like equal sign
+but, of course,
+
+177
+00:12:55 --> 00:13:00
+this is very different.
+You have things like n^2 is big
+
+178
+00:13:00 --> 00:13:04
+Theta of 2(n^2) because you
+ignore constant factors,
+
+179
+00:13:04 --> 00:13:07
+but all of these other
+relations, OK,
+
+180
+00:13:07 --> 00:13:11
+n^2 + O(n) = Theta(n^2),
+but this does not hold with
+
+181
+00:13:11 --> 00:13:16
+theta because square root of n
+is really asymptotically bigger
+
+182
+00:13:16 --> 00:13:19
+than log n.
+And some of the other examples
+
+183
+00:13:19 --> 00:13:25
+we saw like n^2 versus n^3,
+those don't hold with T.
+
+184
+00:13:25 --> 00:13:29
+And we have some strict
+notation which are the little
+
+185
+00:13:29 --> 00:13:32
+o-notation and little
+omega-notation.
+
+186
+00:13:32 --> 00:13:37
+There is no little theta
+because there is not notion of
+
+187
+00:13:37 --> 00:13:41
+strict equality versus unstrict
+equality.
+
+188
+00:13:41 --> 00:13:47
+Little o is going to correspond
+roughly to less than and little
+
+189
+00:13:47 --> 00:13:51
+omega is going to correspond to
+greater than.
+
+190
+00:13:51 --> 00:13:57
+This is a notation you will
+just have to get used to.
+
+191
+00:13:57 --> 00:14:03
+And I am not going to define it
+precisely here because it is
+
+192
+00:14:03 --> 00:14:08
+almost exactly the same.
+The difference is that instead
+
+193
+00:14:08 --> 00:14:15
+of saying there exists constant
+c and n_o, you have to say for
+
+194
+00:14:15 --> 00:14:19
+every constant c there exists a
+constant n_o.
+
+195
+00:14:19 --> 00:14:26
+The relationship between f and
+g, this inequality must hold for
+
+196
+00:14:26 --> 00:14:32
+all c instead of just for 1.
+And so n_o can now depend on c.
+
+197
+00:14:32 --> 00:14:37
+You can assume that really n is
+sufficiently large,
+
+198
+00:14:37 --> 00:14:40
+but this gives you a strict
+inequality.
+
+199
+00:14:40 --> 00:14:45
+No matter what constant you put
+here, in front of g,
+
+200
+00:14:45 --> 00:14:50
+let's say we are doing little
+o, f will be still less than c
+
+201
+00:14:50 --> 00:14:53
+times g for sufficiently large
+n.
+
+202
+00:14:53 --> 00:14:57
+We have some random examples.
+
+203
+00:14:57 --> 00:15:04
+
+
+204
+00:15:04 --> 00:15:06
+We are again ignoring
+constants.
+
+205
+00:15:06 --> 00:15:11
+n^2 is always less than n^3 for
+sufficiently large n.
+
+206
+00:15:11 --> 00:15:15
+And it is a bit subtle here.
+I mean in order to prove
+
+207
+00:15:15 --> 00:15:19
+something like this,
+it will become intuitive after
+
+208
+00:15:19 --> 00:15:25
+you manipulate it a little bit.
+You have to figure out what n_o
+
+209
+00:15:25 --> 00:15:30
+is in terms of c.
+I think it something like 2/c.
+
+210
+00:15:30 --> 00:15:34
+If we have less than or equal
+to, that should be right.
+
+211
+00:15:34 --> 00:15:38
+As long n is at least this big,
+no matter how small of a c,
+
+212
+00:15:38 --> 00:15:42
+you should think of c here as
+being epsilon now,
+
+213
+00:15:42 --> 00:15:44
+in the usual epsilon and
+deltas.
+
+214
+00:15:44 --> 00:15:49
+No matter how small c gets,
+still I can bound n^2 in terms
+
+215
+00:15:49 --> 00:15:53
+of n^3, upper bound,
+but whenever you have theta you
+
+216
+00:15:53 --> 00:15:57
+do not have either of these
+relations.
+
+217
+00:15:57 --> 00:16:00
+For example,
+½n^2 = Theta(n^2) and it is not
+
+218
+00:16:00 --> 00:16:06
+little o(n^2) and it not little
+omega(n^2) because it is exactly
+
+219
+00:16:06 --> 00:16:08
+n^2.
+You will get some sense in
+
+220
+00:16:08 --> 00:16:13
+order relation out of this,
+although there are some messy
+
+221
+00:16:13 --> 00:16:17
+behaviors as you will see in
+your problem set.
+
+222
+00:16:17 --> 00:16:21
+Any questions about asymptotic
+notation?
+
+223
+00:16:21 --> 00:16:25
+That is the quick rundown.
+Now we are going to use it to
+
+224
+00:16:25 --> 00:16:31
+solve some recurrences.
+Although we won't use it that
+
+225
+00:16:31 --> 00:16:35
+much today, we will use it a lot
+more on Wednesday.
+
+226
+00:16:35 --> 00:16:36
+OK.
+
+227
+00:16:36 --> 00:16:53
+
+
+228
+00:16:53 --> 00:16:57
+We will move onto the second
+topic of today,
+
+229
+00:16:57 --> 00:17:02
+which is solving recurrences.
+You have probably solved some
+
+230
+00:17:02 --> 00:17:06
+recurrences before in 6.042 or
+whatever discrete math class you
+
+231
+00:17:06 --> 00:17:09
+have taken.
+We are going to do more and
+
+232
+00:17:09 --> 00:17:14
+have some techniques here that
+are particularly useful for
+
+233
+00:17:14 --> 00:17:18
+analyzing recursive algorithms,
+and we will see that mostly on
+
+234
+00:17:18 --> 00:17:21
+Wednesday.
+There are three main methods
+
+235
+00:17:21 --> 00:17:25
+that we are going to use here
+for solving recurrences.
+
+236
+00:17:25 --> 00:17:30
+The first one is the
+substitution method.
+
+237
+00:17:30 --> 00:17:32
+There is no general procedure
+for solving a recurrence.
+
+238
+00:17:32 --> 00:17:35
+There is no good algorithm for
+solving recurrences,
+
+239
+00:17:35 --> 00:17:37
+unfortunately.
+We just have a bunch of
+
+240
+00:17:37 --> 00:17:39
+techniques.
+Some of them work some of the
+
+241
+00:17:39 --> 00:17:42
+time, and if you are lucky yours
+will work for your recurrence,
+
+242
+00:17:42 --> 00:17:44
+but it is sort of like solving
+an integral.
+
+243
+00:17:44 --> 00:17:47
+You have to just know some of
+them, you have to know various
+
+244
+00:17:47 --> 00:17:50
+methods for solving them.
+It is usually easy to check if
+
+245
+00:17:50 --> 00:17:53
+you have the right answer.
+Just like with integrals,
+
+246
+00:17:53 --> 00:17:56
+you just differentiate and say
+oh, I got the right answer.
+
+247
+00:17:56 --> 00:18:00
+And that is essentially the
+idea of substitution method.
+
+248
+00:18:00 --> 00:18:04
+Substitution method will always
+work, but unfortunately Step 1
+
+249
+00:18:04 --> 00:18:07
+is guess the answer.
+And you have to guess it
+
+250
+00:18:07 --> 00:18:09
+correctly.
+That makes it a big difficult.
+
+251
+00:18:09 --> 00:18:12
+You don't have to guess it
+completely.
+
+252
+00:18:12 --> 00:18:15
+You can usually get away with
+not knowing the constant
+
+253
+00:18:15 --> 00:18:19
+factors, which is a good thing
+because we don't really care
+
+254
+00:18:19 --> 00:18:22
+about the constant factors.
+You guess the form.
+
+255
+00:18:22 --> 00:18:26
+You say oh, it is going to be
+roughly n^2, and so it's some
+
+256
+00:18:26 --> 00:18:31
+constant times n^2 presumably.
+So, you guess that.
+
+257
+00:18:31 --> 00:18:34
+We are going to figure out the
+constants.
+
+258
+00:18:34 --> 00:18:38
+You try to verify whether the
+recurrence satisfies this bound
+
+259
+00:18:38 --> 00:18:40
+by induction,
+and that is the key.
+
+260
+00:18:40 --> 00:18:44
+Substitution uses induction.
+And from that you usually get
+
+261
+00:18:44 --> 00:18:48
+the constants for free.
+You figure out what the
+
+262
+00:18:48 --> 00:18:51
+constants have to be in order to
+make this work.
+
+263
+00:18:51 --> 00:18:55
+So, that is the general idea.
+You will see a few examples of
+
+264
+00:18:55 --> 00:18:57
+this.
+Actually, the same example
+
+265
+00:18:57 --> 00:19:01
+several times.
+Unfortunately,
+
+266
+00:19:01 --> 00:19:04
+this is what you might call,
+I don't know.
+
+267
+00:19:04 --> 00:19:08
+This is an algorithm,
+but it uses an oracle which is
+
+268
+00:19:08 --> 00:19:12
+knowing the right answer.
+But sometimes it is not too
+
+269
+00:19:12 --> 00:19:14
+hard to guess the answer.
+It depends.
+
+270
+00:19:14 --> 00:19:18
+If you look at this recurrence,
+T(n) = 4T(n/2) + n,
+
+271
+00:19:18 --> 00:19:23
+we should implicitly always
+have some base case of T of some
+
+272
+00:19:23 --> 00:19:26
+constant, usually 1 is a
+constant, so we don't really
+
+273
+00:19:26 --> 00:19:32
+care about the base case.
+For algorithms that is always
+
+274
+00:19:32 --> 00:19:34
+the case.
+And we want to solve this
+
+275
+00:19:34 --> 00:19:37
+thing.
+Does anyone have a guess to
+
+276
+00:19:37 --> 00:19:40
+what the solution is?
+Ideally someone who doesn't
+
+277
+00:19:40 --> 00:19:43
+already know how to solve this
+recurrence.
+
+278
+00:19:43 --> 00:19:45
+OK.
+How many people know how to
+
+279
+00:19:45 --> 00:19:48
+solve this recurrence?
+A few, OK.
+
+280
+00:19:48 --> 00:19:50
+And, of the rest,
+any guesses?
+
+281
+00:19:50 --> 00:19:55
+If you look at what is going on
+here, here you have T(n/2) and
+
+282
+00:19:55 --> 00:19:59
+let's ignore this term more or
+less.
+
+283
+00:19:59 --> 00:20:02
+We have n/2 here.
+If we double n and get T(n)
+
+284
+00:20:02 --> 00:20:06
+then we multiply the value by 4.
+And then there is this additive
+
+285
+00:20:06 --> 00:20:08
+end, but that doesn't matter so
+much.
+
+286
+00:20:08 --> 00:20:13
+What function do you know that
+when you double the argument the
+
+287
+00:20:13 --> 00:20:15
+output goes up by a factor of 4?
+Sorry?
+
+288
+00:20:15 --> 00:20:18
+n^2,yeah.
+You should think n^2 and you
+
+289
+00:20:18 --> 00:20:21
+would be right.
+But we won't prove n^2 yet.
+
+290
+00:20:21 --> 00:20:25
+Let's prove something simpler,
+because it turns out proving
+
+291
+00:20:25 --> 00:20:29
+that it is at most n^2 is a bit
+of a pain.
+
+292
+00:20:29 --> 00:20:31
+We will see that in just a few
+minutes.
+
+293
+00:20:31 --> 00:20:36
+But let's guess that T(n) =
+O(n^3) first because that will
+
+294
+00:20:36 --> 00:20:41
+be easier to prove by induction.
+You sort of see how it is done
+
+295
+00:20:41 --> 00:20:44
+in the easy case,
+and then we will actually get
+
+296
+00:20:44 --> 00:20:47
+the right answer,
+n^2, later.
+
+297
+00:20:47 --> 00:20:50
+I need to prove.
+What I am going to do is guess
+
+298
+00:20:50 --> 00:20:55
+that T(n) is some constant times
+n^3 at most, so I will be a
+
+299
+00:20:55 --> 00:20:59
+little more precise.
+I cannot use the big O-notation
+
+300
+00:20:59 --> 00:21:03
+in the substitution method so I
+have to expand it out to use
+
+301
+00:21:03 --> 00:21:08
+constants.
+I will show you why in a little
+
+302
+00:21:08 --> 00:21:13
+bit, but let me just tell you at
+a high level what is important
+
+303
+00:21:13 --> 00:21:17
+in not using big O-notation.
+Big O-notation is great if you
+
+304
+00:21:17 --> 00:21:21
+have a finite chain of big O
+relations, you know,
+
+305
+00:21:21 --> 00:21:25
+n^2 is big O(n^3) is big O(n^4)
+is big O(n^4) is big O(n^4).
+
+306
+00:21:25 --> 00:21:29
+That is all true.
+And so you get that n^2 is big
+
+307
+00:21:29 --> 00:21:33
+O(n^4).
+But if you have an infinite
+
+308
+00:21:33 --> 00:21:37
+chain of those relations then
+the first thing is not big O of
+
+309
+00:21:37 --> 00:21:41
+the last thing.
+You have to be very careful.
+
+310
+00:21:41 --> 00:21:44
+For example,
+this is a total aside on the
+
+311
+00:21:44 --> 00:21:47
+lecture notes.
+Suppose you want to prove that
+
+312
+00:21:47 --> 00:21:50
+n = O(1).
+This is a great relation.
+
+313
+00:21:50 --> 00:21:53
+If it were true,
+every algorithm would have
+
+314
+00:21:53 --> 00:21:56
+constant running time.
+This is not true.
+
+315
+00:21:56 --> 00:22:02
+Not in Wayne's World notation.
+You could "prove this by
+
+316
+00:22:02 --> 00:22:07
+induction" by saying well,
+base case is 1 = O(1).
+
+317
+00:22:07 --> 00:22:12
+OK, that is true.
+And then the induction step as
+
+318
+00:22:12 --> 00:22:18
+well, if I know that n-1,
+so let's suppose that n-1 =
+
+319
+00:22:18 --> 00:22:23
+O(1), well, that implies that n,
+which is (n-1) +1,
+
+320
+00:22:23 --> 00:22:30
+if this is O(1) and 1 = O(1),
+the whole thing is O(1).
+
+321
+00:22:30 --> 00:22:32
+And that is true.
+If you knew that (n-1) = O(1)
+
+322
+00:22:32 --> 00:22:35
+and 1 = O(1) then their sum is
+also O(1), but this is a false
+
+323
+00:22:35 --> 00:22:37
+proof.
+You cannot induct over big Os.
+
+324
+00:22:37 --> 00:22:40
+What is going on here is that
+the constants that are implicit
+
+325
+00:22:40 --> 00:22:43
+in here are changing.
+Here you have some big O of 1,
+
+326
+00:22:43 --> 00:22:46
+here you have some big O of 1.
+You are probably doubling the
+
+327
+00:22:46 --> 00:22:49
+constant in there every time you
+do this relation.
+
+328
+00:22:49 --> 00:22:52
+If you have a finite number of
+doubling of constants,
+
+329
+00:22:52 --> 00:22:54
+no big deal,
+it is just a constant,
+
+330
+00:22:54 --> 00:22:55
+two the power number of
+doublings.
+
+331
+00:22:55 --> 00:23:00
+But here you are doing n
+doublings and that is no good.
+
+332
+00:23:00 --> 00:23:02
+The constant is now depending
+on n.
+
+333
+00:23:02 --> 00:23:06
+So, we are avoiding this kind
+of problem by writing out the
+
+334
+00:23:06 --> 00:23:08
+constant.
+We have to make sure that
+
+335
+00:23:08 --> 00:23:11
+constant doesn't change.
+Good.
+
+336
+00:23:11 --> 00:23:13
+Now I have written out the
+constant.
+
+337
+00:23:13 --> 00:23:16
+I should be safe.
+I am assuming it for all k less
+
+338
+00:23:16 --> 00:23:20
+than n, now I have to prove it
+for k equal to n.
+
+339
+00:23:20 --> 00:23:23
+I am going to take T(n) and
+just expand it.
+
+340
+00:23:23 --> 00:23:25
+I am going to do the obvious
+thing.
+
+341
+00:23:25 --> 00:23:30
+I have this recurrence how to
+expand T(n).
+
+342
+00:23:30 --> 00:23:35
+Then it involves T(n/2).
+And I know some fact about
+
+343
+00:23:35 --> 00:23:39
+T(n/2) because n/2 is less than
+n.
+
+344
+00:23:39 --> 00:23:43
+So, let's expand.
+T(n) = 4T(n/2) + n.
+
+345
+00:23:43 --> 00:23:50
+And now I have an upper bound
+on this thing from the induction
+
+346
+00:23:50 --> 00:23:55
+hypothesis.
+This is at most 4 times c times
+
+347
+00:23:55 --> 00:24:00
+the argument cubed plus n.
+
+348
+00:24:00 --> 00:24:40
+
+
+349
+00:24:40 --> 00:24:48
+Continuing on here.
+Let's expand this a little bit.
+
+350
+00:24:48 --> 00:24:56
+We have n cubed over 2 cubed.
+Two cubed is 8,
+
+351
+00:24:56 --> 00:25:05
+so 4 over 8 is a half.
+So, we have ½cn^3 + n.
+
+352
+00:25:05 --> 00:25:10
+And what I would like this to
+be is, so at the bottom where I
+
+353
+00:25:10 --> 00:25:13
+would like to go is that this is
+at most cn3.
+
+354
+00:25:13 --> 00:25:18
+That is what I would like to
+prove to reestablish the
+
+355
+00:25:18 --> 00:25:21
+induction hypothesis for n.
+What I will do,
+
+356
+00:25:21 --> 00:25:26
+in order to see when that is
+case, is just write this as what
+
+357
+00:25:26 --> 00:25:30
+I want, so this is sort of the
+desired value,
+
+358
+00:25:30 --> 00:25:34
+cn3, minus whatever I don't
+want.
+
+359
+00:25:34 --> 00:25:39
+This is called the residual.
+Now I have to actually figure
+
+360
+00:25:39 --> 00:25:41
+this out.
+Let's see.
+
+361
+00:25:41 --> 00:25:44
+We have cn^3,
+but only ½cn^3 here,
+
+362
+00:25:44 --> 00:25:49
+so I need to subtract off ½cn^3
+to get that lead term correct.
+
+363
+00:25:49 --> 00:25:54
+And then I have plus n and
+there is a minus here,
+
+364
+00:25:54 --> 00:25:59
+so it is minus n.
+And that is the residual.
+
+365
+00:25:59 --> 00:26:04
+In order for this to be at most
+this, I need that the residual
+
+366
+00:26:04 --> 00:26:07
+is non-negative.
+This is if the residual part is
+
+367
+00:26:07 --> 00:26:12
+greater than or equal to zero,
+which is pretty easy to do
+
+368
+00:26:12 --> 00:26:15
+because here I have control over
+c.
+
+369
+00:26:15 --> 00:26:18
+I get to pick c to be whatever
+I want.
+
+370
+00:26:18 --> 00:26:22
+And, as long as c is at least,
+oh, I don't know,
+
+371
+00:26:22 --> 00:26:26
+2, then this is a 1 at least.
+Then I have n^3 should be
+
+372
+00:26:26 --> 00:26:33
+greater than or equal to n.
+And that is always the case.
+
+373
+00:26:33 --> 00:26:37
+For example,
+this is true if c is at least
+
+374
+00:26:37 --> 1.
+
+
+375
+1. --> 00:26:41
+And I don't think it matters
+
+376
+00:26:41 --> 00:26:47
+what n is, but let's say n is at
+least 1 just for kicks.
+
+377
+00:26:47 --> 00:26:53
+So, what we have done is proved
+that T(n) is at most some
+
+378
+00:26:53 --> 00:27:00
+constant times n^3.
+And the constant is like 1.
+
+379
+00:27:00 --> 00:27:03
+So, that is an upper bound.
+It is not a tight upper bound.
+
+380
+00:27:03 --> 00:27:06
+We actually believed that it is
+n^2, and it is,
+
+381
+00:27:06 --> 00:27:09
+but you have to be a little
+careful.
+
+382
+00:27:09 --> 00:27:11
+This does not mean that the
+answer is n^3.
+
+383
+00:27:11 --> 00:27:14
+It just means that at most n^3
+is big O(n^3).
+
+384
+00:27:14 --> 00:27:16
+And this is a proof by
+induction.
+
+385
+00:27:16 --> 00:27:20
+Now, technically I should have
+put a base case in this
+
+386
+00:27:20 --> 00:27:22
+induction, so there is a little
+bit missing.
+
+387
+00:27:22 --> 00:27:26
+The base case is pretty easy
+because T(1) is some constant,
+
+388
+00:27:26 --> 00:27:29
+but it will sort of influence
+things.
+
+389
+00:27:29 --> 00:27:33
+If the base case T(1) is some
+constant.
+
+390
+00:27:33 --> 00:27:37
+And what we need is that it is
+at most c times one cubed,
+
+391
+00:27:37 --> 00:27:40
+which is c.
+And that will be true as long
+
+392
+00:27:40 --> 00:27:43
+as you choose c to be
+sufficiently large.
+
+393
+00:27:43 --> 00:27:47
+So, this is true if c is chosen
+sufficiently large.
+
+394
+00:27:47 --> 00:27:52
+Now, we don't care about
+constants, but the point is just
+
+395
+00:27:52 --> 00:27:56
+to be a little bit careful.
+It is not true that T(n) is at
+
+396
+00:27:56 --> 00:28:00
+most 1 times n^2,
+even though here all we need is
+
+397
+00:28:00 --> 00:28:05
+that c is at least 1.
+For the base case to work,
+
+398
+00:28:05 --> 00:28:10
+c actually might have to be a
+hundred or whatever T(1) is.
+
+399
+00:28:10 --> 00:28:14
+So, be a little bit careful
+there.
+
+400
+00:28:14 --> 00:28:19
+It doesn't really affect the
+answer, usually it won't because
+
+401
+00:28:19 --> 00:28:23
+we have very simple base cases
+here.
+
+402
+00:28:23 --> 00:28:29
+OK, so let's try to prove the
+tight bound of O(n^2).
+
+403
+00:28:29 --> 00:28:33
+I am not going to prove an
+omega bound, but you can prove
+
+404
+00:28:33 --> 00:28:38
+an omega n squared bound as well
+using substitution method.
+
+405
+00:28:38 --> 00:28:43
+I will just be satisfied for
+now proving an upper bound of n
+
+406
+00:28:43 --> 00:28:46
+squared.
+Let's try to prove that T(n),
+
+407
+00:28:46 --> 00:28:51
+this is the same recurrence,
+I want to prove that it is
+
+408
+00:28:51 --> 00:28:53
+O(n^2).
+I am going to do the same
+
+409
+00:28:53 --> 00:28:56
+thing.
+And I will write a bit faster
+
+410
+00:28:56 --> 00:29:01
+because this is basically
+copying.
+
+411
+00:29:01 --> 00:29:06
+
+
+412
+00:29:06 --> 00:29:10
+Except now, instead of three,
+I have two.
+
+413
+00:29:10 --> 00:29:17
+Then I have T(n) = 4T(n/2) + n.
+I expand this T(n/2).
+
+414
+00:29:17 --> 00:29:24
+This is at most 4c(n/2)^2 + n.
+And now, instead of have 2
+
+415
+00:29:24 --> 00:29:30
+cubed, I have 2 squared,
+which is only 4.
+
+416
+00:29:30 --> 00:29:32
+The fours cancel.
+I get cn^2 + n.
+
+417
+00:29:32 --> 00:29:37
+And if you prefer to write it
+as desired minus residual,
+
+418
+00:29:37 --> 00:29:42
+then I have cn^2 - (-n).
+And I want this to be
+
+419
+00:29:42 --> 00:29:46
+non-negative.
+And it is damn hard for minus n
+
+420
+00:29:46 --> 00:29:50
+to be non-negative.
+If n is zero we are happy,
+
+421
+00:29:50 --> 00:29:54
+but unfortunately this is an
+induction on n.
+
+422
+00:29:54 --> 00:30:00
+It's got to hold for all n
+greater than or equal to 1.
+
+423
+00:30:00 --> 00:30:02
+This is not less than or equal
+to cn^2.
+
+424
+00:30:02 --> 00:30:06
+Notice the temptation is to
+write that this equals O(n^2),
+
+425
+00:30:06 --> 00:30:09
+which is true for this one
+step.
+
+426
+00:30:09 --> 00:30:12
+cn^2 - (-n),
+well, these are both order n,
+
+427
+00:30:12 --> 00:30:15
+or this is order n,
+this is order n squared.
+
+428
+00:30:15 --> 00:30:18
+Certainly this thing is O(n^2),
+that is true,
+
+429
+00:30:18 --> 00:30:21
+but it is not completing the
+induction.
+
+430
+00:30:21 --> 00:30:25
+To complete the induction,
+you have to prove the induction
+
+431
+00:30:25 --> 00:30:29
+hypothesis for n with this
+constant c.
+
+432
+00:30:29 --> 00:30:32
+Here you are getting a constant
+c of like c + 1,
+
+433
+00:30:32 --> 00:30:36
+which is not good.
+This is true but useless.
+
+434
+00:30:36 --> 00:30:40
+It does not finish the
+induction, so you can sort of
+
+435
+00:30:40 --> 00:30:42
+ignore that.
+This proof doesn't work,
+
+436
+00:30:42 --> 00:30:46
+which is kind of annoying
+because we feel,
+
+437
+00:30:46 --> 00:30:49
+in our heart of hearts,
+that T(n) = n^2.
+
+438
+00:30:49 --> 00:30:53
+It turns out to fix this you
+need to express T(n) in a
+
+439
+00:30:53 --> 00:30:56
+slightly different form.
+This is, again,
+
+440
+00:30:56 --> 00:31:00
+divine inspiration.
+And, if you have a good
+
+441
+00:31:00 --> 00:31:03
+connection to some divinity,
+you are all set.
+
+442
+00:31:03 --> 00:31:06
+[LAUGHTER] But it is a little
+bit harder for the rest of us
+
+443
+00:31:06 --> 00:31:08
+mere mortals.
+It turns out,
+
+444
+00:31:08 --> 00:31:12
+and maybe you could guess this,
+that the idea is we want to
+
+445
+00:31:12 --> 00:31:14
+strengthen the induction
+hypothesis.
+
+446
+00:31:14 --> 00:31:18
+We assumed this relatively weak
+thing, T(k) is less than or
+
+447
+00:31:18 --> 00:31:20
+equal to some constant times
+k^2.
+
+448
+00:31:20 --> 00:31:22
+We didn't know what the
+constant was,
+
+449
+00:31:22 --> 00:31:25
+that is fine,
+but we assumed that there were
+
+450
+00:31:25 --> 00:31:28
+no lower order terms.
+I want to look at lower order
+
+451
+00:31:28 --> 00:31:31
+terms.
+Maybe they play a role.
+
+452
+00:31:31 --> 00:31:33
+And if you look at this
+progression you say,
+
+453
+00:31:33 --> 00:31:36
+oh, well, I am getting
+something like n^2 and the
+
+454
+00:31:36 --> 00:31:40
+constants are pretty damn tight.
+I mean the fours are canceling
+
+455
+00:31:40 --> 00:31:43
+and the c just is preserved.
+How am I going to get rid of
+
+456
+00:31:43 --> 00:31:46
+this lower order term plus n?
+Well, maybe I could subtract
+
+457
+00:31:46 --> 00:31:49
+off a linear term in here and,
+if I am lucky,
+
+458
+00:31:49 --> 00:31:52
+it will cancel with this one.
+That is all the intuition we
+
+459
+00:31:52 --> 00:31:56
+have at this point.
+It turns out it works.
+
+460
+00:31:56 --> 00:32:01
+We look at T(n) and this is
+4T(n/2) + n as usual.
+
+461
+00:32:01 --> 00:32:05
+Now we expand a slightly
+messier form.
+
+462
+00:32:05 --> 00:32:09
+We have 4[c_1*(n/2)^2 -
+c_2*(n/2)] + n.
+
+463
+00:32:09 --> 00:32:14
+This part is the same because
+the fours cancel again.
+
+464
+00:32:14 --> 00:32:18
+So, we get c_1*n^2,
+which is good.
+
+465
+00:32:18 --> 00:32:22
+I mean that is sort of the form
+we want.
+
+466
+00:32:22 --> 00:32:30
+Then we have something times n,
+so let's figure it out.
+
+467
+00:32:30 --> 00:32:34
+We have a plus 1 times n,
+so let's write it 1 minus c_2
+
+468
+00:32:34 --> 00:32:38
+over 2 times n.
+Oops, got that wrong.
+
+469
+00:32:38 --> 00:32:43
+There is four times a two so,
+in fact, the two is upstairs.
+
+470
+00:32:43 --> 00:32:46
+Let me double check.
+Right.
+
+471
+00:32:46 --> 00:32:48
+OK.
+Now we can write this as
+
+472
+00:32:48 --> 00:32:53
+desired minus residual.
+And we have to be a little
+
+473
+00:32:53 --> 00:32:58
+careful here because now we have
+a stronger induction hypothesis
+
+474
+00:32:58 --> 00:33:03
+to prove.
+We don't just need it is at
+
+475
+00:33:03 --> 00:33:07
+most c_1*n^2,
+which would be fine here
+
+476
+00:33:07 --> 00:33:12
+because we could choose c_2 to
+be large, but what we really
+
+477
+00:33:12 --> 00:33:17
+need is c_1*n^2 - c_2*n,
+and then minus some other
+
+478
+00:33:17 --> 00:33:19
+stuff.
+This is, again,
+
+479
+00:33:19 --> 00:33:23
+desired minus residual.
+And minus residual,
+
+480
+00:33:23 --> 00:33:30
+let's see, we have a minus 1
+and we have a minus c_2.
+
+481
+00:33:30 --> 00:33:35
+That doesn't look so happy.
+Plus c_2, thank you,
+
+482
+00:33:35 --> 00:33:40
+because that again looked
+awfully negative.
+
+483
+00:33:40 --> 00:33:44
+It is plus c_2.
+I am getting my signs,
+
+484
+00:33:44 --> 00:33:50
+there is a minus here and there
+is one minus here,
+
+485
+00:33:50 --> 00:33:55
+so there we go.
+Again, I want my residual to be
+
+486
+00:33:55 --> 00:34:03
+greater than or equal to zero.
+And if I have that I will be
+
+487
+00:34:03 --> 00:34:07
+all set in making this inductive
+argument.
+
+488
+00:34:07 --> 00:34:14
+Office hours start this week,
+in case you are eager to go.
+
+489
+00:34:14 --> 00:34:19
+They are all held in some room
+in Building 24,
+
+490
+00:34:19 --> 00:34:25
+which is roughly the midpoint
+between here and Stata,
+
+491
+00:34:25 --> 00:34:30
+I think, for no particular
+reason.
+
+492
+00:34:30 --> 00:34:34
+And you can look at the Web
+page for details on the office
+
+493
+00:34:34 --> 00:34:35
+hours.
+Continuing along,
+
+494
+00:34:35 --> 00:34:39
+when is c_2 - 1 going to be
+greater than or equal to zero?
+
+495
+00:34:39 --> 00:34:44
+Well, that is true if c_2 is at
+least 1, which is no big deal.
+
+496
+00:34:44 --> 00:34:47
+Again, we get to choose the
+constants however we want.
+
+497
+00:34:47 --> 00:34:51
+It only has to hold for some
+choice of constants.
+
+498
+00:34:51 --> 00:34:54
+So, we can set c_2 greater than
+or equal to 1.
+
+499
+00:34:54 --> 00:34:59
+And then we are happy.
+That means this whole thing is
+
+500
+00:34:59 --> 00:35:03
+less than or equal to c_1*n^2 -
+c_2*n if c_2 is greater than or
+
+501
+00:35:03 --> 00:35:06
+equal to 1.
+It is kind of funny here.
+
+502
+00:35:06 --> 00:35:10
+This finishes the induction,
+at least the induction step.
+
+503
+00:35:10 --> 00:35:13
+We proved now that for any
+value of c_1,
+
+504
+00:35:13 --> 00:35:16
+and provided c_2 is at least
+one.
+
+505
+00:35:16 --> 00:35:20
+We have to be a little more
+careful that c_1 does actually
+
+506
+00:35:20 --> 00:35:26
+have to be sufficiently large.
+Any particular reason why?
+
+507
+00:35:26 --> 00:35:32
+
+
+508
+00:35:32 --> 00:35:34
+c_1 better not be negative,
+indeed.
+
+509
+00:35:34 --> 00:35:39
+c_1 has to be positive for this
+to work, but it even has to be
+
+510
+00:35:39 --> 00:35:43
+larger than positive depending.
+Sorry.
+
+511
+00:35:43 --> 00:35:47
+I have been going so fast,
+I haven't asked you questions.
+
+512
+00:35:47 --> 00:35:50
+Now you are caught off guard.
+Yeah?
+
+513
+00:35:50 --> 00:35:53
+Because of the base case,
+exactly.
+
+514
+00:35:53 --> 00:35:58
+So, the base case will have
+T(1) is c_1 time 1 squared minus
+
+515
+00:35:58 --> 00:36:02
+c_2, we want to prove that it is
+at most this,
+
+516
+00:36:02 --> 00:36:07
+and T(1) is some constant we
+have assumed.
+
+517
+00:36:07 --> 00:36:11
+We need to choose c_1 to be
+sufficiently larger than c_2,
+
+518
+00:36:11 --> 00:36:14
+in fact, so c_2 has to be at
+least 1.
+
+519
+00:36:14 --> 00:36:20
+c_1 may have to be at least a
+hundred more than one if this is
+
+520
+00:36:20 --> 100.
+
+
+521
+100. --> 00:36:22
+This will be true if c_1 is
+
+522
+00:36:22 --> 00:36:26
+sufficiently large.
+And sufficiently large now
+
+523
+00:36:26 --> 00:36:31
+means with respect to c_2.
+You have to be a little bit
+
+524
+00:36:31 --> 00:36:34
+careful, but in this case it
+doesn't matter.
+
+525
+00:36:34 --> 00:36:37
+Any questions about the
+substitution method?
+
+526
+00:36:37 --> 00:36:40
+That was the same example three
+times.
+
+527
+00:36:40 --> 00:36:43
+In the end, it turned out we
+got the right answer.
+
+528
+00:36:43 --> 00:36:47
+But we sort of had to know the
+answer in order to find it,
+
+529
+00:36:47 --> 00:36:51
+which is a bit of a pain.
+It would certainly be nicer to
+
+530
+00:36:51 --> 00:36:54
+just figure out the answer by
+some procedure,
+
+531
+00:36:54 --> 00:36:58
+and that will be the next two
+techniques we talk about.
+
+532
+00:36:58 --> 00:37:02
+Sorry?
+How would you prove a lower
+
+533
+00:37:02 --> 00:37:04
+bound?
+I haven't tried it for this
+
+534
+00:37:04 --> 00:37:09
+recurrence, but you should be
+able to do exactly the same
+
+535
+00:37:09 --> 00:37:12
+form.
+Argue that T(n) is greater than
+
+536
+00:37:12 --> 00:37:16
+or equal to c_1*n^2 - c_2*n.
+I didn't check whether that
+
+537
+00:37:16 --> 00:37:20
+particular form will work,
+but I think it does.
+
+538
+00:37:20 --> 00:37:22
+Try it.
+These other methods will give
+
+539
+00:37:22 --> 00:37:26
+you, in some sense,
+upper and lower bounds if you
+
+540
+00:37:26 --> 00:37:31
+are a little bit careful.
+But, to really check things,
+
+541
+00:37:31 --> 00:37:33
+you pretty much have to do the
+substitution method.
+
+542
+00:37:33 --> 00:37:35
+And you will get some practice
+with that.
+
+543
+00:37:35 --> 00:37:37
+Usually we only care about
+upper bounds.
+
+544
+00:37:37 --> 00:37:39
+Proving upper bounds like this
+is what we will focus on,
+
+545
+00:37:39 --> 00:37:41
+but occasionally we need lower
+bounds.
+
+546
+00:37:41 --> 00:37:43
+It is always nice to know that
+you have the right answer by
+
+547
+00:37:43 --> 00:37:46
+proving a matching lower bound.
+
+548
+00:37:46 --> 00:37:51
+
+
+549
+00:37:51 --> 00:37:54
+The next method we will talk
+about is the recursion-tree
+
+550
+00:37:54 --> 00:37:57
+method.
+And it is a particular way of
+
+551
+00:37:57 --> 00:38:00
+adding up a recurrence,
+and it is my favorite way.
+
+552
+00:38:00 --> 00:38:04
+It usually just works.
+That's the great thing about
+
+553
+00:38:04 --> 00:38:06
+it.
+It provides you intuition for
+
+554
+00:38:06 --> 00:38:08
+free.
+It tells you what the answer is
+
+555
+00:38:08 --> 00:38:11
+pretty much.
+It is slightly nonrigorous,
+
+556
+00:38:11 --> 00:38:14
+this is a bit of a pain,
+so you have to be really
+
+557
+00:38:14 --> 00:38:18
+careful when you apply it.
+Otherwise, you might get the
+
+558
+00:38:18 --> 00:38:20
+wrong answer.
+Because it involves dot,
+
+559
+00:38:20 --> 00:38:24
+dot, dots, our favorite three
+characters, but dot,
+
+560
+00:38:24 --> 00:38:30
+dot, dots are always a little
+bit nonrigorous so be careful.
+
+561
+00:38:30 --> 00:38:32
+Technically,
+what you should do is find out
+
+562
+00:38:32 --> 00:38:34
+what the answer is with
+recursion-tree method.
+
+563
+00:38:34 --> 00:38:37
+Then prove that it is actually
+right with the substitution
+
+564
+00:38:37 --> 00:38:39
+method.
+Usually that is not necessary,
+
+565
+00:38:39 --> 00:38:42
+but you should at least have in
+your mind that that is required
+
+566
+00:38:42 --> 00:38:43
+rigorously.
+And probably the first few
+
+567
+00:38:43 --> 00:38:46
+recurrences you solve,
+you should do it that way.
+
+568
+00:38:46 --> 00:38:48
+When you really understand the
+recursion-tree method,
+
+569
+00:38:48 --> 00:38:51
+you can be a little bit more
+sloppy if you are really sure
+
+570
+00:38:51 --> 00:38:55
+you have the right answer.
+Let's do an example.
+
+571
+00:38:55 --> 00:38:59
+We saw recursion trees very
+briefly last time with mergesort
+
+572
+00:38:59 --> 00:39:01
+as the intuition why it was n
+log n.
+
+573
+00:39:01 --> 00:39:05
+And, if you took an example
+like the one we just did with
+
+574
+00:39:05 --> 00:39:08
+the recursion-tree method,
+it is dead simple.
+
+575
+00:39:08 --> 00:39:12
+Just to make our life harder,
+let's do a more complicated
+
+576
+00:39:12 --> 00:39:15
+recursion.
+Here we imagine we have some
+
+577
+00:39:15 --> 00:39:17
+algorithm.
+It starts with a problem size
+
+578
+00:39:17 --> 00:39:21
+n, it recursively solves a
+problem of size n/4,
+
+579
+00:39:21 --> 00:39:24
+it then recursively solves a
+problem of size n/2,
+
+580
+00:39:24 --> 00:39:30
+and it does n^2 work on the
+side without nonrecursive work.
+
+581
+00:39:30 --> 00:39:33
+What is that?
+I mean that is a bit less
+
+582
+00:39:33 --> 00:39:38
+obvious, I would say.
+What we are going to do is draw
+
+583
+00:39:38 --> 00:39:45
+a picture, and we are just going
+to expand out that recursion in
+
+584
+00:39:45 --> 00:39:47
+tree form --
+
+585
+00:39:47 --> 00:39:56
+
+
+586
+00:39:56 --> 00:40:00
+-- and then just add everything
+up.
+
+587
+00:40:00 --> 00:40:05
+We want the general picture,
+and the general principle in
+
+588
+00:40:05 --> 00:40:12
+the recursion-tree method is we
+just draw this as a picture.
+
+589
+00:40:12 --> 00:40:16
+We say well,
+T(n) equals the sum of n^2,
+
+590
+00:40:16 --> 00:40:21
+T(n/4) and T(n/2).
+This is a weird way of writing
+
+591
+00:40:21 --> 00:40:25
+a sum but why not write it that
+way.
+
+592
+00:40:25 --> 00:40:31
+This is going to be a tree.
+And it is going to be a tree by
+
+593
+00:40:31 --> 00:40:35
+recursively expanding each of
+these two leaves.
+
+594
+00:40:35 --> 00:40:40
+I start by expanding T(n) to
+this, then I keep expanding,
+
+595
+00:40:40 --> 00:40:42
+expanding, expanding
+everything.
+
+596
+00:40:42 --> 00:40:46
+Let's go one more step.
+We have this n^2,
+
+597
+00:40:46 --> 00:40:49
+T(n/4), T(n/2).
+If we expand one more time,
+
+598
+00:40:49 --> 00:40:53
+this is going to be n^2 plus
+two things.
+
+599
+00:40:53 --> 00:40:58
+The first thing is going to be
+(n/4)^2, the second thing is
+
+600
+00:40:58 --> 00:41:03
+going to be (n/2)^2.
+Plus their recursive branches.
+
+601
+00:41:03 --> 00:41:08
+We have T(n/16) and T(n/8).
+Here my arithmetic shows thin.
+
+602
+00:41:08 --> 00:41:12
+This better be the same,
+T(n/8), and this should be
+
+603
+00:41:12 --> 00:41:15
+T(n/4), I believe.
+You just keep going forever,
+
+604
+00:41:15 --> 00:41:20
+I mean, until you get down to
+the base case where T is a
+
+605
+00:41:20 --> 00:41:23
+constant.
+So, I am now going to skip some
+
+606
+00:41:23 --> 00:41:25
+steps and say dot,
+dot, dot.
+
+607
+00:41:25 --> 00:41:30
+This is where you have to be
+careful.
+
+608
+00:41:30 --> 00:41:33
+We have n^2,
+(n/4)^2, (n/2)^2.
+
+609
+00:41:33 --> 00:41:39
+Now this is easy because I have
+already done them all.
+
+610
+00:41:39 --> 00:41:43
+(n/16)^2, (n/8)^2,
+(n/8)^2 again,
+
+611
+00:41:43 --> 00:41:47
+(n/4)^2 and et cetera,
+dot, dot, dot,
+
+612
+00:41:47 --> 00:41:52
+of various levels of recursion
+here.
+
+613
+00:41:52 --> 00:41:57
+At the bottom,
+we are going to get a bunch of
+
+614
+00:41:57 --> 00:42:01
+constants.
+These are the leaves.
+
+615
+00:42:01 --> 00:42:04
+I would like to know how many
+leaves there are.
+
+616
+00:42:04 --> 00:42:07
+One challenge is how many
+leaves in this tree could there
+
+617
+00:42:07 --> 00:42:09
+be?
+This is a bit subtle,
+
+618
+00:42:09 --> 00:42:13
+unlike mergesort or unlike the
+previous recurrence we solved,
+
+619
+00:42:13 --> 00:42:16
+the number of leaves here is a
+bit funny because we are
+
+620
+00:42:16 --> 00:42:20
+recursing at different speeds.
+This tree is going to be much
+
+621
+00:42:20 --> 00:42:23
+smaller than this tree.
+It is going to have smaller
+
+622
+00:42:23 --> 00:42:26
+depth because it has already
+done down to (n/16).
+
+623
+00:42:26 --> 00:42:30
+Here it has only gone down to
+(n/4).
+
+624
+00:42:30 --> 00:42:35
+But how many leaves are there
+in this recursion tree?
+
+625
+00:42:35 --> 00:42:41
+All I need is an upper bound,
+some reasonable upper bound.
+
+626
+00:42:41 --> 00:42:47
+I can tell you it is at most
+T(n^10), but that is a bit
+
+627
+00:42:47 --> 00:42:51
+unreasonable.
+It should be less than n,
+
+628
+00:42:51 --> 00:42:54
+good.
+Why is it less than n?
+
+629
+00:42:54 --> 00:42:58
+Exactly.
+I start with a problem of size
+
+630
+00:42:58 --> 00:43:02
+n.
+And I recurse into a problem
+
+631
+00:43:02 --> 00:43:04
+that n/4 and a problem that says
+n/2.
+
+632
+00:43:04 --> 00:43:08
+When I get down to one I stop.
+So, n/4 + n/2 = ¾n,
+
+633
+00:43:08 --> 00:43:13
+which is strictly less than n.
+So, definitely the total number
+
+634
+00:43:13 --> 00:43:17
+of leaves has to be at most n.
+If I start out with n sort of
+
+635
+00:43:17 --> 00:43:21
+stuff and get rid of a quarter
+of it and then recurse,
+
+636
+00:43:21 --> 00:43:26
+it is definitely going to be
+less than n stuff at the bottom.
+
+637
+00:43:26 --> 00:43:30
+So, strictly less than n
+leaves.
+
+638
+00:43:30 --> 00:43:32
+At this point,
+I have done nothing
+
+639
+00:43:32 --> 00:43:34
+interesting.
+And then the second cool idea
+
+640
+00:43:34 --> 00:43:38
+in recursion trees is you don't
+just expand this tree and see
+
+641
+00:43:38 --> 00:43:42
+what it looks like and then say,
+well, God, how the hell am I
+
+642
+00:43:42 --> 00:43:45
+going to sum that?
+You sum it level by level.
+
+643
+00:43:45 --> 00:43:48
+That is the only other idea.
+It usually works really,
+
+644
+00:43:48 --> 00:43:50
+really well.
+Here it is a bit complicated
+
+645
+00:43:50 --> 00:43:54
+and I have to think a bit to
+figure out n^2 is n^2.
+
+646
+00:43:54 --> 00:43:55
+That is the first level.
+Easy.
+
+647
+00:43:55 --> 00:44:00
+The second level,
+I have to think a lot harder.
+
+648
+00:44:00 --> 00:44:03
+There are three kinds of
+mathematicians,
+
+649
+00:44:03 --> 00:44:08
+those who can add and those who
+cannot, and I am the latter kind
+
+650
+00:44:08 --> 00:44:12
+so I need your help.
+Can you add these things
+
+651
+00:44:12 --> 00:44:15
+together?
+It's n^2 over something.
+
+652
+00:44:15 --> 00:44:16
+Please?
+(5/16)n^2.
+
+653
+00:44:16 --> 00:44:21
+Now I really need your help.
+I think that one I could have
+
+654
+00:44:21 --> 00:44:24
+done, but this one is a little
+bit harder.
+
+655
+00:44:24 --> 00:44:30
+I will go look at my notes
+while you compute that.
+
+656
+00:44:30 --> 00:44:35
+
+
+657
+00:44:35 --> 00:44:37
+Any answers?
+73/256.
+
+658
+00:44:37 --> 00:44:44
+Anyone else confirm that?
+It seems a bit high to me.
+
+659
+00:44:44 --> 00:44:49
+73 does not sound right to me.
+64?
+
+660
+00:44:49 --> 00:44:54
+Closer.
+It is actually important that
+
+661
+00:44:54 --> 00:44:59
+we get this right.
+The 256 is correct.
+
+662
+00:44:59 --> 00:45:04
+I can tell.
+Everyone should know that 16^2
+
+663
+00:45:04 --> 00:45:06
+= 256.
+We are computer scientists.
+
+664
+00:45:06 --> 00:45:09
+25, good.
+We have two people saying 25,
+
+665
+00:45:09 --> 00:45:12
+therefore it is correct by
+democracy.
+
+666
+00:45:12 --> 00:45:17
+[LAUGHTER] 25 is also what my
+notes say, and I computed it at
+
+667
+00:45:17 --> 00:45:19
+home.
+(25/256)n^2 is the right
+
+668
+00:45:19 --> 00:45:21
+answer.
+Now, did anyone notice
+
+669
+00:45:21 --> 00:45:24
+something magical about this
+progression?
+
+670
+00:45:24 --> 00:45:28
+It squares each time,
+good.
+
+671
+00:45:28 --> 00:45:32
+And, if we were going to add
+these up, you might call it?
+
+672
+00:45:32 --> 00:45:34
+A geometric series,
+very good.
+
+673
+00:45:34 --> 00:45:37
+So, it turns out this is
+geometric.
+
+674
+00:45:37 --> 00:45:40
+And we know how to sum
+geometric series,
+
+675
+00:45:40 --> 00:45:43
+at least you should.
+
+676
+00:45:43 --> 00:45:59
+
+
+677
+00:45:59 --> 00:46:01
+We started n^2.
+We know that at the bottom,
+
+678
+00:46:01 --> 00:46:05
+well, this is not quite a
+level, we get something like n,
+
+679
+00:46:05 --> 00:46:07
+but we are decreasing
+geometrically.
+
+680
+00:46:07 --> 00:46:10
+So, the total,
+I mean the solution to the
+
+681
+00:46:10 --> 00:46:13
+recurrence is the sum of all the
+numbers in this tree.
+
+682
+00:46:13 --> 00:46:17
+If we added it up level by
+level and then add up all the
+
+683
+00:46:17 --> 00:46:20
+levels that is going to give us
+the answer.
+
+684
+00:46:20 --> 00:46:22
+This is the total computed
+level by level.
+
+685
+00:46:22 --> 00:46:25
+It is just a cute way to
+compute it.
+
+686
+00:46:25 --> 00:46:30
+It usually gives you nice
+answers like geometric answers.
+
+687
+00:46:30 --> 00:46:32
+We have n^2(1 + 5/16 + 25/256 +
+...).
+
+688
+00:46:32 --> 00:46:37
+And, if we believe in fate and
+we see this three number
+
+689
+00:46:37 --> 00:46:41
+recurrence, we know that we have
+the right answer.
+
+690
+00:46:41 --> 00:46:45
+In general, it is going to be
+(5/16)k, at least we hope,
+
+691
+00:46:45 --> 00:46:47
+and so on.
+And it keeps going.
+
+692
+00:46:47 --> 00:46:52
+It doesn't go on infinitely,
+but let's just assume it goes
+
+693
+00:46:52 --> 00:46:55
+on infinitely.
+That will be an upper bound
+
+694
+00:46:55 --> 00:47:00
+that goes on forever.
+This is all times n^2.
+
+695
+00:47:00 --> 00:47:05
+Now, if you are going to know
+one thing about geometric
+
+696
+00:47:05 --> 00:47:10
+series, you should know that 1 +
+½ + ¼, if you sum all the powers
+
+697
+00:47:10 --> 00:47:14
+of 2 you get 2.
+We are computer scientists.
+
+698
+00:47:14 --> 00:47:19
+We have got to know at least
+the binary case.
+
+699
+00:47:19 --> 00:47:23
+This is like writing 0.1111111
+in binary, actually,
+
+700
+00:47:23 --> 1.11111.
+
+
+701
+1.11111. --> 00:47:27
+And 11111 forever is the same
+
+702
+00:47:27 --> 00:47:31
+as 1, so this is 2.
+This is even smaller.
+
+703
+00:47:31 --> 00:47:34
+We have 5/16,
+that is less than a half and
+
+704
+00:47:34 --> 00:47:39
+then we are squaring each time,
+so this is even less than 2.
+
+705
+00:47:39 --> 00:47:42
+If you want,
+there is a nifty formula for
+
+706
+00:47:42 --> 00:47:47
+solving the general geometric
+series, but all we need is that
+
+707
+00:47:47 --> 00:47:49
+it is a constant.
+This is O(n^2).
+
+708
+00:47:49 --> 00:47:53
+It is also O(n^2).
+It is pretty obvious that it is
+
+709
+00:47:53 --> 00:47:56
+O(n^2) because the top thing is
+n^2.
+
+710
+00:47:56 --> 00:48:00
+So, there is our lower bound of
+n^2.
+
+711
+00:48:00 --> 00:48:03
+And we have it within a factor
+of 2, which is pretty good.
+
+712
+00:48:03 --> 00:48:05
+You actually get a better
+factor here.
+
+713
+00:48:05 --> 00:48:07
+So, that is recursion-tree
+method.
+
+714
+00:48:07 --> 00:48:10
+It is a little shaky here
+because we have these dot,
+
+715
+00:48:10 --> 00:48:13
+dot, dots, and we just believe
+that it is geometric.
+
+716
+00:48:13 --> 00:48:16
+It turns out most of the time
+it is geometric.
+
+717
+00:48:16 --> 00:48:18
+No problem here.
+I would definitely check it
+
+718
+00:48:18 --> 00:48:21
+with the substitution method
+because this is not obvious to
+
+719
+00:48:21 --> 00:48:23
+me that it is going to be
+geometric.
+
+720
+00:48:23 --> 00:48:27
+In the cases we will look at in
+a moment, it will be much
+
+721
+00:48:27 --> 00:48:30
+clearer, so clear that we can
+state a theorem that everything
+
+722
+00:48:30 --> 00:48:34
+is working fine.
+And still time,
+
+723
+00:48:34 --> 00:48:38
+good.
+So, that was recursion-trees.
+
+724
+00:48:38 --> 00:48:43
+There is one more method we are
+going to talk about,
+
+725
+00:48:43 --> 00:48:49
+and you could essentially think
+of it as an application of the
+
+726
+00:48:49 --> 00:48:55
+recursion-tree method but it is
+made more precise.
+
+727
+00:48:55 --> 00:49:00
+And it is an actual theorem,
+whereas recursion trees,
+
+728
+00:49:00 --> 00:49:04
+if the dot, dot,
+dots aren't obvious,
+
+729
+00:49:04 --> 00:49:10
+you better check them.
+The sad part about the master
+
+730
+00:49:10 --> 00:49:13
+method is it is pretty
+restrictive.
+
+731
+00:49:13 --> 00:49:18
+It only applies to a particular
+family of recurrences.
+
+732
+00:49:18 --> 00:49:27
+
+
+733
+00:49:27 --> 00:49:29
+It should be T(n) = aT(n/b) +
+f(n).
+
+734
+00:49:29 --> 00:49:32
+Am I going to call it f?
+Yes, I will call it f.
+
+735
+00:49:32 --> 00:49:35
+In particular,
+it will not cover the
+
+736
+00:49:35 --> 00:49:40
+recurrence I just solved because
+I was recursing on two different
+
+737
+00:49:40 --> 00:49:44
+problems of different sizes.
+Here, every problem you recurse
+
+738
+00:49:44 --> 00:49:48
+on should be of the same size.
+There are a subproblems.
+
+739
+00:49:48 --> 00:49:51
+A way to think of this is a
+recursive algorithm.
+
+740
+00:49:51 --> 00:49:55
+You have a subproblems.
+Each of them is of size n/b,
+
+741
+00:49:55 --> 00:49:57
+so the total costs will be
+this.
+
+742
+00:49:57 --> 00:50:02
+Then you are doing f(n)
+nonrecursive work.
+
+743
+00:50:02 --> 00:50:05
+A few constraints.
+a should be at least 1,
+
+744
+00:50:05 --> 00:50:08
+should have at least 1
+recursion.
+
+745
+00:50:08 --> 00:50:12
+b should be strictly greater
+than 1.
+
+746
+00:50:12 --> 00:50:17
+You better make the problem
+smaller or else it is going to
+
+747
+00:50:17 --> 00:50:21
+be infinity.
+And f should have some nice
+
+748
+00:50:21 --> 00:50:25
+property.
+f(n) should be asymptotically
+
+749
+00:50:25 --> 00:50:27
+positive.
+
+750
+00:50:27 --> 00:50:32
+
+
+751
+00:50:32 --> 00:50:37
+How many people know what
+asymptotically positive means?
+
+752
+00:50:37 --> 00:50:40
+No one.
+OK, you haven't read the
+
+753
+00:50:40 --> 00:50:41
+textbook.
+That's OK.
+
+754
+00:50:41 --> 00:50:46
+I haven't read it either,
+although don't tell Charles.
+
+755
+00:50:46 --> 00:50:50
+And he'd notice.
+And what might you think
+
+756
+00:50:50 --> 00:50:55
+asymptotically positive means?
+That we can do a little bit
+
+757
+00:50:55 --> 00:50:56
+better.
+Sorry?
+
+758
+00:50:56 --> 00:51:03
+Yes, it means for large enough
+n, f(n) is positive.
+
+759
+00:51:03 --> 00:51:07
+This means f(n) is greater than
+zero for n, at least some n_o,
+
+760
+00:51:07 --> 00:51:10
+so for some constant n_o.
+Eventually it should be
+
+761
+00:51:10 --> 00:51:12
+positive.
+I mean, we don't care about
+
+762
+00:51:12 --> 00:51:16
+whether it's negative 1 for n=1,
+not a big deal.
+
+763
+00:51:16 --> 00:51:20
+It won't affect the answer
+because we only care about the
+
+764
+00:51:20 --> 00:51:22
+asympotics within.
+
+765
+00:51:22 --> 00:51:28
+
+
+766
+00:51:28 --> 00:51:30
+The master method,
+you gave it a recurrence of
+
+767
+00:51:30 --> 00:51:33
+this form, it tells you the
+answer.
+
+768
+00:51:33 --> 00:51:36
+That is the great thing about
+the master method.
+
+769
+00:51:36 --> 00:51:39
+The annoying thing about the
+master method is that it has
+
+770
+00:51:39 --> 00:51:41
+three cases.
+It is a big long.
+
+771
+00:51:41 --> 00:51:45
+It takes a little bit longer to
+memorize than all the others
+
+772
+00:51:45 --> 00:51:47
+because the others are just
+ideas.
+
+773
+00:51:47 --> 00:51:50
+Here we need to actually
+remember a few things.
+
+774
+00:51:50 --> 00:51:53
+Let me state the theorem.
+Well, not quite yet.
+
+775
+00:51:53 --> 00:51:57
+There is one very simple idea,
+which is we are going to
+
+776
+00:51:57 --> 00:52:01
+compare this nonrecursive work
+f(n) with a very particular
+
+777
+00:52:01 --> 00:52:05
+function n^(log_b(a)).
+Why n^(log_b(a))?
+
+778
+00:52:05 --> 00:52:08
+You will see later.
+It turns out it is the number
+
+779
+00:52:08 --> 00:52:13
+of leaves in the recursion tree,
+but that is foreshadowing.
+
+780
+00:52:13 --> 00:52:16
+So, it is either less,
+equal or bigger.
+
+781
+00:52:16 --> 00:52:18
+And here we care about
+asymptotics.
+
+782
+00:52:18 --> 00:52:22
+And we have to be a little bit
+more precious about less,
+
+783
+00:52:22 --> 00:52:25
+equal or bigger.
+You might think well,
+
+784
+00:52:25 --> 00:52:30
+it means little o,
+big Theta, or little omega.
+
+785
+00:52:30 --> 00:52:34
+It would be nice if the theorem
+held for all of those cases,
+
+786
+00:52:34 --> 00:52:38
+but it leaves some gaps.
+Let's start with Case 1.
+
+787
+00:52:38 --> 00:52:42
+Case 1 is when f is smaller.
+And not just that it is little
+
+788
+00:52:42 --> 00:52:46
+o, but it is actually quite a
+bit smaller.
+
+789
+00:52:46 --> 00:52:51
+It has got to be polynomially
+smaller than n^(log_b(a)).
+
+790
+00:52:51 --> 00:53:00
+
+
+791
+00:53:00 --> 00:53:04
+For some positive epsilon,
+the running time should be this
+
+792
+00:53:04 --> 00:53:09
+n to this constant log base b of
+a minus that epsilon,
+
+793
+00:53:09 --> 00:53:13
+so it is really polynomially
+smaller than n^(log_b(a)).
+
+794
+00:53:13 --> 00:53:18
+We cannot handle the little o
+case, that's a little bit too
+
+795
+00:53:18 --> 00:53:21
+strong.
+This is saying it is really
+
+796
+00:53:21 --> 00:53:25
+quite a bit smaller.
+But the answer then is really
+
+797
+00:53:25 --> 00:53:28
+simple, T(n) =
+Theta(n^(log_b(a))).
+
+798
+00:53:28 --> 00:53:31
+Great.
+That is Case 1.
+
+799
+00:53:31 --> 00:53:39
+Case 2 is when f(n) is pretty
+much equal to n^(log_b(a)).
+
+800
+00:53:39 --> 00:53:46
+And by pretty much equal I mean
+up to poly log factors.
+
+801
+00:53:46 --> 00:53:51
+This is log base 2 of n to the
+power k.
+
+802
+00:53:51 --> 00:53:56
+You should know this notation.
+For example,
+
+803
+00:53:56 --> 00:54:02
+k could be zero.
+And then they are equal up to
+
+804
+00:54:02 --> 00:54:06
+constant factors,
+for some k greater than or
+
+805
+00:54:06 --> 00:54:09
+equal to zero.
+Less than will not work,
+
+806
+00:54:09 --> 00:54:13
+so it is really important that
+k is non-negative.
+
+807
+00:54:13 --> 00:54:16
+It should probably be an
+integer.
+
+808
+00:54:16 --> 00:54:20
+It doesn't actually matter
+whether there is an integer,
+
+809
+00:54:20 --> 00:54:24
+but there it is.
+It could n^(log_b(a)) times log
+
+810
+00:54:24 --> 00:54:27
+n or just times nothing,
+whatever.
+
+811
+00:54:27 --> 00:54:32
+Again, the solution is easy
+here, T(n) = Theta(n^(log_b(a))*
+
+812
+00:54:32 --> 00:54:38
+lg^(k+1)(n)).
+Presumably it has to be at
+
+813
+00:54:38 --> 00:54:44
+least times log k.
+It turns out it is log to the k
+
+814
+00:54:44 --> 00:54:47
+plus 1 of n.
+That is Case 2.
+
+815
+00:54:47 --> 00:54:53
+We have one more case which is
+slightly more complicated.
+
+816
+00:54:53 --> 00:55:00
+We need to assume slightly more
+for Case 3.
+
+817
+00:55:00 --> 00:55:05
+But Case 3 is roughly when f(n)
+grows bigger than n^(log_b(a)).
+
+818
+00:55:05 --> 00:55:10
+So, it should be capital Omega,
+here is one place where we get
+
+819
+00:55:10 --> 00:55:14
+to use omega,
+(n^(log_b(a)) + epsilon) for
+
+820
+00:55:14 --> 00:55:19
+some positive epsilon.
+It should grow not just bigger
+
+821
+00:55:19 --> 00:55:23
+but polynomially bigger.
+Here it was growing just a log
+
+822
+00:55:23 --> 00:55:27
+factor bigger,
+poly log, and here it is a
+
+823
+00:55:27 --> 00:55:31
+polynomial factor.
+In this case,
+
+824
+00:55:31 --> 00:55:36
+we need another assumption
+about f because we worry a
+
+825
+00:55:36 --> 00:55:40
+little bit about how quickly f
+grows.
+
+826
+00:55:40 --> 00:55:46
+We want to make sure that as
+you go down the recursion f gets
+
+827
+00:55:46 --> 00:55:49
+smaller.
+It would be kind of nice if f
+
+828
+00:55:49 --> 00:55:54
+gets smaller as you go down,
+otherwise you are,
+
+829
+00:55:54 --> 00:55:58
+again, trying to sum to
+infinity or whatever.
+
+830
+00:55:58 --> 00:56:06
+I see why this is for some
+epsilon prime greater than zero.
+
+831
+00:56:06 --> 00:56:09
+What I would like is that if I
+just sort of take the
+
+832
+00:56:09 --> 00:56:13
+recurrence, this T(n) and just
+throw in fs instead,
+
+833
+00:56:13 --> 00:56:16
+f(n) should be somehow related
+to af(n/b).
+
+834
+00:56:16 --> 00:56:20
+What I would like is that f(n),
+which is at the top of the
+
+835
+00:56:20 --> 00:56:23
+recursion tree,
+should be bigger than the thing
+
+836
+00:56:23 --> 00:56:27
+at the next level down.
+The sum of all the values at
+
+837
+00:56:27 --> 00:56:33
+the next level down should be
+bigger by some constant factor.
+
+838
+00:56:33 --> 00:56:37
+Here I have the next level down
+is at most some 1 - e,
+
+839
+00:56:37 --> 00:56:42
+something strictly less than 1,
+some constant strictly less
+
+840
+00:56:42 --> 00:56:45
+than 1 times the thing at the
+top level.
+
+841
+00:56:45 --> 00:56:49
+I need that to make sure things
+are getting smaller as I go
+
+842
+00:56:49 --> 00:56:52
+down.
+Then T(n) = Theta[f(n)].
+
+843
+00:56:52 --> 00:56:56
+And that is the theorem.
+This is the master theorem or
+
+844
+00:56:56 --> 00:57:02
+whatever you want to call it.
+It is not named after some guy
+
+845
+00:57:02 --> 00:57:05
+name Master.
+It is just the master of all
+
+846
+00:57:05 --> 00:57:09
+methods because it is very easy
+to apply.
+
+847
+00:57:09 --> 00:57:14
+Let's apply it a few times.
+It is a bit much to take in all
+
+848
+00:57:14 --> 00:57:16
+at once.
+And then I will give you a
+
+849
+00:57:16 --> 00:57:22
+sketch of the proof to see that
+it is really not that surprising
+
+850
+00:57:22 --> 00:57:26
+this is true if you look at the
+recursion-tree.
+
+851
+00:57:26 --> 00:57:30
+But first let's just try using
+it.
+
+852
+00:57:30 --> 00:57:35
+For example,
+we could take T(n) = 4T(n/2) +
+
+853
+00:57:35 --> 00:57:38
+n.
+This is a, this is b,
+
+854
+00:57:38 --> 00:57:44
+this is f(n).
+The first thing we should
+
+855
+00:57:44 --> 00:57:51
+compute is n^(log_b(a)).
+This I think even I can do.
+
+856
+00:57:51 --> 00:57:56
+Log base 2 of 4.
+Yeah, log base 2 I can do.
+
+857
+00:57:56 --> 00:58:04
+This is n^2.
+OK, so is f(n) smaller or
+
+858
+00:58:04 --> 00:58:10
+bigger than n^2?
+Well, f(n) = n.
+
+859
+00:58:10 --> 00:58:19
+n^2 is clearly bigger by a
+polynomial factor.
+
+860
+00:58:19 --> 00:58:26
+So, we are in Case 1.
+What is the answer?
+
+861
+00:58:26 --> 00:58:32
+n^2, yeah.
+It is T(n^(log_b(a))),
+
+862
+00:58:32 --> 00:58:40
+which here it is just n^2.
+Let's do some slight variation.
+
+863
+00:58:40 --> 00:58:46
+I am going to keep a and b the
+same and just change f.
+
+864
+00:58:46 --> 00:58:54
+Let's say T(n) = 4T(n/2) + n^2.
+This is like drill spelling.
+
+865
+00:58:54 --> 00:59:03
+n^2 is asymptotically the same
+as n^2 even up to constants.
+
+866
+00:59:03 --> 00:59:06
+What is the answer?
+This is Case 2.
+
+867
+00:59:06 --> 00:59:12
+
+
+868
+00:59:12 --> 00:59:14
+It is slightly harder.
+
+869
+00:59:14 --> 00:59:22
+
+
+870
+00:59:22 --> 00:59:31
+What is k in this example? Zero.
+The answer is?
+
+871
+00:59:31 --> 00:59:35
+Survey says?
+n^2 log n.
+
+872
+00:59:35 --> 00:59:44
+
+
+873
+00:59:44 --> 00:59:49
+Good.
+And a couple more.
+
+874
+00:59:49 --> 00:59:58
+T(n) = 4T(n/2) + n^3.
+What is the answer?
+
+875
+00:59:58 --> 1:00:01.948
+n^3.
+This is Case 3.
+
+876
+1:00:01.948 --> 1:00:08.961
+I know this is pretty boring.
+At this point we are just
+
+877
+1:00:08.961 --> 1:00:15.194
+applying this stupid theorem.
+How about n^2/lg n?
+
+878
+1:00:15.194 --> 1:00:18.311
+What is the answer?
+Good.
+
+879
+1:00:18.311 --> 1:00:22.597
+In this case no one should
+answer.
+
+880
+1:00:22.597 --> 1:00:30
+It is a big tricky.
+I forget exactly the answer.
+
+881
+1:00:30 --> 1:00:31.539
+I think it is like n^2 log log
+n over log n,
+
+882
+1:00:31.539 --> 1:00:31.897
+no?
+Oh, no.
+
+883
+1:00:31.897 --> 1:00:32.864
+n^2 log log n,
+that's right.
+
+884
+1:00:32.864 --> 1:00:34.046
+Yeah.
+But you shouldn't know that,
+
+885
+1:00:34.046 --> 1:00:35.693
+and this doesn't follow from
+the master method.
+
+886
+1:00:35.693 --> 1:00:37.161
+This is something you would
+have to solve,
+
+887
+1:00:37.161 --> 1:00:38.843
+probably with the
+recursion-tree would be a good
+
+888
+1:00:38.843 --> 1:00:40.419
+way to do this one,
+and you need to know some
+
+889
+1:00:40.419 --> 1:00:41.851
+properties of logs to know how
+that goes.
+
+890
+1:00:41.851 --> 1:00:44
+But here the master method does
+not apply.
+
+891
+1:00:44 --> 1:01:05
+
+
+892
+1:01:05 --> 1:01:08.094
+And so you have to use a
+different method.
+
+893
+1:01:08.094 --> 1:01:10.584
+OK.
+The last thing I want to do is
+
+894
+1:01:10.584 --> 1:01:15.188
+tell you why the master method
+is true, and that makes it much
+
+895
+1:01:15.188 --> 1:01:17.528
+more intuitive,
+especially using
+
+896
+1:01:17.528 --> 1:01:21
+recursion-trees,
+why everything works.
+
+897
+1:01:21 --> 1:01:35
+
+
+898
+1:01:35 --> 1:01:38.77
+This is a sketch of a proof,
+not the full thing.
+
+899
+1:01:38.77 --> 1:01:42.06
+You should read the proof in
+the textbook.
+
+900
+1:01:42.06 --> 1:01:45.911
+It is not that much harder than
+what I will show,
+
+901
+1:01:45.911 --> 1:01:49.842
+but it is good for you to know
+the formal details.
+
+902
+1:01:49.842 --> 1:01:53.613
+I don't have time here to do
+all of the details.
+
+903
+1:01:53.613 --> 1:01:56.661
+I will just tell you the
+salient parts.
+
+904
+1:01:56.661 --> 1:02:01.315
+This is the proof sketch or the
+intuition behind the master
+
+905
+1:02:01.315 --> 1:02:06.099
+method.
+What we are going to do is just
+
+906
+1:02:06.099 --> 1:02:12.5
+take the recursion-tree for this
+recurrence and add up each level
+
+907
+1:02:12.5 --> 1:02:17.5
+and then add up all the levels
+and see what we get.
+
+908
+1:02:17.5 --> 1:02:23
+We start with f(n) at the top
+after we have expanded one
+
+909
+1:02:23 --> 1:02:25.9
+level.
+Then we get a different
+
+910
+1:02:25.9 --> 1:02:31.498
+problems, each of n/b.
+And after we expand them it
+
+911
+1:02:31.498 --> 1:02:36.31
+will f(n/b) for each one.
+They are all the same size.
+
+912
+1:02:36.31 --> 1:02:41.677
+Then we expand all of those and
+so on, and we get another a
+
+913
+1:02:41.677 --> 1:02:46.026
+subproblems from there.
+We are going to get like
+
+914
+1:02:46.026 --> 1:02:49.45
+f((n/b)^2).
+That is sort of decreasing
+
+915
+1:02:49.45 --> 1:02:54.355
+geometrically the size,
+and so on and so on and so on,
+
+916
+1:02:54.355 --> 1:03:00
+until at the bottom we get
+constant size problems.
+
+917
+1:03:00 --> 1:03:03.904
+This is a bit special because
+this is the base case,
+
+918
+1:03:03.904 --> 1:03:07.349
+but we have some other constant
+at the bottom.
+
+919
+1:03:07.349 --> 1:03:10.947
+We would like to know how many
+leaves there are,
+
+920
+1:03:10.947 --> 1:03:14.392
+but that is a little bit tricky
+at the moment.
+
+921
+1:03:14.392 --> 1:03:17.684
+Let's first compute the height
+of this tree.
+
+922
+1:03:17.684 --> 1:03:21.588
+Let me draw it over here.
+What is the height of this
+
+923
+1:03:21.588 --> 1:03:24.267
+tree?
+I start with a problem of size
+
+924
+1:03:24.267 --> 1:03:26.794
+n.
+I want to get down to a problem
+
+925
+1:03:26.794 --> 1:03:29.397
+of size 1.
+How long does that take?
+
+926
+1:03:29.397 --> 1:03:32
+How many levels?
+
+927
+1:03:32 --> 1:03:38
+
+
+928
+1:03:38 --> 1:03:44.346
+This is probably too easy for
+some and not at your fingertips
+
+929
+1:03:44.346 --> 1:03:47.201
+for others.
+Log base b of n,
+
+930
+1:03:47.201 --> 1:03:50.48
+good.
+The height of this tree is
+
+931
+1:03:50.48 --> 1:03:54.711
+n^(log_b(a)),
+because it is just how many
+
+932
+1:03:54.711 --> 1:04:00
+times I divide by b until I get
+down to 1.
+
+933
+1:04:00 --> 1:04:04.189
+That is great.
+Now I should be able to compute
+
+934
+1:04:04.189 --> 1:04:09.216
+the number of leaves because I
+have branching factor a,
+
+935
+1:04:09.216 --> 1:04:13.312
+I have height h.
+The number of leaves is a^h,
+
+936
+1:04:13.312 --> 1:04:16.849
+a^log_b(n).
+Let me expand that a little
+
+937
+1:04:16.849 --> 1:04:20.108
+bit.
+a^log_b(n), properties of logs,
+
+938
+1:04:20.108 --> 1:04:24.855
+we can take the n downstairs
+and put the a upstairs,
+
+939
+1:04:24.855 --> 1:04:31
+and we get n^(log_b(a)).
+Our good friend n^(log_b(a)).
+
+940
+1:04:31 --> 1:04:35.246
+So, that is why Our good friend
+n^(log_b(a)) is so important in
+
+941
+1:04:35.246 --> 1:04:38.534
+the master method.
+What we are doing is comparing
+
+942
+1:04:38.534 --> 1:04:41.41
+f, which is the top level,
+to n^(log_b(a)),
+
+943
+1:04:41.41 --> 1:04:43.945
+which up to theta is the bottom
+level.
+
+944
+1:04:43.945 --> 1:04:47.643
+Now the leaves are all at the
+same level because we are
+
+945
+1:04:47.643 --> 1:04:50.589
+decreasing at the same rate in
+every branch.
+
+946
+1:04:50.589 --> 1:04:53.328
+If I add up the cost at the
+bottom level,
+
+947
+1:04:53.328 --> 1:04:57.164
+it is Theta(n^(log_b(a))).
+I add up the things at the top
+
+948
+1:04:57.164 --> 1:05:01
+level it is f(n),
+not terribly exciting.
+
+949
+1:05:01 --> 1:05:04.529
+But the next level,
+this is a little bit more
+
+950
+1:05:04.529 --> 1:05:08.78
+interesting, is af(n/b),
+which should look familiar if
+
+951
+1:05:08.78 --> 1:05:12.229
+you had the master method
+already memorized,
+
+952
+1:05:12.229 --> 1:05:15.358
+it is that.
+So, we know that af(n/b) has
+
+953
+1:05:15.358 --> 1:05:19.368
+decreased by some constant
+factor, 1-epsilon prime.
+
+954
+1:05:19.368 --> 1:05:22.818
+We have gone down.
+This is a constant factor
+
+955
+1:05:22.818 --> 1:05:26.508
+smaller than this.
+And then you sum up the next
+
+956
+1:05:26.508 --> 1:05:28.754
+level.
+It is going to be like
+
+957
+1:05:28.754 --> 1:05:33.551
+a^2f(n/b^2).
+I see that I actually wrote
+
+958
+1:05:33.551 --> 1:05:37.804
+this wrong, the parentheses.
+Sorry about that.
+
+959
+1:05:37.804 --> 1:05:40.829
+It is not (n/b)^2.
+It is (n/b^2).
+
+960
+1:05:40.829 --> 1:05:44.326
+So, this sequence,
+in Case 3 at least,
+
+961
+1:05:44.326 --> 1:05:48.768
+is decreasing geometrically.
+If it is decreasing
+
+962
+1:05:48.768 --> 1:05:54.344
+geometrically up to constant
+factors, it is dominated by the
+
+963
+1:05:54.344 --> 1:05:56.896
+biggest term,
+which is f(n).
+
+964
+1:05:56.896 --> 1:06:02
+Therefore, in Case 3,
+we get Theta[f(n)].
+
+965
+1:06:02 --> 1:06:07.613
+Let's look at the other cases,
+and let me adapt those cases to
+
+966
+1:06:07.613 --> 1:06:11.846
+how much time we have left.
+Wow, lot's of time.
+
+967
+1:06:11.846 --> 1:06:14.239
+Five minutes.
+Tons of time.
+
+968
+1:06:14.239 --> 1:06:17.368
+What to do?
+Let me write that down.
+
+969
+1:06:17.368 --> 1:06:22.429
+Case 3, the costs decrease.
+Now, this is a place I would
+
+970
+1:06:22.429 --> 1:06:26.754
+argue where the dot,
+dot, dot is pretty obvious.
+
+971
+1:06:26.754 --> 1:06:32
+Here, this is damn simple,
+it is a^kf(n/b^k).
+
+972
+1:06:32 --> 1:06:37.187
+And, in Case 3,
+we assume that the costs
+
+973
+1:06:37.187 --> 1:06:43.172
+decrease geometrically as we go
+down the tree.
+
+974
+1:06:43.172 --> 1:06:49.423
+That was sort of backwards to
+start with Case 3.
+
+975
+1:06:49.423 --> 1:06:55.009
+Let's do Case 1,
+which is sort of the other
+
+976
+1:06:55.009 --> 1:07:01.079
+intuitively easy case.
+In Case 1, we know that f(n) is
+
+977
+1:07:01.079 --> 1:07:03.494
+polynomially smaller than this
+thing.
+
+978
+1:07:03.494 --> 1:07:07.452
+And we are sort of changing by
+this very simple procedure in
+
+979
+1:07:07.452 --> 1:07:10.203
+the middle.
+I am going to wave my hands if
+
+980
+1:07:10.203 --> 1:07:13.222
+this is where you need a more
+formal argument.
+
+981
+1:07:13.222 --> 1:07:16.241
+I claim that this will increase
+geometrically.
+
+982
+1:07:16.241 --> 1:07:19.528
+It has to increase
+geometrically because this f(n)
+
+983
+1:07:19.528 --> 1:07:23.419
+is polynomially smaller than
+this one, you are going to get
+
+984
+1:07:23.419 --> 1:07:26.639
+various polynomials in the
+middle which interpret
+
+985
+1:07:26.639 --> 1:07:31
+geometrically from the small one
+to the big one.
+
+986
+1:07:31 --> 1:07:34.444
+Therefore, the big one
+dominates because it is,
+
+987
+1:07:34.444 --> 1:07:38.413
+again, geometric series.
+As I said, this is intuition,
+
+988
+1:07:38.413 --> 1:07:42.007
+not a formal argument.
+This one was pretty formal
+
+989
+1:07:42.007 --> 1:07:45.751
+because we assumed it,
+but here you need a bit more
+
+990
+1:07:45.751 --> 1:07:47.997
+argument.
+They may not increase
+
+991
+1:07:47.997 --> 1:07:51.292
+geometrically but they could
+increase faster,
+
+992
+1:07:51.292 --> 1:07:53.987
+and that is also fine.
+So, in Case 3,
+
+993
+1:07:53.987 --> 1:07:57.657
+you are dominated,
+I mean you are always dominated
+
+994
+1:07:57.657 --> 1:08:02
+by the biggest term in a
+geometric series.
+
+995
+1:08:02 --> 1:08:08.416
+Here it happens to be f(n) and
+here you are dominated by
+
+996
+1:08:08.416 --> 1:08:13.316
+n^(log_b(a)) with a bottom term,
+oh, Theta.
+
+997
+1:08:13.316 --> 1:08:19.733
+Case 2, here it is pretty easy
+but you need to know some
+
+998
+1:08:19.733 --> 1:08:25.333
+properties of logs.
+In Case 2, we assume that all
+
+999
+1:08:25.333 --> 1:08:31.905
+of these are basically the same.
+I mean, we assume that the top
+
+1000
+1:08:31.905 --> 1:08:35.145
+is equal to the bottom.
+And this is changing in this
+
+1001
+1:08:35.145 --> 1:08:38.258
+very procedural way.
+Therefore, all of the ones in
+
+1002
+1:08:38.258 --> 1:08:40.927
+the middle have to be pretty
+much the same.
+
+1003
+1:08:40.927 --> 1:08:44.167
+Not quite because here we don't
+have the log factor.
+
+1004
+1:08:44.167 --> 1:08:47.851
+Here we have a log to the k.
+We have n^(log_b(a)) times log
+
+1005
+1:08:47.851 --> 1:08:50.329
+to the kn.
+Here we don't have the log to
+
+1006
+1:08:50.329 --> 1:08:52.68
+the k.
+So, the logs do disappear here.
+
+1007
+1:08:52.68 --> 1:08:57
+It turns out the way they
+disappear is pretty slowly.
+
+1008
+1:08:57 --> 1:09:02.255
+If you look at the top half of
+these terms, they will all have
+
+1009
+1:09:02.255 --> 1:09:06.046
+log to the k.
+The bottom half they will start
+
+1010
+1:09:06.046 --> 1:09:09.493
+to disappear.
+I am giving you some oracle
+
+1011
+1:09:09.493 --> 1:09:13.112
+information.
+If you take logs and you don't
+
+1012
+1:09:13.112 --> 1:09:17.248
+change the argument by too much,
+the logs remain.
+
+1013
+1:09:17.248 --> 1:09:22.073
+Maybe halfway is too far.
+The claim is that each level is
+
+1014
+1:09:22.073 --> 1:09:25.691
+roughly the same,
+especially the upper most
+
+1015
+1:09:25.691 --> 1:09:30
+levels are all asymptotically
+equal.
+
+1016
+1:09:30 --> 1:09:34.659
+Roughly the same.
+And, therefore,
+
+1017
+1:09:34.659 --> 1:09:42.375
+the cost is one level,
+here like f(n) times the number
+
+1018
+1:09:42.375 --> 1:09:47.908
+of levels, h.
+And h is log base b of n.
+
+1019
+1:09:47.908 --> 1:09:52.567
+B is a constant so we don't
+care.
+
+1020
+1:09:52.567 --> 1:09:57.662
+This is Theta(lg n).
+And, therefore,
+
+1021
+1:09:57.662 --> 1:10:05.961
+we get T(n) = (n^(log_b(a))
+lg^(k+1)(n)) times another log
+
+1022
+1:10:05.961 --> 1:10:11.232
+n.
+So, we get [f(n)lg n].
+
+1023
+1:10:11.232 --> 1:10:20.046
+That is the very quick sketch.
+Sorry, I am being pretty fuzzy
+
+1024
+1:10:20.046 --> 1:10:27.098
+on Cases 1 and 2.
+Read the proof because you will
+
+1025
+1:10:27.098 --> 1:10:34.59
+have to, at some point,
+manipulate logs in that way.
+
+1026
+1:10:34.59 --> 1:10:38.998
+And that is all.
+Any questions?
+
+1027
+1:10:38.998 --> 1:10:43.552
+Or, you are all eager to go.
+OK.
+
+1028
+1:10:43.552 --> 1:10:46
+Thanks.
+See you Wednesday.
+

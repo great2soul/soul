@@ -1,0 +1,878 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 14: Competitive Analysis: Self-organizing Lists | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 14: Competitive Analysis: Self-organizing Lists" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 14: Competitive Analysis: Self-organizing Lists" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-14-competitive-analysis-self-organizing-lists">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 14: Competitive Analysis: Self-organizing Lists
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 14: Competitive Analysis: Self-organizing Lists
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/ocw-6.046-lec14.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1858635001?i=1821954786">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-02nov2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/2RxCCEHlEys', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-14-competitive-analysis-self-organizing-lists', 'http://img.youtube.com/vi/2RxCCEHlEys/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/ocw-6.046-lec14.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered:</strong> Competitive Analysis: Self-organizing Lists</p>
+<p><strong>Instructors:</strong> Prof. Erik Demaine, Prof. Charles Leiserson </p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm">
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm">
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/lec14.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J2005L14.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 14</strong></p>
+<p>And this is going to use some of the techniques we learned last time with respect to amortized analysis. And, what's neat about what we're going to talk about today is it's a way of comparing algorithms that are so-called online algorithms. And we're going to introduce this notion with a problem which is called self organizing lists. OK, and so the set up for this problem is that we have a list, L, of n elements. And, we have an operation. Woops, I've got to spell things right, access of x, which accesses item x in the list.</p>
+<p>It could be by searching, or it could be however you want to do it. But basically, it goes and touches that element. And we were to say the cost of that operation is whatever the rank of x is in the list, which is just the distance of x from the head of the list. And the other thing that we can do that the algorithm can do, so this is what the user would do. He just simply runs a whole bunch of accesses on the list, OK, accessing one element after another in any order that he or she cares to. And then, L can be reordered, however, by transposing adjacent elements.</p>
+<p>And the cost for that is one. So, for example, suppose the list is the following. OK, I missed something here. It doesn't matter. Well, I'll just make it be what I have so that it matches the online video. OK, so here we have a list. And so, if I do something like access element 14 here, the element of key 14, OK, that this costs me one, two, three, four. So here the cost is four to access. And so, we're going to have some sequence of accesses that the user is going to do. And obviously, if something is accessed more frequently, we'd like to move it up to the front of the list so that you don't have to search as far. OK, and to do that, if I want to transpose something, so, for example, if I transpose three and 50, that just costs me one.</p>
+<p>OK, so then I would make this be 50, and make this be three. OK, sorry, normally you just do it by swapping pointers. OK, so those are the two operations. And, we are going to do this in what's called an online fashion. So, let's just define online. So, a sequence, S, of operations is provided one at a time for each operation. An online algorithm must execute the operation immediately without getting a chance to look at what else is coming in the sequence.</p>
+<p>So, when you make your decision for the first element, you don't get to see ahead as to what the second, or third, or whatever is. And the second one you get, you get and you have to make your decision as to what to do and so forth. So, that's an online algorithm. Similarly, an off-line algorithm, OK, may see all of S in advance. OK, so you can see an off-line algorithm gets to see the whole sequence, and then decide what it wants to do about element one, element two, or whatever.</p>
+<p>OK, so an off-line algorithm can look at the whole sequence and say, OK, I can see that item number 17 is being accessed a lot, or early on move him up closer to the front of the list, and then the accesses cost less for the off-line algorithm. The online algorithm doesn't get to see any of that. OK, so this is sort of like, if you're familiar with the game Tetris. OK, and Tetris, you get one shape after another that starts coming down, and you have to twiddle it, and move it to the side, and drop it into place. And there, sometimes you get a one step look-ahead on some of them so you can see what the next shape is, but often it's purely online. You don't get to see that next shape or whatever, and you have to make a decision for each one. And you make a decision, and you realize that the next shape, ah, if you had made a different decision it would have been better. OK, so that's the kind of problem.</p>
+<p>Off-line Tetris would be, I get to see the whole sequence of shapes. And now let me decide what I'm going to do with this one. OK, and so, in this, the goal is for any of the algorithms, either online or off-line is to minimize the total cost, which we'll denote by, I forgot to name this. This is algorithm A here. The total cost, C_A of S, OK, so the cost of algorithm A on the sequence, S. That's just the notation we'll use for what the total cost is. So, any questions about the setup to this problem? So, we have an online problem. We're going to get these things one at a time, OK, and we have to decide what to do.</p>
+<p>So, let's do a worst-case analysis for this. OK, so if we're doing a worst-case analysis, we can view that we have an adversary that we are playing against who's going to provide the sequence. The user is going to be able to see what we do. And so, what's the adversary strategy? Thwart our plots, yes, that's his idea. And how is he going to thwart them, or she? Which is what for this problem? What's he going to do?</p>
+<p>Yeah. No matter how we reorder elements using the transposes, he's going to look at every step and say, what's the last element? That's the one I'm going to access, right? So, the adversary always, always accesses the tail element of L. No matter what it is, no matter how we reorder things, OK, for each one, adversary just accesses the tail. So the cost of this, of any algorithm, then, is going to be omega size of S times n, OK, because you're always going to pay for every sequence. You're going to have to go in to pay a cost of n, OK, for every element in the sequence. OK, so not terribly in the worst-case.</p>
+<p>Not terribly good. So, people in studying this problem: question? That analysis is for the online algorithm, right. The off-line algorithm, right, if you named those things, that's right. OK, so we're looking at trying to solve this in an off-line sense, sorry, in an online sense. OK, and so the point is that for the online algorithm, the adversary can be incredibly mean, OK, and just always access the thing at the end, OK? So, what sort of the history of this problem is, that people said, well, if I can't do well in the worst-case, maybe I should be looking at average case, OK, and look at, say, the different elements having some probability distribution.</p>
+<p>OK, so the average case analysis, OK, let's suppose that element x is accessed with probability, P of x. OK, so suppose that we have some a priori distribution on the elements. OK, then the expected cost of the algorithm on a sequence, OK, so if I put all the elements into some order, OK, and don't try to reorder, but just simply look at, is there a static ordering that would work well for a distribution?</p>
+<p>It's just going to be, by definition of expectation, the probability of x times, in this case, the cost, which is the rank of x in whatever that ordering is that I decide I'm going to use. OK, and this is minimized when? So, this is just the definition of expectations: the probability that I access x times the cost summed over all the elements. And the cost is just going to be its position in the list. So, when is this value, this summation, going to be minimized?</p>
+<p>When the element is most likely as the lowest rank, and then what, what about the other element? OK, so what does that mean? Yeah, sort them, yeah, sort them on the basis of decreasing probability, OK? So, it's minimized when L is sorted, OK, in decreasing order with respect to P. OK, so just sort them with the most likely one at the front, and then just decreasing probability. That way, whenever I access something with some probability, OK, I'm going to access, it's more likely that I'm going to access.</p>
+<p>And that's not too difficult to actually prove. You just look at, suppose there were two that were out of order, and show that if you swap them, you would improve this optimization function. OK, so if you didn't know it, this suggests the following heuristic, OK, which is simply keep account of the number of times each element is accessed, and maintain the list in order of decreasing count. OK, so whenever something is accessed, increment its count, OK, and that will move it, at most, one position, which only costs me one transposed to move it, perhaps, forward. OK, actually, I guess it could be more if you have a whole bunch of ties, right? Yeah. So, it could cost more. But the idea is, over time, the law of large numbers says that this is going to approach the probability distribution.</p>
+<p>The frequency with which you access this, divided by the total number of accesses, will be the probability. And so, therefore you will get things in decreasing probability, OK, assuming that there is some distribution that all of these elements are chosen according to, or accessed according to. So, it doesn't seem like there's that much more you could really do here. And that's why I think this notion of competitive analysis is so persuasive, because it's really amazingly strong, OK? And it came about because of what people were doing in practice.</p>
+<p>So practice, what people implement it was a so-called move to front heuristic. OK, and the basic idea was, after you access an element, just move it up to the front. OK, that only doubles the cost of accessing the element because I go and I access it, chasing it down paying the rank, and then I have to do rank number of transposes to bring it back to the front. So, it only cost me a factor of two, and now, if it happens to be a frequently accessed elements, over time you would hope that the most likely elements were near the front of that list.</p>
+<p>So, after accessing x, move x, the head of the list using transposes, and the cost is just equal to twice the rank in L of x, OK, where the two here has two parts. One is the access, and the other is the transposes. OK, so that's sort of what they did. And one of the nice properties of this is that if it turns out that there is locality in the access pattern, if it's not just a static distribution, but rather once I've accessed something, if it's more likely I'm going to access it again, which tends to be the case for many input types of patterns, this responds well to locality because it's going to be up near the front if I access it very soon after I've accessed.</p>
+<p>So, there is what's called temporal locality, meaning that in time, I tend to access, so it may be that I access some thing's very hot for awhile; then it gets very cold. This type of algorithm responds very well to the hotness of the accessing. OK, so it responds well to locality in S. So, this is sort of what was known up to the point that a very famous paper was written by Danny Sleator and Bob Tarjan, where they took a totally different approach to looking at this kind of problem. OK, and it's an approach that matter you see everywhere from analysis of caching and high-performance processors to analyses of disk paging to just a huge number of applications of this basic technique.</p>
+<p>And, that's the technique of competitive analysis. OK, so here's the definition. So, online algorithm A is alpha competitive. If there exists a constant, k, such that for any sequence, S, of operations, the cost of S using algorithm A is bounded by alpha times the cost of opt, where opt is the optimal offline algorithm. OK, so the optimal off-line, the one that knows the whole sequence and does the absolute best it could do on that sequence, OK, that's this cost here. This is sometimes called God's algorithm, OK, not to bring religion into the classroom, or to offend anybody, but that is what people sometimes call it.</p>
+<p>OK, so the fully omniscient knows absolutely the best thing that could be done, sees into the future, the whole works, OK? It gets to apply that. That's what opts algorithm is. And, what we're saying is that the cost is basically whatever this alpha factor is. It could be a function of things, or it could be a constant, OK, times whatever the best algorithm is. Plus, there's a potential for a constant out here.</p>
+<p>OK, so for example, if alpha is two, and we say it's two competitive, that means you're going to do, at worst, twice the algorithm that has all the information. But you're doing it online, for example. OK, it's a really pretty powerful notion. And what's interesting about this, it's not even clear these things should exist to my mind. OK, what's pretty remarkable about this, I think, is that there is no assumption of distribution, of probability distribution or anything. It's whatever the sequence is that you give it. You are within a factor of alpha, essentially, of the best algorithm, OK, which is pretty remarkable.</p>
+<p>OK, and so, we're going to prove the following theorem, which is the one that Sleator and Tarjan proved. And that is that MTF is four competitive for self organizing lists. OK, so the idea here is that suppose the adversary says, oh, I'm always going to access the thing at the end of the list like we said in the beginning. So, the adversary says, I'm always going to access the thing there. I'm going to make MTF work really bad, because you're going to go and move that thing all the way up to the front. And I'm just going to access the thing way at the end again. OK, well it turns out, yeah, that's a bad sequence for move to front, OK, and it will take a long time.</p>
+<p>But it turns out God couldn't have done better, OK, by more than a factor of four no matter how long the list is. OK, that's pretty amazing. OK, so that's a bad sequence. But, if there's a way that the sequence exhibits any kind of locality or anything that can be taken advantage of, if you could see the whole thing, MTF takes advantage of it too, OK, within a factor of four. OK, it's a pretty remarkable theorem, and it's the basis of many types of analysis of online algorithms. Almost all online algorithms today are analyzed using some kind of competitive analysis. OK, not always. Sometimes you do probabilistic analysis, or whatever, but the dominant thing is too competitive analysis because then you don't have to make any statistical assumptions.</p>
+<p>OK, just prove that it works well no matter what. This is remarkable, I think. Isn't it remarkable? So, let's prove this theorem, we're just going to spend the rest of the lecture on this proof. OK, and the proof in some ways is not hard, but it's also not necessarily completely intuitive. So, you will have to pay attention. OK, so let's get some notation down. Let's let L_i be MTF's list after the i'th access. And, let's let L be opt's list after the i'th access.</p>
+<p>OK, so generally what I'll do is I'll put a star if we are talking about opt, and have nothing if we're talking about MTF. OK, so that's going to be the list. So, we can say, what's the list? So, we're going to set it up where we have one in operation that transforms list i minus one into list i. OK, that's what the i'th operation does. OK, and move to front does it by moving whatever the thing that was accessed to the front. And opt does whatever opt thinks is the best thing to do. We don't know. So, we're going to let c_i be MTF's cost for the I'th operation.</p>
+<p>And that's just twice the rank in L_i minus one of x if the operation accesses x, OK, two times the rank in L_i minus one because we're going to be accessing it in L_i minus one and transforming it into L_i. And similarly, we'll let c_i star be opt's cost for the i'th operation. And that's just equal to, well, to access it, it's going to be the rank in L_i minus one star, whatever its list is of x at that step, because it's got to access it.</p>
+<p>And then, some number of transposes, t_i if opt forms t_i transposes. OK, so we have the setup where we have two different lists that are being managed, and we have different costs in the list. And, we're interested in is comparing in some way MTF's list with opt's list at any point in time. And, how do you think we're going to do that? What technique do you think we should use to compare these two lists, general technique from last lecture? Well, it is going to be amortized, but what?</p>
+<p>How are we going to compare them? What technique did we learn last time? Potential function, good. OK, we're going to define a potential function, OK, that measures how far apart these two lists are. OK, and the idea is, if, let's define that and then we'll take a look at it. So, we're going to define the potential function phi mapping the set of MTF's lists into the real numbers by the following.</p>
+<p>phi of L_i is going to be twice the cardinality of this set. OK, so this is the precedes-operation and list, i. So, we can define a relationship between any two elements that says that x precedes y in L_i if, as I'm accessing it from the head, I hit x first. OK, so what I'm interested in, here, are in some sense the disagreements between the two lists. This is where x precedes y in MTF's list, but y precedes x in opt's list. They disagree, OK? And, what we're interested in is the cardinality of the set. And we're going to multiply it by two. OK, so that's equal to two times; so there is a name for this type of thing. We saw that when we were doing sorting.</p>
+<p>Anybody remember the name? It was very briefly. I don't expect anybody to remember, but somebody might. Inversions: good, OK, twice the number of inversions. So, let's just do an example. So, let's say L_i is the list with five elements. OK, I'll use characters for the order just to keep things simple. So, in this case phi of L_i is going to be twice the cardinality of the set. So what we want to do is see which things are out of order. So here, I look at E and C are in this order, but C and E in that order. So, those are out of order. So, that counts as one of my elements, EC, and then, E and A, A and E.</p>
+<p>OK, so those are out of order, and then ED, DE, out of order, and then EB, BE, those are out of order. And now, I go C, A, C, A. Those are in order, so it doesn't count. CD, CD, CB, CB, so, nothing with C. Then, A, D, A, D, those are in order, A, B, A, B, those are in order. So then, DB, BD, so BD. And that's the last one. So, that's my potential function, which is equal to, therefore, ten, because the cardinality of the set is five.</p>
+<p>I have five inversions, OK, between the two lists. OK, so let's just check some properties of this potential function. The first one is notice that phi of L_i is greater than or equal to zero for all i. The number of inversions might be zero, but is never less than zero. OK, it's always at least zero. So, that's one of the properties that we normally have we are dealing with potential functions. And, the other thing is, well, what about phi of L0? Is that equal to zero? Well, it depends upon what list they start with. OK, so what's the initial ordering?</p>
+<p>So, it's zero if they start with the same list. Then there are no inversions. But, they might start with different lists. We'll talk about different lists later on, but let's say for now that it's zero because they start with the same list. That seems like a fair comparison. OK, so we have this potential function now that's counting up, how different are these two lists? Intuitively, we're going to do is the more differences there are in the list, the more we are going to be able to have more stored up work than we can pay for it. That's the basic idea. So, the more that opt changes the list, so it's not the same as ours, in some sense the more we are going to be in a position as MTF to take advantage of that difference in delivering up work for us to do.</p>
+<p>And we'll see how that plays out. So, let's first also make another observation. So, how much does phi change from one transpose? How much does phi change from one transpose? So, basically that's asking, if you do a transpose, what happens to the number of inversions? So, what happens when a transposing is done? What's going to happen to phi? What's going to happen to the number of inversions?</p>
+<p>So, if I change, it is less than n minus one, yes, if n is sufficiently large, yes. OK, if I change, so you can think about it here. Suppose I switch two of these elements here. How much are things going to change? Yeah, it's basically one or minus one, OK, because a transpose creates or destroys one inversion. So, if you think about it, what if I change, for example, C and A, the relationship of C and A to everything else in the list is going to stay the same.</p>
+<p>The only thing, possibly, that happens is that if they are in the same order when I transpose them, I've created an inversion. Or, if they were in the wrong order when I transpose them, now they're in the right order. So therefore, the change to the potential function is going to be plus or minus two because we're counting twice the number of inversions. OK, any questions about that? So, transposes don't change the potential very much, just by one. It either goes up by two or down by two, just by one inversion. So now, let's take a look at how these two algorithms operate.</p>
+<p>OK, so what happens when op i accesses x in the two lists? What's going to be going on? To do that, let's define the following sets. Why do I keep doing that? OK, so we're going to look at the, when we access x, we are going to look at the two lists, and see what the relationship is, so, based on things that come before and after. So, I think a picture is very helpful to understand what's going on here. OK, so let's let, so here's L_i minus one, and we have our list, which I'll draw like this. And somewhere in there, we have x.</p>
+<p>OK, and then we have L_i minus one star, which is opt's list, OK, and he's got x somewhere else, or she. OK, and so, what is this set? This is the set of Y that come before x. So, that basically sets A and B. OK, those things that come before x in both. And, some of them, the A's come before it in x, but come after it in, come before it in A, but come after it in B. OK, and similarly down here, what's this set?</p>
+<p>That's A union C, good. And this one? Duh. Yeah, it better be C union D because I've got A union B over there, and I've got x. So that better be everything else. OK, and here is B union D. OK, so those are the four sets that we're going to care about. We're actually mostly going to care about these two sets. OK, and we also know something about the r here. The position of x is going to be the rank in L_i minus one of x.</p>
+<p>And here, this is our star. It's just to the rank in L_i minus one star of x. So, we know what these ranks are. And what we're going to be interested in is, in fact, characterizing the rank in terms of the sets. OK, so what's the position of this? Well, the rank, we have that r is equal to the size of A. What's the size of B plus one? OK, and r star is equal to the size of A plus the size of C plus one.</p>
+<p>So, let's take a look at what happens when these two algorithms do their thing. So, when the access to x occurs, we move x to the front of the list. OK, it goes right up to the front. So, how many inversions are created and destroyed? So, how many are created by this? That's probably a, how many inversions are created? How many inversions are created? So, we move x to the front. So what we are concerned about is that anything that was in one of these sets that came, where it's going to change in order versus down here. So, if I look in B, well, let's take a look at A. OK, so A, those are the things that are in the same order in both. So, everything that's in A, when I move x to the front, each thing in A is going to count for one more inversion.</p>
+<p>Does everybody see that? So, I create a cardinality of A inversions. And, we are going to destroy, well, everything in B came before x in this list, and after x in this. But after we move x, they're in the right order. So, I'm going to destroy B inversions, cardinality of B inversions. OK, so that's what happens we operate with move to front. We destroy. We create A inversions and destroy B inversions, OK, by doing this movement.</p>
+<p>OK, now, let's take a look at what opt does. So, each transpose, we don't know what opt does. He might move x this way or that way. We don't know. But each transpose, I opt, well, we're going to be interested in how many inversions it creates, and we already argued that it's going to create, at most, one inversion per transpose. So, he can go and create more inversions, OK? So, let me write it over here. Thus --</p>
+<p>-- the change in potential is going to be, at most, twice, A minus B plus t_i. OK, so t_i, remember, was the number of transposes that opt does on the i'th step for the i'th operation. OK, so we're going to create the change in potential is, at most, twice this function. So, we are now going to look to see how we use this fact, and these two facts, this fact and this fact, OK, to show that opt can't be much better than MTF. OK, good.</p>
+<p>The way we are going to do that is look at the amortized cost of the I'th operation. OK, what's MTF's amortized cost? OK, and then we'll make the argument, which is the one you always make that the amortized cost upper bound the true costs, OK? But the amortized cost is going to be easier to calculate. OK, so amortized cost is just C hat, actually, let me make sure I have lots of room here on the right, c_i hat, which is equal to the true cost plus the change in potential. OK, that's just the definition of amortized cost when given potential functions, OK?</p>
+<p>So, what is the cost of operation i, OK, in this context here? OK, we accessed x there. What's the cost of operation i? Two times the rank of x, which is 2r. OK, so 2r, that part of it. OK, well, we have an upper bound on the change in potential. That's this. OK, so that's two times the cardinality of A minus cardinality of B plus t_i. OK, everybody with me? Yeah? OK, I see lots of nods. That's good. OK, that's equal to 2r plus two of size of A minus, OK, I want to plug in for B, and it turns out very nicely. I have an equation involving A, B, and r. So, I get rid of the variable size of B by just plugging that in.</p>
+<p>OK, and so what do I plug in here? What's B equal to? Yeah, r minus size of A minus one. I wrote it the other way. OK, and then plus t_i. OK, and this is since r is A plus B plus one. OK, everybody with me still? I'm just doing algebra. We've got to make sure we do the algebra right. OK, so that's equal to, let's just multiply all this out now and get 2r plus, I have 2A here minus A. So, that's 4A. And then, two times minus r is minus 2r. Two times minus one is minus two. Oh, but it's minus-minus two, so it's plus two. OK, and then I have 2t_i. So, that's just algebra. OK, so that's not bad. We've just got rid of another variable.</p>
+<p>What variable did we get rid of? r. It didn't matter what the rank was as long as I knew what the number of inversions was here. OK, so that's now equal to 4A plus two plus 2t_i. And, that's less than or equal to, I claim, four times r star plus t_i using our other fact. Since r star is equal to the size of A plus the size of C, plus one, then that's greater than or equal to the size of A plus one.</p>
+<p>OK, if I look at this, I'm basically looking at A. The fact that A, what did I do here? If r star is greater than or equal to A plus one, right, so therefore, A plus one, good. Yeah, so this is basically less than or equal to 4A plus four, which is four times A plus one. I probably should have put in another algebra step here, OK, because if I can't verify it like this, then I get nervous. This is basically, at most, 4A plus four. That's four times A plus one, and A plus one is less than or equal to r star. And then, 2t_i is, at most, 4TI.</p>
+<p>So, I've got this. Does everybody see where that came from? But what is r star plus t_i? What is r star plus t_i? What is it? It's c_i star. That's just c_i star. So, the amortized cost of i'th operation is, at most, four times opt's cost. OK, that's pretty remarkable. OK, so amortized cost of the i'th operation is just four times opt's cost. Now, of course, we have to now go through and analyze the total cost. But this is now the routine way that we analyze things with a potential function.</p>
+<p>So, the costs of MTF of S is just the summation of the individual costs, OK, by definition. And that is just the sum, i equals one, to S of the amortized cost plus, minus the change in potential. OK, did I do this right? No, I put the parentheses in the wrong place. Now I've got it right. Good. I just missed a parenthesis. OK, so this is, so in the past what I did was I expressed the amortized cost as being equal to c_i plus the change in potential. I'm just throwing these two terms over to the other side and saying, what's the true cost in terms of the amortized cost? OK, so I get c hat of i plus phi sub L_i minus one minus phi of L_i, OK, by making that substitution.</p>
+<p>OK, that's less than or equal to since this is linear. Well, I know what the sum of the amortized cost is. It's, at most, 4c_i star. So, the sum of them is, at most, to that sum, I equals one to S of 4c_i star. And then, as happens in all these things, you get a telescope with these terms. Every term is added in once and subtracted out once, except for the ones at the limit. So, I get plus phi of L_0 minus phi of L sub cardinality of S. And now, this term is zero. And this term is greater than or equal to zero.</p>
+<p>OK, so therefore this whole thing is less than or equal to, well, what's that? That's just four times opt's cost. And so, we're four competitive. OK, this is amazing, I think. It's not that hard, OK, but it's quite amazing that just by doing a simple heuristic, you're nearly as good as any omniscient algorithm could possibly be. OK, you're nearly as good. And, in fact, in practice, this is a great heuristic. So, if ever you have things like a hash table that you're actually seeing by chaining, OK, often it's the case that if when you access the elements, you're just bringing them up to the front of the list if it's an unsorted list that you've put them into, just bring them up to the front.</p>
+<p>You can easily save 30 to 40% in run time for the accessing to the hash table because you will be much more likely to find the elements inside. Of course, it depends on the distribution and so forth, for empirical matters, but the point is that you are not going to be too far off from the ordering that an optimal algorithm would do, optimal off-line algorithm: I mean, amazing. OK: optimal off-line. Now, it turns out that in the reading that we assigned, so, we assigned you Sleator and Tarjan's original paper.</p>
+<p>In that reading, they actually have a slightly different model where they count transposes that move in excess to element x towards the front of the list as free. OK, so, and this basically models, so here's the idea is if I actually have a linked list, and when I chase down, once I find x, I can actually move x up to the front with just a constant number of pointer operations to splice it out and put it up to the front.</p>
+<p>I don't actually have to transpose all way back down. OK, so that's kind of the model that they use, which is a more realistic model. OK, I presented this argument because it's a little bit simpler. OK, and the model is a little bit simpler. But in our model, they have, when you access something, you want to bring it up to the front, or anything that you happen to go across during that time, you could bring up to the front essentially for free.</p>
+<p>This model is the splicing in, splicing x in and out of L in constant time. Then, MTF is, it turns out, too competitive. It's within a factor of two of optimal, OK, if you use that. And that's actually a good exercise to work through. You could also go read about it in the reading to understand this better, to look to see where you would use those things. You have to have another term representing the number of, quote, "free" transposes. But it turns out that all the math works out pretty much the same. OK, let's see, another thing I promised you is, what if, to look at the case, what if they don't start with the same lists?</p>
+<p>OK, what if the two lists are different when they start? Then, the potential function at the beginning might be as big as what? How big are the potential function start out as if the lists are different? So, suppose we're starting out, you have a list, and opt says, OK, I'm going to start out by ordering my list according to the sequence that I want to use, OK, and MTF orders it according to the sequence it must use. What list is opt going to start out with as an adversary?</p>
+<p>Yeah, it's going to pick the reverse of what ever MTF starts out with, right, because then, if he picks the reverse, what's the number of inversions? It's how many inversions in a reverse ordered list? Yeah, n choose two, OK. Is it n choose two, or n minus one choose two? n minus one choose two, OK, inversions that you get because it's basically a triangular number when you add them up. But in any case, it's order n^2, worst case.</p>
+<p>So, what does that do to our analysis here? It says that the cost of MTF of S is going to be, well, this is no longer zero. This is now n^2. OK, so we get that costs of MTF of S is, at most, four times opt's thing plus order n^2, OK? And, if we look at the definition, did we erase it already? OK, this is still for competitive, OK, since n^2 is constant as the size of S goes to infinity. This is, once again, sort of your notion of, what does it mean to be a constant? OK, so as the size of the list gets bigger, all we're doing is accessing whatever that number, n, is of elements. That number doesn't grow with the problem size, OK, even if it starts out as some variable number, n.</p>
+<p>OK, it doesn't grow with the problem size. We still end up being competitive. This is just the k that was in that definition of competitiveness. OK, any questions? Yeah? Well, so you could change the cost model a little bit. Yeah. And that's a good one to work out. But if you say the cost of transposing, so, the cost of transposing is probably moving two pointers, approximately. No, one, three pointers. So, suppose that the cost of, wow, that's a good exercise, OK? Suppose the cost was three times to do a transpose, was three times the cost of doing an access, of following a pointer.</p>
+<p>OK, how would that change the number here? OK, good exercise, great exercise. OK, hmm, good final question. OK, yes, it will affect the constant here just as when we do the free transpose, when we move things towards the front, that we consider those as free, OK. Those operations end up reducing the constant as well. OK, but the point is that this constant is independent of the constant having to do with the number of elements in the list. So that's a different constant. So, this is a constant. OK, and so as with a lot of these things, there's two things.</p>
+<p>One is, there's the theory. So, theory here backs up practice. OK, those practitioners knew what they were doing, OK, without knowing what they were doing. OK, so that's really good. OK, and we have a deeper understanding that's led to, as I say, many algorithms for things like, the important ones are like paging. So, what's the comment page replacement policy that people study, people have at most operating systems? Who's done 6.033 or something?</p>
+<p>Yeah, it's Least Recently Used, LRU. People have heard of that, OK. So, you can analyze LRU competitive, and show that LRU is actually competitive with optimal page replacement under certain assumptions. OK, and there are also other things. Like, people do random replacement algorithms, and there are a whole bunch of other kinds of things that can be analyzed with the competitive analysis framework. OK, so it's very cool stuff. And, we are going to see more in recitation on Friday, see a couple of other really good problems that are maybe a little bit easier than this one, OK, definitely easier than this one.</p>
+<p>OK, they give you hopefully some more intuition about competitive analysis. I also want to warn you about next week's problem set. So, next week's problem set has a programming assignment on it. OK, and the programming assignment is mandatory, meaning, well, all the problem sets are mandatory as you know, but if you decide not to do a problem there's a little bit of a penalty and then the penalties scale dramatically as you stop doing problem sets. But this one is mandatory-mandatory.</p>
+<p>OK, you don't pass the class. You'll get an incomplete if you do not do this programming assignment. Now, I know that some people are less practiced with programming. And so, what I encourage you to do over the weekend is spent a few minutes and work on your programming skills if you're not up to snuff in programming. It's not going to be a long assignment, but if you don't know how to read a file and write out a file, and be able to write a dozen lines of code, OK, if you are weak on that, this weekend would be a good idea to practice reading in a text file.</p>
+<p>It's going to be a text file. Read it in a text file, decent manipulations, write out a text file, OK? So, I don't want people to get caught with this being mandatory and that not have time to finish it because they are busy trying to learn how to program in short order. I know some people take this course without quite getting all the programming prerequisites. Here's where you need it. Question? No language limitations. Pick your language. The answer will be written in, I think, Java, and Eric has graciously volunteered to use Python for his solution to this problem. We'll see whether he lives up to that promise. You did already? OK, and George wrote the Java solution. And so, C is fine. Matlab is fine. OK, what else is fine? Anything is fine.</p>
+<p>Scheme is fine. Scheme is fine. Scheme is great. OK, so any such things will be just fine. So, we don't care what language you program in, but you will have to do programming to solve this problem. OK, so thanks very much. See you next week.</p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1858635001?i=1821954786">MP4 - 155MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-02nov2005-220k_512kb.mp4">MP4 - 305MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/ocw-6.046-lec14.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>

@@ -1,0 +1,3923 @@
+1
+00:00:13 --> 00:00:20
+And this is going to use some
+of the techniques we learned
+
+2
+00:00:20 --> 00:00:25
+last time with respect to
+amortized analysis.
+
+3
+00:00:25 --> 00:00:32
+And, what's neat about what
+we're going to talk about today
+
+4
+00:00:32 --> 00:00:39
+is it's a way of comparing
+algorithms that are so-called
+
+5
+00:00:39 --> 00:00:48
+online algorithms.
+And we're going to introduce
+
+6
+00:00:48 --> 00:01:00
+this notion with a problem which
+is called self organizing lists.
+
+7
+00:01:00 --> 00:01:10
+OK, and so the set up for this
+problem is that we have a list,
+
+8
+00:01:10 --> 00:01:17
+L, of n elements.
+And, we have an operation.
+
+9
+00:01:17 --> 00:01:26
+Woops, I've got to spell things
+right, access of x,
+
+10
+00:01:26 --> 00:01:33
+which accesses item x in the
+list.
+
+11
+00:01:33 --> 00:01:40
+It could be by searching,
+or it could be however you want
+
+12
+00:01:40 --> 00:01:42
+to do it.
+But basically,
+
+13
+00:01:42 --> 00:01:46
+it goes and touches that
+element.
+
+14
+00:01:46 --> 00:01:54
+And we were to say the cost of
+that operation is whatever the
+
+15
+00:01:54 --> 00:02:01
+rank of x is in the list,
+which is just the distance of x
+
+16
+00:02:01 --> 00:02:10
+from the head of the list.
+And the other thing that we can
+
+17
+00:02:10 --> 00:02:18
+do that the algorithm can do,
+so this is what the user would
+
+18
+00:02:18 --> 00:02:22
+do.
+He just simply runs a whole
+
+19
+00:02:22 --> 00:02:30
+bunch of accesses on the list,
+OK, accessing one element after
+
+20
+00:02:30 --> 00:02:36
+another in any order that he or
+she cares to.
+
+21
+00:02:36 --> 00:02:43
+And then, L can be reordered,
+however, by transposing
+
+22
+00:02:43 --> 00:02:53
+adjacent elements.
+And the cost for that is one.
+
+23
+00:02:53 --> 00:03:01
+So, for example,
+suppose the list is the
+
+24
+00:03:01 --> 00:03:04
+following.
+
+25
+00:03:04 --> 00:03:21
+
+
+26
+00:03:21 --> 00:03:29
+OK, I missed something here.
+It doesn't matter.
+
+27
+00:03:29 --> 00:03:40
+Well, I'll just make it be what
+I have so that it matches the
+
+28
+00:03:40 --> 00:03:46
+online video.
+OK, so here we have a list.
+
+29
+00:03:46 --> 00:03:51
+And so, if I do something like
+access element 14 here,
+
+30
+00:03:51 --> 00:03:56
+the element of key 14,
+OK, that this costs me one,
+
+31
+00:03:56 --> 00:04:01
+two, three, four.
+So here the cost is four to
+
+32
+00:04:01 --> 00:04:05
+access.
+And so, we're going to have
+
+33
+00:04:05 --> 00:04:10
+some sequence of accesses that
+the user is going to do.
+
+34
+00:04:10 --> 00:04:14
+And obviously,
+if something is accessed more
+
+35
+00:04:14 --> 00:04:21
+frequently, we'd like to move it
+up to the front of the list so
+
+36
+00:04:21 --> 00:04:24
+that you don't have to search as
+far.
+
+37
+00:04:24 --> 00:04:28
+OK, and to do that,
+if I want to transpose
+
+38
+00:04:28 --> 00:04:31
+something, so,
+for example,
+
+39
+00:04:31 --> 00:04:38
+if I transpose three and 50,
+that just costs me one.
+
+40
+00:04:38 --> 00:04:43
+OK, so then I would make this
+be 50, and make this be three.
+
+41
+00:04:43 --> 00:04:49
+OK, sorry, normally you just do
+it by swapping pointers.
+
+42
+00:04:49 --> 00:04:52
+OK, so those are the two
+operations.
+
+43
+00:04:52 --> 00:04:59
+And, we are going to do this in
+what's called an online fashion.
+
+44
+00:04:59 --> 00:05:06
+So, let's just define online.
+So, a sequence,
+
+45
+00:05:06 --> 00:05:16
+S, of operations is provided
+one at a time for each
+
+46
+00:05:16 --> 00:05:24
+operation.
+An online algorithm must
+
+47
+00:05:24 --> 00:05:34
+execute the operation
+immediately without getting a
+
+48
+00:05:34 --> 00:05:48
+chance to look at what else is
+coming in the sequence.
+
+49
+00:05:48 --> 00:05:51
+So, when you make your decision
+for the first element,
+
+50
+00:05:51 --> 00:05:54
+you don't get to see ahead as
+to what the second,
+
+51
+00:05:54 --> 00:05:57
+or third, or whatever is.
+And the second one you get,
+
+52
+00:05:57 --> 00:06:00
+you get and you have to make
+your decision as to what to do
+
+53
+00:06:00 --> 00:06:06
+and so forth.
+So, that's an online algorithm.
+
+54
+00:06:06 --> 00:06:11
+Similarly, an off-line
+algorithm, OK,
+
+55
+00:06:11 --> 00:06:18
+may see all of S in advance.
+OK, so you can see an off-line
+
+56
+00:06:18 --> 00:06:27
+algorithm gets to see the whole
+sequence, and then decide what
+
+57
+00:06:27 --> 00:06:33
+it wants to do about element
+one, element two,
+
+58
+00:06:33 --> 00:06:37
+or whatever.
+OK, so an off-line algorithm
+
+59
+00:06:37 --> 00:06:41
+can look at the whole sequence
+and say, OK, I can see that item
+
+60
+00:06:41 --> 00:06:45
+number 17 is being accessed a
+lot, or early on move him up
+
+61
+00:06:45 --> 00:06:49
+closer to the front of the list,
+and then the accesses cost less
+
+62
+00:06:49 --> 00:06:53
+for the off-line algorithm.
+The online algorithm doesn't
+
+63
+00:06:53 --> 00:06:56
+get to see any of that.
+OK, so this is sort of like,
+
+64
+00:06:56 --> 00:07:00
+if you're familiar with the
+game Tetris.
+
+65
+00:07:00 --> 00:07:02
+OK, and Tetris,
+you get one shape after another
+
+66
+00:07:02 --> 00:07:05
+that starts coming down,
+and you have to twiddle it,
+
+67
+00:07:05 --> 00:07:08
+and move it to the side,
+and drop it into place.
+
+68
+00:07:08 --> 00:07:11
+And there, sometimes you get a
+one step look-ahead on some of
+
+69
+00:07:11 --> 00:07:14
+them so you can see what the
+next shape is,
+
+70
+00:07:14 --> 00:07:17
+but often it's purely online.
+You don't get to see that next
+
+71
+00:07:17 --> 00:07:20
+shape or whatever,
+and you have to make a decision
+
+72
+00:07:20 --> 00:07:22
+for each one.
+And you make a decision,
+
+73
+00:07:22 --> 00:07:26
+and you realize that the next
+shape, ah, if you had made a
+
+74
+00:07:26 --> 00:07:28
+different decision it would have
+been better.
+
+75
+00:07:28 --> 00:07:32
+OK, so that's the kind of
+problem.
+
+76
+00:07:32 --> 00:07:38
+Off-line Tetris would be,
+I get to see the whole sequence
+
+77
+00:07:38 --> 00:07:42
+of shapes.
+And now let me decide what I'm
+
+78
+00:07:42 --> 00:07:47
+going to do with this one.
+OK, and so, in this,
+
+79
+00:07:47 --> 00:07:53
+the goal is for any of the
+algorithms, either online or
+
+80
+00:07:53 --> 00:08:00
+off-line is to minimize the
+total cost, which we'll denote
+
+81
+00:08:00 --> 00:08:06
+by, I forgot to name this.
+This is algorithm A here.
+
+82
+00:08:06 --> 00:08:09
+The total cost,
+C_A of S, OK,
+
+83
+00:08:09 --> 00:08:13
+so the cost of algorithm A on
+the sequence,
+
+84
+00:08:13 --> 00:08:16
+S.
+That's just the notation we'll
+
+85
+00:08:16 --> 00:08:22
+use for what the total cost is.
+So, any questions about the
+
+86
+00:08:22 --> 00:08:27
+setup to this problem?
+So, we have an online problem.
+
+87
+00:08:27 --> 00:08:32
+We're going to get these things
+one at a time,
+
+88
+00:08:32 --> 00:08:37
+OK, and we have to decide what
+to do.
+
+89
+00:08:37 --> 00:08:41
+So, let's do a worst-case
+analysis for this.
+
+90
+00:08:41 --> 00:08:52
+
+
+91
+00:08:52 --> 00:08:56
+OK, so if we're doing a
+worst-case analysis,
+
+92
+00:08:56 --> 00:09:01
+we can view that we have an
+adversary that we are playing
+
+93
+00:09:01 --> 00:09:06
+against who's going to provide
+the sequence.
+
+94
+00:09:06 --> 00:09:10
+The user is going to be able to
+see what we do.
+
+95
+00:09:10 --> 00:09:14
+And so, what's the adversary
+strategy?
+
+96
+00:09:14 --> 00:09:18
+Thwart our plots,
+yes, that's his idea.
+
+97
+00:09:18 --> 00:09:22
+And how is he going to thwart
+them, or she?
+
+98
+00:09:22 --> 00:09:29
+Which is what for this problem?
+What's he going to do?
+
+99
+00:09:29 --> 00:09:32
+Yeah.
+No matter how we reorder
+
+100
+00:09:32 --> 00:09:39
+elements using the transposes,
+he's going to look at every
+
+101
+00:09:39 --> 00:09:43
+step and say,
+what's the last element?
+
+102
+00:09:43 --> 00:09:48
+That's the one I'm going to
+access, right?
+
+103
+00:09:48 --> 00:09:53
+So, the adversary always,
+always accesses the tail
+
+104
+00:09:53 --> 00:09:57
+element of L.
+No matter what it is,
+
+105
+00:09:57 --> 00:10:03
+no matter how we reorder
+things, OK, for each one,
+
+106
+00:10:03 --> 00:10:09
+adversary just accesses the
+tail.
+
+107
+00:10:09 --> 00:10:13
+So the cost of this,
+of any algorithm,
+
+108
+00:10:13 --> 00:10:18
+then, is going to be omega size
+of S times n,
+
+109
+00:10:18 --> 00:10:25
+OK, because you're always going
+to pay for every sequence.
+
+110
+00:10:25 --> 00:10:31
+You're going to have to go in
+to pay a cost of n,
+
+111
+00:10:31 --> 00:10:36
+OK, for every element in the
+sequence.
+
+112
+00:10:36 --> 00:10:42
+OK, so not terribly in the
+worst-case.
+
+113
+00:10:42 --> 00:10:46
+Not terribly good.
+So, people in studying this
+
+114
+00:10:46 --> 00:10:50
+problem: question?
+That analysis is for the online
+
+115
+00:10:50 --> 00:10:54
+algorithm, right.
+The off-line algorithm,
+
+116
+00:10:54 --> 00:10:59
+right, if you named those
+things, that's right.
+
+117
+00:10:59 --> 00:11:03
+OK, so we're looking at trying
+to solve this in an off-line
+
+118
+00:11:03 --> 00:11:06
+sense, sorry,
+in an online sense.
+
+119
+00:11:06 --> 00:11:10
+OK, and so the point is that
+for the online algorithm,
+
+120
+00:11:10 --> 00:11:15
+the adversary can be incredibly
+mean, OK, and just always access
+
+121
+00:11:15 --> 00:11:17
+the thing at the end,
+OK?
+
+122
+00:11:17 --> 00:11:21
+So, what sort of the history of
+this problem is,
+
+123
+00:11:21 --> 00:11:24
+that people said,
+well, if I can't do well in the
+
+124
+00:11:24 --> 00:11:29
+worst-case, maybe I should be
+looking at average case,
+
+125
+00:11:29 --> 00:11:32
+OK, and look at,
+say, the different elements
+
+126
+00:11:32 --> 00:11:37
+having some probability
+distribution.
+
+127
+00:11:37 --> 00:11:44
+OK, so the average case
+analysis, OK,
+
+128
+00:11:44 --> 00:11:56
+let's suppose that element x is
+accessed with probability,
+
+129
+00:11:56 --> 00:12:03
+P of x.
+OK, so suppose that we have
+
+130
+00:12:03 --> 00:12:14
+some a priori distribution on
+the elements.
+
+131
+00:12:14 --> 00:12:20
+OK, then the expected cost of
+the algorithm on a sequence,
+
+132
+00:12:20 --> 00:12:26
+OK, so if I put all the
+elements into some order,
+
+133
+00:12:26 --> 00:12:33
+OK, and don't try to reorder,
+but just simply look at,
+
+134
+00:12:33 --> 00:12:39
+is there a static ordering that
+would work well for a
+
+135
+00:12:39 --> 00:12:44
+distribution?
+It's just going to be,
+
+136
+00:12:44 --> 00:12:49
+by definition of expectation,
+the probability of x times,
+
+137
+00:12:49 --> 00:12:54
+in this case,
+the cost, which is the rank of
+
+138
+00:12:54 --> 00:13:01
+x in whatever that ordering is
+that I decide I'm going to use.
+
+139
+00:13:01 --> 00:13:09
+OK, and this is minimized when?
+So, this is just the definition
+
+140
+00:13:09 --> 00:13:15
+of expectations:
+the probability that I access x
+
+141
+00:13:15 --> 00:13:21
+times the cost summed over all
+the elements.
+
+142
+00:13:21 --> 00:13:28
+And the cost is just going to
+be its position in the list.
+
+143
+00:13:28 --> 00:13:33
+So, when is this value,
+this summation,
+
+144
+00:13:33 --> 00:13:41
+going to be minimized?
+When the element is most likely
+
+145
+00:13:41 --> 00:13:44
+as the lowest rank,
+and then what,
+
+146
+00:13:44 --> 00:13:49
+what about the other element?
+OK, so what does that mean?
+
+147
+00:13:49 --> 00:13:54
+Yeah, sort them,
+yeah, sort them on the basis of
+
+148
+00:13:54 --> 00:13:58
+decreasing probability,
+OK?
+
+149
+00:13:58 --> 00:14:04
+So, it's minimized when L is
+sorted, OK, in decreasing order
+
+150
+00:14:04 --> 00:14:10
+with respect to P.
+OK, so just sort them with the
+
+151
+00:14:10 --> 00:14:16
+most likely one at the front,
+and then just decreasing
+
+152
+00:14:16 --> 00:14:20
+probability.
+That way, whenever I access
+
+153
+00:14:20 --> 00:14:27
+something with some probability,
+OK, I'm going to access,
+
+154
+00:14:27 --> 00:14:33
+it's more likely that I'm going
+to access.
+
+155
+00:14:33 --> 00:14:37
+And that's not too difficult to
+actually prove.
+
+156
+00:14:37 --> 00:14:41
+You just look at,
+suppose there were two that
+
+157
+00:14:41 --> 00:14:46
+were out of order,
+and show that if you swap them,
+
+158
+00:14:46 --> 00:14:50
+you would improve this
+optimization function.
+
+159
+00:14:50 --> 00:14:56
+OK, so if you didn't know it,
+this suggests the following
+
+160
+00:14:56 --> 00:15:05
+heuristic,
+OK, which is simply keep
+
+161
+00:15:05 --> 00:15:21
+account of the number of times
+each element is accessed,
+
+162
+00:15:21 --> 00:15:38
+and maintain the list in order
+of decreasing count.
+
+163
+00:15:38 --> 00:15:42
+OK, so whenever something is
+accessed, increment its count,
+
+164
+00:15:42 --> 00:15:45
+OK, and that will move it,
+at most, one position,
+
+165
+00:15:45 --> 00:15:48
+which only costs me one
+transposed to move it,
+
+166
+00:15:48 --> 00:15:50
+perhaps, forward.
+OK, actually,
+
+167
+00:15:50 --> 00:15:54
+I guess it could be more if you
+have a whole bunch of ties,
+
+168
+00:15:54 --> 00:15:55
+right?
+Yeah.
+
+169
+00:15:55 --> 00:15:58
+So, it could cost more.
+But the idea is,
+
+170
+00:15:58 --> 00:16:02
+over time, the law of large
+numbers says that this is going
+
+171
+00:16:02 --> 00:16:06
+to approach the probability
+distribution.
+
+172
+00:16:06 --> 00:16:11
+The frequency with which you
+access this, divided by the
+
+173
+00:16:11 --> 00:16:15
+total number of accesses,
+will be the probability.
+
+174
+00:16:15 --> 00:16:20
+And so, therefore you will get
+things in decreasing
+
+175
+00:16:20 --> 00:16:24
+probability, OK,
+assuming that there is some
+
+176
+00:16:24 --> 00:16:29
+distribution that all of these
+elements are chosen according
+
+177
+00:16:29 --> 00:16:35
+to, or accessed according to.
+So, it doesn't seem like
+
+178
+00:16:35 --> 00:16:40
+there's that much more you could
+really do here.
+
+179
+00:16:40 --> 00:16:46
+And that's why I think this
+notion of competitive analysis
+
+180
+00:16:46 --> 00:16:51
+is so persuasive,
+because it's really amazingly
+
+181
+00:16:51 --> 00:16:55
+strong, OK?
+And it came about because of
+
+182
+00:16:55 --> 00:17:00
+what people were doing in
+practice.
+
+183
+00:17:00 --> 00:17:04
+So practice,
+what people implement it was a
+
+184
+00:17:04 --> 00:17:07
+so-called move to front
+heuristic.
+
+185
+00:17:07 --> 00:17:12
+OK, and the basic idea was,
+after you access an element,
+
+186
+00:17:12 --> 00:17:18
+just move it up to the front.
+OK, that only doubles the cost
+
+187
+00:17:18 --> 00:17:24
+of accessing the element because
+I go and I access it,
+
+188
+00:17:24 --> 00:17:29
+chasing it down paying the
+rank, and then I have to do rank
+
+189
+00:17:29 --> 00:17:36
+number of transposes to bring it
+back to the front.
+
+190
+00:17:36 --> 00:17:39
+So, it only cost me a factor of
+two, and now,
+
+191
+00:17:39 --> 00:17:43
+if it happens to be a
+frequently accessed elements,
+
+192
+00:17:43 --> 00:17:47
+over time you would hope that
+the most likely elements were
+
+193
+00:17:47 --> 00:17:55
+near the front of that list.
+So, after accessing x,
+
+194
+00:17:55 --> 00:18:05
+move x, the head of the list
+using transposes,
+
+195
+00:18:05 --> 00:18:17
+and the cost is just equal to
+twice the rank in L of x,
+
+196
+00:18:17 --> 00:18:25
+OK, where the two here has two
+parts.
+
+197
+00:18:25 --> 00:18:34
+One is the access,
+and the other is the
+
+198
+00:18:34 --> 00:18:41
+transposes.
+OK, so that's sort of what they
+
+199
+00:18:41 --> 00:18:43
+did.
+And one of the nice properties
+
+200
+00:18:43 --> 00:18:47
+of this is that if it turns out
+that there is locality in the
+
+201
+00:18:47 --> 00:18:50
+access pattern,
+if it's not just a static
+
+202
+00:18:50 --> 00:18:53
+distribution,
+but rather once I've accessed
+
+203
+00:18:53 --> 00:18:57
+something, if it's more likely
+I'm going to access it again,
+
+204
+00:18:57 --> 00:19:01
+which tends to be the case for
+many input types of patterns,
+
+205
+00:19:01 --> 00:19:05
+this responds well to locality
+because it's going to be up near
+
+206
+00:19:05 --> 00:19:10
+the front if I access it very
+soon after I've accessed.
+
+207
+00:19:10 --> 00:19:15
+So, there is what's called
+temporal locality,
+
+208
+00:19:15 --> 00:19:19
+meaning that in time,
+I tend to access,
+
+209
+00:19:19 --> 00:19:26
+so it may be that I access some
+thing's very hot for awhile;
+
+210
+00:19:26 --> 00:19:32
+then it gets very cold.
+This type of algorithm responds
+
+211
+00:19:32 --> 00:19:37
+very well to the hotness of the
+accessing.
+
+212
+00:19:37 --> 00:19:43
+OK, so it responds well to
+locality in S.
+
+213
+00:19:43 --> 00:19:48
+So, this is sort of what was
+known up to the point that a
+
+214
+00:19:48 --> 00:19:54
+very famous paper was written by
+Danny Sleator and Bob Tarjan,
+
+215
+00:19:54 --> 00:19:59
+where they took a totally
+different approach to looking at
+
+216
+00:19:59 --> 00:20:04
+this kind of problem.
+OK, and it's an approach that
+
+217
+00:20:04 --> 00:20:09
+matter you see everywhere from
+analysis of caching and
+
+218
+00:20:09 --> 00:20:14
+high-performance processors to
+analyses of disk paging to just
+
+219
+00:20:14 --> 00:20:21
+a huge number of applications of
+this basic technique.
+
+220
+00:20:21 --> 00:20:30
+And, that's the technique of
+competitive analysis.
+
+221
+00:20:30 --> 00:20:45
+OK, so here's the definition.
+So, online algorithm A is alpha
+
+222
+00:20:45 --> 00:20:55
+competitive.
+If there exists a constant,
+
+223
+00:20:55 --> 00:21:08
+k, such that for any sequence,
+S, of operations,
+
+224
+00:21:08 --> 00:21:23
+the cost of S using algorithm A
+is bounded by alpha times the
+
+225
+00:21:23 --> 00:21:39
+cost of opt, where opt is the
+optimal offline algorithm.
+
+226
+00:21:39 --> 00:21:43
+OK, so the optimal off-line,
+the one that knows the whole
+
+227
+00:21:43 --> 00:21:47
+sequence and does the absolute
+best it could do on that
+
+228
+00:21:47 --> 00:21:50
+sequence, OK,
+that's this cost here.
+
+229
+00:21:50 --> 00:21:53
+This is sometimes called God's
+algorithm, OK,
+
+230
+00:21:53 --> 00:21:58
+not to bring religion into the
+classroom, or to offend anybody,
+
+231
+00:21:58 --> 00:22:03
+but that is what people
+sometimes call it.
+
+232
+00:22:03 --> 00:22:07
+OK, so the fully omniscient
+knows absolutely the best thing
+
+233
+00:22:07 --> 00:22:10
+that could be done,
+sees into the future,
+
+234
+00:22:10 --> 00:22:12
+the whole works,
+OK?
+
+235
+00:22:12 --> 00:22:16
+It gets to apply that.
+That's what opts algorithm is.
+
+236
+00:22:16 --> 00:22:21
+And, what we're saying is that
+the cost is basically whatever
+
+237
+00:22:21 --> 00:22:24
+this alpha factor is.
+It could be a function of
+
+238
+00:22:24 --> 00:22:27
+things, or it could be a
+constant, OK,
+
+239
+00:22:27 --> 00:22:30
+times whatever the best
+algorithm is.
+
+240
+00:22:30 --> 00:22:36
+Plus, there's a potential for a
+constant out here.
+
+241
+00:22:36 --> 00:22:38
+OK, so for example,
+if alpha is two,
+
+242
+00:22:38 --> 00:22:43
+and we say it's two
+competitive, that means you're
+
+243
+00:22:43 --> 00:22:47
+going to do, at worst,
+twice the algorithm that has
+
+244
+00:22:47 --> 00:22:51
+all the information.
+But you're doing it online,
+
+245
+00:22:51 --> 00:22:54
+for example.
+OK, it's a really pretty
+
+246
+00:22:54 --> 00:22:57
+powerful notion.
+And what's interesting about
+
+247
+00:22:57 --> 00:23:04
+this, it's not even clear these
+things should exist to my mind.
+
+248
+00:23:04 --> 00:23:08
+OK, what's pretty remarkable
+about this, I think,
+
+249
+00:23:08 --> 00:23:12
+is that there is no assumption
+of distribution,
+
+250
+00:23:12 --> 00:23:16
+of probability distribution or
+anything.
+
+251
+00:23:16 --> 00:23:20
+It's whatever the sequence is
+that you give it.
+
+252
+00:23:20 --> 00:23:24
+You are within a factor of
+alpha, essentially,
+
+253
+00:23:24 --> 00:23:30
+of the best algorithm,
+OK, which is pretty remarkable.
+
+254
+00:23:30 --> 00:23:38
+OK, and so, we're going to
+prove the following theorem,
+
+255
+00:23:38 --> 00:23:45
+which is the one that Sleator
+and Tarjan proved.
+
+256
+00:23:45 --> 00:23:55
+And that is that MTF is four
+competitive for self organizing
+
+257
+00:23:55 --> 00:23:58
+lists.
+OK, so the idea here is that
+
+258
+00:23:58 --> 00:24:02
+suppose the adversary says,
+oh, I'm always going to access
+
+259
+00:24:02 --> 00:24:06
+the thing at the end of the list
+like we said in the beginning.
+
+260
+00:24:06 --> 00:24:10
+So, the adversary says,
+I'm always going to access the
+
+261
+00:24:10 --> 00:24:12
+thing there.
+I'm going to make MTF work
+
+262
+00:24:12 --> 00:24:16
+really bad, because you're going
+to go and move that thing all
+
+263
+00:24:16 --> 00:24:20
+the way up to the front.
+And I'm just going to access
+
+264
+00:24:20 --> 00:24:23
+the thing way at the end again.
+OK, well it turns out,
+
+265
+00:24:23 --> 00:24:26
+yeah, that's a bad sequence for
+move to front,
+
+266
+00:24:26 --> 00:24:30
+OK, and it will take a long
+time.
+
+267
+00:24:30 --> 00:24:34
+But it turns out God couldn't
+have done better,
+
+268
+00:24:34 --> 00:24:40
+OK, by more than a factor of
+four no matter how long the list
+
+269
+00:24:40 --> 00:24:43
+is.
+OK, that's pretty amazing.
+
+270
+00:24:43 --> 00:24:49
+OK, so that's a bad sequence.
+But, if there's a way that the
+
+271
+00:24:49 --> 00:24:55
+sequence exhibits any kind of
+locality or anything that can be
+
+272
+00:24:55 --> 00:25:00
+taken advantage of,
+if you could see the whole
+
+273
+00:25:00 --> 00:25:06
+thing, MTF takes advantage of it
+too, OK, within a factor of
+
+274
+00:25:06 --> 00:25:10
+four.
+OK, it's a pretty remarkable
+
+275
+00:25:10 --> 00:25:14
+theorem, and it's the basis of
+many types of analysis of online
+
+276
+00:25:14 --> 00:25:17
+algorithms.
+Almost all online algorithms
+
+277
+00:25:17 --> 00:25:21
+today are analyzed using some
+kind of competitive analysis.
+
+278
+00:25:21 --> 00:25:25
+OK, not always.
+Sometimes you do probabilistic
+
+279
+00:25:25 --> 00:25:28
+analysis, or whatever,
+but the dominant thing is too
+
+280
+00:25:28 --> 00:25:33
+competitive analysis because
+then you don't have to make any
+
+281
+00:25:33 --> 00:25:38
+statistical assumptions.
+OK, just prove that it works
+
+282
+00:25:38 --> 00:25:40
+well no matter what.
+This is remarkable,
+
+283
+00:25:40 --> 00:25:42
+I think.
+Isn't it remarkable?
+
+284
+00:25:42 --> 00:25:47
+So, let's prove this theorem,
+we're just going to spend the
+
+285
+00:25:47 --> 00:25:49
+rest of the lecture on this
+proof.
+
+286
+00:25:49 --> 00:25:54
+OK, and the proof in some ways
+is not hard, but it's also not
+
+287
+00:25:54 --> 00:25:56
+necessarily completely
+intuitive.
+
+288
+00:25:56 --> 00:26:00
+So, you will have to pay
+attention.
+
+289
+00:26:00 --> 00:26:09
+OK, so let's get some notation
+down.
+
+290
+00:26:09 --> 00:26:22
+Let's let L_i be MTF's list
+after the i'th access.
+
+291
+00:26:22 --> 00:26:38
+And, let's let L be opt's list
+after the i'th access.
+
+292
+00:26:38 --> 00:26:42
+OK, so generally what I'll do
+is I'll put a star if we are
+
+293
+00:26:42 --> 00:26:46
+talking about opt,
+and have nothing if we're
+
+294
+00:26:46 --> 00:26:50
+talking about MTF.
+OK, so that's going to be the
+
+295
+00:26:50 --> 00:26:51
+list.
+So, we can say,
+
+296
+00:26:51 --> 00:26:55
+what's the list?
+So, we're going to set it up
+
+297
+00:26:55 --> 00:27:00
+where we have one in operation
+that transforms list i minus one
+
+298
+00:27:00 --> 00:27:03
+into list i.
+OK, that's what the i'th
+
+299
+00:27:03 --> 00:27:09
+operation does.
+OK, and move to front does it
+
+300
+00:27:09 --> 00:27:16
+by moving whatever the thing
+that was accessed to the front.
+
+301
+00:27:16 --> 00:27:23
+And opt does whatever opt
+thinks is the best thing to do.
+
+302
+00:27:23 --> 00:27:28
+We don't know.
+So, we're going to let c_i be
+
+303
+00:27:28 --> 00:27:33
+MTF's cost for the I'th
+operation.
+
+304
+00:27:33 --> 00:27:40
+And that's just twice the rank
+in L_i minus one of x if the
+
+305
+00:27:40 --> 00:27:47
+operation accesses x,
+OK, two times the rank in L_i
+
+306
+00:27:47 --> 00:27:55
+minus one because we're going to
+be accessing it in L_i minus one
+
+307
+00:27:55 --> 00:28:01
+and transforming it into L_i.
+And similarly,
+
+308
+00:28:01 --> 00:28:09
+we'll let c_i star be opt's
+cost for the i'th operation.
+
+309
+00:28:09 --> 00:28:14
+And that's just equal to,
+well, to access it,
+
+310
+00:28:14 --> 00:28:20
+it's going to be the rank in
+L_i minus one star,
+
+311
+00:28:20 --> 00:28:28
+whatever its list is of x at
+that step, because it's got to
+
+312
+00:28:28 --> 00:28:34
+access it.
+And then, some number of
+
+313
+00:28:34 --> 00:28:41
+transposes, t_i if opt forms t_i
+transposes.
+
+314
+00:28:41 --> 00:28:51
+OK, so we have the setup where
+we have two different lists that
+
+315
+00:28:51 --> 00:28:59
+are being managed,
+and we have different costs in
+
+316
+00:28:59 --> 00:29:04
+the list.
+And, we're interested in is
+
+317
+00:29:04 --> 00:29:11
+comparing in some way MTF's list
+with opt's list at any point in
+
+318
+00:29:11 --> 00:29:14
+time.
+And, how do you think we're
+
+319
+00:29:14 --> 00:29:19
+going to do that?
+What technique do you think we
+
+320
+00:29:19 --> 00:29:25
+should use to compare these two
+lists, general technique from
+
+321
+00:29:25 --> 00:29:28
+last lecture?
+Well, it is going to be
+
+322
+00:29:28 --> 00:29:35
+amortized, but what?
+How are we going to compare
+
+323
+00:29:35 --> 00:29:39
+them?
+What technique did we learn
+
+324
+00:29:39 --> 00:29:43
+last time?
+Potential function,
+
+325
+00:29:43 --> 00:29:47
+good.
+OK, we're going to define a
+
+326
+00:29:47 --> 00:29:54
+potential function,
+OK, that measures how far apart
+
+327
+00:29:54 --> 00:29:59
+these two lists are.
+OK, and the idea is,
+
+328
+00:29:59 --> 00:30:08
+if, let's define that and then
+we'll take a look at it.
+
+329
+00:30:08 --> 00:30:21
+So, we're going to define the
+potential function phi mapping
+
+330
+00:30:21 --> 00:30:37
+the set of MTF's lists into the
+real numbers by the following.
+
+331
+00:30:37 --> 00:30:46
+phi of L_i is going to be twice
+the cardinality of this set.
+
+332
+00:30:46 --> 00:31:04
+
+
+333
+00:31:04 --> 00:31:08
+OK, so this is the
+precedes-operation and list,
+
+334
+00:31:08 --> 00:31:10
+i.
+So, we can define a
+
+335
+00:31:10 --> 00:31:15
+relationship between any two
+elements that says that x
+
+336
+00:31:15 --> 00:31:20
+precedes y in L_i if,
+as I'm accessing it from the
+
+337
+00:31:20 --> 00:31:25
+head, I hit x first.
+OK, so what I'm interested in,
+
+338
+00:31:25 --> 00:31:31
+here, are in some sense the
+disagreements between the two
+
+339
+00:31:31 --> 00:31:35
+lists.
+This is where x precedes y in
+
+340
+00:31:35 --> 00:31:39
+MTF's list, but y precedes x in
+opt's list.
+
+341
+00:31:39 --> 00:31:40
+They disagree,
+OK?
+
+342
+00:31:40 --> 00:31:45
+And, what we're interested in
+is the cardinality of the set.
+
+343
+00:31:45 --> 00:31:49
+And we're going to multiply it
+by two.
+
+344
+00:31:49 --> 00:31:53
+OK, so that's equal to two
+times; so there is a name for
+
+345
+00:31:53 --> 00:31:58
+this type of thing.
+We saw that when we were doing
+
+346
+00:31:58 --> 00:32:03
+sorting.
+Anybody remember the name?
+
+347
+00:32:03 --> 00:32:08
+It was very briefly.
+I don't expect anybody to
+
+348
+00:32:08 --> 00:32:14
+remember, but somebody might.
+Inversions: good,
+
+349
+00:32:14 --> 00:32:18
+OK, twice the number of
+inversions.
+
+350
+00:32:18 --> 00:32:25
+So, let's just do an example.
+So, let's say L_i is the list
+
+351
+00:32:25 --> 00:32:37
+with five elements.
+OK, I'll use characters for the
+
+352
+00:32:37 --> 00:32:47
+order just to keep things
+simple.
+
+353
+00:32:47 --> 00:33:01
+So, in this case phi of L_i is
+going to be twice the
+
+354
+00:33:01 --> 00:33:12
+cardinality of the set.
+So what we want to do is see
+
+355
+00:33:12 --> 00:33:18
+which things are out of order.
+So here, I look at E and C are
+
+356
+00:33:18 --> 00:33:21
+in this order,
+but C and E in that order.
+
+357
+00:33:21 --> 00:33:26
+So, those are out of order.
+So, that counts as one of my
+
+358
+00:33:26 --> 00:33:29
+elements, EC,
+and then, E and A,
+
+359
+00:33:29 --> 00:33:36
+A and E.
+OK, so those are out of order,
+
+360
+00:33:36 --> 00:33:41
+and then ED,
+DE, out of order,
+
+361
+00:33:41 --> 00:33:48
+and then EB,
+BE, those are out of order.
+
+362
+00:33:48 --> 00:33:53
+And now, I go C,
+A, C, A.
+
+363
+00:33:53 --> 00:34:00
+Those are in order,
+so it doesn't count.
+
+364
+00:34:00 --> 00:34:08
+CD, CD, CB, CB,
+so, nothing with C.
+
+365
+00:34:08 --> 00:34:12
+Then, A, D, A,
+D, those are in order,
+
+366
+00:34:12 --> 00:34:16
+A, B, A, B, those are in order.
+So then, DB,
+
+367
+00:34:16 --> 00:34:20
+BD, so BD.
+And that's the last one.
+
+368
+00:34:20 --> 00:34:26
+So, that's my potential
+function, which is equal to,
+
+369
+00:34:26 --> 00:34:31
+therefore, ten,
+because the cardinality of the
+
+370
+00:34:31 --> 00:34:37
+set is five.
+I have five inversions,
+
+371
+00:34:37 --> 00:34:44
+OK, between the two lists.
+OK, so let's just check some
+
+372
+00:34:44 --> 00:34:49
+properties of this potential
+function.
+
+373
+00:34:49 --> 00:34:57
+The first one is notice that
+phi of L_i is greater than or
+
+374
+00:34:57 --> 00:35:04
+equal to zero for all i.
+The number of inversions might
+
+375
+00:35:04 --> 00:35:07
+be zero, but is never less than
+zero.
+
+376
+00:35:07 --> 00:35:11
+OK, it's always at least zero.
+So, that's one of the
+
+377
+00:35:11 --> 00:35:16
+properties that we normally have
+we are dealing with potential
+
+378
+00:35:16 --> 00:35:19
+functions.
+And, the other thing is,
+
+379
+00:35:19 --> 00:35:23
+well, what about phi of L0?
+Is that equal to zero?
+
+380
+00:35:23 --> 00:35:27
+Well, it depends upon what list
+they start with.
+
+381
+00:35:27 --> 00:35:31
+OK, so what's the initial
+ordering?
+
+382
+00:35:31 --> 00:35:35
+So, it's zero if they start
+with the same list.
+
+383
+00:35:35 --> 00:35:41
+Then there are no inversions.
+But, they might start with
+
+384
+00:35:41 --> 00:35:46
+different lists.
+We'll talk about different
+
+385
+00:35:46 --> 00:35:50
+lists later on,
+but let's say for now that it's
+
+386
+00:35:50 --> 00:35:55
+zero because they start with the
+same list.
+
+387
+00:35:55 --> 00:36:00
+That seems like a fair
+comparison.
+
+388
+00:36:00 --> 00:36:04
+OK, so we have this potential
+function now that's counting up,
+
+389
+00:36:04 --> 00:36:07
+how different are these two
+lists?
+
+390
+00:36:07 --> 00:36:10
+Intuitively,
+we're going to do is the more
+
+391
+00:36:10 --> 00:36:14
+differences there are in the
+list, the more we are going to
+
+392
+00:36:14 --> 00:36:18
+be able to have more stored up
+work than we can pay for it.
+
+393
+00:36:18 --> 00:36:22
+That's the basic idea.
+So, the more that opt changes
+
+394
+00:36:22 --> 00:36:27
+the list, so it's not the same
+as ours, in some sense the more
+
+395
+00:36:27 --> 00:36:32
+we are going to be in a position
+as MTF to take advantage of that
+
+396
+00:36:32 --> 00:36:37
+difference in delivering up work
+for us to do.
+
+397
+00:36:37 --> 00:36:42
+And we'll see how that plays
+out.
+
+398
+00:36:42 --> 00:36:50
+So, let's first also make
+another observation.
+
+399
+00:36:50 --> 00:36:59
+So, how much does phi change
+from one transpose?
+
+400
+00:36:59 --> 00:37:08
+How much does phi change from
+one transpose?
+
+401
+00:37:08 --> 00:37:14
+So, basically that's asking,
+if you do a transpose,
+
+402
+00:37:14 --> 00:37:18
+what happens to the number of
+inversions?
+
+403
+00:37:18 --> 00:37:24
+So, what happens when a
+transposing is done?
+
+404
+00:37:24 --> 00:37:31
+What's going to happen to phi?
+What's going to happen to the
+
+405
+00:37:31 --> 00:37:37
+number of inversions?
+So, if I change,
+
+406
+00:37:37 --> 00:37:43
+it is less than n minus one,
+yes, if n is sufficiently
+
+407
+00:37:43 --> 00:37:47
+large, yes.
+OK, if I change,
+
+408
+00:37:47 --> 00:37:54
+so you can think about it here.
+Suppose I switch two of these
+
+409
+00:37:54 --> 00:37:59
+elements here.
+How much are things going to
+
+410
+00:37:59 --> 00:38:05
+change?
+Yeah, it's basically one or
+
+411
+00:38:05 --> 00:38:11
+minus one, OK,
+because a transpose creates or
+
+412
+00:38:11 --> 00:38:17
+destroys one inversion.
+So, if you think about it,
+
+413
+00:38:17 --> 00:38:21
+what if I change,
+for example,
+
+414
+00:38:21 --> 00:38:29
+C and A, the relationship of C
+and A to everything else in the
+
+415
+00:38:29 --> 00:38:36
+list is going to stay the same.
+The only thing,
+
+416
+00:38:36 --> 00:38:41
+possibly, that happens is that
+if they are in the same order
+
+417
+00:38:41 --> 00:38:46
+when I transpose them,
+I've created an inversion.
+
+418
+00:38:46 --> 00:38:51
+Or, if they were in the wrong
+order when I transpose them,
+
+419
+00:38:51 --> 00:38:55
+now they're in the right order.
+So therefore,
+
+420
+00:38:55 --> 00:39:01
+the change to the potential
+function is going to be plus or
+
+421
+00:39:01 --> 00:39:08
+minus two because we're counting
+twice the number of inversions.
+
+422
+00:39:08 --> 00:39:14
+OK, any questions about that?
+So, transposes don't change the
+
+423
+00:39:14 --> 00:39:17
+potential very much,
+just by one.
+
+424
+00:39:17 --> 00:39:22
+It either goes up by two or
+down by two, just by one
+
+425
+00:39:22 --> 00:39:26
+inversion.
+So now, let's take a look at
+
+426
+00:39:26 --> 00:39:31
+how these two algorithms
+operate.
+
+427
+00:39:31 --> 00:39:46
+
+
+428
+00:39:46 --> 00:40:03
+OK, so what happens when op i
+accesses x in the two lists?
+
+429
+00:40:03 --> 00:40:07
+What's going to be going on?
+To do that, let's define the
+
+430
+00:40:07 --> 00:40:09
+following sets.
+
+431
+00:40:09 --> 00:40:33
+
+
+432
+00:40:33 --> 00:40:34
+Why do I keep doing that?
+
+433
+00:40:34 --> 00:41:54
+
+
+434
+00:41:54 --> 00:41:57
+OK, so we're going to look at
+the, when we access x,
+
+435
+00:41:57 --> 00:42:01
+we are going to look at the two
+lists, and see what the
+
+436
+00:42:01 --> 00:42:05
+relationship is,
+so, based on things that come
+
+437
+00:42:05 --> 00:42:10
+before and after.
+So, I think a picture is very
+
+438
+00:42:10 --> 00:42:15
+helpful to understand what's
+going on here.
+
+439
+00:42:15 --> 00:42:19
+OK, so let's let,
+so here's L_i minus one,
+
+440
+00:42:19 --> 00:42:25
+and we have our list,
+which I'll draw like this.
+
+441
+00:42:25 --> 00:42:30
+And somewhere in there,
+we have x.
+
+442
+00:42:30 --> 00:42:40
+OK, and then we have L_i minus
+one star, which is opt's list,
+
+443
+00:42:40 --> 00:42:48
+OK, and he's got x somewhere
+else, or she.
+
+444
+00:42:48 --> 00:42:59
+OK, and so, what is this set?
+This is the set of Y that come
+
+445
+00:42:59 --> 00:43:05
+before x.
+So, that basically sets A and
+
+446
+00:43:05 --> 00:43:08
+B.
+OK, those things that come
+
+447
+00:43:08 --> 00:43:13
+before x in both.
+And, some of them,
+
+448
+00:43:13 --> 00:43:19
+the A's come before it in x,
+but come after it in,
+
+449
+00:43:19 --> 00:43:24
+come before it in A,
+but come after it in B.
+
+450
+00:43:24 --> 00:43:31
+OK, and similarly down here,
+what's this set?
+
+451
+00:43:31 --> 00:43:40
+
+
+452
+00:43:40 --> 00:43:42
+That's A union C,
+good.
+
+453
+00:43:42 --> 00:43:44
+And this one?
+Duh.
+
+454
+00:43:44 --> 00:43:51
+Yeah, it better be C union D
+because I've got A union B over
+
+455
+00:43:51 --> 00:43:57
+there, and I've got x.
+So that better be everything
+
+456
+00:43:57 --> 00:44:02
+else.
+OK, and here is B union D.
+
+457
+00:44:02 --> 00:44:11
+OK, so those are the four sets
+that we're going to care about.
+
+458
+00:44:11 --> 00:44:19
+We're actually mostly going to
+care about these two sets.
+
+459
+00:44:19 --> 00:44:26
+OK, and we also know something
+about the r here.
+
+460
+00:44:26 --> 00:44:35
+The position of x is going to
+be the rank in L_i minus one of
+
+461
+00:44:35 --> 00:44:39
+x.
+And here, this is our star.
+
+462
+00:44:39 --> 00:44:44
+It's just to the rank in L_i
+minus one star of x.
+
+463
+00:44:44 --> 00:44:47
+So, we know what these ranks
+are.
+
+464
+00:44:47 --> 00:44:51
+And what we're going to be
+interested in is,
+
+465
+00:44:51 --> 00:44:56
+in fact, characterizing the
+rank in terms of the sets.
+
+466
+00:44:56 --> 00:45:01
+OK, so what's the position of
+this?
+
+467
+00:45:01 --> 00:45:09
+Well, the rank,
+we have that r is equal to the
+
+468
+00:45:09 --> 00:45:17
+size of A.
+What's the size of B plus one?
+
+469
+00:45:17 --> 00:45:28
+OK, and r star is equal to the
+size of A plus the size of C
+
+470
+00:45:28 --> 00:45:34
+plus one.
+So, let's take a look at what
+
+471
+00:45:34 --> 00:45:41
+happens when these two
+algorithms do their thing.
+
+472
+00:45:41 --> 00:45:48
+So, when the access to x
+occurs, we move x to the front
+
+473
+00:45:48 --> 00:45:53
+of the list.
+OK, it goes right up to the
+
+474
+00:45:53 --> 00:45:57
+front.
+So, how many inversions are
+
+475
+00:45:57 --> 00:46:03
+created and destroyed?
+So, how many are created by
+
+476
+00:46:03 --> 00:46:05
+this?
+That's probably a,
+
+477
+00:46:05 --> 00:46:08
+how many inversions are
+created?
+
+478
+00:46:08 --> 00:46:33
+
+
+479
+00:46:33 --> 00:46:35
+How many inversions are
+created?
+
+480
+00:46:35 --> 00:46:39
+So, we move x to the front.
+So what we are concerned about
+
+481
+00:46:39 --> 00:46:43
+is that anything that was in one
+of these sets that came,
+
+482
+00:46:43 --> 00:46:47
+where it's going to change in
+order versus down here.
+
+483
+00:46:47 --> 00:46:51
+So, if I look in B,
+well, let's take a look at A.
+
+484
+00:46:51 --> 00:46:56
+OK, so A, those are the things
+that are in the same order in
+
+485
+00:46:56 --> 00:46:58
+both.
+So, everything that's in A,
+
+486
+00:46:58 --> 00:47:02
+when I move x to the front,
+each thing in A is going to
+
+487
+00:47:02 --> 00:47:09
+count for one more inversion.
+Does everybody see that?
+
+488
+00:47:09 --> 00:47:15
+So, I create a cardinality of A
+inversions.
+
+489
+00:47:15 --> 00:47:23
+And, we are going to destroy,
+well, everything in B came
+
+490
+00:47:23 --> 00:47:31
+before x in this list,
+and after x in this.
+
+491
+00:47:31 --> 00:47:36
+But after we move x,
+they're in the right order.
+
+492
+00:47:36 --> 00:47:43
+So, I'm going to destroy B
+inversions, cardinality of B
+
+493
+00:47:43 --> 00:47:48
+inversions.
+OK, so that's what happens we
+
+494
+00:47:48 --> 00:47:52
+operate with move to front.
+We destroy.
+
+495
+00:47:52 --> 00:47:58
+We create A inversions and
+destroy B inversions,
+
+496
+00:47:58 --> 00:48:06
+OK, by doing this movement.
+OK, now, let's take a look at
+
+497
+00:48:06 --> 00:48:09
+what opt does.
+So, each transpose,
+
+498
+00:48:09 --> 00:48:16
+we don't know what opt does.
+He might move x this way or
+
+499
+00:48:16 --> 00:48:18
+that way.
+We don't know.
+
+500
+00:48:18 --> 00:48:22
+But each transpose,
+I opt, well,
+
+501
+00:48:22 --> 00:48:29
+we're going to be interested in
+how many inversions it creates,
+
+502
+00:48:29 --> 00:48:34
+and we already argued that it's
+going to create,
+
+503
+00:48:34 --> 00:48:40
+at most, one inversion per
+transpose.
+
+504
+00:48:40 --> 00:48:46
+So, he can go and create more
+inversions, OK?
+
+505
+00:48:46 --> 00:48:53
+So, let me write it over here.
+Thus --
+
+506
+00:48:53 --> 00:49:05
+
+
+507
+00:49:05 --> 00:49:16
+-- the change in potential is
+going to be, at most,
+
+508
+00:49:16 --> 00:49:26
+twice, A minus B plus t_i.
+OK, so t_i, remember,
+
+509
+00:49:26 --> 00:49:39
+was the number of transposes
+that opt does on the i'th step
+
+510
+00:49:39 --> 00:49:49
+for the i'th operation.
+OK, so we're going to create
+
+511
+00:49:49 --> 00:49:56
+the change in potential is,
+at most, twice this function.
+
+512
+00:49:56 --> 00:50:07
+So, we are now going to look to
+see how we use this fact,
+
+513
+00:50:07 --> 00:50:16
+and these two facts,
+this fact and this fact,
+
+514
+00:50:16 --> 00:50:26
+OK, to show that opt can't be
+much better than MTF.
+
+515
+00:50:26 --> 00:50:33
+OK, good.
+The way we are going to do that
+
+516
+00:50:33 --> 00:50:38
+is look at the amortized cost of
+the I'th operation.
+
+517
+00:50:38 --> 00:50:41
+OK, what's MTF's amortized
+cost?
+
+518
+00:50:41 --> 00:50:47
+OK, and then we'll make the
+argument, which is the one you
+
+519
+00:50:47 --> 00:50:53
+always make that the amortized
+cost upper bound the true costs,
+
+520
+00:50:53 --> 00:50:57
+OK?
+But the amortized cost is going
+
+521
+00:50:57 --> 00:51:04
+to be easier to calculate.
+OK, so amortized cost is just C
+
+522
+00:51:04 --> 00:51:09
+hat, actually,
+let me make sure I have lots of
+
+523
+00:51:09 --> 00:51:15
+room here on the right,
+c_i hat, which is equal to the
+
+524
+00:51:15 --> 00:51:19
+true cost plus the change in
+potential.
+
+525
+00:51:19 --> 00:51:25
+OK, that's just the definition
+of amortized cost when given
+
+526
+00:51:25 --> 00:51:29
+potential functions,
+OK?
+
+527
+00:51:29 --> 00:51:36
+So, what is the cost of
+operation i, OK,
+
+528
+00:51:36 --> 00:51:45
+in this context here?
+OK, we accessed x there.
+
+529
+00:51:45 --> 00:51:56
+What's the cost of operation i?
+Two times the rank of x,
+
+530
+00:51:56 --> 00:52:05
+which is 2r.
+OK, so 2r, that part of it.
+
+531
+00:52:05 --> 00:52:13
+OK, well, we have an upper
+bound on the change in
+
+532
+00:52:13 --> 00:52:17
+potential.
+That's this.
+
+533
+00:52:17 --> 00:52:25
+OK, so that's two times the
+cardinality of A minus
+
+534
+00:52:25 --> 00:52:33
+cardinality of B plus t_i.
+OK, everybody with me?
+
+535
+00:52:33 --> 00:52:37
+Yeah?
+OK, I see lots of nods.
+
+536
+00:52:37 --> 00:52:42
+That's good.
+OK, that's equal to 2r plus two
+
+537
+00:52:42 --> 00:52:48
+of size of A minus,
+OK, I want to plug in for B,
+
+538
+00:52:48 --> 00:52:55
+and it turns out very nicely.
+I have an equation involving A,
+
+539
+00:52:55 --> 00:53:00
+B, and r.
+So, I get rid of the variable
+
+540
+00:53:00 --> 00:53:06
+size of B by just plugging that
+in.
+
+541
+00:53:06 --> 00:53:11
+OK, and so what do I plug in
+here?
+
+542
+00:53:11 --> 00:53:18
+What's B equal to?
+Yeah, r minus size of A minus
+
+543
+00:53:18 --> 00:53:23
+one.
+I wrote it the other way.
+
+544
+00:53:23 --> 00:53:31
+OK, and then plus t_i.
+OK, and this is since r is A
+
+545
+00:53:31 --> 00:53:37
+plus B plus one.
+OK, everybody with me still?
+
+546
+00:53:37 --> 00:53:44
+I'm just doing algebra.
+We've got to make sure we do
+
+547
+00:53:44 --> 00:53:50
+the algebra right.
+OK, so that's equal to,
+
+548
+00:53:50 --> 00:53:57
+let's just multiply all this
+out now and get 2r plus,
+
+549
+00:53:57 --> 00:54:03
+I have 2A here minus A.
+So, that's 4A.
+
+550
+00:54:03 --> 00:54:08
+And then, two times minus r is
+minus 2r.
+
+551
+00:54:08 --> 00:54:12
+Two times minus one is minus
+two.
+
+552
+00:54:12 --> 00:54:18
+Oh, but it's minus-minus two,
+so it's plus two.
+
+553
+00:54:18 --> 00:54:24
+OK, and then I have 2t_i.
+So, that's just algebra.
+
+554
+00:54:24 --> 00:54:31
+OK, so that's not bad.
+We've just got rid of another
+
+555
+00:54:31 --> 00:54:37
+variable.
+What variable did we get rid
+
+556
+00:54:37 --> 00:54:38
+of?
+r.
+
+557
+00:54:38 --> 00:54:46
+It didn't matter what the rank
+was as long as I knew what the
+
+558
+00:54:46 --> 00:54:54
+number of inversions was here.
+OK, so that's now equal to 4A
+
+559
+00:54:54 --> 00:55:02
+plus two plus 2t_i.
+And, that's less than or equal
+
+560
+00:55:02 --> 00:55:11
+to, I claim, four times r star
+plus t_i using our other fact.
+
+561
+00:55:11 --> 00:55:19
+Since r star is equal to the
+size of A plus the size of C,
+
+562
+00:55:19 --> 00:55:28
+plus one, then that's greater
+than or equal to the size of A
+
+563
+00:55:28 --> 00:55:35
+plus one.
+OK, if I look at this,
+
+564
+00:55:35 --> 00:55:42
+I'm basically looking at A.
+The fact that A,
+
+565
+00:55:42 --> 00:55:51
+what did I do here?
+If r star is greater than or
+
+566
+00:55:51 --> 00:55:58
+equal to A plus one,
+right, so therefore,
+
+567
+00:55:58 --> 00:56:05
+A plus one, good.
+Yeah, so this is basically less
+
+568
+00:56:05 --> 00:56:09
+than or equal to 4A plus four,
+which is four times A plus one.
+
+569
+00:56:09 --> 00:56:13
+I probably should have put in
+another algebra step here,
+
+570
+00:56:13 --> 00:56:16
+OK, because if I can't verify
+it like this,
+
+571
+00:56:16 --> 00:56:19
+then I get nervous.
+This is basically,
+
+572
+00:56:19 --> 00:56:23
+at most, 4A plus four.
+That's four times A plus one,
+
+573
+00:56:23 --> 00:56:26
+and A plus one is less than or
+equal to r star.
+
+574
+00:56:26 --> 00:56:30
+And then, 2t_i is,
+at most, 4TI.
+
+575
+00:56:30 --> 00:56:43
+So, I've got this.
+Does everybody see where that
+
+576
+00:56:43 --> 00:56:54
+came from?
+But what is r star plus t_i?
+
+577
+00:56:54 --> 00:57:04
+What is r star plus t_i?
+What is it?
+
+578
+00:57:04 --> 00:57:13
+It's c_i star.
+That's just c_i star.
+
+579
+00:57:13 --> 00:57:24
+So, the amortized cost of i'th
+operation is,
+
+580
+00:57:24 --> 00:57:36
+at most, four times opt's cost.
+OK, that's pretty remarkable.
+
+581
+00:57:36 --> 00:57:44
+OK, so amortized cost of the
+i'th operation is just four
+
+582
+00:57:44 --> 00:57:48
+times opt's cost.
+Now, of course,
+
+583
+00:57:48 --> 00:57:55
+we have to now go through and
+analyze the total cost.
+
+584
+00:57:55 --> 00:58:03
+But this is now the routine way
+that we analyze things with a
+
+585
+00:58:03 --> 00:58:12
+potential function.
+So, the costs of MTF of S is
+
+586
+00:58:12 --> 00:58:21
+just the summation of the
+individual costs,
+
+587
+00:58:21 --> 00:58:30
+OK, by definition.
+And that is just the sum,
+
+588
+00:58:30 --> 00:58:38
+i equals one,
+to S of the amortized cost
+
+589
+00:58:38 --> 00:58:45
+plus, minus the change in
+potential.
+
+590
+00:58:45 --> 00:58:55
+OK, did I do this right?
+No, I put the parentheses in
+
+591
+00:58:55 --> 00:59:01
+the wrong place.
+Now I've got it right.
+
+592
+00:59:01 --> 00:59:04
+Good.
+I just missed a parenthesis.
+
+593
+00:59:04 --> 00:59:08
+OK, so this is,
+so in the past what I did was I
+
+594
+00:59:08 --> 00:59:13
+expressed the amortized cost as
+being equal to c_i plus the
+
+595
+00:59:13 --> 00:59:17
+change in potential.
+I'm just throwing these two
+
+596
+00:59:17 --> 00:59:22
+terms over to the other side and
+saying, what's the true cost in
+
+597
+00:59:22 --> 00:59:26
+terms of the amortized cost?
+OK, so I get c hat of i plus
+
+598
+00:59:26 --> 00:59:31
+phi sub L_i minus one minus phi
+of L_i, OK, by making that
+
+599
+00:59:31 --> 00:59:36
+substitution.
+OK, that's less than or equal
+
+600
+00:59:36 --> 00:59:41
+to since this is linear.
+Well, I know what the sum of
+
+601
+00:59:41 --> 00:59:44
+the amortized cost is.
+It's, at most,
+
+602
+00:59:44 --> 00:59:47
+4c_i star.
+So, the sum of them is,
+
+603
+00:59:47 --> 00:59:52
+at most, to that sum,
+I equals one to S of 4c_i star.
+
+604
+00:59:52 --> 00:59:56
+And then, as happens in all
+these things,
+
+605
+00:59:56 --> 1:00:01
+you get a telescope with these
+terms.
+
+606
+1:00:01 --> 1:00:08.706
+Every term is added in once and
+subtracted out once,
+
+607
+1:00:08.706 --> 1:00:13.542
+except for the ones at the
+limit.
+
+608
+1:00:13.542 --> 1:00:22.76
+So, I get plus phi of L_0 minus
+phi of L sub cardinality of S.
+
+609
+1:00:22.76 --> 1:00:31.222
+And now, this term is zero.
+And this term is greater than
+
+610
+1:00:31.222 --> 1:00:39.468
+or equal to zero.
+OK, so therefore this whole
+
+611
+1:00:39.468 --> 1:00:47.579
+thing is less than or equal to,
+well, what's that?
+
+612
+1:00:47.579 --> 1:00:53.041
+That's just four times opt's
+cost.
+
+613
+1:00:53.041 --> 1:01:00.591
+And so, we're four competitive.
+OK, this is amazing,
+
+614
+1:01:00.591 --> 1:01:02.739
+I think.
+It's not that hard,
+
+615
+1:01:02.739 --> 1:01:06.956
+OK, but it's quite amazing that
+just by doing a simple
+
+616
+1:01:06.956 --> 1:01:11.65
+heuristic, you're nearly as good
+as any omniscient algorithm
+
+617
+1:01:11.65 --> 1:01:15.151
+could possibly be.
+OK, you're nearly as good.
+
+618
+1:01:15.151 --> 1:01:17.141
+And, in fact,
+in practice,
+
+619
+1:01:17.141 --> 1:01:21.358
+this is a great heuristic.
+So, if ever you have things
+
+620
+1:01:21.358 --> 1:01:25.893
+like a hash table that you're
+actually seeing by chaining,
+
+621
+1:01:25.893 --> 1:01:30.667
+OK, often it's the case that if
+when you access the elements,
+
+622
+1:01:30.667 --> 1:01:35.679
+you're just bringing them up to
+the front of the list if it's an
+
+623
+1:01:35.679 --> 1:01:40.533
+unsorted list that you've put
+them into, just bring them up to
+
+624
+1:01:40.533 --> 1:01:45.448
+the front.
+You can easily save 30 to 40%
+
+625
+1:01:45.448 --> 1:01:50.767
+in run time for the accessing to
+the hash table because you will
+
+626
+1:01:50.767 --> 1:01:54.736
+be much more likely to find the
+elements inside.
+
+627
+1:01:54.736 --> 1:01:59.295
+Of course, it depends on the
+distribution and so forth,
+
+628
+1:01:59.295 --> 1:02:03.601
+for empirical matters,
+but the point is that you are
+
+629
+1:02:03.601 --> 1:02:08.667
+not going to be too far off from
+the ordering that an optimal
+
+630
+1:02:08.667 --> 1:02:12.551
+algorithm would do,
+optimal off-line algorithm:
+
+631
+1:02:12.551 --> 1:02:17.037
+I mean, amazing.
+OK: optimal off-line.
+
+632
+1:02:17.037 --> 1:02:22.276
+Now, it turns out that in the
+reading that we assigned,
+
+633
+1:02:22.276 --> 1:02:28
+so, we assigned you Sleator and
+Tarjan's original paper.
+
+634
+1:02:28 --> 1:02:39.388
+In that reading,
+they actually have a slightly
+
+635
+1:02:39.388 --> 1:02:55.08
+different model where they count
+transposes that move in excess
+
+636
+1:02:55.08 --> 1:03:09
+to element x towards the front
+of the list as free.
+
+637
+1:03:09 --> 1:03:14.555
+OK, so, and this basically
+models, so here's the idea is if
+
+638
+1:03:14.555 --> 1:03:19.536
+I actually have a linked list,
+and when I chase down,
+
+639
+1:03:19.536 --> 1:03:23.846
+once I find x,
+I can actually move x up to the
+
+640
+1:03:23.846 --> 1:03:29.306
+front with just a constant
+number of pointer operations to
+
+641
+1:03:29.306 --> 1:03:34
+splice it out and put it up to
+the front.
+
+642
+1:03:34 --> 1:03:36.785
+I don't actually have to
+transpose all way back down.
+
+643
+1:03:36.785 --> 1:03:39.196
+OK, so that's kind of the model
+that they use,
+
+644
+1:03:39.196 --> 1:03:40.857
+which is a more realistic
+model.
+
+645
+1:03:40.857 --> 1:03:43.75
+OK, I presented this argument
+because it's a little bit
+
+646
+1:03:43.75 --> 1:03:45.732
+simpler.
+OK, and the model is a little
+
+647
+1:03:45.732 --> 1:03:47.285
+bit simpler.
+But in our model,
+
+648
+1:03:47.285 --> 1:03:50.339
+they have, when you access
+something, you want to bring it
+
+649
+1:03:50.339 --> 1:03:52.803
+up to the front,
+or anything that you happen to
+
+650
+1:03:52.803 --> 1:03:55.91
+go across during that time,
+you could bring up to the front
+
+651
+1:03:55.91 --> 1:04:06
+essentially for free.
+This model is the splicing in,
+
+652
+1:04:06 --> 1:04:17.466
+splicing x in and out of L in
+constant time.
+
+653
+1:04:17.466 --> 1:04:24.4
+Then, MTF is,
+it turns out,
+
+654
+1:04:24.4 --> 1:04:32.289
+too competitive.
+It's within a factor of two of
+
+655
+1:04:32.289 --> 1:04:36.487
+optimal, OK, if you use that.
+And that's actually a good
+
+656
+1:04:36.487 --> 1:04:40.761
+exercise to work through.
+You could also go read about it
+
+657
+1:04:40.761 --> 1:04:44.958
+in the reading to understand
+this better, to look to see
+
+658
+1:04:44.958 --> 1:04:47.401
+where you would use those
+things.
+
+659
+1:04:47.401 --> 1:04:51.675
+You have to have another term
+representing the number of,
+
+660
+1:04:51.675 --> 1:04:55.796
+quote, "free" transposes.
+But it turns out that all the
+
+661
+1:04:55.796 --> 1:04:58.467
+math works out pretty much the
+same.
+
+662
+1:04:58.467 --> 1:05:01.673
+OK, let's see,
+another thing I promised you
+
+663
+1:05:01.673 --> 1:05:06.023
+is, what if, to look at the
+case, what if they don't start
+
+664
+1:05:06.023 --> 1:05:14.48
+with the same lists?
+OK, what if the two lists are
+
+665
+1:05:14.48 --> 1:05:25.251
+different when they start?
+Then, the potential function at
+
+666
+1:05:25.251 --> 1:05:33
+the beginning might be as big as
+what?
+
+667
+1:05:33 --> 1:05:37.997
+How big are the potential
+function start out as if the
+
+668
+1:05:37.997 --> 1:05:42.805
+lists are different?
+So, suppose we're starting out,
+
+669
+1:05:42.805 --> 1:05:45.539
+you have a list,
+and opt says,
+
+670
+1:05:45.539 --> 1:05:51.008
+OK, I'm going to start out by
+ordering my list according to
+
+671
+1:05:51.008 --> 1:05:56.948
+the sequence that I want to use,
+OK, and MTF orders it according
+
+672
+1:05:56.948 --> 1:06:02.511
+to the sequence it must use.
+What list is opt going to start
+
+673
+1:06:02.511 --> 1:06:09.9
+out with as an adversary?
+Yeah, it's going to pick the
+
+674
+1:06:09.9 --> 1:06:16.447
+reverse of what ever MTF starts
+out with, right,
+
+675
+1:06:16.447 --> 1:06:21.601
+because then,
+if he picks the reverse,
+
+676
+1:06:21.601 --> 1:06:25.92
+what's the number of
+inversions?
+
+677
+1:06:25.92 --> 1:06:34
+It's how many inversions in a
+reverse ordered list?
+
+678
+1:06:34 --> 1:06:36.465
+Yeah, n choose two,
+OK.
+
+679
+1:06:36.465 --> 1:06:41.508
+Is it n choose two,
+or n minus one choose two?
+
+680
+1:06:41.508 --> 1:06:47.112
+n minus one choose two,
+OK, inversions that you get
+
+681
+1:06:47.112 --> 1:06:53.163
+because it's basically a
+triangular number when you add
+
+682
+1:06:53.163 --> 1:06:55.853
+them up.
+But in any case,
+
+683
+1:06:55.853 --> 1:07:00
+it's order n^2,
+worst case.
+
+684
+1:07:00 --> 1:07:07.03
+So, what does that do to our
+analysis here?
+
+685
+1:07:07.03 --> 1:07:15.064
+It says that the cost of MTF of
+S is going to be,
+
+686
+1:07:15.064 --> 1:07:22.596
+well, this is no longer zero.
+This is now n^2.
+
+687
+1:07:22.596 --> 1:07:30.63
+OK, so we get that costs of MTF
+of S is, at most,
+
+688
+1:07:30.63 --> 1:07:39
+four times opt's thing plus
+order n^2, OK?
+
+689
+1:07:39 --> 1:07:51.329
+And, if we look at the
+definition, did we erase it
+
+690
+1:07:51.329 --> 1:07:58.625
+already?
+OK, this is still for
+
+691
+1:07:58.625 --> 1:08:09.696
+competitive, OK,
+since n^2 is constant as the
+
+692
+1:08:09.696 --> 1:08:19.283
+size of S goes to infinity.
+This is, once again,
+
+693
+1:08:19.283 --> 1:08:22.364
+sort of your notion of,
+what does it mean to be a
+
+694
+1:08:22.364 --> 1:08:24.868
+constant?
+OK, so as the size of the list
+
+695
+1:08:24.868 --> 1:08:28.847
+gets bigger, all we're doing is
+accessing whatever that number,
+
+696
+1:08:28.847 --> 1:08:31.864
+n, is of elements.
+That number doesn't grow with
+
+697
+1:08:31.864 --> 1:08:34.753
+the problem size,
+OK, even if it starts out as
+
+698
+1:08:34.753 --> 1:08:37
+some variable number,
+n.
+
+699
+1:08:37 --> 1:08:42.579
+OK, it doesn't grow with the
+problem size.
+
+700
+1:08:42.579 --> 1:08:47.071
+We still end up being
+competitive.
+
+701
+1:08:47.071 --> 1:08:53.603
+This is just the k that was in
+that definition of
+
+702
+1:08:53.603 --> 1:08:58.23
+competitiveness.
+OK, any questions?
+
+703
+1:08:58.23 --> 1:09:02.761
+Yeah?
+Well, so you could change the
+
+704
+1:09:02.761 --> 1:09:05.523
+cost model a little bit.
+Yeah.
+
+705
+1:09:05.523 --> 1:09:08.666
+And that's a good one to work
+out.
+
+706
+1:09:08.666 --> 1:09:12.666
+But if you say the cost of
+transposing, so,
+
+707
+1:09:12.666 --> 1:09:17.904
+the cost of transposing is
+probably moving two pointers,
+
+708
+1:09:17.904 --> 1:09:21.523
+approximately.
+No, one, three pointers.
+
+709
+1:09:21.523 --> 1:09:26.952
+So, suppose that the cost of,
+wow, that's a good exercise,
+
+710
+1:09:26.952 --> 1:09:29.714
+OK?
+Suppose the cost was three
+
+711
+1:09:29.714 --> 1:09:34.571
+times to do a transpose,
+was three times the cost of
+
+712
+1:09:34.571 --> 1:09:40
+doing an access,
+of following a pointer.
+
+713
+1:09:40 --> 1:09:43.741
+OK, how would that change the
+number here?
+
+714
+1:09:43.741 --> 1:09:46.752
+OK, good exercise,
+great exercise.
+
+715
+1:09:46.752 --> 1:09:51.863
+OK, hmm, good final question.
+OK, yes, it will affect the
+
+716
+1:09:51.863 --> 1:09:56.517
+constant here just as when we do
+the free transpose,
+
+717
+1:09:56.517 --> 1:10:02.266
+when we move things towards the
+front, that we consider those as
+
+718
+1:10:02.266 --> 1:10:06.09
+free, OK.
+Those operations end up
+
+719
+1:10:06.09 --> 1:10:11.545
+reducing the constant as well.
+OK, but the point is that this
+
+720
+1:10:11.545 --> 1:10:17
+constant is independent of the
+constant having to do with the
+
+721
+1:10:17 --> 1:10:22.636
+number of elements in the list.
+So that's a different constant.
+
+722
+1:10:22.636 --> 1:10:27.181
+So, this is a constant.
+OK, and so as with a lot of
+
+723
+1:10:27.181 --> 1:10:31
+these things,
+there's two things.
+
+724
+1:10:31 --> 1:10:34.505
+One is, there's the theory.
+So, theory here backs up
+
+725
+1:10:34.505 --> 1:10:37.048
+practice.
+OK, those practitioners knew
+
+726
+1:10:37.048 --> 1:10:40.485
+what they were doing,
+OK, without knowing what they
+
+727
+1:10:40.485 --> 1:10:43.028
+were doing.
+OK, so that's really good.
+
+728
+1:10:43.028 --> 1:10:46.603
+OK, and we have a deeper
+understanding that's led to,
+
+729
+1:10:46.603 --> 1:10:50.727
+as I say, many algorithms for
+things like, the important ones
+
+730
+1:10:50.727 --> 1:10:53.682
+are like paging.
+So, what's the comment page
+
+731
+1:10:53.682 --> 1:10:57.532
+replacement policy that people
+study, people have at most
+
+732
+1:10:57.532 --> 1:11:02
+operating systems?
+Who's done 6.033 or something?
+
+733
+1:11:02 --> 1:11:04.272
+Yeah, it's Least Recently Used,
+LRU.
+
+734
+1:11:04.272 --> 1:11:06.155
+People have heard of that,
+OK.
+
+735
+1:11:06.155 --> 1:11:09.597
+So, you can analyze LRU
+competitive, and show that LRU
+
+736
+1:11:09.597 --> 1:11:13.363
+is actually competitive with
+optimal page replacement under
+
+737
+1:11:13.363 --> 1:11:16.48
+certain assumptions.
+OK, and there are also other
+
+738
+1:11:16.48 --> 1:11:18.363
+things.
+Like, people do random
+
+739
+1:11:18.363 --> 1:11:21.805
+replacement algorithms,
+and there are a whole bunch of
+
+740
+1:11:21.805 --> 1:11:25.831
+other kinds of things that can
+be analyzed with the competitive
+
+741
+1:11:25.831 --> 1:11:28.883
+analysis framework.
+OK, so it's very cool stuff.
+
+742
+1:11:28.883 --> 1:11:32.324
+And, we are going to see more
+in recitation on Friday,
+
+743
+1:11:32.324 --> 1:11:36.09
+see a couple of other really
+good problems that are maybe a
+
+744
+1:11:36.09 --> 1:11:40.181
+little bit easier than this one,
+OK, definitely easier than this
+
+745
+1:11:40.181 --> 1:11:45.479
+one.
+OK, they give you hopefully
+
+746
+1:11:45.479 --> 1:11:51.407
+some more intuition about
+competitive analysis.
+
+747
+1:11:51.407 --> 1:11:58.237
+I also want to warn you about
+next week's problem set.
+
+748
+1:11:58.237 --> 1:12:07
+So, next week's problem set has
+a programming assignment on it.
+
+749
+1:12:07 --> 1:12:10.676
+OK, and the programming
+assignment is mandatory,
+
+750
+1:12:10.676 --> 1:12:13.649
+meaning, well,
+all the problem sets are
+
+751
+1:12:13.649 --> 1:12:17.639
+mandatory as you know,
+but if you decide not to do a
+
+752
+1:12:17.639 --> 1:12:22.568
+problem there's a little bit of
+a penalty and then the penalties
+
+753
+1:12:22.568 --> 1:12:26.401
+scale dramatically as you stop
+doing problem sets.
+
+754
+1:12:26.401 --> 1:12:30
+But this one is
+mandatory-mandatory.
+
+755
+1:12:30 --> 1:12:33.823
+OK, you don't pass the class.
+You'll get an incomplete if you
+
+756
+1:12:33.823 --> 1:12:36.18
+do not do this programming
+assignment.
+
+757
+1:12:36.18 --> 1:12:39.43
+Now, I know that some people
+are less practiced with
+
+758
+1:12:39.43 --> 1:12:42.169
+programming.
+And so, what I encourage you to
+
+759
+1:12:42.169 --> 1:12:45.865
+do over the weekend is spent a
+few minutes and work on your
+
+760
+1:12:45.865 --> 1:12:49.624
+programming skills if you're not
+up to snuff in programming.
+
+761
+1:12:49.624 --> 1:12:53.129
+It's not going to be a long
+assignment, but if you don't
+
+762
+1:12:53.129 --> 1:12:55.932
+know how to read a file and
+write out a file,
+
+763
+1:12:55.932 --> 1:12:58.608
+and be able to write a dozen
+lines of code,
+
+764
+1:12:58.608 --> 1:13:02.176
+OK, if you are weak on that,
+this weekend would be a good
+
+765
+1:13:02.176 --> 1:13:06
+idea to practice reading in a
+text file.
+
+766
+1:13:06 --> 1:13:09.571
+It's going to be a text file.
+Read it in a text file,
+
+767
+1:13:09.571 --> 1:13:12.524
+decent manipulations,
+write out a text file,
+
+768
+1:13:12.524 --> 1:13:14.791
+OK?
+So, I don't want people to get
+
+769
+1:13:14.791 --> 1:13:19.186
+caught with this being mandatory
+and that not have time to finish
+
+770
+1:13:19.186 --> 1:13:23.513
+it because they are busy trying
+to learn how to program in short
+
+771
+1:13:23.513 --> 1:13:25.848
+order.
+I know some people take this
+
+772
+1:13:25.848 --> 1:13:31
+course without quite getting all
+the programming prerequisites.
+
+773
+1:13:31 --> 1:13:33.964
+Here's where you need it.
+Question?
+
+774
+1:13:33.964 --> 1:13:37.712
+No language limitations.
+Pick your language.
+
+775
+1:13:37.712 --> 1:13:41.548
+The answer will be written in,
+I think, Java,
+
+776
+1:13:41.548 --> 1:13:46.082
+and Eric has graciously
+volunteered to use Python for
+
+777
+1:13:46.082 --> 1:13:51.138
+his solution to this problem.
+We'll see whether he lives up
+
+778
+1:13:51.138 --> 1:13:53.928
+to that promise.
+You did already?
+
+779
+1:13:53.928 --> 1:13:57.241
+OK, and George wrote the Java
+solution.
+
+780
+1:13:57.241 --> 1:14:00.117
+And so, C is fine.
+Matlab is fine.
+
+781
+1:14:00.117 --> 1:14:05
+OK, what else is fine?
+Anything is fine.
+
+782
+1:14:05 --> 1:14:07.6
+Scheme is fine.
+Scheme is fine.
+
+783
+1:14:07.6 --> 1:14:11.587
+Scheme is great.
+OK, so any such things will be
+
+784
+1:14:11.587 --> 1:14:15.141
+just fine.
+So, we don't care what language
+
+785
+1:14:15.141 --> 1:14:18.435
+you program in,
+but you will have to do
+
+786
+1:14:18.435 --> 1:14:21.295
+programming to solve this
+problem.
+
+787
+1:14:21.295 --> 1:14:24
+OK, so thanks very much.
+See you next week.
+

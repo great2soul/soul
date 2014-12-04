@@ -1,0 +1,884 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 7: Hashing, Hash Functions | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 7: Hashing, Hash Functions" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 7: Hashing, Hash Functions" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-7-hashing-hash-functions">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 7: Hashing, Hash Functions
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 7: Hashing, Hash Functions
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-7-hashing-hash-functions/ocw-6.046-lec7.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1851952681?i=1809215639">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-03oct2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/JZHBa-rLrBA', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-7-hashing-hash-functions', 'http://img.youtube.com/vi/JZHBa-rLrBA/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-7-hashing-hash-functions/ocw-6.046-lec7.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered:</strong> Hashing, Hash Functions</p> <p><strong>Instructors:</strong> Prof. Erik Demaine, Prof. Charles Leiserson</p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm">
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/lec7.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J2005L07.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 7</strong></p>
+<p>Today starts a two-lecture sequence on the topic of hashing, which is a really great technique that shows up in a lot of places. So we're going to introduce it through a problem that comes up often in compilers called the symbol table problem. And the idea is that we have a table S holding n records where each record, just to be a little more explicit here. So each record typically has a bunch of, this is record x. x is usually a pointer to the actual data. So when we talk about the record x, what it usually means some pointer to the data. And in the data, in the record, so this is a record, there is a key called a key of x.</p>
+<p>In some languages it's key, it's x dot key or x arrow key, OK, are other ways that that will be denoted in some languages. And there's usually some additional data called satellite data, which is carried around with the key. This is also true in sorting, but usually you're sorting records. You're not sorting individual keys. And so the idea is that we have a bunch of operations that we would like to do on this data on this table.</p>
+<p>So we want to be able to insert an item x into the table, which just essentially means that we update the table by adding the element x. We want to be able to delete an item from the table -- -- so removing the item x from the set and we want to be able to search for a given key. So this returns the value x such that key of x is equal to k, where it returns nil if there's no such x. So be able to insert items in, delete them and also look to see if there's an item that has a particular key. So notice that delete doesn't take a key. Delete takes a record. OK, so if you want to delete something of a particular key and you don't happen to have a pointer to it, you have to say let me search for it and then delete it.</p>
+<p>So these, whenever you have a set operations, where operations that change the set like in certain delete, we call it a dynamic set. So these two operations make the set dynamic. It changes over time. Sometimes you want to build a fixed data structure. It's going to be a static set. All you're going to do is do things like look it up and so forth. But most often, it turns out that in programming and so forth, we want to have the set be dynamic. Want to be able to add elements to it, delete elements to it and so forth. And there may be other operations that modify the set, modify membership in the set. So the simplest implementation for this is actually often overlooked.</p>
+<p>I'm actually surprised how often people use more complicated data structures when this simple data structure will work. It's called a direct access table. Doesn't always work. I'll give the conditions where it does. So it works when the keys are drawn from our small distribution. So suppose the keys are drawn from a set U of m elements. OK, zero to m minus one. And we're going to assume the keys are distinct.</p>
+<p>So the way a direct access table works is that you set up an array T -- -- from zero to m minus one to represent the dynamic set S -- -- such that T of k is going to be equal to x if x is in the set and its key is k and nil otherwise. So you just simply have an array and if you have a record whose key is some value k, the key is 15 say, then slot 15 if the element is there has the element.</p>
+<p>And if it's not in the set, it's nil. Very simple data structure. OK, insertion. Just go to that location and set the value to the inserted value. For deletion, just remove it from there. And to look it up, you just index it and see what's in that slot. OK, very simple data structure. All these operations, therefore, take constant time in the worst case. But as a practical matter, the places you can use this strategy are pretty limited. What's the issue of limitation here?</p>
+<p>Yes. OK, so that's a limitation surely. But there's actually a more severe limitation. Yeah. What does that mean, it's hard to draw? No. Yeah. m minus one could be a huge number. Like for example, suppose that I want to have my set drawn over 64 bit values. OK, the things that I'm storing in my table is a set of 64-bit numbers. And so, maybe a small set. Maybe we only have a few thousand of these elements.</p>
+<p>But they're drawn from a 64-bit value. Then this strategy requires me to have an array that goes from zero to 2 to the 64th minus one. How big is 2^64 minus one? Approximately? It's like big. It's like 18 quintillion or something. I mean, it's zillions literally because it's like it's beyond the illions we normally use. Not a billion or a trillion. It's 18 quintillion. OK, so that's a really big number. So, or even worse, suppose the keys were drawn from character strings, so people's names or something. This would be an awful way to have to represent it. Because most of the table would be empty for any reasonable set of values you would want to keep.</p>
+<p>So the idea is we want to try to keep something that's going to keep the table small, while still preserving some of the properties. And that's where hashing comes in. So hashing is we use a hash function H which maps the keys randomly. And I'm putting that in quotes because it's not quite at random. Into slots table T. So we call each of the array indexes here a slot. So you can just sort of think of it as a big table and you've got slots in the table where you're storing your values.</p>
+<p>And so, we may have a big universe of keys. Let's call that U. And we have our table over here that we've set up that has -- -- m slots. And so we actually have then a set that we're actually going to try to represent S, which is presumably a very small piece of the universe. And what we'll do is we'll take an element from here and map it to let's say to there and take another one and we apply the hash function to the element. And what the hash function is going to give us is it's going to give us a particular slot.</p>
+<p>Here's one that might go up here. Might have another one over here that goes down to there. And so, we get it to distribute the elements over the table. So what's the problem that's going to occur as we do this? So far, I've been a little bit lucky. What's the problem potentially going to be? Yeah, when two things are in S, more specifically, get assigned to the same value. So I may have a guy here and he gets mapped to the same slot that somebody else has already been mapped to. And when this happens, we call that a collision.</p>
+<p>So we're trying to map these things down into a small set but we could get unlucky in our mapping, particularly if we map enough of these guys. They're not going to fit. So when a record -- -- to be inserted maps to an already occupied slot -- -- a collision occurs. OK. So looks like this method's no good. But no, there's a pretty simple thing we can do. What should we do when two things map to the same slot? If we want to represent the whole set, but you can't lose any data, can't treat it like a cache. In a cache what you do is it uses a hashing scheme, but in a cache, you just kick it out because you don't care about representing a set precisely.</p>
+<p>But in a hash table you're programming, you often want to make sure that the values you have are exactly the values in the sets so you can tell whether something belongs to the set or not. So what's a good strategy here? Yeah. Create a list for each slot and just put all the elements that hash to the same slot into the list. And that's called resolving collisions by chaining. And the idea is to link records in the same slot --</p>
+<p>-- into a list. So for example, imagine this is my hash table and this for example is slot i. I may have several things that are, so I'm going to put the key value -- -- have several things that may have been inserted into this table that are elements of S. And what I'll do is just link them together. OK, so nil pointer here. And this is the satellite data and these are the keys. So if they're all linked together in slot i, then the hash function applied to 49 has got to be equal to the hash function of 86 is equal to the hash function of 52, which equals what?</p>
+<p>There's only one thing I haven't. i. Good. Even if you don't understand it, your quizmanship should tell you. He didn't mention i. That's equal to i. So the point is when I hash 49, the hash of 49 produces me some index in the table, say i, and everything that hashes to that same location is linked together into a list OK. Every record. Any questions about what the mechanics of this. I hope that most of you have seen this, seen hashing, basic hashing in 6.001, right? They teach it in? They used to teach it 6.001. Yeah. OK. Some people are saying maybe. They used to teach it. Good. So let's analyze this strategy.</p>
+<p>The analysis. We'll first do worst case. So what happens in the worst case? With hashing? Yeah, raise your hand so that I could call on you. Yeah. Yeah, all hash keys, well all, all the keys in S. I happen to pick a set S where my hash function happens to map them all to the same value. That would be bad. So every key hashes to the same slot. And so, therefore if that happens, then what I've essentially built is a fancy linked list for keeping this data structure. All this stuff with the tables, the hashing, etc., irrelevant. All that matters is that I have a long linked list. And then how long does an access take? How long does it take me to insert something or well, more importantly, to search for something. Find out whether something's in there. In the worst case.</p>
+<p>Yeah, it takes order n time. Because they're all just a link, we just have a linked list. So access takes data n time if as we assume the size of S is equal to n. So from a worst case point of view, this doesn't look so attractive. And we will see data structures that in worst case do very well for this problem. But they don't do as good as the average case of hashing. So let's analyze the average case.</p>
+<p>In order to analyze the average case, I have to, whenever you have averages, whenever you have probability, you have to state your assumptions. You have to say what is the assumption about the behavior of the system. And it's very hard to do that because you don't know necessarily what the hash function is. Well, let's imagine an ideal hash function. What should an ideal hash function do?</p>
+<p>Yeah, map the keys essentially at random to a slot. Should really distribute them randomly. So we call this the assumption -- -- of simple uniform hashing. And what it means is that each key k in S is equally likely -- -- to be hashed to any slot in T and we're actually have to make an independence assumption. Independent of where other records, other keys are hashed. So we're going to make this assumption and includes n an independence assumption. That if I have two keys the odds that they're hashed to the same place is therefore what?</p>
+<p>What are the odds that two keys under this assumption are hashed to the same slot, if I have, say, m slots? One over m. What are the odds that one key is hashed to slot 15? One over m. Because they're being distributed, but the odds in particular two keys are hashed to the same slot, one over m. So let's define. Is there a question? No. OK. The load factor of a hash table with n keys at m slots to be alpha which is equal to n over m, which is also if you think about it, just the average number of keys per slot.</p>
+<p>So alpha is the average number of keys per, we call it the load factor of the table. OK. How many on average keys do I have? So the expected, we'll look first at unsuccessful search time. So by unsuccessful search, I mean I'm looking for something that's actually not in the table. It's going to return nil. I look for a key that's not in the table. It's going to be what? It's going to be order. Well, I have to do a certain amount of work just to calculate the hash function and so forth. It's going to be order at least one plus, then I have to search the list and on average how much of the list do I have to search?</p>
+<p>What's the cost of searching that list? On average. If I'm searching at random. If I'm searching for a key that's not in the table. Whichever one it is, I got to search to the end of the list, right? So what's the average cost over all the slots in the table? Alpha. Right? Alpha. That's the average length of a list. So this is essentially the cost of doing the hash and then accessing the slot and that is just the cost of searching the list.</p>
+<p>So the expected unsuccessful search time is proportional essentially to alpha and if alpha's bigger than one, it's order alpha. If alpha's less than one, it's constant. So when is the expected search time -- -- equal to order one? So when is this order one? Simple questions, by the way. I only ask simple questions. Some guys ask hard questions. Yeah. Or in terms first we'll get there in two steps, OK. In terms of alpha, it's when?</p>
+<p>When alpha is constant. If alpha in particular is. Alpha doesn't have to be constant. It could be less than constant. It's O of one, right. OK, or equivalently, which is what you said, if n is O of m. OK, which is to say if the number of elements in the table is order, is upper bounded by a constant times n. Then the search cost is constant. So a lot of people will tell you oh, a hash table runs in constant search time. OK, that's actually wrong. It depends upon the load factor of the hash table. And people have made programming errors based on that misunderstanding of hash tables. Because they have a hash table that's too small for the number of elements they're putting in there.</p>
+<p>Doesn't help. The number may in fact will grow with the, since this is one plus n over m, it actually grows with n. So unless you make sure that m keeps up with n, this doesn't stay constant. Now it turns out for a successful search, it's also one plus alpha. And for that you need to do a little bit more mathematics because you now have to condition on searching for the items in the table. But it turns out it's also one plus alpha and that you can read about in the book. And also, there's a more rigorous proof of this. I sort of have glossed over the expectation stuff here, doing sort of a more intuitive proof. So both of those things you should look for in the book.</p>
+<p>So this is one reason why hashing is such a popular method, is it basically lets you represent a dynamic set with order one cost per operation, constant cost per operation, inserting, deleting and so forth, as long as the table that you're keeping is not much smaller than the number of items that you're putting in there. And then all the operations end up being constant time. But it depends upon, strongly upon this assumption of simple uniform hashing. And so no matter what hash function you pick, I can always find a set of elements that are going to hash, that that hash function is going to hash badly. I just could generate a whole bunch of them and look to see where the hash function takes them and in the end pick a whole bunch that hash to the same place.</p>
+<p>We're actually going to see a way of countering that, but in practice people understand that most programs that need to use things aren't really reverse engineering the hash function. And so, there's some very simple hash functions that seem to work fairly well in practice. So in choosing a hash function -- -- we would like it to distribute -- keys uniformly into slots and we also would like that regularity in the key distributions --</p>
+<p>-- should not affect uniformity. For example, a regularity that you often see is that all the keys that are being inserted are even numbers. Somebody happens to have that property of his data, that they're only inserting even numbers. In fact, on many machines, since they use byte pointers, if they're sorting things that are for example, indexes to arrays or something like that, in fact, they're numbers that are typically divisible by four.</p>
+<p>Or by eight. So you don't want regularity in the key distribution to affect the fact that you're distributing slots. So probably the most popular method that's used just for a quick hash function is what's called the division method. And the idea here is that you simply let h of k for a key equal k modulo m, where m is the number of slots in your table. And this works reasonably well in practice, but you want to be careful about your choice of modulus.</p>
+<p>In other words, it turns out it doesn't work well for every possible size of table you might want to pick. Fortunately when you're building hash tables, you don't usually care about the specific size of the table. If you pick it around some size, that's probably fine because it's not going to affect their performance. So there's no need to pick a specific value. In particular, you don't want to pick --</p>
+<p>-- m with a small divisor -- -- and let me illustrate why that's a bad idea for this particular hash function. I should have said small divisor d. So for example -- -- if D is two, in other words m is an even number, and it turns out that we have the situation I just mentioned, all keys are even, what happens to my usage of the hash table? So I have an even slot, even number of slots, and all the keys that the user of the hash table chooses to pick happen to be even numbers, what's going to happen in terms of my use of the hash table? Well, in the worst case, they are always all going to point in the same slot no matter what hash function I pick.</p>
+<p>But here, let's say that, in fact, my hash function does do a pretty good job of distributing, but I have this property. What's a property that's going to have no matter what set of keys I pick that satisfies this property? What's going to happen to the hash table? So, I have even number, mod an even number. What does that say about the hash function? It's even, right? I have an even number mod. It's even. So, what's going to happen to my use of the table? Yeah, you're never going to hash anything to an odd-numbered slot. You wasted half your slots. It doesn't matter what the key distribution is.</p>
+<p>OK, as long as they're all even, OK, that means the odds slots are never used. OK, an extreme example, here's another example, imagine that m is equal to two to the r. In other words, all its factors are small divisors, OK? In that case, if I think about taking k mod n, OK, the hash doesn't even depend on all the bits of k, OK? So, for example, suppose I had one..., and r equals six, OK, so m is two to the sixth.</p>
+<p>So, I take this binary number, mod two to the sixth, what's the hash value? If I take something mod a power of two, what does it do? So, I hash this function. This is k, OK, in binary. And I take it mod two to the sixth. Well, if I took it mod two, what's the answer? What's this number mod two? Zero, right. OK, what's this number mod four? One zero. What is it mod two to the sixth? Yeah, it's just these last six bits. This is H of k. OK, when you take something mod a power of two, all you're doing is taking its low order bits. OK, mod two to the r, you are taking its r low order bits. So, the hash function doesn't even depend on what's up here.</p>
+<p>So, that's a pretty bad situation because generally you would like a very common regularity that you'll see in data is that all the low order bits are the same, and all the high order bits differ, or vice versa. So, this particular is not a very good one. So, good heuristics for this is to pick m to be a prime, not too close to a power of two or ten because those are the two common bases that you see regularity in the world. A prime is sometimes inconvenient, however. But generally, it's fairly easy to find primes. And there's a lot of nice theorems about primes. So, generally what you do, if you're just coding up something and you know what it is, you can pick a prime out of a textbook or look it up on the web or write a little program, or whatever, and pick a prime.</p>
+<p>Not too close to a power of two or ten, and it will probably work pretty well. It will probably work pretty well. So, this is a very popular method, the division method. OK, but the next method we are going to see is actually usually superior. The reason people do this is because they can write in-line in their code. OK, but it's not usually the best method. And the reason is because division, one of the reasons is division tends to take a lot of cycles to compute on most computers compared with multiplication or addition. OK, in fact, it's usually done with taking several multiplications. So, the next method is actually generally better, but none of the hash function methods that we are talking about today are, in some sense, provably good hash functions.</p>
+<p>OK, so for the multiplication method, the nice thing about it is just essentially requires multiplication to do. And, for that is, also, we are going to assume that the number of slots is a power of two which is also often very convenient. OK, and for this, we're going to assume that the computer has w bit words. So, it would be convenient on a computer with 32 bits, or 64 bits, for example. OK, this would be very convenient. So, the hash function is the following. h of k is equal to A times k mod, two to the w, right shifted by w minus r.</p>
+<p>OK, so the key part of this is A, which has chosen to be an odd integer in the range between two to the w minus one and two to the w. OK, so it's an odd integer that the full width of the computer word. OK, and what you do is multiply it by whatever your key is, by this funny integer. And, then take it mod two to the w. And then, you take the result and right shift it by this fixed amount, w minus r. So, this is a bit wise right shift.</p>
+<p>OK, so let's look at what this does. But first, let me just give you a couple of tips on how you pick, or what you don't pick for A. So, you don't pick A too close to a power of two. And, it's generally a pretty fast method because multiplication mod two to the w is faster than division. And the other thing is that a right shift is fast, especially because this is a known shift. OK, you know it before you are computing the hash function. Both w and r are known in advance.</p>
+<p>So, the compiler can often do tricks there to make it go even faster. So, let's do an example to understand how this hash function works. So, we will have, in this case, a number of slots will be eight, which is two to the three. And, we'll have a bizarre word size of seven bits. Anybody know any seven bit computers out there? OK, well, here's one. So, A is our fixed value that's used for hashing all our keys. And, in this case, let's say it's 1011001. So, that's A. And, I take in some value for k that I'm going to multiply. So, k is going to be 1101011. So, that's my k.</p>
+<p>And, I multiply them. What I multiply two, each of these is the full word width. You can view it as the full word width of the machine, in this case, seven bits. So, in general, this would be like a 32 bit number, and my key, I'd be multiplying two 32 bit numbers, for example. OK, and so, when I multiply that out, I get a 2w bit answer. So, when you multiply two w bit numbers, you get a 2w bit answer.</p>
+<p>In this case, it happens to be that number, OK? So, that's the product part, OK? And then we take it mod two to the w. Well, what mod two to the w says is that I'm just taking, ignoring the high order bits of this product. So, all of these are ignored, because, remember that if I take something, mod, a power of two, that's just the low order bits. So, I just get these low order bits as being the mod. And then, the right shift operation, and that's good also, by the way, because a lot of machines, when I multiply two 32 bit numbers, they'll have an instruction that gives you just the 32 lower bits. And, it's usually an instruction that's faster than the instruction that gives you the full 64 bit answer. OK, so, that's very convenient. And, the second thing is, then, that I want just the, in this case, three bits that are the high order bits of this word.</p>
+<p>So, this ends up being my H of k. And these end up getting removed by right shifting this word over. So, you just right shift that in, zeros come in, in a high order bit, and you end up getting that value of H of k. OK, so to understand what's going on here, why this is a pretty good method, or what's happening with it, you can imagine that one way to think about it is to think of A as being a binary fraction.</p>
+<p>So, imagine that the decimal point is here, sorry, the binary point, OK, the radix point is here. Then when I multiply things, I'm just taking, the binary point ends up being there. OK, so if you just imagine that conceptually, we don't have to actually put this into the hardware because we just do what the hardware does. But, I can imagine that it's there, and that it's here. And so, what I'm really taking is the fractional part of this product if I treat A as a fraction of a number. So, we can certainly look at that as sort of a modular wheel.</p>
+<p>So, here I have a wheel where this is going to be, that I'm going to divide into eight parts, OK, where this point is zero. And then, I go around, and this point is then one. And, I go around, and this point is two, and so forth, so that all the integers, if I wrap it around this unit wheel, all the integers lined up at the zero point here, OK? And then, we can divide this into the fractional pieces. So, that's essentially the zero point. This is the one eighth, because we are dividing into eight, two, three, four, five, six, seven.</p>
+<p>So, if I have one times A, in this case, I'm basically saying, well, one times A, if I multiply, is basically going around to about there, five and a half I think, right, because one times A is about five and a half, OK, or five halves of 5.5 eighths, essentially. So, it takes me about to there. That's A. And, if I do 2^A, that continues around, and takes me up to about, where? About, a little past three, about to there. So, that's 2^A. OK, and 3^A takes me, then, around to somewhere like about there. So, each time I add another A, it's taking me another A's distance around.</p>
+<p>And, the idea is that if A is, for example, odd, and it's not too close to a power of two, then what's happening is sort of throwing it into another slot on a different thing. So, if I now go around, if I have k being very big, then k times A is going around k times. Where does it end up? It's like spinning a wheel of fortune or something. OK, it ends somewhere. OK, and so that's basically the notion. That's basically the notion, that it's going to end up in some place. So, you're basically looking at, where does ka end up? Well, it sort of whirls around, and ends up at some point. OK, and so that's why that tends to be a fairly good one. But, these are only heuristic methods for hashing, because for any hash function, you can always find a set of keys that's going to make it operate badly.</p>
+<p>So, the question is, well, what do you use in practice? OK, the second topic that I want to tie it, so, we talked about resolving collisions by chaining. OK, there's another way of resolving collisions, which is often useful, which is resolving collisions by what's called open addressing. OK, and the idea is, in this method, is we have no storage for links. So, when I result by chaining, I'd need an extra linked field in each record in order to be able to do that. Now, that's not necessarily a big overhead, but for some applications, I don't want to have to touch those records at all. OK, and for those, open addressing is a useful way to resolve collisions.</p>
+<p>So, the idea is, with open addressing, is if I hash to a given slot, and the slot is full, OK, what I do is I just hash again with a different hash function, with my second hash function. I check that slot. OK, if that slot is full, OK, then I hash again. And, I keep this probe sequence, which hopefully is a permutation so that I'm not going back and checking things that I've already checked until I find a place to put it. And, if I got a good probe sequence that I will hopefully, then, find a place to put it fairly quickly. OK, and then to search, I just follow the same probe sequence.</p>
+<p>So, the idea, here, is we probe the table systematically until an empty slot is found, OK? And so, we can extend that by looking as if the sequence of hash functions were, in fact, a hash function that took two arguments: a key and a probe step. In other words, is it the zero of one our first one? It's the second one, etc. So, it takes two arguments. So, H is then going to map our universe of keys cross, our probe number into a slot.</p>
+<p>So, this is the universe of keys. This is the probe number. And, this is going to be the slot. Now, as I mentioned, the probe sequence should be permutation. In other words, it should just be the numbers from zero to n minus one in some fairly random order. OK, it should just be rearranged. And the other thing about open addressing is that you don't have to worry about n chaining is that the table may actually fill up.</p>
+<p>So, you have to have that the number of elements in the table is less than or equal to the table size, the number of slots because the table may fill up. And, if it's full, you're going to probe everywhere. You are never going to get a place to put it. And, the final thing is that in this type of scheme, deletion is difficult. It's not impossible. There are schemes for doing deletion. But, it's basically hard because the danger is that you remove a key out of the table, and now, somebody who's doing a probe sequence who would have hit that key and gone to find his element now finds that it's an empty slot. And he says, oh, the key I am looking for probably isn't there. OK, so you have that issue to deal with. So, you can delete things but keep them marked, and there's all kinds of schemes that people have for doing deletion.</p>
+<p>But it's difficult. It's messy compared to chaining, where you can just remove the element out of the chain. So, let's do an example -- -- just so that we make sure we're on the same page. So, we'll insert a key. k is 496. OK, so here's my table. And, I've got some values in it, 586, 133, 204, 481, etc. So, the table looks like that; the other places are empty. So, on my zero step, I probe H of 496, zero. OK, and let's say that takes me to the slot where there's 204. And so, I say, oh, there's something there.</p>
+<p>I have to probe again. So then, I probe H of 496, one. Maybe that maps me there, and I discover, oh, there's something there. So, now, I probe H of 496, two. Maybe that takes me to there. It's empty. So, if I'm doing a search, I report nil. If I'm doing in the insert, I put it there. And then, if I'm looking for that value, if I put it there, then when I'm looking, I go through exactly the same sequence. I'll find these things are busy, and then, eventually, I'll come up and discover the value.</p>
+<p>OK, and there are various heuristics that people use, as well, like keeping track of the longest probe sequence because there's no point in probing beyond the largest number of probes that need to be done globally to do an insertion. OK, so if it took me 5, 5 is the maximum number of probes I ever did for an insertion. A search never has to look more than five, OK, and so sometimes hash tables will keep that auxiliary value so that it can quit rather than continuing to probe until it doesn't find something.</p>
+<p>OK, so, search is the same probe sequence. And, if it's successful, it finds the record. And, if it's unsuccessful, you find a nil. OK, so it's pretty straightforward. So, once again, as with just hash functions to begin with, there are a lot of ideas about how you should form a probe sequence, ways of doing this effectively. OK, so the simplest one is called linear probing, and what you do there is you have H of k comma i. You just make that be some H prime of k, zero plus i mod m.</p>
+<p>Sorry, no prime there. OK, so what happens is, so, the idea here is that all you are doing on the I'th probe is, on the zero'th probe, you look at H of k zero. On probe one, you just look at the slot after that. Probe two, you look at the slot after that. So, you're just simply, rather than sort of jumping around like this, you probe there and then just find the next one that will fit in. OK, so you just scan down mod m. So, if you hit the bottom, you go to the top. OK, so the I'th one, so that's fairly easy to do because you don't have to recomputed a full hash function each time. All you have to do is add one each time you go because the difference between this and the previous one is just one. OK, so you just go down. Now, the problem with that is that you get a phenomenon of clustering. If you get a few things in a given area, then suddenly everything, everybody has to keep searching to the end of those things.</p>
+<p>OK, so that turns out not to be one of the better schemes, although it's not bad if you just need to do something quick and dirty. So, it suffers from primary clustering, where regions of the hash table get very full. And then, anything that hashes into that region has to look through all the stuff that's there. OK, so: long runs of filled slots. OK, there's also things like quadratic clustering, where you basically make this be, instead of adding one each time, you add i each time. OK, but probably the most effective popular scheme is what's called double hashing. And, you can do statistical studies.</p>
+<p>People have done statistical studies to show that this is a good scheme, OK, where you let H of k, i, let me do it below here because I have for them. So, H of k, i is equal to an H_1 of k plus i times H_2 of k. So, you have two hash functions on m. You have two hash functions, H_1 of k and H_2 of k. OK, so you compute the two hash functions, and what you do is you start by just using H_1 of k for the zero probe, because here, i, then, will be zero. OK. Then, for the probe number one, OK, you just add H_2 of k.</p>
+<p>For probe number two, you just add that hash function amount again. You just keep adding H_2 of k for each successive probe you make. So, it's fairly easy; you compute two hash functions up front, OK, or you can delay the second one, in case. But basically, you compute two up front, and then you just keep adding the second one in. You start at the location of the first one, and keep adding the second one, mod m, to determine your probe sequences.</p>
+<p>So, this is an excellent method. OK, it does a fine job, and you usually pick m to be a power of two here, OK, so that you're using, usually people use this with the multiplication method, for example, so that m is a power of two, and H_2 of k you force to be odd. OK, so we don't use and even value there, because otherwise for any particular key, you'd be skipping over. Once again, you would have the problem that everything could be even, or everything could be odd as you're going through. But, if you make H_2 of k odd, and m is a power of two, you are guaranteed to hit every slot. OK, so let's analyze this scheme. This turns out to be a pretty interesting scheme to analyze.</p>
+<p>It's got some nice math in it. So, once again, in the worst case, hashing is lousy. So, we're going to analyze average case. OK, and for this, we need a little bit stronger assumption than for chaining. And, we call it the assumption of uniform hashing, which says that each key is equally likely, OK, to have any one of the m factorial permutations as its probe sequence, independent of other keys.</p>
+<p>And, the theorem we're going to prove is that the expected number of probes is, at most, one over one minus alpha if alpha is less than one, OK, that is, if the number of keys in the table is less than number of slots. OK, so we're going to show that the number of probes is one over one minus alpha. So, alpha is the load factor, and of course, for open addressing, we want the load factor to be less than one because if we have more keys than slots, open addressing simply doesn't work, OK, because you've got to find a place for every key in the table. So, the proof, we'll look at an unsuccessful search, OK?</p>
+<p>So, the first thing is that one probe is always necessary. OK, so if I have n over m, sorry, if I have n items stored in m slots, what's the probability that when I do that probe I get a collision with something that's already in the table? What's the probability that I get a collision? Yeah? Yeah, n over m, right? So, with probability, n over m, we have a collision because my table has got n things in there.</p>
+<p>I'm hashing, at random, to one of them. OK, so, what are the odds I hit something, n over m? And then, a second probe is necessary. OK, so then, I do a second probe. And, with what probability on the second probe do I get a collision? So, we're going to make the assumption of uniform hashing. Each key is equally likely to have any one of the m factorial permutations as its probe sequence. So, what is the probability that on the second probe, OK, I get a collision?</p>
+<p>Yeah? If it's a permutation, you're not, right? Something like that. What is it exactly? So, that's the question. OK, so you are not going to hit the same slot because it's going to be a permutation. Yeah? That's exactly right. n minus one over m minus one because I'm now, I've essentially eliminated that slot that I hit the first time. And so, I have, now, and there was a key there. So, now I'm essentially looking, at random, into the remaining n minus one slots where there are aggregately n minus one keys in those slots.</p>
+<p>OK, everybody got that? OK, so with that probability, I get a collision. That means that I need a third probe necessary, OK? And, we keep going on. OK, so what is it going to be the next time? Yeah, it's going to be n minus two over m minus two. So, let's note, OK, that n minus i over m minus i is less than n over m, which equals alpha, OK? So, n minus i over m minus i is less than n over m.</p>
+<p>And, the way you can sort of reason that is that if n is less than m, I'm subtracting a larger fraction of n when I subtract i than I am subtracting a fraction of m. OK, so therefore, n minus i over m minus i is going to be less than n over m. OK, so, or you can do the algebra. I think it's always helpful when you do algebra to sort of think about it sort of quantitatively as well, you know, qualitatively what's going on.</p>
+<p>So, the expected number of probes is, then, going to be equal to, it's going to be equal to because we're going to need some space, well, we have one which is forced because we've got to do one probe, plus with probability n over m, I have to do another probe plus with probability of n over m minus one I have to do another probe up until I do one plus one over m minus n. OK, so each one is cascading what's happened. In the book, there is a more rigorous proof of this using indicator random variables. I'm going to give you the short version. OK, so basically, this is my first probe. With probability n over m, I had to do a second one. And, the result of that is that with probability n minus one over m minus one, I have to do another. And, with probability n over two minus m over two, I have to do another, and so forth.</p>
+<p>So, that's how many probes I'm going to end up doing. So, this is less than or equal to one plus alpha. There's one plus alpha times one plus alpha times one plus alpha, OK, just using the fact that I had here. OK, and that is less than or equal to one plus I just multiply through here. Alpha plus alpha squared plus alpha cubed plus k. I can just take that out to infinity. It's going to bound this.</p>
+<p>OK, does everybody see the math there? OK, and that is just the sum, I, equals zero to infinity, alpha to the I, which is equal to one over one minus alpha using your familiar geometric series bound. OK, and there's also, in the textbook, an analysis of the successful search, which, once again, is a little bit more technical because you have to worry about what the distribution is that you happen to have in the table when you are searching for something that's already in the table. But, it turns out it's also bounded by one over one minus alpha.</p>
+<p>So, let's just look to see what that means. So, if alpha is less than one is a constant, it implies that it takes order one probes. OK, so if alpha is a constant, it takes order one probes. OK, but it's helpful to understand what's happening with the constant. So, for example, if the table is 50% full, so alpha is a half, what's the expected number of probes by this analysis? Two, because one over one minus a half is two.</p>
+<p>If I let the table fill up to 90%, how many probes do I need on average? Ten. So, you can see that as you fill up the table, the cost is going dramatically, OK? And so, typically, you don't let the table get too full. OK, you don't want to be pushing 99.9% utilization. Oh, I got this great hash table that's got full utilization. It's like, yeah, and it's slow. It's really, really slow, OK, because as alpha approaches one, the time is approaching and essentially m, or n.</p>
+<p>Good. So, next time, we are going to address head-on in what was one of the most, I think, interesting ideas in algorithms. We are going to talk about how you solve this problem that no matter what hash function you pick, there's a bad set of keys. OK, so next time we're going to show that there are ways of confronting that problem, very clever ways. And we use a lot of math for it so will be a really fun lecture.</p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1851952681?i=1809215639">MP4 - 164MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-03oct2005-220k_512kb.mp4">MP4 - 320MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/ocw-6.046-lec7.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>

@@ -1,0 +1,4272 @@
+1
+00:00:10 --> 00:00:13
+OK, good morning.
+So today we are going to,
+
+2
+00:00:13 --> 00:00:17
+as I mentioned last week,
+we've started the part of the
+
+3
+00:00:17 --> 00:00:22
+course where we are doing more
+things having to do with design
+
+4
+00:00:22 --> 00:00:26
+than purely analysis.
+Today, we're actually going to
+
+5
+00:00:26 --> 00:00:32
+do analysis, but it's the type
+of analysis that leads to really
+
+6
+00:00:32 --> 00:00:38
+interesting design issues.
+And we're going to follow it up
+
+7
+00:00:38 --> 00:00:46
+on Wednesday with an application
+of the methods we're going to
+
+8
+00:00:46 --> 00:00:53
+learn today with a really
+interesting and practical
+
+9
+00:00:53 --> 00:00:57
+problem.
+So we're talking today about
+
+10
+00:00:57 --> 00:01:04
+amortized analysis.
+And I want to motivate this
+
+11
+00:01:04 --> 00:01:12
+topic by asking the question,
+how large should a hash table
+
+12
+00:01:12 --> 00:01:17
+be?
+So, how large should a hash
+
+13
+00:01:17 --> 00:01:20
+table be?
+Any suggestions?
+
+14
+00:01:20 --> 00:01:30
+You have got to make a hash
+table, how big should I make it?
+
+15
+00:01:30 --> 00:01:38
+Let's say it's a simple hash
+table, resolving collisions with
+
+16
+00:01:38 --> 00:01:43
+chaining.
+How big should it be?
+
+17
+00:01:43 --> 00:01:50
+Twice as big as you need:
+OK, how big would that be?
+
+18
+00:01:50 --> 00:01:57
+So, twice the number of
+elements, for example,
+
+19
+00:01:57 --> 00:02:02
+OK.
+As I increase the size of a
+
+20
+00:02:02 --> 00:02:10
+hash table, what happens to the
+search time?
+
+21
+00:02:10 --> 00:02:14
+What happens to search time as
+I increase the size of the hash
+
+22
+00:02:14 --> 00:02:16
+table?
+Yeah, but what does it,
+
+23
+00:02:16 --> 00:02:19
+in general, do you?
+It decreases,
+
+24
+00:02:19 --> 00:02:21
+right?
+OK, the bigger I make it,
+
+25
+00:02:21 --> 00:02:24
+in fact, if I make it
+sufficiently large,
+
+26
+00:02:24 --> 00:02:27
+then I essentially get a direct
+access table,
+
+27
+00:02:27 --> 00:02:32
+and everything is worst-case,
+order one time.
+
+28
+00:02:32 --> 00:02:38
+So in some sense,
+we'll get back to your answer
+
+29
+00:02:38 --> 00:02:44
+in a minute.
+We should make it as large as
+
+30
+00:02:44 --> 00:02:50
+possible, OK,
+so that the searching is cheap.
+
+31
+00:02:50 --> 00:02:58
+The flipside of that is what?
+It takes a lot of space so I
+
+32
+00:02:58 --> 00:03:05
+should make it as small as
+possible so as not to waste
+
+33
+00:03:05 --> 00:03:10
+space.
+So I want it big,
+
+34
+00:03:10 --> 00:03:18
+and the happy medium,
+as we've discussed in our
+
+35
+00:03:18 --> 00:03:26
+analysis, is to make it order n
+size for n items,
+
+36
+00:03:26 --> 00:03:33
+OK, because making it larger
+than order n,
+
+37
+00:03:33 --> 00:03:43
+the payoff in search time is
+not worth the extra amount of
+
+38
+00:03:43 --> 00:03:51
+space that you are paying.
+OK, or at least you can view it
+
+39
+00:03:51 --> 00:03:54
+that way.
+OK, however,
+
+40
+00:03:54 --> 00:03:58
+this begs the question,
+which is, how do I make it,
+
+41
+00:03:58 --> 00:04:04
+if I start out with a hash
+table, and I don't know how many
+
+42
+00:04:04 --> 00:04:09
+elements are going to be hashed
+into it?
+
+43
+00:04:09 --> 00:04:18
+OK, how big should I make it?
+OK, so what if we don't know --
+
+44
+00:04:18 --> 00:04:34
+
+
+45
+00:04:34 --> 00:04:39
+-- in advance?
+OK, what if we don't know n?
+
+46
+00:04:39 --> 00:04:47
+OK, so the solution to this
+problem turns out it's fairly
+
+47
+00:04:47 --> 00:04:53
+elegant?
+It's a strategy called dynamic
+
+48
+00:04:53 --> 00:04:58
+tables.
+OK, and the idea is that
+
+49
+00:04:58 --> 00:05:06
+whenever the table gets too many
+elements in it,
+
+50
+00:05:06 --> 00:05:13
+gets too full,
+OK, so the idea is --
+
+51
+00:05:13 --> 00:05:26
+
+
+52
+00:05:26 --> 00:05:30
+-- OK, and we say that says the
+table overflows,
+
+53
+00:05:30 --> 00:05:34
+OK, we grow it and make a
+bigger table.
+
+54
+00:05:34 --> 00:05:38
+So, for hashing,
+although there's going to be no
+
+55
+00:05:38 --> 00:05:44
+point at which you could say
+that it overflows in the sense
+
+56
+00:05:44 --> 00:05:49
+that it wouldn't be functional
+at least if it was done with
+
+57
+00:05:49 --> 00:05:52
+chaining.
+There would be,
+
+58
+00:05:52 --> 00:05:57
+by the way, if you were doing
+it with open addressing.
+
+59
+00:05:57 --> 00:06:01
+But let's say with chaining,
+when it gets too big,
+
+60
+00:06:01 --> 00:06:06
+say, as many elements as the
+size of the table,
+
+61
+00:06:06 --> 00:06:11
+what we do is we grow the
+table.
+
+62
+00:06:11 --> 00:06:16
+So, the way we do that as we
+allocate using,
+
+63
+00:06:16 --> 00:06:22
+in a language like C,
+it's called Malloc,
+
+64
+00:06:22 --> 00:06:30
+or in a language like Java
+called New, a larger table.
+
+65
+00:06:30 --> 00:06:43
+So, we create a larger table.
+We move the items from the old
+
+66
+00:06:43 --> 00:06:53
+table to the new.
+And then, we free the old
+
+67
+00:06:53 --> 00:07:01
+table.
+So, let's do an example.
+
+68
+00:07:01 --> 00:07:05
+So, let's say I have,
+over here, a table of size one,
+
+69
+00:07:05 --> 00:07:09
+and it's empty to begin with.
+And I do an insert.
+
+70
+00:07:09 --> 00:07:12
+So what I do is stick it in the
+table.
+
+71
+00:07:12 --> 00:07:14
+It fits.
+OK, so here,
+
+72
+00:07:14 --> 00:07:17
+I'm not going to do it with
+hashing.
+
+73
+00:07:17 --> 00:07:22
+I'm just going to do it as if I
+just had a table that I was
+
+74
+00:07:22 --> 00:07:26
+filling up with elements to
+abstract the problem.
+
+75
+00:07:26 --> 00:07:33
+But it would work with hashing.
+It would work with any kind of
+
+76
+00:07:33 --> 00:07:38
+fixed size data structure.
+I insert again,
+
+77
+00:07:38 --> 00:07:42
+oops, doesn't fit.
+I get an overflow.
+
+78
+00:07:42 --> 00:07:48
+OK, so what I do is I create a
+new, actually,
+
+79
+00:07:48 --> 00:07:53
+I'm going to need a little more
+space than that.
+
+80
+00:07:53 --> 00:08:01
+I create a new table of size
+two, doubling the size.
+
+81
+00:08:01 --> 00:08:06
+And, I copy the old value into
+the new.
+
+82
+00:08:06 --> 00:08:13
+I freed this one,
+and now I can insert item two.
+
+83
+00:08:13 --> 00:08:19
+So, I do it again.
+I get another overflow.
+
+84
+00:08:19 --> 00:08:24
+So now, I make a table of size
+four.
+
+85
+00:08:24 --> 00:08:31
+I copied these guys in,
+and then I insert my number
+
+86
+00:08:31 --> 00:08:36
+three.
+I do insert here.
+
+87
+00:08:36 --> 00:08:41
+I do five.
+I guess I should be using ditto
+
+88
+00:08:41 --> 00:08:46
+marks.
+That would be a lot smarter.
+
+89
+00:08:46 --> 00:08:52
+Whoops, what am I doing?
+I overflow.
+
+90
+00:08:52 --> 00:09:00
+And now, I make one of size
+eight, OK, copy these over,
+
+91
+00:09:00 --> 00:09:07
+and now I can insert five.
+And I can do six,
+
+92
+00:09:07 --> 00:09:09
+seven, etc.,
+OK?
+
+93
+00:09:09 --> 00:09:15
+Does everybody understand the
+basic idea?
+
+94
+00:09:15 --> 00:09:24
+So, whenever I overflow,
+I'm going to create a table of
+
+95
+00:09:24 --> 00:09:30
+twice the size.
+OK, so let's do a quick
+
+96
+00:09:30 --> 00:09:39
+analysis of this.
+So, we have a sequence of n
+
+97
+00:09:39 --> 00:09:49
+insertion operations.
+OK, what is the worst-case cost
+
+98
+00:09:49 --> 00:09:58
+of one insert operation?
+What's the worst case for any
+
+99
+00:09:58 --> 00:10:04
+one of these?
+Yeah, it's order n,
+
+100
+00:10:04 --> 00:10:10
+whatever the overhead is of
+copying; if we counted it as
+
+101
+00:10:10 --> 00:10:17
+one, it would be basically n or
+n plus one because we've got to
+
+102
+00:10:17 --> 00:10:21
+copy all those.
+OK, so it's order n.
+
+103
+00:10:21 --> 00:10:25
+So therefore,
+if I have n of those,
+
+104
+00:10:25 --> 00:10:31
+so the worst-case cost of n
+inserts is equal to n times
+
+105
+00:10:31 --> 00:10:36
+order n, which is order n^2.
+
+106
+00:10:36 --> 00:10:44
+
+
+107
+00:10:44 --> 00:10:54
+Any questions?
+Does that make sense?
+
+108
+00:10:54 --> 00:10:58
+Raise hands.
+
+109
+00:10:58 --> 00:11:15
+
+
+110
+00:11:15 --> 00:11:19
+Yeah, not all of them can be
+worst-case, good.
+
+111
+00:11:19 --> 00:11:24
+And in fact,
+this is totally wrong analysis.
+
+112
+00:11:24 --> 00:11:29
+Just because one can be
+worst-case order n doesn't mean
+
+113
+00:11:29 --> 00:11:35
+n are necessarily order n.
+OK, so this is totally wrong
+
+114
+00:11:35 --> 00:11:38
+analysis.
+n inserts, in fact,
+
+115
+00:11:38 --> 00:11:43
+take order n time in the worst
+case.
+
+116
+00:11:43 --> 00:11:48
+OK, it doesn't take order n^2.
+So, the analysis is correct up
+
+117
+00:11:48 --> 00:11:52
+to the point where we set the
+worst-case of one insert was
+
+118
+00:11:52 --> 00:11:55
+order n.
+Therefore, that's the wrong
+
+119
+00:11:55 --> 00:11:58
+step.
+OK, whenever you see bugs in
+
+120
+00:11:58 --> 00:12:02
+proofs, you want to know,
+which step is the one that
+
+121
+00:12:02 --> 00:12:07
+failed so you can make sure that
+you don't have a confusion
+
+122
+00:12:07 --> 00:12:13
+there?
+So, let's do the proper
+
+123
+00:12:13 --> 00:12:23
+analysis, OK?
+So let's let c_i be the cost of
+
+124
+00:12:23 --> 00:12:32
+the i'th insert.
+OK, so that's equal to i,
+
+125
+00:12:32 --> 00:12:42
+if i minus one is an exact
+power of two.
+
+126
+00:12:42 --> 00:12:47
+And it's one otherwise.
+OK, so as I was going through
+
+127
+00:12:47 --> 00:12:52
+here, it was only when I
+inserted something where the
+
+128
+00:12:52 --> 00:12:56
+previous one had been the exact
+power of two,
+
+129
+00:12:56 --> 00:13:03
+because that was my table size.
+That's when I got the overflow
+
+130
+00:13:03 --> 00:13:09
+and had to do all that copying.
+And otherwise,
+
+131
+00:13:09 --> 00:13:13
+the cost, for example,
+for inserting six,
+
+132
+00:13:13 --> 00:13:17
+was just one.
+I just inserted it.
+
+133
+00:13:17 --> 00:13:23
+Does everybody see that?
+So, let's actually make a
+
+134
+00:13:23 --> 00:13:31
+little table here so we can see
+this a little bit more clearly.
+
+135
+00:13:31 --> 00:13:36
+OK, so here's i,
+and in the size of the table at
+
+136
+00:13:36 --> 00:13:43
+step i, and the cost at step i.
+OK, so let's see,
+
+137
+00:13:43 --> 00:13:48
+the size of i,
+let's see, at step one it was
+
+138
+00:13:48 --> 00:13:50
+one.
+At step two,
+
+139
+00:13:50 --> 00:13:53
+it was two.
+And at step three,
+
+140
+00:13:53 --> 00:13:57
+that's when,
+to get three in the table,
+
+141
+00:13:57 --> 00:14:03
+we had to double the size here.
+So, this is four,
+
+142
+00:14:03 --> 00:14:06
+and four, it fit.
+And then five,
+
+143
+00:14:06 --> 00:14:09
+it had to bump up to eight.
+And then, six,
+
+144
+00:14:09 --> 00:14:12
+it was eight.
+Seven, it was eight.
+
+145
+00:14:12 --> 00:14:16
+Eight, it was eight.
+And nine, it bumps up to 16,
+
+146
+00:14:16 --> 00:14:19
+16, etc.
+So that's the size.
+
+147
+00:14:19 --> 00:14:22
+And let's take a look at what
+the cost was.
+
+148
+00:14:22 --> 00:14:26
+So, the cost here was one,
+OK, to insert one.
+
+149
+00:14:26 --> 00:14:29
+The cost here was,
+I had to copy one,
+
+150
+00:14:29 --> 00:14:35
+and then insert one.
+So, the cost was two.
+
+151
+00:14:35 --> 00:14:38
+Here, I had to copy two and
+insert one.
+
+152
+00:14:38 --> 00:14:44
+So, the cost was three.
+Here, I had to just insert one.
+
+153
+00:14:44 --> 00:14:49
+So, the cost was one.
+Here, I had to copy four and
+
+154
+00:14:49 --> 00:14:52
+insert one.
+So, the cost was five.
+
+155
+00:14:52 --> 00:14:55
+Excuse me?
+I think it is.
+
+156
+00:14:55 --> 00:14:59
+Yeah, see, it's i cost.
+The cost for five is i,
+
+157
+00:14:59 --> 00:15:05
+OK, is five if this is a power
+of two.
+
+158
+00:15:05 --> 00:15:07
+OK, one, one,
+and now we paid nine,
+
+159
+00:15:07 --> 00:15:11
+and then one again.
+So that's the cost we are
+
+160
+00:15:11 --> 00:15:15
+paying.
+It's a little bit easier to see
+
+161
+00:15:15 --> 00:15:18
+what the costs are if I break
+them down.
+
+162
+00:15:18 --> 00:15:23
+OK, so let's just redraw this
+as two values because there is
+
+163
+00:15:23 --> 00:15:28
+always the cost for inserting
+the one thing that I want to
+
+164
+00:15:28 --> 00:15:32
+insert.
+And now, the residual amount
+
+165
+00:15:32 --> 00:15:35
+that I have to pay is I have to
+pay one here.
+
+166
+00:15:35 --> 00:15:38
+I've got to pay two additional,
+four additional,
+
+167
+00:15:38 --> 00:15:42
+eight additional.
+That makes the pattern a little
+
+168
+00:15:42 --> 00:15:45
+bit easier to see.
+OK, this is the cost of copying
+
+169
+00:15:45 --> 00:15:49
+versus the cost of just doing
+the actual insert,
+
+170
+00:15:49 --> 00:15:51
+OK?
+Now, if you're taking notes,
+
+171
+00:15:51 --> 00:15:55
+leave some space here because
+I'm going to come back to this
+
+172
+00:15:55 --> 00:15:58
+table later.
+OK, so leave a little bit of
+
+173
+00:15:58 --> 00:16:03
+space because I'm going to come
+back and add some more things at
+
+174
+00:16:03 --> 00:16:09
+there at a later time.
+OK, so, I can then just add up
+
+175
+00:16:09 --> 00:16:14
+the cost of n inserts.
+That's just the sum,
+
+176
+00:16:14 --> 00:16:20
+I equals one to n of c_i,
+which is equal to,
+
+177
+00:16:20 --> 00:16:27
+well, by this analysis it is
+essentially n because that's
+
+178
+00:16:27 --> 00:16:35
+what this thing adds up to plus
+I just have to add the powers of
+
+179
+00:16:35 --> 00:16:42
+two up to but not exceeding
+whatever my n was.
+
+180
+00:16:42 --> 00:16:50
+So, if I do my algebra properly
+there, that's up to the floor of
+
+181
+00:16:50 --> 00:16:55
+log n minus one,
+OK, of two to the J.
+
+182
+00:16:55 --> 00:17:03
+So, I'm just adding up all the
+powers of two up to that aren't
+
+183
+00:17:03 --> 00:17:09
+going to exceed my n.
+And, this is what type of
+
+184
+00:17:09 --> 00:17:12
+series?
+That's geometric.
+
+185
+00:17:12 --> 00:17:18
+That's geometric,
+so it is bounded by its largest
+
+186
+00:17:18 --> 00:17:22
+term.
+Its largest term is two to the
+
+187
+00:17:22 --> 00:17:27
+ceiling; it's dominated by its
+largest term,
+
+188
+00:17:27 --> 00:17:32
+two to the ceiling of log n
+minus one, which is,
+
+189
+00:17:32 --> 00:17:38
+at most, n.
+OK, and then all the other
+
+190
+00:17:38 --> 00:17:41
+terms at up to,
+at most, n.
+
+191
+00:17:41 --> 00:17:47
+So this is actually less than
+or equal to 3n,
+
+192
+00:17:47 --> 00:17:51
+which is order n as we want it
+to show.
+
+193
+00:17:51 --> 00:17:57
+OK, that's algebra.
+OK, so, thus,
+
+194
+00:17:57 --> 00:18:05
+the average cost per insert is
+theta of n over n,
+
+195
+00:18:05 --> 00:18:12
+which is theta one.
+So, the average cost of an
+
+196
+00:18:12 --> 00:18:21
+insert is order one,
+which is what we would like it
+
+197
+00:18:21 --> 00:18:30
+to be especially if we're
+building hash tables.
+
+198
+00:18:30 --> 00:18:34
+Even though sometimes you have
+to pay a big price with
+
+199
+00:18:34 --> 00:18:38
+amortized over the previous
+insertions that we've done,
+
+200
+00:18:38 --> 00:18:42
+so that the overall cost of n
+operations is order n.
+
+201
+00:18:42 --> 00:18:46
+And that's the notion of
+amortized analysis,
+
+202
+00:18:46 --> 00:18:50
+OK, that if I look at a
+sequence of operations,
+
+203
+00:18:50 --> 00:18:55
+I can spread the cost out over
+a whole bunch of operations,
+
+204
+00:18:55 --> 00:18:59
+so that the average cost is
+order n.
+
+205
+00:18:59 --> 00:19:07
+So, if we sort of summarize
+that, OK, OK,
+
+206
+00:19:07 --> 00:19:20
+with basically an amortized
+analysis, we analyze a sequence
+
+207
+00:19:20 --> 00:19:34
+of operations to show that the
+average cost per operation is
+
+208
+00:19:34 --> 00:19:44
+small, even though one
+operation, or several,
+
+209
+00:19:44 --> 00:19:59
+even, may be expensive.
+OK, there's no probability.
+
+210
+00:19:59 --> 00:20:05
+Even though we're doing it with
+averages, there's no probability
+
+211
+00:20:05 --> 00:20:08
+going on.
+OK, what you do probability,
+
+212
+00:20:08 --> 00:20:13
+and you are looking at means,
+there's averages.
+
+213
+00:20:13 --> 00:20:17
+OK, here's average,
+but there's no probability
+
+214
+00:20:17 --> 00:20:21
+going on.
+It's average performance in the
+
+215
+00:20:21 --> 00:20:27
+worst case because n operations
+take me a constant amount of
+
+216
+00:20:27 --> 00:20:31
+time per operation in the worst
+case.
+
+217
+00:20:31 --> 00:20:36
+n operations take me order n
+time.
+
+218
+00:20:36 --> 00:20:42
+OK, each operation takes order
+one time, OK,
+
+219
+00:20:42 --> 00:20:49
+but it's amortized over the n
+operations, OK?
+
+220
+00:20:49 --> 00:20:52
+Yeah, question?
+Yes.
+
+221
+00:20:52 --> 00:21:00
+Yes, yes, you can mix,
+but you don't have to.
+
+222
+00:21:00 --> 00:21:06
+Yeah, but the point is that the
+basic amortized analysis is
+
+223
+00:21:06 --> 00:21:10
+actually saying something very
+strong.
+
+224
+00:21:10 --> 00:21:16
+It's giving you worst-case
+bounds, but over a sequence as
+
+225
+00:21:16 --> 00:21:21
+opposed to looking at each
+individual element of the
+
+226
+00:21:21 --> 00:21:25
+sequence.
+Now, there are three types of
+
+227
+00:21:25 --> 00:21:32
+amortized arguments that appear
+in the literature.
+
+228
+00:21:32 --> 00:21:35
+Maybe there are more.
+At one point,
+
+229
+00:21:35 --> 00:21:39
+there were two.
+And then, a third one was
+
+230
+00:21:39 --> 00:21:43
+developed.
+So, maybe there's a fourth.
+
+231
+00:21:43 --> 00:21:49
+The first one is an aggregate,
+what's called an aggregate
+
+232
+00:21:49 --> 00:21:53
+analysis.
+And this is what we just saw,
+
+233
+00:21:53 --> 00:21:59
+OK, where basically you just
+analyze, what do the n
+
+234
+00:21:59 --> 00:22:08
+operations take?
+OK, and then we're going to see
+
+235
+00:22:08 --> 00:22:16
+two more today.
+One is called an accounting
+
+236
+00:22:16 --> 00:22:25
+argument, and the other is a
+potential argument.
+
+237
+00:22:25 --> 00:22:36
+These two are more precise
+because they allocate specific
+
+238
+00:22:36 --> 00:22:45
+amortized costs to each
+operation.
+
+239
+00:22:45 --> 00:22:49
+So, one of the things about the
+aggregate analysis is that you
+
+240
+00:22:49 --> 00:22:53
+can't really say what the
+amortized cost of a single
+
+241
+00:22:53 --> 00:22:57
+operation is easily.
+You can in this case.
+
+242
+00:22:57 --> 00:23:00
+You can say it's order one,
+OK?
+
+243
+00:23:00 --> 00:23:03
+But, in the accounting and
+potential arguments,
+
+244
+00:23:03 --> 00:23:07
+it gives you a much more
+precise way of characterizing
+
+245
+00:23:07 --> 00:23:11
+what an amortized cost of a
+particular operation is.
+
+246
+00:23:11 --> 00:23:16
+So, let's pitch in and look at
+the accounting method as our
+
+247
+00:23:16 --> 00:23:19
+first method.
+So, these we're going to go
+
+248
+00:23:19 --> 00:23:22
+through the exact same example.
+In some sense,
+
+249
+00:23:22 --> 00:23:25
+this example,
+the easiest argument to make is
+
+250
+00:23:25 --> 00:23:29
+the aggregate analysis.
+OK, so we're going get into
+
+251
+00:23:29 --> 00:23:32
+arguments that,
+in some sense,
+
+252
+00:23:32 --> 00:23:37
+see more complicated.
+But it turns out that these
+
+253
+00:23:37 --> 00:23:43
+methods are more powerful in
+many circumstances.
+
+254
+00:23:43 --> 00:23:49
+OK, and so I want to do it in a
+simple situation where you have
+
+255
+00:23:49 --> 00:23:56
+some sort of appreciation of the
+fact that you can look at any
+
+256
+00:23:56 --> 00:24:02
+particular problem and approach
+it from different ways.
+
+257
+00:24:02 --> 00:24:08
+OK, so the accounting method is
+putting yourself in the position
+
+258
+00:24:08 --> 00:24:19
+of a financial accountant.
+So what you do is we are going
+
+259
+00:24:19 --> 00:24:33
+to charge the i'th operation a
+fictitious amortized cost.
+
+260
+00:24:33 --> 00:24:39
+We'll call it c hat sub i,
+where we are going to use the
+
+261
+00:24:39 --> 00:24:44
+abstraction that $1 pays for one
+unit of work.
+
+262
+00:24:44 --> 00:24:51
+There's Time manipulating the
+data structure or whatever.
+
+263
+00:24:51 --> 00:24:55
+OK, so the idea is you charge
+the cost.
+
+264
+00:24:55 --> 00:25:03
+You say, this operation will
+cost you $5 or whatever.
+
+265
+00:25:03 --> 00:25:14
+OK, and that phi is consumed to
+perform the operation,
+
+266
+00:25:14 --> 00:25:21
+but there may be some unused
+part.
+
+267
+00:25:21 --> 00:25:33
+So, if there's any unused
+amount, it's going to be stored
+
+268
+00:25:33 --> 00:25:44
+in the bank for use by later
+operations.
+
+269
+00:25:44 --> 00:25:49
+So the idea is that if the phi
+that is being paid,
+
+270
+00:25:49 --> 00:25:54
+the c_i hat phi,
+isn't sufficient to pay for
+
+271
+00:25:54 --> 00:26:01
+performing the operation,
+then you take money out of the
+
+272
+00:26:01 --> 00:26:05
+bank to pay for it.
+OK, and so you don't get
+
+273
+00:26:05 --> 00:26:09
+arrested, what's the property
+that you've got to have?
+
+274
+00:26:09 --> 00:26:12
+You've got to have the bank
+balance.
+
+275
+00:26:12 --> 00:26:16
+What about the bank balance?
+What mathematical fact has to
+
+276
+00:26:16 --> 00:26:20
+hold the bank balance?
+Yeah, it better be greater than
+
+277
+00:26:20 --> 00:26:22
+or equal to zero,
+right?
+
+278
+00:26:22 --> 00:26:26
+Most people are familiar with
+that.
+
+279
+00:26:26 --> 00:26:30
+So, the bank balance must not
+go negative.
+
+280
+00:26:30 --> 00:26:35
+In other words,
+the amortized costs minus the
+
+281
+00:26:35 --> 00:26:41
+costs of the operations up to
+that point have to always be
+
+282
+00:26:41 --> 00:26:46
+enough to pay for all the
+operations that you're doing.
+
+283
+00:26:46 --> 00:26:51
+Otherwise, you're borrowing on
+the future.
+
+284
+00:26:51 --> 00:26:56
+In amortized analysis,
+we don't borrow on the future,
+
+285
+00:26:56 --> 00:27:04
+at least not on the simple ones
+that we are doing here.
+
+286
+00:27:04 --> 00:27:11
+OK, so that means we must have
+that the sum,
+
+287
+00:27:11 --> 00:27:19
+I equals one to n of c_i,
+the true costs,
+
+288
+00:27:19 --> 00:27:29
+therefore, if the balance is
+not going to ever go negative,
+
+289
+00:27:29 --> 00:27:41
+must be bounded above by the
+amortized costs for all n.
+
+290
+00:27:41 --> 00:27:45
+OK, for the bank balance not to
+go negative, if I add up the
+
+291
+00:27:45 --> 00:27:49
+true costs, it's got to be the
+case that I can always pay for
+
+292
+00:27:49 --> 00:27:51
+them.
+This is what I'm charging.
+
+293
+00:27:51 --> 00:27:54
+This is what it actually costs
+me.
+
+294
+00:27:54 --> 00:27:58
+So, it better be the case that
+whatever I've actually had to
+
+295
+00:27:58 --> 00:28:02
+pay to operate on that data
+structure, that's what this is,
+
+296
+00:28:02 --> 00:28:07
+better be covered by the amount
+that I've been charging people
+
+297
+00:28:07 --> 00:28:12
+for the use of that data
+structure up to that point.
+
+298
+00:28:12 --> 00:28:15
+And that's got to be true for
+all n.
+
+299
+00:28:15 --> 00:28:19
+But notice that this now gives
+me a way of charging a
+
+300
+00:28:19 --> 00:28:23
+particular operation a certain
+amount.
+
+301
+00:28:23 --> 00:28:28
+So, the total amortized costs
+provide an upper bound on the
+
+302
+00:28:28 --> 00:28:35
+total true costs.
+Total amortized costs are an
+
+303
+00:28:35 --> 00:28:45
+upper bound on the true costs.
+Any question about this?
+
+304
+00:28:45 --> 00:28:54
+That we'll do the example of
+the dynamic table using this
+
+305
+00:28:54 --> 00:29:01
+methodology.
+OK, so, back to the dynamic
+
+306
+00:29:01 --> 00:29:08
+table.
+OK, so what we're going to do
+
+307
+00:29:08 --> 00:29:19
+in this case is we're going to
+charge an amortized cost of $3
+
+308
+00:29:19 --> 00:29:31
+for the i'th insert for all i.
+And the idea is that $1 is
+
+309
+00:29:31 --> 00:29:45
+going to pay for an immediate
+insert, and $2 is going to be
+
+310
+00:29:45 --> 00:30:00
+stored for doubling the table.
+And, it needs to be expanded.
+
+311
+00:30:00 --> 00:30:10
+When the table doubles,
+of the stored dollars,
+
+312
+00:30:10 --> 00:30:24
+we'll use one dollar to move a
+recent item, I'll call it,
+
+313
+00:30:24 --> 00:30:34
+and one dollar we'll move an
+old item.
+
+314
+00:30:34 --> 00:30:42
+So, let's do the example.
+So, imagine that I'm in this
+
+315
+00:30:42 --> 00:30:49
+situation where I have a table
+of size eight,
+
+316
+00:30:49 --> 00:30:57
+and I just doubled my table.
+So I have four items of the
+
+317
+00:30:57 --> 00:31:03
+table.
+What I'm going to do is have no
+
+318
+00:31:03 --> 00:31:11
+dollars in my table.
+So, along comes an insertion of
+
+319
+00:31:11 --> 00:31:16
+item number five.
+I charge $3 for it.
+
+320
+00:31:16 --> 00:31:23
+$1 lets me put the item in the
+table, and I have $2 left over.
+
+321
+00:31:23 --> 00:31:31
+So let me store those $2 in the
+slot corresponding to where that
+
+322
+00:31:31 --> 00:31:34
+item is.
+Now, item six comes in.
+
+323
+00:31:34 --> 00:31:38
+Once again, $1,
+charge $3, $1 is paid for the
+
+324
+00:31:38 --> 00:31:42
+insert, $2 left over,
+I'm going to play $2.
+
+325
+00:31:42 --> 00:31:45
+Let me put it down there,
+and so forth.
+
+326
+00:31:45 --> 00:31:48
+The next one comes in,
+$2, $2 leftover,
+
+327
+00:31:48 --> 00:31:51
+and now the ninth item comes
+in.
+
+328
+00:31:51 --> 00:31:55
+So, I double the size of my
+table.
+
+329
+00:31:55 --> 00:32:08
+
+
+330
+00:32:08 --> 00:32:13
+OK, and now I copy all of these
+guys and to all of these here.
+
+331
+00:32:13 --> 00:32:15
+And what happens?
+Look at that:
+
+332
+00:32:15 --> 00:32:19
+I've got $8,
+and I've got eight items that
+
+333
+00:32:19 --> 00:32:21
+have to be copied.
+Perfect.
+
+334
+00:32:21 --> 00:32:26
+OK, so one of these dollars
+pays for one of the ones that
+
+335
+00:32:26 --> 00:32:31
+was inserted in the last round,
+and one of them pays for an old
+
+336
+00:32:31 --> 00:32:35
+one.
+OK, and so, I copy them in,
+
+337
+00:32:35 --> 00:32:40
+and now, none of those guys
+have any money.
+
+338
+00:32:40 --> 00:32:45
+And the ninth guy comes in:
+he has $2 left over.
+
+339
+00:32:45 --> 00:32:50
+And then, we keep going on.
+OK, so you see that by that
+
+340
+00:32:50 --> 00:32:57
+argument, if I charge everybody
+$3, OK, I can always handle all
+
+341
+00:32:57 --> 00:33:01
+of the table doubling,
+the charges for the table
+
+342
+00:33:01 --> 00:33:08
+doubling because the inductive
+invariant that I've maintained
+
+343
+00:33:08 --> 00:33:13
+is that after it doubles,
+there's nothing in the bank
+
+344
+00:33:13 --> 00:33:17
+account.
+And now, I put in $2.
+
+345
+00:33:17 --> 00:33:21
+Well then, I can pay,
+and I'm now left in the same
+
+346
+00:33:21 --> 00:33:24
+situation.
+OK, and it's the case that the
+
+347
+00:33:24 --> 00:33:26
+bank balance never goes
+negative.
+
+348
+00:33:26 --> 00:33:31
+So that's a really important
+invariant to verify.
+
+349
+00:33:31 --> 00:33:41
+
+
+350
+00:33:41 --> 00:33:46
+And so, therefore,
+the sum of the true costs,
+
+351
+00:33:46 --> 00:33:53
+or the amortized costs,
+upper bound the sum of the true
+
+352
+00:33:53 --> 00:33:57
+costs.
+And, since the sum of the
+
+353
+00:33:57 --> 00:34:03
+amortized cost,
+here, is, if I go i equals one
+
+354
+00:34:03 --> 00:34:09
+to n, OK, this is 3n.
+So, the point is,
+
+355
+00:34:09 --> 00:34:16
+now I bounded the sum of the
+true costs by 3n.
+
+356
+00:34:16 --> 00:34:25
+OK, so let's go back to this
+table here, and look to see what
+
+357
+00:34:25 --> 00:34:35
+happens, OK, if I put in c_i
+hat, and the bank balance.
+
+358
+00:34:35 --> 00:34:43
+OK, so in fact,
+so the first thing I do is
+
+359
+00:34:43 --> 00:34:53
+insert; I charge $3,
+right, and I do an insert.
+
+360
+00:34:53 --> 00:35:01
+How much do I have left?
+I'm going to have $2.
+
+361
+00:35:01 --> 00:35:07
+It turns out I'm actually going
+to charge $2 and have only $1
+
+362
+00:35:07 --> 00:35:10
+left.
+OK, so I'm actually going to
+
+363
+00:35:10 --> 00:35:16
+under charge the first guy.
+I'm going to show you that it
+
+364
+00:35:16 --> 00:35:21
+works if I charge everybody $3.
+Except the first guy:
+
+365
+00:35:21 --> 00:35:25
+I charge $2.
+I can actually save a little
+
+366
+00:35:25 --> 00:35:30
+bit on number one.
+OK, that for this guy I'm going
+
+367
+00:35:30 --> 00:35:36
+to charge $3.
+OK, what's the size of my bank
+
+368
+00:35:36 --> 00:35:42
+balance when I'm done?
+Well, I have to copy one guy.
+
+369
+00:35:42 --> 00:35:47
+He's all paid for,
+so I have $2 left.
+
+370
+00:35:47 --> 00:35:51
+OK, people with me?
+OK, the next guy:
+
+371
+00:35:51 --> 00:35:56
+I charge $3.
+Actually, I'm going to charge
+
+372
+00:35:56 --> 00:36:02
+all these guys $3.
+OK, so here now I basically get
+
+373
+00:36:02 --> 00:36:06
+to, I've got a table of size
+four.
+
+374
+00:36:06 --> 00:36:09
+So, I basically have,
+I have to copy,
+
+375
+00:36:09 --> 00:36:14
+oh, when I insert the third
+guy, I've got to copy two guys.
+
+376
+00:36:14 --> 00:36:19
+That'll use up that,
+so I'll have only $2 left in
+
+377
+00:36:19 --> 00:36:22
+the table after I've inserted
+him.
+
+378
+00:36:22 --> 00:36:27
+OK, now I insert the fourth
+guy, OK, and that's a good one
+
+379
+00:36:27 --> 00:36:32
+because now I've built up a
+balance here of $4 because I
+
+380
+00:36:32 --> 00:36:41
+didn't have to copy anybody.
+OK, now I insert the fifth guy.
+
+381
+00:36:41 --> 00:36:50
+I've got to copy four items.
+So that expends that balance.
+
+382
+00:36:50 --> 00:36:54
+I have, then,
+two left.
+
+383
+00:36:54 --> 00:37:00
+OK, and then here basically I
+add two to it.
+
+384
+00:37:00 --> 00:37:09
+And then at this point,
+I use it all up and go back to
+
+385
+00:37:09 --> 00:37:13
+two, etc.
+OK, so you see one of the
+
+386
+00:37:13 --> 00:37:18
+things I want you to notice is I
+could have charged three here.
+
+387
+00:37:18 --> 00:37:22
+And then I would've had an
+extra dollar lying around
+
+388
+00:37:22 --> 00:37:25
+throughout here.
+It wouldn't have mattered.
+
+389
+00:37:25 --> 00:37:28
+It still would be upper bounded
+by 3n.
+
+390
+00:37:28 --> 00:37:32
+OK, so the idea is that
+different schemes for charging
+
+391
+00:37:32 --> 00:37:36
+amortized costs can work.
+They don't all have to be the
+
+392
+00:37:36 --> 00:37:39
+same.
+It's not like when you do in
+
+393
+00:37:39 --> 00:37:43
+amortized analysis that there is
+one scheme that will work.
+
+394
+00:37:43 --> 00:37:45
+I could have charged $4 to
+everybody.
+
+395
+00:37:45 --> 00:37:48
+And it would have worked.
+But it turns out,
+
+396
+00:37:48 --> 00:37:51
+I couldn't have charged two
+dollars for everybody.
+
+397
+00:37:51 --> 00:37:55
+If I charged $2 for everybody,
+my balance would go negative,
+
+398
+00:37:55 --> 00:37:57
+OK?
+My balance would go negative,
+
+399
+00:37:57 --> 00:38:02
+but I can charge three dollars,
+and that will work.
+
+400
+00:38:02 --> 00:38:04
+OK, four, five,
+six, I could charge that.
+
+401
+00:38:04 --> 00:38:08
+The bound that I would get
+would be simply a looser bound.
+
+402
+00:38:08 --> 00:38:11
+Instead of it being less than
+or equal to 3n,
+
+403
+00:38:11 --> 00:38:15
+it would be less than or equal
+to 4n or 5n, or what have you.
+
+404
+00:38:15 --> 00:38:19
+But if I tried to do 2n,
+it wouldn't have worked because
+
+405
+00:38:19 --> 00:38:22
+I wouldn't have enough money
+left to copy everything.
+
+406
+00:38:22 --> 00:38:25
+What would happen is I would
+have only $1 in this,
+
+407
+00:38:25 --> 00:38:28
+and then when it came time to
+table double,
+
+408
+00:38:28 --> 00:38:30
+I would need to copy eight
+guys.
+
+409
+00:38:30 --> 00:38:33
+And I'd only have built up a
+bank account of $4,
+
+410
+00:38:33 --> 00:38:38
+sorry, if I charged $2 and had
+$1 left over.
+
+411
+00:38:38 --> 00:38:42
+OK, so to actually make these
+things work out,
+
+412
+00:38:42 --> 00:38:47
+you have to play a little bit,
+OK, see what works,
+
+413
+00:38:47 --> 00:38:53
+see what doesn't work.
+OK, no algorithmic formulas for
+
+414
+00:38:53 --> 00:38:55
+algorithm design.
+OK, good.
+
+415
+00:38:55 --> 00:38:59
+In the book,
+you can read about table
+
+416
+00:38:59 --> 00:39:03
+contraction.
+What happens when you start
+
+417
+00:39:03 --> 00:39:06
+deleting elements?
+Now you want to make the table
+
+418
+00:39:06 --> 00:39:09
+be smaller.
+Now, you have to be very
+
+419
+00:39:09 --> 00:39:12
+careful because unless you put,
+who remembers from physics,
+
+420
+00:39:12 --> 00:39:13
+hysteresis?
+Vaguely?
+
+421
+00:39:13 --> 00:39:16
+A couple people?
+OK, you have to worry about
+
+422
+00:39:16 --> 00:39:18
+hysteresis.
+OK, if you're not careful,
+
+423
+00:39:18 --> 00:39:22
+if whenever it gets to be less
+than a power of two,
+
+424
+00:39:22 --> 00:39:24
+you go in the half,
+you can find that you're
+
+425
+00:39:24 --> 00:39:27
+thrashing.
+So, you need to make it so that
+
+426
+00:39:27 --> 00:39:31
+there is some memory in the
+system so that you only collapse
+
+427
+00:39:31 --> 00:39:34
+after you've done a sufficient
+number of deletions,
+
+428
+00:39:34 --> 00:39:39
+OK, and so forth.
+And the book has analysis of
+
+429
+00:39:39 --> 00:39:43
+the more general case.
+OK, so any questions about the
+
+430
+00:39:43 --> 00:39:46
+accounting method?
+Accounting method is really
+
+431
+00:39:46 --> 00:39:48
+very cute, OK,
+very cute.
+
+432
+00:39:48 --> 00:39:51
+And, it's the one most students
+prefer to do,
+
+433
+00:39:51 --> 00:39:54
+OK?
+They usually hate the next one
+
+434
+00:39:54 --> 00:39:56
+until they learn it.
+Once they learn it,
+
+435
+00:39:56 --> 00:40:00
+they say, ooh,
+that's cool.
+
+436
+00:40:00 --> 00:40:04
+OK, but to start out with,
+it takes a little bit more
+
+437
+00:40:04 --> 00:40:07
+intestinal fortitude,
+OK?
+
+438
+00:40:07 --> 00:40:11
+But it's amazing.
+Good potential arguments are
+
+439
+00:40:11 --> 00:40:15
+really sweet.
+And we are going to see one
+
+440
+00:40:15 --> 00:40:20
+next time, so you'll definitely
+want to review and make sure you
+
+441
+00:40:20 --> 00:40:26
+understand it before Wednesday's
+lecture because Wednesday's
+
+442
+00:40:26 --> 00:40:32
+lecture, we're going to assume
+we understand potential method.
+
+443
+00:40:32 --> 00:40:37
+OK, so let's do,
+enough advertisement.
+
+444
+00:40:37 --> 00:40:43
+I think the potential method is
+one of the beautiful results in
+
+445
+00:40:43 --> 00:40:48
+algorithmic analysis,
+OK, just beautiful result,
+
+446
+00:40:48 --> 00:40:52
+beautiful set of techniques.
+OK, and it's also,
+
+447
+00:40:52 --> 00:40:57
+just in terms of,
+I mean, what do you aspire:
+
+448
+00:40:57 --> 00:41:02
+to be a bookkeeper or to be a
+physicist?
+
+449
+00:41:02 --> 00:41:10
+OK, so, the idea is we don't
+want to be bankers.
+
+450
+00:41:10 --> 00:41:16
+We want to be physicists.
+
+451
+00:41:16 --> 00:41:24
+
+
+452
+00:41:24 --> 00:41:28
+And so, this bank account,
+we are going to say about the
+
+453
+00:41:28 --> 00:41:32
+potential energy of the dynamics
+that that we are analyzing.
+
+454
+00:41:32 --> 00:41:34
+OK, because,
+why?
+
+455
+00:41:34 --> 00:41:38
+It delivers up work just like a
+spring does, for example,
+
+456
+00:41:38 --> 00:41:42
+OK, when you study potential
+energy, or putting something up
+
+457
+00:41:42 --> 00:41:45
+high and having gravity pull it
+down.
+
+458
+00:41:45 --> 00:41:49
+We convert dynamic to
+potential, and that's exactly
+
+459
+00:41:49 --> 00:41:53
+what we're going to be doing
+here, and it's similar
+
+460
+00:41:53 --> 00:41:58
+mathematics except that in our
+case it turns out to be discrete
+
+461
+00:41:58 --> 00:42:04
+mathematics rather than
+continuous math for most of it.
+
+462
+00:42:04 --> 00:42:14
+So here's the framework for the
+potential method.
+
+463
+00:42:14 --> 00:42:23
+So, we start with some data
+structure, D_0,
+
+464
+00:42:23 --> 00:42:35
+and operation i transforms D_(i
+- 1) into D_i.
+
+465
+00:42:35 --> 00:42:40
+So, we view the operation on
+the data structure as a mapping,
+
+466
+00:42:40 --> 00:42:45
+mapping one data structure to
+another data structure,
+
+467
+00:42:45 --> 00:42:48
+the one from before to the one
+after.
+
+468
+00:42:48 --> 00:42:51
+OK, already it's nicely
+mathematical.
+
+469
+00:42:51 --> 00:42:55
+OK, and of course,
+the costs of operation i
+
+470
+00:42:55 --> 00:42:58
+remains at c_i.
+
+471
+00:42:58 --> 00:43:14
+
+
+472
+00:43:14 --> 00:43:26
+And, now what we are going to
+do is define the potential
+
+473
+00:43:26 --> 00:43:35
+function, phi,
+which maps the set of data
+
+474
+00:43:35 --> 00:43:46
+structures into the reals.
+So, associated with every data
+
+475
+00:43:46 --> 00:43:51
+structure, now,
+is a potential,
+
+476
+00:43:51 --> 00:44:00
+OK, a real-valued potential,
+often integer potential such
+
+477
+00:44:00 --> 00:44:06
+that phi of D_0 is equal to
+zero.
+
+478
+00:44:06 --> 00:44:11
+So, the initial potential is
+zero, and phi of D_i is greater
+
+479
+00:44:11 --> 00:44:16
+than or equal to zero for all i.
+So, potential can never be
+
+480
+00:44:16 --> 00:44:22
+nonnegative, just like the bank
+account because the potential is
+
+481
+00:44:22 --> 00:44:25
+essentially representing the
+bank account,
+
+482
+00:44:25 --> 00:44:29
+if you will,
+in the accounting method.
+
+483
+00:44:29 --> 00:44:35
+OK, so we always want the
+potential to be nonnegative.
+
+484
+00:44:35 --> 00:44:37
+Now, actually,
+there are times where you use
+
+485
+00:44:37 --> 00:44:40
+potential functions where you
+violate both of these
+
+486
+00:44:40 --> 00:44:43
+properties.
+There's some really interesting
+
+487
+00:44:43 --> 00:44:46
+potential arguments which don't
+violate like these,
+
+488
+00:44:46 --> 00:44:50
+but for the simple ones we're
+going to be doing in this class,
+
+489
+00:44:50 --> 00:44:52
+we'll just assume that these
+tend to be true.
+
+490
+00:44:52 --> 00:44:56
+OK, but we will actually see
+some times where phi of D_0
+
+491
+00:44:56 --> 00:45:00
+isn't zero, it doesn't matter.
+OK, but generally this is what
+
+492
+00:45:00 --> 00:45:03
+we are going to assume in the
+type of potential function
+
+493
+00:45:03 --> 00:45:07
+argument that we are going to be
+doing.
+
+494
+00:45:07 --> 00:45:12
+OK, so I just want to let you
+know that there are bigger,
+
+495
+00:45:12 --> 00:45:18
+there is a bigger space of
+potential function arguments
+
+496
+00:45:18 --> 00:45:22
+than the one that I'm showing
+you here.
+
+497
+00:45:22 --> 00:45:25
+OK, so then,
+under this circumstance,
+
+498
+00:45:25 --> 00:45:31
+we define the amortized cost
+c_i hat with respect to phi as,
+
+499
+00:45:31 --> 00:45:36
+and this is one of these
+formulas that if you can't
+
+500
+00:45:36 --> 00:45:42
+remember it, definitely put it
+down on your crib sheet for the
+
+501
+00:45:42 --> 00:45:51
+final.
+OK, so c_i hat is equal to c_i
+
+502
+00:45:51 --> 00:46:01
+plus phi of D_i minus phi of D_i
+minus one.
+
+503
+00:46:01 --> 00:46:12
+OK, so this is the change in
+potential difference.
+
+504
+00:46:12 --> 00:46:22
+And, let's call it delta phi i
+for shorthand.
+
+505
+00:46:22 --> 00:46:33
+OK, and let's see what it means
+to have --
+
+506
+00:46:33 --> 00:46:43
+
+
+507
+00:46:43 --> 00:46:48
+-- in the different
+circumstances.
+
+508
+00:46:48 --> 00:46:55
+So, if delta of phi i is
+greater than zero,
+
+509
+00:46:55 --> 00:47:03
+OK, so if this is greater than
+zero, then what's the
+
+510
+00:47:03 --> 00:47:11
+relationship between c_i hat and
+c_i?
+
+511
+00:47:11 --> 00:47:19
+This is greater than zero.
+Yeah, c_i hat is then greater
+
+512
+00:47:19 --> 00:47:25
+than c_i, OK?
+Then, c_i hat is greater than
+
+513
+00:47:25 --> 00:47:30
+c_i.
+And what does that mean?
+
+514
+00:47:30 --> 00:47:39
+That means when I do operation
+I, I charged more than it cost
+
+515
+00:47:39 --> 00:47:48
+me to do the operation.
+So, the extra amount that I
+
+516
+00:47:48 --> 00:47:58
+charged beyond what I actually
+used is being put into the bank,
+
+517
+00:47:58 --> 00:48:04
+OK, is being stored as
+potential energy.
+
+518
+00:48:04 --> 00:48:15
+So, op I stores work in the
+data structure for later.
+
+519
+00:48:15 --> 00:48:22
+Similarly, if delta phi i is
+less than zero,
+
+520
+00:48:22 --> 00:48:33
+then c_i hat is less than c_i.
+And so, the data structure
+
+521
+00:48:33 --> 00:48:38
+delivers up work --
+
+522
+00:48:38 --> 00:48:52
+
+
+523
+00:48:52 --> 00:49:03
+-- to help pay for op I,
+OK, for operation I.
+
+524
+00:49:03 --> 00:49:08
+So, if it's less than zero,
+that means that my change in
+
+525
+00:49:08 --> 00:49:14
+potential, that means my bank
+account went down as a result,
+
+526
+00:49:14 --> 00:49:18
+and so therefore,
+what happens was the data
+
+527
+00:49:18 --> 00:49:23
+structure provided work to be
+done in order,
+
+528
+00:49:23 --> 00:49:30
+because the true cost was
+bigger than the amortized cost.
+
+529
+00:49:30 --> 00:49:33
+So, if you think about it,
+the difference between looking
+
+530
+00:49:33 --> 00:49:37
+at it from the potential
+function point of view versus
+
+531
+00:49:37 --> 00:49:41
+the accounting point of view,
+the accounting point of view,
+
+532
+00:49:41 --> 00:49:44
+you sort of say,
+here is what my amortized cost
+
+533
+00:49:44 --> 00:49:46
+will be.
+Now let me analyze my bank
+
+534
+00:49:46 --> 00:49:49
+account, make sure it never went
+negative.
+
+535
+00:49:49 --> 00:49:52
+In some sense,
+in the potential function
+
+536
+00:49:52 --> 00:49:56
+argument, you're saying,
+here's what my bank account is
+
+537
+00:49:56 --> 00:50:01
+all the time.
+Now let me analyze what the
+
+538
+00:50:01 --> 00:50:06
+amortized costs are.
+So, that's sort of the
+
+539
+00:50:06 --> 00:50:12
+difference in approaches.
+One is you are sort of
+
+540
+00:50:12 --> 00:50:19
+specifying the bank account.
+The other, you're specifying
+
+541
+00:50:19 --> 00:50:24
+the amortized costs.
+So, we look at the,
+
+542
+00:50:24 --> 00:50:32
+why is it that this is a
+reasonable way to proceed?
+
+543
+00:50:32 --> 00:50:41
+Well, let's look at the total
+amortized cost of n operations.
+
+544
+00:50:41 --> 00:50:49
+OK, that's just the sum,
+i equals one to n of c_i hat.
+
+545
+00:50:49 --> 00:50:53
+That's the total amortized
+cost.
+
+546
+00:50:53 --> 00:50:59
+And that's equal to,
+but substitution,
+
+547
+00:50:59 --> 00:51:07
+just substitute c_i hat for
+this formula.
+
+548
+00:51:07 --> 00:51:24
+OK, so that's c_i plus phi of
+D_i minus phi of D_i minus one.
+
+549
+00:51:24 --> 00:51:36
+OK, and that's equal to c_i.
+And now, what happens when I
+
+550
+00:51:36 --> 00:51:41
+sum up these terms?
+What happens when some of these
+
+551
+00:51:41 --> 00:51:45
+terms?
+What's the mathematical term we
+
+552
+00:51:45 --> 00:51:47
+use?
+It telescopes.
+
+553
+00:51:47 --> 00:51:53
+OK, every term on the left is
+added in once when it's I,
+
+554
+00:51:53 --> 00:52:00
+and subtract it out when it's I
+minus one, except for the first
+
+555
+00:52:00 --> 00:52:08
+and last terms.
+The term for n is only added
+
+556
+00:52:08 --> 00:52:16
+in, and the term for zero is
+only subtracted out.
+
+557
+00:52:16 --> 00:52:23
+OK, so that's because it
+telescopes.
+
+558
+00:52:23 --> 00:52:32
+OK, so this term is what?
+What property do we know of
+
+559
+00:52:32 --> 00:52:38
+this?
+It's greater than or equal to
+
+560
+00:52:38 --> 00:52:42
+zero.
+And this one equals zero.
+
+561
+00:52:42 --> 00:52:48
+So, therefore,
+this is greater than or equal
+
+562
+00:52:48 --> 00:52:53
+to c_i.
+And thus, the amortized costs
+
+563
+00:52:53 --> 00:53:02
+are an upper bound on the true
+costs, which is what we want.
+
+564
+00:53:02 --> 00:53:06
+Some of the amortized costs is
+an upper bound up on the sum of
+
+565
+00:53:06 --> 00:53:08
+the true costs.
+OK, but here,
+
+566
+00:53:08 --> 00:53:11
+the way that we define the
+amortized costs was by first
+
+567
+00:53:11 --> 00:53:15
+defining the potential function.
+OK, so the potential function
+
+568
+00:53:15 --> 00:53:19
+is sort of, as I said,
+the difference between the
+
+569
+00:53:19 --> 00:53:23
+accounting and the potential
+method is, do you specify the
+
+570
+00:53:23 --> 00:53:25
+bank account or do you specify
+the cost?
+
+571
+00:53:25 --> 00:53:29
+OK, do you specify the
+potential energy at any point,
+
+572
+00:53:29 --> 00:53:33
+or do you specify the cost at
+any point?
+
+573
+00:53:33 --> 00:53:38
+OK, but in any case,
+you get, this bound,
+
+574
+00:53:38 --> 00:53:44
+also this math is nicer math.
+I like telescopes.
+
+575
+00:53:44 --> 00:53:51
+OK, so the amortized costs
+upper bound the true costs.
+
+576
+00:53:51 --> 00:53:57
+OK, let's do table doubling
+over here.
+
+577
+00:53:57 --> 00:54:20
+
+
+578
+00:54:20 --> 00:54:24
+So, to analyze this,
+we have to define our
+
+579
+00:54:24 --> 00:54:28
+potential.
+OK, if anybody can guess this
+
+580
+00:54:28 --> 00:54:35
+off the top of their head,
+they're better than I am.
+
+581
+00:54:35 --> 00:54:42
+I struggled with this for
+probably easily a couple hours
+
+582
+00:54:42 --> 00:54:48
+to get it right,
+OK, because I'm not too smart.
+
+583
+00:54:48 --> 00:54:55
+OK, that's a potential function
+I'm going to use,
+
+584
+00:54:55 --> 00:55:02
+OK, 2i minus two to the ceiling
+of log i.
+
+585
+00:55:02 --> 00:55:07
+And, we're going to assume that
+two to the ceiling of log of
+
+586
+00:55:07 --> 00:55:13
+zero is equal to zero,
+because that's what it is in
+
+587
+00:55:13 --> 00:55:15
+the limit.
+For log of zero,
+
+588
+00:55:15 --> 00:55:21
+this becomes minus infinity,
+so, two to the minus infinity
+
+589
+00:55:21 --> 00:55:25
+is zero.
+So, that's just going to be a
+
+590
+00:55:25 --> 00:55:30
+mathematical convenience.
+Assume that.
+
+591
+00:55:30 --> 00:55:32
+OK, so where did I get this
+from?
+
+592
+00:55:32 --> 00:55:35
+I played around.
+I looked at that sequence that
+
+593
+00:55:35 --> 00:55:38
+I have erased and I said,
+OK, because reversing,
+
+594
+00:55:38 --> 00:55:41
+there are some problems for
+which defining a potential
+
+595
+00:55:41 --> 00:55:45
+function is fairly easy.
+But, defining the amortized
+
+596
+00:55:45 --> 00:55:47
+costs is hard,
+OK, to define the accounting.
+
+597
+00:55:47 --> 00:55:50
+So, for this one,
+the accounting method is,
+
+598
+00:55:50 --> 00:55:53
+I would say,
+an easier method to use.
+
+599
+00:55:53 --> 00:55:57
+However, I'm going to show you
+that you still can do it with
+
+600
+00:55:57 --> 00:56:02
+potential method if you come up
+with the right potential.
+
+601
+00:56:02 --> 00:56:07
+So, intuitively,
+this is basically what's left
+
+602
+00:56:07 --> 00:56:14
+in the bank account at the I'th
+operation because I've put in 2i
+
+603
+00:56:14 --> 00:56:20
+things into the bank,
+and I've subtracted out this
+
+604
+00:56:20 --> 00:56:24
+many, essentially,
+from table doublings,
+
+605
+00:56:24 --> 00:56:27
+OK, up to that point,
+OK?
+
+606
+00:56:27 --> 00:56:34
+So, first let's observe,
+what is phi of D_0?
+
+607
+00:56:34 --> 00:56:36
+Zero.
+So, that's good.
+
+608
+00:56:36 --> 00:56:43
+And, the phi of D_i is greater
+than or equal to zero.
+
+609
+00:56:43 --> 00:56:45
+Why is that?
+
+610
+00:56:45 --> 00:56:58
+
+
+611
+00:56:58 --> 00:56:59
+Why is that?
+
+612
+00:56:59 --> 00:57:11
+
+
+613
+00:57:11 --> 00:57:20
+So, what's the biggest that
+ceiling of log i could be?
+
+614
+00:57:20 --> 00:57:30
+Ceiling of log i is either log
+i or log i quantity plus one,
+
+615
+00:57:30 --> 00:57:34
+OK?
+So, the biggest it is,
+
+616
+00:57:34 --> 00:57:40
+is log i plus one.
+If it's log i plus one,
+
+617
+00:57:40 --> 00:57:45
+two to the log i plus one,
+it's just 2i.
+
+618
+00:57:45 --> 00:57:50
+That's the biggest it could be,
+right?
+
+619
+00:57:50 --> 00:57:55
+So, two, the log of i,
+plus one, is just,
+
+620
+00:57:55 --> 00:58:01
+let's do it the other way,
+is i times two,
+
+621
+00:58:01 --> 00:58:08
+OK, i for that part,
+two for that part.
+
+622
+00:58:08 --> 00:58:12
+OK, so that the biggest it
+could be.
+
+623
+00:58:12 --> 00:58:20
+OK, or it's just log of i.
+So, either this is going to be
+
+624
+00:58:20 --> 00:58:25
+2i minus i or 2i minus 2i.
+In either case,
+
+625
+00:58:25 --> 00:58:30
+it's bigger than zero,
+OK?
+
+626
+00:58:30 --> 00:58:34
+So, those are the two
+properties I need for this to be
+
+627
+00:58:34 --> 00:58:36
+a well-defined potential
+function.
+
+628
+00:58:36 --> 00:58:41
+Now, that doesn't say that the
+amortized costs are going to be
+
+629
+00:58:41 --> 00:58:45
+satisfied the property that
+things are going to be cheap,
+
+630
+00:58:45 --> 00:58:50
+OK, that I'm going to be able
+to do my analysis and get the
+
+631
+00:58:50 --> 00:58:53
+kind of bounds I want.
+But, it sets up to say,
+
+632
+00:58:53 --> 00:58:58
+yes, I've satisfied the syntax
+of having a proper potential
+
+633
+00:58:58 --> 00:59:03
+function.
+So, let's just do a quick
+
+634
+00:59:03 --> 00:59:07
+example here just to see what
+this means.
+
+635
+00:59:07 --> 00:59:14
+So, imagine that I am in the
+situation where I have eight,
+
+636
+00:59:14 --> 00:59:19
+did I do that right,
+OK, yeah, eight slots,
+
+637
+00:59:19 --> 00:59:26
+and say six of them are full.
+So then, phi by this is going
+
+638
+00:59:26 --> 00:59:31
+to be 2i.
+That's two times six minus two
+
+639
+00:59:31 --> 00:59:35
+to the 2i.
+What's that?
+
+640
+00:59:35 --> 00:59:41
+Sorry, minus two to the ceiling
+of log i.
+
+641
+00:59:41 --> 00:59:46
+So, i is six,
+right, so log of i is log of
+
+642
+00:59:46 --> 00:59:50
+six.
+The ceiling of it is three.
+
+643
+00:59:50 --> 00:59:55
+So, that's minus 2^3,
+which is eight.
+
+644
+00:59:55 --> 1:00:02
+So, that's 12 minus eight.
+That's four.
+
+645
+1:00:02 --> 1:00:05.875
+And if you think about this in
+the accounting method,
+
+646
+1:00:05.875 --> 1:00:09.228
+these would be zeros,
+and these would be twos,
+
+647
+1:00:09.228 --> 1:00:13.401
+right, for the accounting
+method if we do the same thing,
+
+648
+1:00:13.401 --> 1:00:16.233
+because this is halfway
+through, right,
+
+649
+1:00:16.233 --> 1:00:20.629
+all zeros, and that we add two
+for each one that we're going
+
+650
+1:00:20.629 --> 1:00:22.194
+in.
+So, I function is,
+
+651
+1:00:22.194 --> 1:00:25.399
+in fact, telling me what the
+actual cost is.
+
+652
+1:00:25.399 --> 1:00:29.199
+OK, everybody with me?
+OK, so that's what we mean by
+
+653
+1:00:29.199 --> 1:00:33
+this particular potential
+function.
+
+654
+1:00:33 --> 1:00:37.274
+OK, so now let's add up the
+amortized cost of the i'th
+
+655
+1:00:37.274 --> 1:00:38
+insert.
+
+656
+1:00:38 --> 1:01:09
+
+
+657
+1:01:09 --> 1:01:14.19
+OK, so that's the amortized
+cost of the i'th insert,
+
+658
+1:01:14.19 --> 1:01:18.973
+just by definition.
+OK, and now that's equal to,
+
+659
+1:01:18.973 --> 1:01:23.756
+well, what is c_i?
+Do we still have that written
+
+660
+1:01:23.756 --> 1:01:28.336
+down somewhere,
+or have we erased that at this
+
+661
+1:01:28.336 --> 1:01:32
+point?
+I think we erased it.
+
+662
+1:01:32 --> 1:01:37.48
+Well, we can write it down
+again.
+
+663
+1:01:37.48 --> 1:01:45.53
+It is i if i minus one is an
+exact power of two.
+
+664
+1:01:45.53 --> 1:01:51.524
+And, it's one otherwise.
+That's c_i.
+
+665
+1:01:51.524 --> 1:01:58.718
+That's this term,
+plus, and now phi of D_i:
+
+666
+1:01:58.718 --> 1:02:10.83
+so, what is that?
+phi of D_i is this business,
+
+667
+1:02:10.83 --> 1:02:26.771
+2i minus two ceiling of log i
+minus 2i minus one minus two
+
+668
+1:02:26.771 --> 1:02:39.634
+ceiling of log of I minus one.
+OK, so that's the amortized
+
+669
+1:02:39.634 --> 1:02:42.192
+cost.
+That's a nice,
+
+670
+1:02:42.192 --> 1:02:45.019
+pretty formula,
+right?
+
+671
+1:02:45.019 --> 1:02:50
+OK, let's hope it simplifies a
+little.
+
+672
+1:02:50 --> 1:02:57.269
+OK, so that's equal to,
+well, we have the i and the one
+
+673
+1:02:57.269 --> 1:03:01.173
+here, if, etc.,
+that business,
+
+674
+1:03:01.173 --> 1:03:06.692
+plus, OK, well,
+we have some things we can
+
+675
+1:03:06.692 --> 1:03:16.662
+cancel here, right?
+So here, we have 2i minus 2i.
+
+676
+1:03:16.662 --> 1:03:24.668
+That cancels.
+And then we have what's left
+
+677
+1:03:24.668 --> 1:03:33.846
+over here is a minus two.
+So, that's a plus two.
+
+678
+1:03:33.846 --> 1:03:44
+And now, I have minus this term
+plus this term.
+
+679
+1:03:44 --> 1:03:48.049
+That's a lot prettier.
+OK, it's still a mess.
+
+680
+1:03:48.049 --> 1:03:53.294
+We've got to case analysis.
+Why is it suggestive of a case
+
+681
+1:03:53.294 --> 1:03:55.503
+analysis?
+We have a case.
+
+682
+1:03:55.503 --> 1:03:59
+OK, so let's do a case
+analysis.
+
+683
+1:03:59 --> 1:04:11
+
+
+684
+1:04:11 --> 1:04:17.966
+OK, so case one,
+I minus one is an exact power
+
+685
+1:04:17.966 --> 1:04:23.539
+of two.
+So then, c_i hat is equal to,
+
+686
+1:04:23.539 --> 1:04:29.887
+well, c_i is now just i.
+That's that case.
+
+687
+1:04:29.887 --> 1:04:36.234
+And then we have the rest
+there, plus two,
+
+688
+1:04:36.234 --> 1:04:44.903
+minus two, ceiling of log i
+minus two ceiling of log of i
+
+689
+1:04:44.903 --> 1:04:53.089
+minus one.
+OK, and that's equal to i plus
+
+690
+1:04:53.089 --> 1:04:56.482
+two.
+Well, let's see.
+
+691
+1:04:56.482 --> 1:05:03.098
+If I minus one is an exact
+power of two,
+
+692
+1:05:03.098 --> 1:05:12.236
+what is this term?
+i minus one is an exact power
+
+693
+1:05:12.236 --> 1:05:16.388
+of two.
+Plus, thank you,
+
+694
+1:05:16.388 --> 1:05:20
+sorry about that.
+
+695
+1:05:20 --> 1:05:33
+
+
+696
+1:05:33 --> 1:05:36.916
+It's good to have students,
+let me say, because,
+
+697
+1:05:36.916 --> 1:05:41.25
+boy, my math is so bad.
+This is actually why I end up
+
+698
+1:05:41.25 --> 1:05:46.333
+being a pretty good theoretician
+is because I don't ever trust
+
+699
+1:05:46.333 --> 1:05:50.583
+what I've written down.
+And so, I write it down in a
+
+700
+1:05:50.583 --> 1:05:55.666
+way that I can verify it because
+otherwise I just am not smart
+
+701
+1:05:55.666 --> 1:06:00.416
+enough to carry through five
+equations in a row and expect
+
+702
+1:06:00.416 --> 1:06:06
+that everyone is going to be
+transformed appropriately.
+
+703
+1:06:06 --> 1:06:11.53
+OK, so you write it down.
+So I always write it down so I
+
+704
+1:06:11.53 --> 1:06:15.754
+can verify it.
+And that fortunately has the
+
+705
+1:06:15.754 --> 1:06:21.988
+side benefit that other people
+can understand what I've done as
+
+706
+1:06:21.988 --> 1:06:24.905
+well.
+OK, so what is this one?
+
+707
+1:06:24.905 --> 1:06:30.636
+This is two to the log of i
+minus one because the ceiling,
+
+708
+1:06:30.636 --> 1:06:36.569
+if this is an exact power of
+two, right, then ceiling of log
+
+709
+1:06:36.569 --> 1:06:42
+of i minus one is just log of i
+minus one.
+
+710
+1:06:42 --> 1:06:52.013
+So, this is two to the log of i
+minus one, which is i minus one,
+
+711
+1:06:52.013 --> 1:06:53.761
+right?
+Yeah?
+
+712
+1:06:53.761 --> 1:06:58.847
+OK.
+OK, if it's an exact power of
+
+713
+1:06:58.847 --> 1:07:06
+two, then the log is an integer,
+right?
+
+714
+1:07:06 --> 1:07:09.713
+So, taking the ceiling,
+it doesn't matter,
+
+715
+1:07:09.713 --> 1:07:12.973
+get rid of the ceiling.
+OK, this one,
+
+716
+1:07:12.973 --> 1:07:16.324
+however, is not an exact power
+of two.
+
+717
+1:07:16.324 --> 1:07:20.218
+But what is it?
+It's just one more than this
+
+718
+1:07:20.218 --> 1:07:23.388
+guy.
+We know that i minus one is not
+
+719
+1:07:23.388 --> 1:07:27.916
+an exact power of two,
+so it's going to be the next
+
+720
+1:07:27.916 --> 1:07:36.053
+bigger one.
+OK, so that means this is what?
+
+721
+1:07:36.053 --> 1:07:45.035
+So, it's going to be,
+how do these two compare?
+
+722
+1:07:45.035 --> 1:07:53.041
+How much bigger is this one
+than this one?
+
+723
+1:07:53.041 --> 1:08:03
+It's twice the size.
+We know what this one is.
+
+724
+1:08:03 --> 1:08:06.656
+OK, or it can reason it from
+first principles.
+
+725
+1:08:06.656 --> 1:08:10.8
+This is going to be the log of
+i minus one plus one.
+
+726
+1:08:10.8 --> 1:08:14.131
+OK, and so then you can reduce
+it to this.
+
+727
+1:08:14.131 --> 1:08:18.6
+So, you've got to think about
+those floors and ceilings,
+
+728
+1:08:18.6 --> 1:08:21.524
+right?
+It's like, what's happening in
+
+729
+1:08:21.524 --> 1:08:25.262
+the round off there?
+OK, so now we can simplify
+
+730
+1:08:25.262 --> 1:08:29
+this.
+OK, so what do we have here?
+
+731
+1:08:29 --> 1:08:34.136
+We have, OK,
+so if I multiply this through,
+
+732
+1:08:34.136 --> 1:08:40.863
+I have an i plus two minus 2i
+plus two plus i minus one.
+
+733
+1:08:40.863 --> 1:08:46.611
+I know a lot of you,
+probably 90% of you will do
+
+734
+1:08:46.611 --> 1:08:51.503
+this step.
+You will go directly from this
+
+735
+1:08:51.503 --> 1:08:57.618
+step to the last step.
+And that's where 30% of you,
+
+736
+1:08:57.618 --> 1:09:03
+or some number,
+will get it wrong.
+
+737
+1:09:03 --> 1:09:06.819
+OK, so let me encourage you to
+do that step.
+
+738
+1:09:06.819 --> 1:09:11.526
+OK, it's easier to find your
+bugs if you take it slow.
+
+739
+1:09:11.526 --> 1:09:15.967
+Actually, taking it slow is
+faster in the long run.
+
+740
+1:09:15.967 --> 1:09:20.141
+It's hard to teach young
+stallions, or phillies,
+
+741
+1:09:20.141 --> 1:09:21.473
+or whatever,
+OK?
+
+742
+1:09:21.473 --> 1:09:24.315
+Just take it easy.
+Just patience,
+
+743
+1:09:24.315 --> 1:09:26.891
+just do it slow,
+get it right.
+
+744
+1:09:26.891 --> 1:09:32.67
+It's actually faster.
+OK, everybody knows the
+
+745
+1:09:32.67 --> 1:09:37.432
+tortoise and hare story.
+Yeah, yeah, yeah,
+
+746
+1:09:37.432 --> 1:09:43.587
+OK, but nobody believes it.
+OK, so now here we have 2i
+
+747
+1:09:43.587 --> 1:09:47.07
+here, an i here,
+and an i here.
+
+748
+1:09:47.07 --> 1:09:53.109
+And then, that leaves us with
+two plus two minus one,
+
+749
+1:09:53.109 --> 1:09:56.593
+equals three.
+Awesome, awesome.
+
+750
+1:09:56.593 --> 1:10:02.98
+OK, amortized cost is three
+when i minus one is an exact
+
+751
+1:10:02.98 --> 1:10:08
+power of two.
+OK, case two.
+
+752
+1:10:08 --> 1:10:30
+
+
+753
+1:10:30 --> 1:10:34.829
+OK, i minus one is not an exact
+power of two.
+
+754
+1:10:34.829 --> 1:10:41.085
+So then we have c_i hat is
+equal to, now instead of i it's
+
+755
+1:10:41.085 --> 1:10:48.109
+one plus, and then the two minus
+two to the ceiling of log i plus
+
+756
+1:10:48.109 --> 1:10:52.5
+two to the ceiling of log of i
+minus one.
+
+757
+1:10:52.5 --> 1:10:59.195
+OK, now what can somebody tell
+me about these two terms in the
+
+758
+1:10:59.195 --> 1:11:06
+case where i minus one is not an
+exact power of two?
+
+759
+1:11:06 --> 1:11:09.216
+What are they?
+Equal.
+
+760
+1:11:09.216 --> 1:11:15.809
+Why is that?
+Yeah, the ceiling is going to
+
+761
+1:11:15.809 --> 1:11:24.974
+do the same thing to both,
+going to take it up to the same
+
+762
+1:11:24.974 --> 1:11:31.085
+integer.
+So these two things are equal,
+
+763
+1:11:31.085 --> 1:11:38
+which means this is equal to
+three.
+
+764
+1:11:38 --> 1:11:42.405
+OK, so therefore,
+n inserts, OK,
+
+765
+1:11:42.405 --> 1:11:48.657
+so now I say,
+oh, the amortized cost is three
+
+766
+1:11:48.657 --> 1:11:53.773
+for every operation for every
+insert.
+
+767
+1:11:53.773 --> 1:11:57.894
+So therefore,
+n inserts costs,
+
+768
+1:11:57.894 --> 1:12:05
+well, the amortized cost of
+each is three.
+
+769
+1:12:05 --> 1:12:08.986
+So n of them,
+the amortized cost is 3n.
+
+770
+1:12:08.986 --> 1:12:14.23
+That's an upper bound on the
+worst-case true costs.
+
+771
+1:12:14.23 --> 1:12:18.951
+So, n inserts costs order n in
+the worst case.
+
+772
+1:12:18.951 --> 1:12:22.622
+OK, there is a bug in this
+analysis.
+
+773
+1:12:22.622 --> 1:12:27.132
+It's a minor bug.
+It's the one I pointed out
+
+774
+1:12:27.132 --> 1:12:32.272
+before the first insert has
+amortized cost of two,
+
+775
+1:12:32.272 --> 1:12:37.182
+and not three.
+I didn't actually deal with
+
+776
+1:12:37.182 --> 1:12:41.547
+that one carefully enough.
+OK, so that's an exercise to
+
+777
+1:12:41.547 --> 1:12:46.721
+just go and look to see where it
+is that that happens and how you
+
+778
+1:12:46.721 --> 1:12:50.763
+show that, in fact,
+the amortized cost of the first
+
+779
+1:12:50.763 --> 1:12:53.592
+one is two, OK,
+where that shows up.
+
+780
+1:12:53.592 --> 1:12:57.634
+OK, so to summarize,
+actually let me summarize over
+
+781
+1:12:57.634 --> 1:13:02
+here, conclusions about
+amortized analysis.
+
+782
+1:13:02 --> 1:13:17
+
+
+783
+1:13:17 --> 1:13:35
+So amortized costs provide a
+clean abstraction for data
+
+784
+1:13:35 --> 1:13:45.556
+structure performance.
+So, what I can tell somebody,
+
+785
+1:13:45.556 --> 1:13:49.699
+so suppose I built a dynamic
+table, for example,
+
+786
+1:13:49.699 --> 1:13:51.638
+OK.
+It's easier to say,
+
+787
+1:13:51.638 --> 1:13:55.252
+in terms of your own
+performance modeling,
+
+788
+1:13:55.252 --> 1:13:59.659
+it costs a constant amount of
+time for each insert.
+
+789
+1:13:59.659 --> 1:14:04.066
+As long as you don't care about
+real-time behavior,
+
+790
+1:14:04.066 --> 1:14:08.121
+but only the aggregate
+behavior, that's a great
+
+791
+1:14:08.121 --> 1:14:14.156
+abstraction for the performance
+Rather than saying it's got
+
+792
+1:14:14.156 --> 1:14:18.39
+that complicated thing which
+sometimes cost you a lot,
+
+793
+1:14:18.39 --> 1:14:22.624
+how do they reason about that?
+But you could say every
+
+794
+1:14:22.624 --> 1:14:26.618
+operation costs me order one,
+that's really simple.
+
+795
+1:14:26.618 --> 1:14:31.251
+But they have to understand,
+it's order one in an amortized
+
+796
+1:14:31.251 --> 1:14:34.526
+sense, OK.
+So, if they do have a real-time
+
+797
+1:14:34.526 --> 1:14:39
+constraint to make,
+amortized doesn't cut it.
+
+798
+1:14:39 --> 1:14:42.159
+OK, but for many problems,
+it's perfectly good.
+
+799
+1:14:42.159 --> 1:14:44.563
+It lets me explain it rather
+simply.
+
+800
+1:14:44.563 --> 1:14:48.752
+OK, we will see some other data
+structures that have amortized
+
+801
+1:14:48.752 --> 1:14:53.079
+costs where different operations
+have different amortized costs.
+
+802
+1:14:53.079 --> 1:14:56.239
+And the nice thing about that
+is I just add up,
+
+803
+1:14:56.239 --> 1:14:59.398
+what's the cost of all my
+different operations,
+
+804
+1:14:59.398 --> 1:15:04
+OK, where there is a different
+cost for each operation?
+
+805
+1:15:04 --> 1:15:07.068
+Some will be log n.
+Some will be order one,
+
+806
+1:15:07.068 --> 1:15:08.822
+or whatever.
+Add them up:
+
+807
+1:15:08.822 --> 1:15:11.672
+that's an upper bound on the
+true costs.
+
+808
+1:15:11.672 --> 1:15:15.837
+OK: tremendous simplification
+in abstracting and reasoning
+
+809
+1:15:15.837 --> 1:15:18.686
+about those complicated data
+structures.
+
+810
+1:15:18.686 --> 1:15:21.755
+OK, now, so this is probably,
+this is huge.
+
+811
+1:15:21.755 --> 1:15:24.897
+OK, abstraction,
+you know, computer science,
+
+812
+1:15:24.897 --> 1:15:28.551
+what teach you through four
+years of undergraduate,
+
+813
+1:15:28.551 --> 1:15:33.008
+and another year if you go on
+to M.Eng., and then if you get a
+
+814
+1:15:33.008 --> 1:15:39
+Ph.D., it's another 15 years or
+whatever it takes to get a Ph.D.
+
+815
+1:15:39 --> 1:15:44.392
+OK, all you teach about is
+abstraction: abstraction,
+
+816
+1:15:44.392 --> 1:15:46.929
+abstraction,
+abstraction.
+
+817
+1:15:46.929 --> 1:15:51.792
+So, this is a powerful
+abstraction: quite good.
+
+818
+1:15:51.792 --> 1:15:58.03
+Now, we learned three methods.
+In general, any method can be
+
+819
+1:15:58.03 --> 1:16:01.308
+used.
+You can convert one to the
+
+820
+1:16:01.308 --> 1:16:10.386
+other.
+But each has situations where
+
+821
+1:16:10.386 --> 1:16:20.32
+it is arguably simplest or most
+precise.
+
+822
+1:16:20.32 --> 1:16:30
+So, any of the methods can be
+used.
+
+823
+1:16:30 --> 1:16:34.299
+However, you must learn all of
+them, OK, because there are
+
+824
+1:16:34.299 --> 1:16:37.768
+going to be some situations
+where you need one,
+
+825
+1:16:37.768 --> 1:16:41.464
+where it's better to do one,
+better to do another.
+
+826
+1:16:41.464 --> 1:16:45.386
+If you're reading in the
+literature, you want to know
+
+827
+1:16:45.386 --> 1:16:47.8
+these different ways of doing
+it.
+
+828
+1:16:47.8 --> 1:16:52.401
+And that means that even though
+you may get really comfortable
+
+829
+1:16:52.401 --> 1:16:54.739
+with accounting,
+OK, in an exam,
+
+830
+1:16:54.739 --> 1:16:57.681
+or whatever,
+I may say solve this with a
+
+831
+1:16:57.681 --> 1:17:07.441
+potential function argument.
+So, you want to be comfortable
+
+832
+1:17:07.441 --> 1:17:12.595
+with all the methods,
+OK.
+
+833
+1:17:12.595 --> 1:17:22.687
+Last point is that,
+in fact, different potential
+
+834
+1:17:22.687 --> 1:17:36
+functions or accounting costs
+may yield different bounds.
+
+835
+1:17:36 --> 1:17:41.628
+OK, so when you do an amortized
+analysis, there's nothing to say
+
+836
+1:17:41.628 --> 1:17:45.559
+that one set of costs is better
+than another.
+
+837
+1:17:45.559 --> 1:17:49.847
+So, just as an example,
+OK, in any data structure
+
+838
+1:17:49.847 --> 1:17:55.296
+generally that supports delete,
+I can amortize all the deletes
+
+839
+1:17:55.296 --> 1:17:58.423
+against the inserts.
+So, in general,
+
+840
+1:17:58.423 --> 1:18:02.265
+what I could do is say deletes
+are free, OK,
+
+841
+1:18:02.265 --> 1:18:07
+and charge twice as much for
+each insert.
+
+842
+1:18:07 --> 1:18:10.338
+OK, charging enough when I do
+the insert to amortize it
+
+843
+1:18:10.338 --> 1:18:13.059
+against the delete.
+That you could do with an
+
+844
+1:18:13.059 --> 1:18:15.717
+accounting method.
+You can also do it with a
+
+845
+1:18:15.717 --> 1:18:17.634
+potential method,
+the potential,
+
+846
+1:18:17.634 --> 1:18:21.467
+then, being the number of items
+that I actually have in my data
+
+847
+1:18:21.467 --> 1:18:25.301
+structure times the cost of the
+delete for each of those items.
+
+848
+1:18:25.301 --> 1:18:28.825
+OK, so the point is that I can
+allocate costs in different
+
+849
+1:18:28.825 --> 1:18:31.919
+ways.
+Or I could have amortized costs
+
+850
+1:18:31.919 --> 1:18:33.962
+which are equal to the true
+costs.
+
+851
+1:18:33.962 --> 1:18:37.491
+So, there are different ways
+that I could assign amortized
+
+852
+1:18:37.491 --> 1:18:39.101
+costs.
+There is no one way,
+
+853
+1:18:39.101 --> 1:18:42.692
+OK, and choosing different ones
+may yield different bounds.
+
+854
+1:18:42.692 --> 1:18:45.478
+It may not, but it may yield
+different bounds.
+
+855
+1:18:45.478 --> 1:18:48.079
+OK, generally it does yield
+different ones.
+
+856
+1:18:48.079 --> 1:18:50.617
+OK, next time:
+an amazing use of potential
+
+857
+1:18:50.617 --> 1:18:52.598
+functions.
+OK, the stuff is cool,
+
+858
+1:18:52.598 --> 1:18:55.075
+but let me tell you,
+Wednesday's lecture:
+
+859
+1:18:55.075 --> 1:18:57.49
+amazing.
+Amazing the type of analysis we
+
+860
+1:18:57.49 --> 1:19:00
+are going to be able to do.
+

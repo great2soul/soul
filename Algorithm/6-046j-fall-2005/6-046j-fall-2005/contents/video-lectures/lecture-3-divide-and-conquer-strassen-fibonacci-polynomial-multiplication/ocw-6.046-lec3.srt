@@ -1,0 +1,5100 @@
+1
+00:00:14 --> 00:00:18
+Good morning everyone.
+Today we are going to do some
+
+2
+00:00:18 --> 00:00:23
+algorithms, back to algorithms,
+and we are going to use a lot
+
+3
+00:00:23 --> 00:00:27
+of the, well,
+some of the simpler mathematics
+
+4
+00:00:27 --> 00:00:31
+that we developed last class
+like the master theorem for
+
+5
+00:00:31 --> 00:00:35
+solving recurrences.
+We are going to use this a lot.
+
+6
+00:00:35 --> 00:00:39
+Because we are going to talk
+about recursive algorithms
+
+7
+00:00:39 --> 00:00:41
+today.
+And so we will find their
+
+8
+00:00:41 --> 00:00:43
+running time using the master
+theorem.
+
+9
+00:00:43 --> 00:00:46
+This is just the same as it was
+last time, I hope,
+
+10
+00:00:46 --> 00:00:49
+unless I made a mistake.
+A couple of reminders.
+
+11
+00:00:49 --> 00:00:52
+You should all go to recitation
+on Friday.
+
+12
+00:00:52 --> 00:00:54
+That is required.
+If you want to,
+
+13
+00:00:54 --> 00:00:56
+you can go to homework lab on
+Sunday.
+
+14
+00:00:56 --> 00:00:59
+That may be a good excuse for
+you to actually work on your
+
+15
+00:00:59 --> 00:01:04
+problem set a few hours early.
+Well, actually,
+
+16
+00:01:04 --> 00:01:07
+it's due on Wednesday so you
+have lots of time.
+
+17
+00:01:07 --> 00:01:10
+And there is no class on
+Monday.
+
+18
+00:01:10 --> 00:01:13
+It is the holiday known as
+Student Holiday,
+
+19
+00:01:13 --> 00:01:16
+so don't come.
+Today we are going to cover
+
+20
+00:01:16 --> 00:01:20
+something called Divide and
+Conquer.
+
+21
+00:01:20 --> 00:01:27
+
+
+22
+00:01:27 --> 00:01:31
+Also known as divide and rule
+or divide et impera for those of
+
+23
+00:01:31 --> 00:01:34
+you who know Latin,
+which is a tried and tested way
+
+24
+00:01:34 --> 00:01:39
+of conquering a land by dividing
+it into sections of some kind.
+
+25
+00:01:39 --> 00:01:43
+It could be different political
+factions, different whatever.
+
+26
+00:01:43 --> 00:01:47
+And then somehow making them no
+longer like each other.
+
+27
+00:01:47 --> 00:01:50
+Like starting a family feud is
+always a good method.
+
+28
+00:01:50 --> 00:01:53
+You should remember this on
+your quiz.
+
+29
+00:01:53 --> 00:01:56
+I'm kidding.
+And if you can separate this
+
+30
+00:01:56 --> 00:02:00
+big power structure into little
+power structures such that you
+
+31
+00:02:00 --> 00:02:03
+dominate each little power
+structure then you can conquer
+
+32
+00:02:03 --> 00:02:06
+all of them individually,
+as long as you make sure they
+
+33
+00:02:06 --> 00:02:09
+don't get back together.
+That is divide and conquer as
+
+34
+00:02:09 --> 00:02:11
+practiced, say,
+by the British.
+
+35
+00:02:11 --> 00:02:14
+But today we are going to do
+divide and conquer as practiced
+
+36
+00:02:14 --> 00:02:17
+in Cormen, Leiserson,
+Rivest and Stein or every other
+
+37
+00:02:17 --> 00:02:20
+algorithm textbook.
+This is a very basic and very
+
+38
+00:02:20 --> 00:02:22
+powerful algorithm design
+technique.
+
+39
+00:02:22 --> 00:02:27
+So, this is our first real
+algorithm design experience.
+
+40
+00:02:27 --> 00:02:30
+We are still sort of mostly in
+the analysis mode,
+
+41
+00:02:30 --> 00:02:33
+but we are going to do some
+actual design.
+
+42
+00:02:33 --> 00:02:37
+We're going to cover maybe only
+three or four major design
+
+43
+00:02:37 --> 00:02:39
+techniques.
+This is one of them,
+
+44
+00:02:39 --> 00:02:43
+so it is really important.
+And it will lead to all sorts
+
+45
+00:02:43 --> 00:02:45
+of recurrences,
+so we will get to use
+
+46
+00:02:45 --> 00:02:49
+everything from last class and
+see why it is useful.
+
+47
+00:02:49 --> 00:02:51
+As you might expect,
+the first step in
+
+48
+00:02:51 --> 00:02:57
+divide-and-conquer is divide and
+the second step is conquer.
+
+49
+00:02:57 --> 00:03:01
+But you may not have guessed
+that there are three steps.
+
+50
+00:03:01 --> 00:03:04
+And I am leaving some blank
+space here, so you should,
+
+51
+00:03:04 --> 00:03:06
+too.
+Divide-and-conquer is an
+
+52
+00:03:06 --> 00:03:10
+algorithmic technique.
+You are given some big problem
+
+53
+00:03:10 --> 00:03:14
+you want to solve,
+you don't really know how to
+
+54
+00:03:14 --> 00:03:18
+solve it in an efficient way,
+so you are going to split it up
+
+55
+00:03:18 --> 00:03:22
+into subproblems.
+That is the divide.
+
+56
+00:03:22 --> 00:03:26
+You are going to divide that
+problem, or more precisely the
+
+57
+00:03:26 --> 00:03:30
+instance of that problem,
+the particular instance of that
+
+58
+00:03:30 --> 00:03:32
+problem you have into
+subproblems.
+
+59
+00:03:32 --> 00:03:36
+And those subproblems should be
+smaller in some sense.
+
+60
+00:03:36 --> 00:03:41
+And smaller means normally that
+the value of N is smaller than
+
+61
+00:03:41 --> 00:03:45
+it was in the original problem.
+So, you sort of made some
+
+62
+00:03:45 --> 00:03:47
+progress.
+Now you have one,
+
+63
+00:03:47 --> 00:03:51
+or more likely you have several
+subproblems you need to solve.
+
+64
+00:03:51 --> 00:03:55
+Each of them is smaller.
+So, you recursively solve each
+
+65
+00:03:55 --> 00:04:00
+subproblem.
+That is the conquer step.
+
+66
+00:04:00 --> 00:04:04
+You conquer each subproblem
+recursively.
+
+67
+00:04:04 --> 00:04:11
+And then somehow you combine
+those solutions into a solution
+
+68
+00:04:11 --> 00:04:14
+for the whole problem.
+
+69
+00:04:14 --> 00:04:23
+
+
+70
+00:04:23 --> 00:04:26
+So, this is the general
+divide-and-conquer paradigm.
+
+71
+00:04:26 --> 00:04:29
+And lots of algorithms fit it.
+You have already seen one
+
+72
+00:04:29 --> 00:04:33
+algorithm that fits this
+paradigm, if you can remember.
+
+73
+00:04:33 --> 00:04:36
+Merge sort, good.
+Wow, you are all awake.
+
+74
+00:04:36 --> 00:04:39
+I'm impressed.
+So, we saw merge sort.
+
+75
+00:04:39 --> 00:04:42
+And, if I am clever,
+I could fit it in this space.
+
+76
+00:04:42 --> 00:04:44
+Sure.
+Let's be clever.
+
+77
+00:04:44 --> 00:04:48
+A quick review on merge sort.
+Phrased in this 1,
+
+78
+00:04:48 --> 00:04:52
+2, 3 kind of method.
+The first step was to divide
+
+79
+00:04:52 --> 00:04:56
+your array into two halves.
+This really doesn't mean
+
+80
+00:04:56 --> 00:04:59
+anything because you just sort
+of think, oh,
+
+81
+00:04:59 --> 00:05:05
+I will pretend my array is
+divided into two halves.
+
+82
+00:05:05 --> 00:05:07
+There is no work here.
+This is zero time.
+
+83
+00:05:07 --> 00:05:11
+You just look at your array.
+Here is your array.
+
+84
+00:05:11 --> 00:05:14
+I guess maybe you compute n/2
+and take the floor.
+
+85
+00:05:14 --> 00:05:17
+That takes constant time.
+And you say OK,
+
+86
+00:05:17 --> 00:05:21
+I am pretending my array is now
+divided into the left part and
+
+87
+00:05:21 --> 00:05:24
+the right part.
+And then the interesting part
+
+88
+00:05:24 --> 00:05:27
+is that you recursively solve
+each one.
+
+89
+00:05:27 --> 00:05:32
+That's the conquer.
+We recursively sort each
+
+90
+00:05:32 --> 00:05:37
+subarray.
+And then the third step is to
+
+91
+00:05:37 --> 00:05:44
+combine those solutions.
+And so here we really see what
+
+92
+00:05:44 --> 00:05:49
+this means.
+We now have a sorted version of
+
+93
+00:05:49 --> 00:05:55
+this array by induction.
+We have a sorted version of
+
+94
+00:05:55 --> 00:06:02
+this array by induction.
+We now want the sorted version
+
+95
+00:06:02 --> 00:06:07
+of the whole array.
+And we saw that was the merge
+
+96
+00:06:07 --> 00:06:10
+problem, merging two sorted
+arrays.
+
+97
+00:06:10 --> 00:06:15
+And that we saw how to do in
+linear time, order n time.
+
+98
+00:06:15 --> 00:06:20
+I am not going to repeat that,
+but the point is it falls into
+
+99
+00:06:20 --> 00:06:24
+that framework.
+I want to write the running
+
+100
+00:06:24 --> 00:06:29
+time and merge sort as a
+recurrence.
+
+101
+00:06:29 --> 00:06:33
+You have already seen the
+recurrence, you have already
+
+102
+00:06:33 --> 00:06:37
+been told the solution,
+but now we actually know how to
+
+103
+00:06:37 --> 00:06:39
+solve it.
+And, furthermore,
+
+104
+00:06:39 --> 00:06:43
+every algorithm that follows
+the divide-and-conquer paradigm
+
+105
+00:06:43 --> 00:06:47
+will have a recurrence of pretty
+much the same form,
+
+106
+00:06:47 --> 00:06:51
+very much like our good friend
+the master method.
+
+107
+00:06:51 --> 00:06:56
+Let's do it for merge sort
+where we sort of already know
+
+108
+00:06:56 --> 00:07:00
+the answer and get a bit of
+practice.
+
+109
+00:07:00 --> 00:07:02
+This is the merge sort
+recurrence.
+
+110
+00:07:02 --> 00:07:06
+You should know and love this
+recurrence because it comes up
+
+111
+00:07:06 --> 00:07:09
+all over the place.
+It comes from this general
+
+112
+00:07:09 --> 00:07:13
+approach by just seeing what are
+the sizes of the subproblems you
+
+113
+00:07:13 --> 00:07:17
+are solving and how many there
+are and how much extra work you
+
+114
+00:07:17 --> 00:07:20
+are doing.
+You have here the size of the
+
+115
+00:07:20 --> 00:07:22
+subproblems.
+It happens here that both
+
+116
+00:07:22 --> 00:07:25
+subproblems have the same size
+roughly.
+
+117
+00:07:25 --> 00:07:29
+There is this sloppiness that
+we have, which really should be
+
+118
+00:07:29 --> 00:07:34
+T of floor of n over 2 plus T of
+ceiling of n over 2.
+
+119
+00:07:34 --> 00:07:37
+And when you go to recitation
+on Friday you will see why that
+
+120
+00:07:37 --> 00:07:40
+is OK, the floors and ceilings
+don't matter.
+
+121
+00:07:40 --> 00:07:43
+There is a theorem you can
+prove that that's happy.
+
+122
+00:07:43 --> 00:07:47
+You can assume that N is a
+power of 2, but we are just
+
+123
+00:07:47 --> 00:07:51
+going to assume that for now.
+We just have two problems with
+
+124
+00:07:51 --> 00:07:53
+size n over 2.
+This 2 is the number of
+
+125
+00:07:53 --> 00:07:55
+subproblems.
+
+126
+00:07:55 --> 00:08:00
+
+
+127
+00:08:00 --> 00:08:03
+And this order n is all the
+extra work we are doing.
+
+128
+00:08:03 --> 00:08:07
+Now, what is the extra work
+potentially?
+
+129
+00:08:07 --> 00:08:10
+Well, the conquering is always
+just recursion.
+
+130
+00:08:10 --> 00:08:14
+There is sort of no work there
+except this lead part.
+
+131
+00:08:14 --> 00:08:19
+The dividing in this case is
+trivial, but in general it might
+
+132
+00:08:19 --> 00:08:23
+involve some work.
+And the combining here involves
+
+133
+00:08:23 --> 00:08:25
+linear work.
+So, this is the
+
+134
+00:08:25 --> 00:08:29
+divide-and-conquer running
+times.
+
+135
+00:08:29 --> 00:08:31
+So, this is the nonrecursive
+work.
+
+136
+00:08:31 --> 00:08:36
+And that is generally how you
+convert a divide-and-conquer
+
+137
+00:08:36 --> 00:08:41
+algorithm into a recurrence.
+It's really easy and you
+
+138
+00:08:41 --> 00:08:44
+usually get to apply the master
+method.
+
+139
+00:08:44 --> 00:08:47
+Here we are in Case 2.
+Very good.
+
+140
+00:08:47 --> 00:08:49
+This is Case 2.
+And k is zero here.
+
+141
+00:08:49 --> 00:08:54
+And so in the recursion tree,
+all of the costs are roughly
+
+142
+00:08:54 --> 00:08:58
+the same.
+They are all n to the log base
+
+143
+00:08:58 --> 00:09:02
+b of a.
+Here n to the log base 2 of 2
+
+144
+00:09:02 --> 00:09:04
+is just n.
+So these are equal.
+
+145
+00:09:04 --> 00:09:07
+We get an extra log factor
+because of the number of levels
+
+146
+00:09:07 --> 00:09:11
+in the recursion tree.
+Remember the intuition behind
+
+147
+00:09:11 --> 00:09:13
+the master method.
+This is n log n,
+
+148
+00:09:13 --> 00:09:16
+and that is good.
+Merge sort is a fast sorting
+
+149
+00:09:16 --> 00:09:20
+algorithm n log n.
+Insertion sort was n squared.
+
+150
+00:09:20 --> 00:09:23
+In some sense,
+n log n is the best you can do.
+
+151
+00:09:23 --> 00:09:26
+We will cover that in two
+lectures from now,
+
+152
+00:09:26 --> 00:09:30
+but just foreshadowing.
+Today we are going to do
+
+153
+00:09:30 --> 00:09:32
+different divide-and-conquer
+algorithms.
+
+154
+00:09:32 --> 00:09:36
+Sorting is one problem.
+There are all sorts of problems
+
+155
+00:09:36 --> 00:09:39
+we might want to solve.
+It turns out a lot of them you
+
+156
+00:09:39 --> 00:09:42
+can apply divide-and-conquer to.
+Not every problem.
+
+157
+00:09:42 --> 00:09:45
+Like how to wake up in the
+morning, it's not so easy to
+
+158
+00:09:45 --> 00:09:48
+solve a divide-and-conquer,
+although maybe that's a good
+
+159
+00:09:48 --> 00:09:51
+problem set problem.
+
+160
+00:09:51 --> 00:09:59
+
+
+161
+00:09:59 --> 00:10:03
+The next divide-and-conquer
+algorithm we are going to look
+
+162
+00:10:03 --> 00:10:09
+at is even simpler than sorting,
+even simpler than merge sort,
+
+163
+00:10:09 --> 00:10:13
+but it drives home the point of
+when you have only one
+
+164
+00:10:13 --> 00:10:16
+subproblem.
+How many people have seen
+
+165
+00:10:16 --> 00:10:19
+binary search before?
+Anyone hasn't?
+
+166
+00:10:19 --> 00:10:22
+One, OK.
+I will go very quickly then.
+
+167
+00:10:22 --> 00:10:27
+You have some element X.
+You want to find X in a sorted
+
+168
+00:10:27 --> 00:10:31
+array.
+How many people had not seen it
+
+169
+00:10:31 --> 00:10:33
+before they saw it in
+recitation?
+
+170
+00:10:33 --> 00:10:34
+No one, OK.
+Good.
+
+171
+00:10:34 --> 00:10:38
+You have seen it in another
+class, probably 6.001 or
+
+172
+00:10:38 --> 00:10:39
+something.
+Very good.
+
+173
+00:10:39 --> 00:10:42
+You took the prerequisites.
+OK.
+
+174
+00:10:42 --> 00:10:46
+I just want to phrase it as a
+divide-and-conquer because you
+
+175
+00:10:46 --> 00:10:50
+don't normally see it that way.
+The divide step is you compare
+
+176
+00:10:50 --> 00:10:53
+X with the middle element in
+your array.
+
+177
+00:10:53 --> 00:10:56
+Then the conquer step.
+Here is your array.
+
+178
+00:10:56 --> 00:11:02
+Here is the middle element.
+You compare X with this thing
+
+179
+00:11:02 --> 00:11:06
+if let's say X is smaller than
+the middle element in your
+
+180
+00:11:06 --> 00:11:09
+array.
+You know that X is in the left
+
+181
+00:11:09 --> 00:11:13
+half because it is sorted,
+a nice loop invariant there,
+
+182
+00:11:13 --> 00:11:17
+whatever, but we are just going
+to think of that as recursively
+
+183
+00:11:17 --> 00:11:22
+I am going to solve the problem
+of finding X in this subarray.
+
+184
+00:11:22 --> 00:11:26
+We recurse in one subarray,
+unlike merge sort where we had
+
+185
+00:11:26 --> 00:11:31
+two recursions.
+And then the combined step we
+
+186
+00:11:31 --> 00:11:35
+don't do anything.
+I mean if you find X in here
+
+187
+00:11:35 --> 00:11:38
+then you've found X in the whole
+array.
+
+188
+00:11:38 --> 00:11:42
+There is nothing to bring it
+back up really.
+
+189
+00:11:42 --> 00:11:46
+So, this is just phrasing
+binary search in the
+
+190
+00:11:46 --> 00:11:51
+divide-and-conquer paradigm.
+It is kind of a trivial
+
+191
+00:11:51 --> 00:11:56
+example, but there are lots of
+circumstances where you only
+
+192
+00:11:56 --> 00:12:02
+need to recurse in one side.
+And it is important to see how
+
+193
+00:12:02 --> 00:12:06
+much of a difference making one
+recursion versus making two
+
+194
+00:12:06 --> 00:12:09
+recursions can be.
+This is the recurrence for
+
+195
+00:12:09 --> 00:12:13
+binary search.
+We start with a problem size n.
+
+196
+00:12:13 --> 00:12:16
+We reduce it to 1.
+There is an implicit 1 factor
+
+197
+00:12:16 --> 00:12:19
+here.
+One subproblem of size n over 2
+
+198
+00:12:19 --> 00:12:21
+roughly.
+Again, floors and ceilings
+
+199
+00:12:21 --> 00:12:24
+don't matter.
+Plus a constant which is to
+
+200
+00:12:24 --> 00:12:28
+compare X with the middle
+element, so it is actually like
+
+201
+00:12:28 --> 00:12:32
+one comparison.
+This has a solution,
+
+202
+00:12:32 --> 00:12:35
+log n.
+And you all know the running
+
+203
+00:12:35 --> 00:12:38
+time of binary search,
+but here it is at solving the
+
+204
+00:12:38 --> 00:12:41
+recurrence.
+I mean, there are a couple of
+
+205
+00:12:41 --> 00:12:44
+differences here.
+We don't have the additive
+
+206
+00:12:44 --> 00:12:48
+order n term.
+If we did, it would be linear,
+
+207
+00:12:48 --> 00:12:51
+the running the time.
+Still better than n log n.
+
+208
+00:12:51 --> 00:12:55
+So, we are getting rid of the
+2, bringing it down to a 1,
+
+209
+00:12:55 --> 00:13:00
+taking the n and bringing it
+down to a 1.
+
+210
+00:13:00 --> 00:13:02
+That is making the running time
+a lot faster,
+
+211
+00:13:02 --> 00:13:05
+the whole factor of n faster.
+No big surprise there.
+
+212
+00:13:05 --> 00:13:08
+Let's do some more interesting
+algorithms.
+
+213
+00:13:08 --> 00:13:18
+
+
+214
+00:13:18 --> 00:13:24
+The powering a number problem
+is I give you a number X.
+
+215
+00:13:24 --> 00:13:31
+I give that as like a real
+number or floating point number
+
+216
+00:13:31 --> 00:13:35
+or whatever.
+And I give you an integer n,
+
+217
+00:13:35 --> 00:13:40
+at least zero.
+I want to compute X to the
+
+218
+00:13:40 --> 00:13:44
+power n.
+So, it's a very simple problem.
+
+219
+00:13:44 --> 00:13:49
+It is, in some sense,
+even easier than all of these.
+
+220
+00:13:49 --> 00:13:54
+But here it is.
+And divide-and-conquer is sort
+
+221
+00:13:54 --> 00:14:00
+of the right thing to do.
+So, the naïve algorithm is very
+
+222
+00:14:00 --> 00:14:04
+simple.
+How do you compute X to the
+
+223
+00:14:04 --> 00:14:07
+power n?
+Well, the definition of X to
+
+224
+00:14:07 --> 00:14:11
+the power n is I take X and I
+multiply by X n times.
+
+225
+00:14:11 --> 00:14:16
+So, I take X times X times X
+times X where there are n copies
+
+226
+00:14:16 --> 00:14:19
+of X totally.
+And that's X to the n.
+
+227
+00:14:19 --> 00:14:22
+No big surprise.
+That is n multiplications,
+
+228
+00:14:22 --> 00:14:27
+or n minus 1 multiplications,
+theta n time.
+
+229
+00:14:27 --> 00:14:34
+
+
+230
+00:14:34 --> 00:14:39
+But that's not the best you can
+do for this problem.
+
+231
+00:14:39 --> 00:14:44
+Any suggestions on what we
+might do using
+
+232
+00:14:44 --> 00:14:49
+divide-and-conquer?
+Has anyone seen this algorithm
+
+233
+00:14:49 --> 00:14:51
+before?
+A few, OK.
+
+234
+00:14:51 --> 00:14:56
+For the rest?
+Testing on the spot creativity,
+
+235
+00:14:56 --> 00:15:04
+which is very difficult,
+but I always like a challenge.
+
+236
+00:15:04 --> 00:15:08
+I mean random ideas.
+What could we possibly do to
+
+237
+00:15:08 --> 00:15:12
+solve this problem in less than
+linear time?
+
+238
+00:15:12 --> 00:15:16
+How is this sort of a
+divide-and-conquer problem?
+
+239
+00:15:16 --> 00:15:19
+We have to inputs,
+X and n.
+
+240
+00:15:19 --> 00:15:22
+Yeah?
+We could try to divide on X.
+
+241
+00:15:22 --> 00:15:25
+It seems a bit hard.
+It is just some number.
+
+242
+00:15:25 --> 00:15:30
+Or, we could try to divide on
+n.
+
+243
+00:15:30 --> 00:15:32
+Any guesses?
+Look at X to the n over 2,
+
+244
+00:15:32 --> 00:15:35
+very good.
+That is exactly the idea of the
+
+245
+00:15:35 --> 00:15:38
+divide-and-conquer algorithm.
+
+246
+00:15:38 --> 00:15:48
+
+
+247
+00:15:48 --> 00:15:50
+We would like to look at X to
+the n over 2.
+
+248
+00:15:50 --> 00:15:53
+This is going to be a little
+bit tricky.
+
+249
+00:15:53 --> 00:15:56
+Now we are going to have to pay
+attention to floors and
+
+250
+00:15:56 --> 00:15:59
+ceilings.
+What I would like to say is
+
+251
+00:15:59 --> 00:16:04
+while X to the n is X to the n
+over 2 times X to the n over 2.
+
+252
+00:16:04 --> 00:16:07
+And this is true if n is even.
+If it is odd then I need to be
+
+253
+00:16:07 --> 00:16:11
+a little bit more careful.
+But let's just think about the
+
+254
+00:16:11 --> 00:16:14
+intuition why this is a good
+divide-and-conquer algorithm.
+
+255
+00:16:14 --> 00:16:17
+We have a problem of size n,
+let's say.
+
+256
+00:16:17 --> 00:16:20
+We convert it into,
+it looks like two subproblems
+
+257
+00:16:20 --> 00:16:23
+of size n over 2,
+but in fact they are the same
+
+258
+00:16:23 --> 00:16:25
+subproblems.
+So, I only have to solve one of
+
+259
+00:16:25 --> 00:16:28
+them.
+If I compute X to the n over 2.
+
+260
+00:16:28 --> 00:16:33
+Yeah, I know X to the n over 2.
+So, there is one conversive
+
+261
+00:16:33 --> 00:16:38
+call, problem of size n over 2,
+then I square that number.
+
+262
+00:16:38 --> 00:16:44
+And that is one computation.
+So, exactly the same recurrence
+
+263
+00:16:44 --> 00:16:48
+as binary search,
+log n time much better than n.
+
+264
+00:16:48 --> 00:16:51
+Cool.
+I also have to solve the odd
+
+265
+00:16:51 --> 00:16:53
+case.
+So, n is odd.
+
+266
+00:16:53 --> 2.
+I will look at n minus 1 over
+
+267
+2. --> 00:16:56
+
+
+268
+00:16:56 --> 00:17:02
+N minus 1 better be even.
+And then I am missing another
+
+269
+00:17:02 --> 00:17:04
+factor of X.
+If n is odd,
+
+270
+00:17:04 --> 00:17:09
+I am going to have to do one
+recursive call and two
+
+271
+00:17:09 --> 00:17:12
+multiplications.
+The same recurrence.
+
+272
+00:17:12 --> 00:17:17
+One recursive problem of size n
+over 2, plus constant time.
+
+273
+00:17:17 --> 00:17:21
+The dividing work here is
+dividing by 2 and the
+
+274
+00:17:21 --> 00:17:27
+combination work is doing one or
+possibly two multiplications.
+
+275
+00:17:27 --> 00:17:32
+And this is lg n.
+And if all you are allowed to
+
+276
+00:17:32 --> 00:17:37
+do is multiply numbers,
+lg n is the best you can do.
+
+277
+00:17:37 --> 00:17:40
+Good.
+Simple but powerful.
+
+278
+00:17:40 --> 00:17:44
+Whenever you want to compute a
+power of a number,
+
+279
+00:17:44 --> 00:17:48
+now you know what to do.
+
+280
+00:17:48 --> 00:17:55
+
+
+281
+00:17:55 --> 00:17:58
+Does anyone not know the
+definition of Fibonacci numbers
+
+282
+00:17:58 --> 00:18:01
+and is willing to admit it?
+OK, so this is a good old
+
+283
+00:18:01 --> 00:18:02
+friend.
+I will write down the
+
+284
+00:18:02 --> 00:18:05
+definition as just a reminder.
+And, in particular,
+
+285
+00:18:05 --> 00:18:07
+the base cases.
+
+286
+00:18:07 --> 00:18:17
+
+
+287
+00:18:17 --> 00:18:18
+Fibonacci numbers,
+I will claim,
+
+288
+00:18:18 --> 00:18:21
+are very important because it
+appears throughout nature.
+
+289
+00:18:21 --> 00:18:24
+You look at certain fruits,
+you see the Fibonacci sequence.
+
+290
+00:18:24 --> 00:18:28
+If you count the number of
+little bumps around each ring.
+
+291
+00:18:28 --> 00:18:31
+If you look at the sand on the
+beach and how the waves hit it,
+
+292
+00:18:31 --> 00:18:34
+it's the Fibonacci sequence I
+am told.
+
+293
+00:18:34 --> 00:18:39
+If you look all over the place,
+Fibonacci sequence is there.
+
+294
+00:18:39 --> 00:18:43
+How does nature compute the
+Fibonacci sequence?
+
+295
+00:18:43 --> 00:18:46
+Well, that is a different
+class.
+
+296
+00:18:46 --> 00:18:52
+But how are we going to compute
+the Fibonacci sequence as fast
+
+297
+00:18:52 --> 00:18:56
+as possible?
+You have probably seen two
+
+298
+00:18:56 --> 00:18:59
+algorithms.
+The most naïve algorithm is the
+
+299
+00:18:59 --> 00:19:04
+recursive algorithm.
+Where you say OK,
+
+300
+00:19:04 --> 00:19:06
+f of n.
+I say well, if n is zero,
+
+301
+00:19:06 --> 00:19:09
+return zero,
+if n is 1, return one.
+
+302
+00:19:09 --> 00:19:13
+Otherwise, recursively compute
+f of n minus 1 and f of n minus
+
+303
+00:19:13 --> 00:19:17
+2, add them together.
+How much time does this
+
+304
+00:19:17 --> 00:19:20
+algorithm take,
+for those who have seen it
+
+305
+00:19:20 --> 00:19:22
+before?
+This is not obvious to guess.
+
+306
+00:19:22 --> 00:19:26
+It doesn't have to be exact.
+
+307
+00:19:26 --> 00:19:31
+
+
+308
+00:19:31 --> 00:19:33
+OK.
+And how many people have seen
+
+309
+00:19:33 --> 00:19:36
+this algorithm before and
+analyzed it?
+
+310
+00:19:36 --> 00:19:39
+Half, OK.
+So what is the running time?
+
+311
+00:19:39 --> 00:19:41
+Really, really long,
+very good.
+
+312
+00:19:41 --> 00:19:44
+Anymore precise answers?
+What's that?
+
+313
+00:19:44 --> 00:19:45
+Exponential,
+yes.
+
+314
+00:19:45 --> 00:19:48
+That is also correct and more
+precise.
+
+315
+00:19:48 --> 00:19:52
+I will be even more precise.
+Maybe you haven't seen this
+
+316
+00:19:52 --> 00:19:56
+analysis before.
+It's phi to the n where phi is
+
+317
+00:19:56 --> 00:20:01
+the Golden Ratio.
+Again, Golden Ratio appears
+
+318
+00:20:01 --> 00:20:03
+throughout the world in
+mathematics.
+
+319
+00:20:03 --> 00:20:07
+This is probably the only time
+in this class,
+
+320
+00:20:07 --> 00:20:11
+I'm afraid, but there we go.
+It made its cameo so we are
+
+321
+00:20:11 --> 00:20:14
+happy.
+This is called exponential
+
+322
+00:20:14 --> 00:20:16
+time.
+This is bigger than one,
+
+323
+00:20:16 --> 00:20:20
+that's all you need to know.
+This is exponential time.
+
+324
+00:20:20 --> 00:20:25
+Exponential time means
+basically some constant to the
+
+325
+00:20:25 --> 00:20:28
+power n.
+Exponential time is a very long
+
+326
+00:20:28 --> 00:20:30
+time.
+It's bad.
+
+327
+00:20:30 --> 00:20:35
+Polynomial time is good.
+[LAUGHTER] This is what we
+
+328
+00:20:35 --> 00:20:38
+want, polynomial time
+algorithms.
+
+329
+00:20:38 --> 00:20:42
+This class is basically
+entirely about polynomial time
+
+330
+00:20:42 --> 00:20:44
+algorithms.
+Question?
+
+331
+00:20:44 --> 00:20:47
+Oh, say what the algorithm does
+again.
+
+332
+00:20:47 --> 00:20:53
+Define function Fibonacci of n?
+I check for the base cases.
+
+333
+00:20:53 --> 00:20:59
+Otherwise, I recursively call
+Fibonacci of n minus 1.
+
+334
+00:20:59 --> 00:21:02
+I recursively call Fibonacci of
+n minus 2 and add those two
+
+335
+00:21:02 --> 00:21:04
+numbers together.
+So, you get this branching
+
+336
+00:21:04 --> 00:21:06
+tree.
+You are solving two subproblems
+
+337
+00:21:06 --> 00:21:09
+of almost the same size,
+just additively smaller by one
+
+338
+00:21:09 --> 00:21:10
+or two.
+I mean you are almost not
+
+339
+00:21:10 --> 00:21:13
+reducing the problem size at
+all, so that's intuitively why
+
+340
+00:21:13 --> 00:21:16
+it is exponential.
+You can draw a recursion tree
+
+341
+00:21:16 --> 00:21:18
+and you will see how big it gets
+and how quickly.
+
+342
+00:21:18 --> 00:21:21
+I mean by n over two levels,
+you've only reduced on one
+
+343
+00:21:21 --> 00:21:23
+branch the problem from n to n
+over 2.
+
+344
+00:21:23 --> 00:21:26
+The other one,
+maybe you've gotten from n down
+
+345
+00:21:26 --> 00:21:29
+to one, but none of the branches
+have stopped after n of two
+
+346
+00:21:29 --> 00:21:32
+levels.
+You have at least 2 to the
+
+347
+00:21:32 --> 00:21:37
+power n over 2 which is like
+square root of 2 to the power n,
+
+348
+00:21:37 --> 00:21:40
+which is getting close to phi
+to the n.
+
+349
+00:21:40 --> 00:21:42
+So, this is definitely
+exponential.
+
+350
+00:21:42 --> 00:21:46
+And exponential is bad.
+We want polynomial.
+
+351
+00:21:46 --> 00:21:49
+N squared, n cubed,
+log n would be nice.
+
+352
+00:21:49 --> 00:21:53
+Anything that is bounded above
+by a polynomial is good.
+
+353
+00:21:53 --> 00:21:57
+This is an old idea.
+It goes back to one of the main
+
+354
+00:21:57 --> 00:22:01
+people who said polynomial is
+good, Jack Edmonds who is famous
+
+355
+00:22:01 --> 00:22:06
+in the combinatorial
+optimization world.
+
+356
+00:22:06 --> 00:22:12
+He is my academic grandfather
+on one side.
+
+357
+00:22:12 --> 00:22:18
+He is a very interesting guy.
+
+358
+00:22:18 --> 00:22:32
+
+
+359
+00:22:32 --> 00:22:34
+OK, so that's a really bad
+algorithm.
+
+360
+00:22:34 --> 00:22:37
+You have probably seen a
+somewhat better algorithm,
+
+361
+00:22:37 --> 00:22:41
+which you might think of as the
+bottom-up implantation of that
+
+362
+00:22:41 --> 00:22:43
+recursive algorithm.
+
+363
+00:22:43 --> 00:22:49
+
+
+364
+00:22:49 --> 00:22:51
+Or, another way to think of it
+is if you build out the
+
+365
+00:22:51 --> 00:22:54
+recursion tree for Fibonacci of
+n, you will see that there are
+
+366
+00:22:54 --> 00:22:58
+lots of common subtrees that you
+are just wasting time on.
+
+367
+00:22:58 --> 00:23:01
+When you solve Fibonacci of n
+minus 1, it again solves
+
+368
+00:23:01 --> 00:23:04
+Fibonacci of n minus 2.
+Why solve it twice?
+
+369
+00:23:04 --> 00:23:07
+You only need to solve it once.
+So, it is really easy to do
+
+370
+00:23:07 --> 00:23:11
+that if you do it bottom-up.
+But you could also do it
+
+371
+00:23:11 --> 00:23:14
+recursively with some cache of
+things you have already
+
+372
+00:23:14 --> 00:23:16
+computed.
+So, no big surprise.
+
+373
+00:23:16 --> 00:23:19
+You compute the Fibonacci
+numbers in order.
+
+374
+00:23:19 --> 00:23:22
+And each time,
+when you compute Fibonacci of
+
+375
+00:23:22 --> 00:23:24
+n, let's say,
+you have already computed the
+
+376
+00:23:24 --> 00:23:27
+previous two,
+you add them together,
+
+377
+00:23:27 --> 00:23:32
+it takes constant time.
+So, the running time here is
+
+378
+00:23:32 --> 00:23:36
+linear, linear in n,
+and as our input.
+
+379
+00:23:36 --> 00:23:39
+Great.
+Is that the best we can do?
+
+380
+00:23:39 --> 00:23:42
+No.
+Any ideas on how we could
+
+381
+00:23:42 --> 00:23:47
+compute Fibonacci of n faster
+than linear time?
+
+382
+00:23:47 --> 00:23:52
+Now we should diverge from what
+you have already seen,
+
+383
+00:23:52 --> 00:23:56
+most of you.
+Any ideas using techniques you
+
+384
+00:23:56 --> 00:24:00
+have already seen?
+Yes?
+
+385
+00:24:00 --> 00:24:02
+Yes.
+We can use the mathematical
+
+386
+00:24:02 --> 00:24:05
+trick of phi and psi to the nth
+powers.
+
+387
+00:24:05 --> 00:24:09
+In fact, you can just use phi,
+phi, pi, pho,
+
+388
+00:24:09 --> 00:24:13
+phum, whatever you want to call
+this Greek letter.
+
+389
+00:24:13 --> 00:24:16
+Good.
+Here is the mathematical trick.
+
+390
+00:24:16 --> 00:24:18
+And, indeed,
+this is cheating,
+
+391
+00:24:18 --> 00:24:21
+as you have said.
+This is no good,
+
+392
+00:24:21 --> 00:24:24
+but so it is.
+We will call it naïve recursive
+
+393
+00:24:24 --> 00:24:30
+squaring and say well,
+we know recursive squaring.
+
+394
+00:24:30 --> 00:24:32
+Recursive squaring takes log n
+time.
+
+395
+00:24:32 --> 00:24:36
+Let's use recursive squaring.
+And if you happen to know lots
+
+396
+00:24:36 --> 00:24:40
+of properties of the Fibonacci
+numbers, you don't have to,
+
+397
+00:24:40 --> 00:24:44
+but here is one of them.
+If you take phi to the n
+
+398
+00:24:44 --> 00:24:48
+divided by root 5 and you round
+it to the nearest integer that
+
+399
+00:24:48 --> 00:24:51
+is the nth Fibonacci number.
+
+400
+00:24:51 --> 00:24:58
+
+
+401
+00:24:58 --> 00:25:01
+This is pretty cool.
+Fibonacci of n is basically phi
+
+402
+00:25:01 --> 00:25:03
+to the n.
+We could apply recursive
+
+403
+00:25:03 --> 00:25:07
+squaring to compute phi to the n
+in log n time,
+
+404
+00:25:07 --> 00:25:11
+divide by root 5,
+assume that our computer has an
+
+405
+00:25:11 --> 00:25:16
+operation that rounds a number
+to its nearest integer and poof,
+
+406
+00:25:16 --> 00:25:19
+we are done.
+That doesn't work for many
+
+407
+00:25:19 --> 00:25:22
+different reasons.
+On a real machine,
+
+408
+00:25:22 --> 00:25:26
+probably you would represent
+phi and root 5 as floating point
+
+409
+00:25:26 --> 00:25:32
+numbers which have some fixed
+amount of precise bits.
+
+410
+00:25:32 --> 00:25:35
+And if you do this computation,
+you will lose some of the
+
+411
+00:25:35 --> 00:25:37
+important bits.
+And when you round to the
+
+412
+00:25:37 --> 00:25:39
+nearest integer you won't get
+the right answer.
+
+413
+00:25:39 --> 00:25:42
+So, floating point round off
+will kill you on a floating
+
+414
+00:25:42 --> 00:25:45
+point machine.
+On a theoretical machine where
+
+415
+00:25:45 --> 00:25:48
+we magically have numbers that
+can do crazy things like this,
+
+416
+00:25:48 --> 00:25:51
+I mean it really takes more
+than constant time per
+
+417
+00:25:51 --> 00:25:53
+multiplication.
+So, we are sort of in a
+
+418
+00:25:53 --> 00:25:56
+different model.
+You cannot multiply phi times
+
+419
+00:25:56 --> 00:25:58
+phi in constant time.
+I mean that's sort of outside
+
+420
+00:25:58 --> 00:26:03
+the boundaries of this course,
+but that's the way it is.
+
+421
+00:26:03 --> 00:26:06
+In fact, in a normal machine,
+some problems you can only
+
+422
+00:26:06 --> 00:26:09
+solve in exponential time.
+In a machine where you can
+
+423
+00:26:09 --> 00:26:13
+multiply real numbers and round
+them to the nearest integers,
+
+424
+00:26:13 --> 00:26:15
+you can solve them in
+polynomial time.
+
+425
+00:26:15 --> 00:26:19
+So, it really breaks the model.
+You can do crazy things if you
+
+426
+00:26:19 --> 00:26:22
+were allowed to do this.
+This is not allowed.
+
+427
+00:26:22 --> 00:26:25
+And I am foreshadowing like
+three classes ahead,
+
+428
+00:26:25 --> 00:26:28
+or three courses ahead,
+so I shouldn't talk more about
+
+429
+00:26:28 --> 00:26:32
+it.
+But it turns out we can use
+
+430
+00:26:32 --> 00:26:35
+recursive squaring in a
+different way if we use a
+
+431
+00:26:35 --> 00:26:38
+different property of Fibonacci
+numbers.
+
+432
+00:26:38 --> 00:26:42
+And then we will just stick
+with integers and everything
+
+433
+00:26:42 --> 00:26:45
+will be happy.
+Don't forget to go to
+
+434
+00:26:45 --> 00:26:48
+recitation and if you want to
+homework lab.
+
+435
+00:26:48 --> 00:26:51
+Don't come here on Monday.
+That is required.
+
+436
+00:26:51 --> 00:26:57
+This is sort of the right
+recursive squaring algorithm.
+
+437
+00:26:57 --> 00:27:02
+And this is a bit hard to guess
+if you haven't already seen it,
+
+438
+00:27:02 --> 00:27:07
+so I will just give it to you.
+I will call this a theorem.
+
+439
+00:27:07 --> 00:27:12
+It's the first time I get to
+use the word theorem in this
+
+440
+00:27:12 --> 00:27:15
+class.
+It turns out the nth Fibonacci
+
+441
+00:27:15 --> 00:27:18
+number is the nth power of this
+matrix.
+
+442
+00:27:18 --> 00:27:21
+Cool.
+If you look at it a little bit
+
+443
+00:27:21 --> 00:27:24
+you say oh, yeah,
+of course.
+
+444
+00:27:24 --> 00:27:29
+And we will prove this theorem
+in a second.
+
+445
+00:27:29 --> 00:27:31
+But once we have this theorem,
+we can compute f of n by
+
+446
+00:27:31 --> 00:27:34
+computing the nth power of this
+matrix.
+
+447
+00:27:34 --> 00:27:36
+It's a two-by-two matrix.
+You multiply two two-by-two
+
+448
+00:27:36 --> 00:27:39
+matrixes together,
+you get a two-by-two matrix.
+
+449
+00:27:39 --> 00:27:41
+So that is constant size,
+four numbers.
+
+450
+00:27:41 --> 00:27:44
+I can handle four numbers.
+We don't have crazy precision
+
+451
+00:27:44 --> 00:27:46
+problems on the floating point
+side.
+
+452
+00:27:46 --> 00:27:48
+There are only four numbers to
+deal with.
+
+453
+00:27:48 --> 00:27:52
+Matrixes aren't getting bigger.
+So, the running time of this
+
+454
+00:27:52 --> 00:27:55
+divide-and-conquer algorithm
+will still be log n because it
+
+455
+00:27:55 --> 00:27:57
+takes a constant time per
+two-by-two matrix
+
+456
+00:27:57 --> 00:28:00
+multiplication.
+Yes?
+
+457
+00:28:00 --> 00:28:02
+Oh, yes.
+Thank you.
+
+458
+00:28:02 --> 00:28:06
+I have a type error.
+Sorry about that.
+
+459
+00:28:06 --> 00:28:12
+F of n is indeed the upper left
+corner, I hope.
+
+460
+00:28:12 --> 00:28:17
+I better check I don't have it
+off by one.
+
+461
+00:28:17 --> 00:28:21
+I do.
+It's F_n upper right corner,
+
+462
+00:28:21 --> 00:28:24
+indeed.
+That's what you said.
+
+463
+00:28:24 --> 00:28:27
+F of n.
+I need more space.
+
+464
+00:28:27 --> 00:28:32
+Sorry.
+I really ought to have a
+
+465
+00:28:32 --> 00:28:36
+two-by-two matrix on the
+left-hand side there.
+
+466
+00:28:36 --> 00:28:40
+Thank you.
+So, I compute this nth power of
+
+467
+00:28:40 --> 00:28:44
+a matrix in log n time,
+I take the upper right corner
+
+468
+00:28:44 --> 00:28:48
+or the lower left corner,
+your choice,
+
+469
+00:28:48 --> 00:28:51
+that is the nth Fibonacci
+number.
+
+470
+00:28:51 --> 00:28:56
+This implies an order log n
+time algorithm with the same
+
+471
+00:28:56 --> 00:29:01
+recurrence as the last two,
+binary search and really the
+
+472
+00:29:01 --> 00:29:07
+recursive squaring algorithm.
+It is log n plus a constant,
+
+473
+00:29:07 --> 00:29:10
+so log n.
+Let's prove that theorem.
+
+474
+00:29:10 --> 00:29:30
+
+
+475
+00:29:30 --> 00:29:34
+Any suggestions on what
+techniques we might use for
+
+476
+00:29:34 --> 00:29:37
+proving this theorem,
+or what technique,
+
+477
+00:29:37 --> 00:29:40
+singular?
+Induction, very good.
+
+478
+00:29:40 --> 00:29:44
+I think any time I ask that
+question the answer is
+
+479
+00:29:44 --> 00:29:47
+induction.
+Hint for the future in this
+
+480
+00:29:47 --> 00:29:49
+class.
+
+481
+00:29:49 --> 00:29:54
+
+
+482
+00:29:54 --> 00:29:56
+A friend of mine,
+when he took an analysis class,
+
+483
+00:29:56 --> 00:29:59
+whenever the professor asked,
+and what is the answer to this
+
+484
+00:29:59 --> 00:30:01
+question, the answer was always
+zero.
+
+485
+00:30:01 --> 00:30:04
+If you have taken analysis
+class that is funny.
+
+486
+00:30:04 --> 00:30:10
+[LAUGHTER] Maybe I will try to
+ask some questions whose answers
+
+487
+00:30:10 --> 00:30:13
+are zero just for our own
+amusement.
+
+488
+00:30:13 --> 00:30:17
+We are going to induct on n.
+It's pretty much the obvious
+
+489
+00:30:17 --> 00:30:20
+thing to do.
+But we have to check some
+
+490
+00:30:20 --> 00:30:23
+cases.
+So, the base case is we have
+
+491
+00:30:23 --> 00:30:27
+this to the first power.
+And that is itself [(1,
+
+492
+00:30:27 --> 00:30:33
+1), (1, 0)].
+And I should have said n is at
+
+493
+00:30:33 --> 00:30:36
+least 1.
+And you can check.
+
+494
+00:30:36 --> 00:30:40
+This is supposed to be F_2,
+F_1, F_1, F_0.
+
+495
+00:30:40 --> 00:30:46
+And you can check it is,
+F_0 is 0, F_1 is 1 and F_2 is
+
+496
+00:30:46 --> 1.
+
+
+497
+1. --> 00:30:46
+Good.
+
+498
+00:30:46 --> 00:30:52
+Base case is correct,
+step case is about as exciting,
+
+499
+00:30:52 --> 00:30:59
+but you've got to prove that
+your algorithm works.
+
+500
+00:30:59 --> 00:31:03
+Suppose this is what we want to
+compute.
+
+501
+00:31:03 --> 00:31:10
+I am just going to sort of,
+well, there are many ways I can
+
+502
+00:31:10 --> 00:31:14
+do this.
+I will just do it the fast way
+
+503
+00:31:14 --> 00:31:18
+because it's really not that
+exciting.
+
+504
+00:31:18 --> 00:31:23
+Which direction?
+Let's do this direction.
+
+505
+00:31:23 --> 00:31:29
+I want to use induction on n.
+If I want to use induction on
+
+506
+00:31:29 --> 00:31:33
+n, presumably I should use what
+I already know is true.
+
+507
+00:31:33 --> 00:31:37
+If I decrease n by 1,
+I have this property that this
+
+508
+00:31:37 --> 00:31:40
+thing is going to be [(1,
+1), (1, 0)] to the power n
+
+509
+00:31:40 --> 00:31:42
+minus 1.
+This I already know,
+
+510
+00:31:42 --> 00:31:45
+by the induction hypothesis,
+[(1, 1), (1,
+
+511
+00:31:45 --> 00:31:48
+0)] to the n minus 1.
+So, presumably I should use it
+
+512
+00:31:48 --> 00:31:51
+in some way.
+This equality is not yet true,
+
+513
+00:31:51 --> 00:31:54
+you may have noticed.
+So, I need to add something on.
+
+514
+00:31:54 --> 00:31:59
+What could I possibly add on to
+be correct?
+
+515
+00:31:59 --> 00:32:01
+Well, another factor of [(1,
+1), (1, 0)].
+
+516
+00:32:01 --> 00:32:05
+The way I am developing this
+proof is the only way it could
+
+517
+00:32:05 --> 00:32:08
+possibly be, in some sense.
+If you know its induction,
+
+518
+00:32:08 --> 00:32:12
+this is all that you could do.
+And then you check.
+
+519
+00:32:12 --> 00:32:14
+Indeed, this equality holds
+conveniently.
+
+520
+00:32:14 --> 00:32:17
+For example,
+F_(n plus 1) is the product of
+
+521
+00:32:17 --> 00:32:20
+these two things.
+It is this row times this
+
+522
+00:32:20 --> 00:32:22
+column.
+So, it is F_n times 1 plus F_(n
+
+523
+00:32:22 --> 00:32:25
+minus 1) times 1,
+which is indeed the definition
+
+524
+00:32:25 --> 00:32:30
+of F_(n plus 1).
+And you could check four of the
+
+525
+00:32:30 --> 00:32:32
+entries.
+This is true.
+
+526
+00:32:32 --> 00:32:36
+Great.
+If that is true then I would
+
+527
+00:32:36 --> 00:32:39
+just put these together.
+That is [(1,
+
+528
+00:32:39 --> 00:32:43
+1), (1, 0)] to the n minus 1
+times [(1, 1),
+
+529
+00:32:43 --> 00:32:47
+(1, 0)], which is [(1,
+1), (1, 0)] to the n,
+
+530
+00:32:47 --> 00:32:50
+end of proof.
+A very simple proof,
+
+531
+00:32:50 --> 00:32:55
+but you have to do that in
+order to know if this algorithm
+
+532
+00:32:55 --> 00:32:57
+really works.
+Good.
+
+533
+00:32:57 --> 00:33:00
+Question?
+Oh, yes.
+
+534
+00:33:00 --> 00:33:03
+Thank you.
+This, in the lower right,
+
+535
+00:33:03 --> 00:33:08
+we should have F_(n minus 1).
+This is why you should really
+
+536
+00:33:08 --> 00:33:12
+check your proofs.
+We would have discovered that
+
+537
+00:33:12 --> 00:33:16
+when I checked that this was
+that row times that column,
+
+538
+00:33:16 --> 00:33:20
+but that is why you are here,
+to fix my bugs.
+
+539
+00:33:20 --> 00:33:25
+That's the great thing about
+being up here instead of in a
+
+540
+00:33:25 --> 00:33:29
+quiz.
+But that is a minor mistake.
+
+541
+00:33:29 --> 00:33:31
+You wouldn't lose much for
+that.
+
+542
+00:33:31 --> 00:33:34
+All right.
+More divide-and-conquer
+
+543
+00:33:34 --> 00:33:37
+algorithms.
+Still, we have done relatively
+
+544
+00:33:37 --> 00:33:41
+simple ones so far.
+In fact, the fanciest has been
+
+545
+00:33:41 --> 00:33:44
+merge sort, which we already
+saw.
+
+546
+00:33:44 --> 00:33:48
+So, that is not too exciting.
+The rest have all be log n
+
+547
+00:33:48 --> 00:33:51
+time.
+Let's break out of the log n
+
+548
+00:33:51 --> 00:33:54
+world.
+Well, you all have the master
+
+549
+00:33:54 --> 00:33:58
+method memorized,
+right, so I can erase that.
+
+550
+00:33:58 --> 00:34:01
+Good.
+This will be a good test.
+
+551
+00:34:01 --> 00:34:04
+Next problem is matrix
+multiplication,
+
+552
+00:34:04 --> 00:34:08
+following right up on this
+two-by-two matrix
+
+553
+00:34:08 --> 00:34:11
+multiplication.
+Let's see how we can compute
+
+554
+00:34:11 --> 00:34:15
+n-by-n matrix multiplications.
+Just for a recap,
+
+555
+00:34:15 --> 00:34:19
+you should know how to multiply
+matrixes, but here is the
+
+556
+00:34:19 --> 00:34:22
+definition so we can turn it
+into an algorithm.
+
+557
+00:34:22 --> 00:34:26
+You have two matrixes,
+A and B, which are capital
+
+558
+00:34:26 --> 00:34:28
+levels.
+The ijth entry.
+
+559
+00:34:28 --> 00:34:34
+Ith row, jth column is called
+little a_ij or little b_ij.
+
+560
+00:34:34 --> 00:34:40
+And your goal is to compute the
+products of those matrixes.
+
+561
+00:34:40 --> 00:34:45
+I should probably say that i
+and j range from 1 to n.
+
+562
+00:34:45 --> 00:34:51
+So, they are square matrixes.
+The output is to compute C
+
+563
+00:34:51 --> 00:34:57
+which has entry c_ij which is
+the product of A and B.
+
+564
+00:34:57 --> 00:35:01
+And, for a recap,
+the ijth entry of the product
+
+565
+00:35:01 --> 00:35:08
+is the inner product of the ith
+row of A with the jth column of
+
+566
+00:35:08 --> 00:35:13
+B.
+But you can write that out as a
+
+567
+00:35:13 --> 00:35:17
+sum like so.
+We want to compute this thing
+
+568
+00:35:17 --> 00:35:22
+for every i and j.
+What is the obvious algorithm
+
+569
+00:35:22 --> 00:35:27
+for doing this?
+Well, for every i and j you
+
+570
+00:35:27 --> 00:35:32
+compute the sum.
+You compute all the products.
+
+571
+00:35:32 --> 00:35:35
+You compute the sum.
+So, it's like n operations here
+
+572
+00:35:35 --> 00:35:37
+roughly.
+I mean like 2n minus 1,
+
+573
+00:35:37 --> 00:35:40
+whatever.
+It is order n operations.
+
+574
+00:35:40 --> 00:35:43
+There are n^2 entries of C that
+I need to compute,
+
+575
+00:35:43 --> 00:35:47
+so that's n^3 time.
+I will write this out just for
+
+576
+00:35:47 --> 00:35:50
+the programmers at heart.
+Here is the pseudocode.
+
+577
+00:35:50 --> 00:35:53
+It's rare that I will write
+pseudocode.
+
+578
+00:35:53 --> 00:35:57
+And this is a simple enough
+algorithm that I can write it in
+
+579
+00:35:57 --> 00:36:03
+gory detail.
+But it gives you some basis for
+
+580
+00:36:03 --> 00:36:06
+this analysis if you like to
+program.
+
+581
+00:36:06 --> 00:36:10
+It is a triply nested for loop.
+
+582
+00:36:10 --> 00:36:17
+
+
+583
+00:36:17 --> 00:36:23
+And I made a coding error.
+Hopefully you haven't written
+
+584
+00:36:23 --> 00:36:27
+that far yet.
+I need c_ij to be initialized
+
+585
+00:36:27 --> 00:36:31
+to zero.
+And then I add to c_ij the
+
+586
+00:36:31 --> 00:36:36
+appropriate product,
+a_ik, b_kj.
+
+587
+00:36:36 --> 00:36:39
+That is the algorithm.
+And the point is you have a
+
+588
+00:36:39 --> 00:36:42
+nesting of n for loops from 1 to
+n.
+
+589
+00:36:42 --> 00:36:46
+That takes n^3 time because
+this is constant and that is
+
+590
+00:36:46 --> 00:36:48
+constant.
+So, very simple,
+
+591
+00:36:48 --> 00:36:51
+n^3.
+Let's do better.
+
+592
+00:36:51 --> 00:36:57
+
+
+593
+00:36:57 --> 00:36:58
+And, of course,
+we are going to use
+
+594
+00:36:58 --> 00:36:59
+divide-and-conquer.
+
+595
+00:36:59 --> 00:37:04
+
+
+596
+00:37:04 --> 00:37:06
+Now, how are we going to divide
+a matrix?
+
+597
+00:37:06 --> 00:37:10
+There are a lot of numbers in a
+matrix, n^2 of them in each one.
+
+598
+00:37:10 --> 00:37:12
+There are all sorts of ways you
+could divide.
+
+599
+00:37:12 --> 00:37:15
+So far all of the
+divide-and-conquers we have done
+
+600
+00:37:15 --> 00:37:19
+have been problems of size n
+into some number of problems of
+
+601
+00:37:19 --> 00:37:21
+size n over 2.
+I am going to say I start with
+
+602
+00:37:21 --> 00:37:25
+some matrixes of size n-by-n.
+I want to convert it down to
+
+603
+00:37:25 --> 00:37:28
+something like n/2-by-n/2.
+Any suggestions how I might do
+
+604
+00:37:28 --> 00:37:30
+that?
+Yeah?
+
+605
+00:37:30 --> 00:37:33
+Block form the matrix,
+indeed.
+
+606
+00:37:33 --> 00:37:38
+That is the right answer.
+So, this is the first
+
+607
+00:37:38 --> 00:37:43
+divide-and-conquer algorithm.
+This will not work,
+
+608
+00:37:43 --> 00:37:47
+but it has the first idea that
+we need.
+
+609
+00:37:47 --> 00:37:51
+We have a n-by-n matrix.
+We can view it,
+
+610
+00:37:51 --> 00:37:55
+this equality is more,
+you can think of it as,
+
+611
+00:37:55 --> 00:38:01
+it's really the thing,
+a two-by-two block matrix where
+
+612
+00:38:01 --> 00:38:06
+each entry in this two-by-two
+block matrix is a block of
+
+613
+00:38:06 --> 00:38:11
+n/2-by-n/2 submatrixes.
+
+614
+00:38:11 --> 00:38:20
+
+
+615
+00:38:20 --> 00:38:27
+I will think of C as being
+divided into three parts,
+
+616
+00:38:27 --> 00:38:32
+r, s, t and u.
+Even though I write them as
+
+617
+00:38:32 --> 00:38:37
+lower case letters they are
+really matrixes.
+
+618
+00:38:37 --> 00:38:42
+Each is n/2-by-n/2.
+And A, I will split into a,
+
+619
+00:38:42 --> 00:38:46
+b, c, d, times B,
+I will split into e,
+
+620
+00:38:46 --> 00:38:48
+f, g, h.
+Why not?
+
+621
+00:38:48 --> 00:38:53
+This is certainly true.
+And if you've seen some linear
+
+622
+00:38:53 --> 00:39:01
+algebra, this is basically what
+you can do with matrixes.
+
+623
+00:39:01 --> 00:39:05
+Now I can pretend these are
+two-by-two and sort of forget
+
+624
+00:39:05 --> 00:39:09
+the fact that these little
+letters are matrixes and say
+
+625
+00:39:09 --> 00:39:14
+well, r is the inner product of
+this row with this column.
+
+626
+00:39:14 --> 00:39:17
+It is ae times bg.
+Let me not cheat or else it
+
+627
+00:39:17 --> 00:39:23
+will be too easy.
+r=ae+bg, s=af+bh,
+
+628
+00:39:23 --> 00:39:34
+t=ce+dh and u=cf+dg.
+It's nothing like making it too
+
+629
+00:39:34 --> 00:39:41
+hard on yourself.
+OK, got them right.
+
+630
+00:39:41 --> 00:39:48
+Good.
+I mean this is just a fact
+
+631
+00:39:48 --> 00:39:59
+about how you would expand out
+this product.
+
+632
+00:39:59 --> 00:40:01
+And so now we have a recursive
+algorithm.
+
+633
+00:40:01 --> 00:40:04
+In fact, we have a
+divide-and-conquer algorithm.
+
+634
+00:40:04 --> 00:40:07
+We start with our n-by-n
+matrix.
+
+635
+00:40:07 --> 00:40:09
+Well, we have two of them
+actually.
+
+636
+00:40:09 --> 00:40:12
+We divide it into eight little
+pieces, a, b,
+
+637
+00:40:12 --> 00:40:13
+c, d, e, f, g,
+h.
+
+638
+00:40:13 --> 00:40:16
+Then we compute these things
+and that gives us C,
+
+639
+00:40:16 --> 00:40:20
+just by sticking them together.
+Now, how do we compute these
+
+640
+00:40:20 --> 00:40:23
+things?
+Well, these innocent-looking
+
+641
+00:40:23 --> 00:40:27
+little products between these
+two little numbers are actually
+
+642
+00:40:27 --> 00:40:31
+recursive matrix
+multiplications.
+
+643
+00:40:31 --> 00:40:37
+Because each of these little
+letters is an n/2-by-n/2 matrix
+
+644
+00:40:37 --> 00:40:42
+so I have to recursively compute
+the product.
+
+645
+00:40:42 --> 00:40:49
+There are like eight recursive
+multiplications of n/2-by-n/2
+
+646
+00:40:49 --> 00:40:52
+matrixes.
+That is what bites us.
+
+647
+00:40:52 --> 00:40:59
+And then there are like four
+additions, plus minor work of
+
+648
+00:40:59 --> 00:41:05
+gluing things together.
+How long does it take to add
+
+649
+00:41:05 --> 00:41:06
+two matrixes together?
+n^2.
+
+650
+00:41:06 --> 00:41:09
+This is cheap.
+It just takes n^2.
+
+651
+00:41:09 --> 00:41:12
+Remember, we are trying to beat
+n^3 for our matrix
+
+652
+00:41:12 --> 00:41:15
+multiplication.
+Addition is a really easy
+
+653
+00:41:15 --> 00:41:17
+problem.
+You just have to add every
+
+654
+00:41:17 --> 00:41:20
+number.
+There is no way you can do
+
+655
+00:41:20 --> 00:41:23
+better than n^2.
+So, that is not recursive.
+
+656
+00:41:23 --> 00:41:26
+That is the nice thing.
+But the bad thing is we have
+
+657
+00:41:26 --> 00:41:31
+eight of these recursions.
+We have
+
+658
+00:41:31 --> 00:41:39
+T(n)=8T(n/2)+Theta(n^2).
+And I have erased the master
+
+659
+00:41:39 --> 00:41:46
+method, but you should all have
+it memorized.
+
+660
+00:41:46 --> 00:41:52
+What is the solution to this
+recurrence?
+
+661
+00:41:52 --> 00:41:56
+Theta(n^3).
+That is annoying.
+
+662
+00:41:56 --> 00:42:01
+All right.
+A is 8, b is 2,
+
+663
+00:42:01 --> 00:42:07
+log base 2 of 8 is 3.
+Every computer scientist should
+
+664
+00:42:07 --> 00:42:09
+know that.
+n^log_b(a)=n^3.
+
+665
+00:42:09 --> 00:42:15
+That is polynomially larger
+than n^2, so we are in Case 1.
+
+666
+00:42:15 --> 00:42:19
+Thank you.
+Let's get them upside down.
+
+667
+00:42:19 --> 00:42:23
+This is n^3,
+no better than our previous
+
+668
+00:42:23 --> 00:42:26
+algorithm.
+That kind of sucks.
+
+669
+00:42:26 --> 00:42:30
+And now comes the divine
+inspiration.
+
+670
+00:42:30 --> 00:42:34
+Let's go over here.
+
+671
+00:42:34 --> 00:42:41
+
+
+672
+00:42:41 --> 00:42:44
+There are some algorithms like
+this Fibonacci algorithm where
+
+673
+00:42:44 --> 00:42:47
+if you sat down for a little
+while, it's no big deal,
+
+674
+00:42:47 --> 00:42:51
+you would figure it out.
+I mean it is kind of clever to
+
+675
+00:42:51 --> 00:42:54
+look at that matrix and then
+everything works happily.
+
+676
+00:42:54 --> 00:42:57
+It is not obvious but it is not
+that amazingly clever.
+
+677
+00:42:57 --> 00:43:01
+This is an algorithm that is
+amazingly clever.
+
+678
+00:43:01 --> 00:43:05
+You may have seen it before
+which steals the thunder a
+
+679
+00:43:05 --> 00:43:10
+little bit, but it is still
+really, really cool so you
+
+680
+00:43:10 --> 00:43:15
+should be happy to see it again.
+And how Strassen came up with
+
+681
+00:43:15 --> 00:43:19
+this algorithm,
+he must have been very clever.
+
+682
+00:43:19 --> 00:43:24
+The idea is we've got to get
+rid of these multiplications.
+
+683
+00:43:24 --> 00:43:30
+I could do a hundred additions.
+That only costs Theta(n^2).
+
+684
+00:43:30 --> 00:43:33
+I have to reduce this 8 to
+something smaller.
+
+685
+00:43:33 --> 00:43:35
+It turns out,
+if you try to split the
+
+686
+00:43:35 --> 00:43:39
+matrices into three-by-three or
+something, that doesn't help
+
+687
+00:43:39 --> 00:43:41
+you.
+You get the same problem
+
+688
+00:43:41 --> 00:43:44
+because we're using
+fundamentally the same
+
+689
+00:43:44 --> 00:43:47
+algorithm, just in a different
+order.
+
+690
+00:43:47 --> 00:43:51
+We have got to somehow reduce
+the number of multiplications.
+
+691
+00:43:51 --> 00:43:55
+We are going to reduce it to 7.
+The claim is that if we have
+
+692
+00:43:55 --> 00:43:59
+two two-by-two matrices we can
+take their product using seven
+
+693
+00:43:59 --> 00:44:03
+multiplications.
+If that were true,
+
+694
+00:44:03 --> 00:44:08
+we would reduce the 8 to a 7
+and presumably make things run
+
+695
+00:44:08 --> 00:44:11
+faster.
+We will see how fast in a
+
+696
+00:44:11 --> 00:44:14
+moment.
+You can compute it in your
+
+697
+00:44:14 --> 00:44:16
+head.
+If you are bored and like
+
+698
+00:44:16 --> 00:44:21
+computing logs that are
+non-integral logs then go ahead.
+
+699
+00:44:21 --> 00:44:23
+All right.
+Here we are.
+
+700
+00:44:23 --> 00:44:28
+This algorithm is unfortunately
+rather long, but it is only
+
+701
+00:44:28 --> 00:44:32
+seven multiplications.
+
+702
+00:44:32 --> 00:44:45
+
+
+703
+00:44:45 --> 00:44:49
+Each of these P's is a product
+of two things which only
+
+704
+00:44:49 --> 00:44:54
+involves addition or
+subtraction, the same thing.
+
+705
+00:44:54 --> 00:45:38
+
+
+706
+00:45:38 --> 00:45:41
+Those are seven
+multiplications.
+
+707
+00:45:41 --> 00:45:44
+And I can compute those in
+7T(n/2).
+
+708
+00:45:44 --> 00:45:47
+Oh, indeed it is.
+Six was wrong.
+
+709
+00:45:47 --> 00:45:51
+Six and seven are the same,
+very good.
+
+710
+00:45:51 --> 00:45:57
+You know, you think that
+copying something would not be
+
+711
+00:45:57 --> 00:46:02
+such a challenging task.
+But when you become an
+
+712
+00:46:02 --> 00:46:07
+absent-minded professor like me
+then you will know how easy it
+
+713
+00:46:07 --> 00:46:07
+is.
+OK.
+
+714
+00:46:07 --> 00:46:10
+We have them all correct,
+hopefully.
+
+715
+00:46:10 --> 00:46:12
+We continue.
+That wasn't enough.
+
+716
+00:46:12 --> 00:46:16
+Of course we had seven things.
+Clearly we have to reduce this
+
+717
+00:46:16 --> 00:46:19
+down to four things,
+the elements of C.
+
+718
+00:46:19 --> 00:46:22
+Here they are,
+the elements of C,
+
+719
+00:46:22 --> 00:46:25
+r, s, t, u.
+It turns out r=P_5+P_4-P_2+P_6.
+
+720
+00:46:25 --> 00:46:27
+Of course.
+Didn't you all see that?
+
+721
+00:46:27 --> 00:46:33
+[LAUGHTER]
+I mean this one is really easy,
+
+722
+00:46:33 --> 00:46:36
+s=P_1+P2.
+t=P_3+P_4.
+
+723
+00:46:36 --> 00:46:41
+I mean that is clearly how they
+were chosen.
+
+724
+00:46:41 --> 00:46:48
+And then u is another tricky
+one, u=P_5+P_1-P_3-P_7.
+
+725
+00:46:48 --> 00:46:52
+OK.
+Now, which one of these would
+
+726
+00:46:52 --> 00:46:57
+you like me to check?
+Don't be so nice.
+
+727
+00:46:57 --> 00:47:03
+How about s?
+I can show you s is right.
+
+728
+00:47:03 --> 00:47:06
+Any preferences?
+u.
+
+729
+00:47:06 --> 00:47:09
+Oh, no, sign errors.
+OK.
+
+730
+00:47:09 --> 00:47:14
+Here we go.
+The claim that this really
+
+731
+00:47:14 --> 00:47:21
+works is you have to check all
+four of them.
+
+732
+00:47:21 --> 00:47:25
+And I did in my notes.
+u=P_5.
+
+733
+00:47:25 --> 00:47:31
+P_5=(ae + ah + de + dh).
+That is P_5.
+
+734
+00:47:31 --> 00:47:35
+Check me.
+If I screw up,
+
+735
+00:47:35 --> 00:47:40
+I am really hosed.
+(af - ah) = P_1.
+
+736
+00:47:40 --> 00:47:48
+P_3 has a minus sign in front,
+so that is (ce + de).
+
+737
+00:47:48 --> 00:47:55
+And then we have minus P_7,
+which is a big one,
+
+738
+00:47:55 --> 00:48:00
+(ae + af - ce - cf).
+OK.
+
+739
+00:48:00 --> 00:48:12
+Now I need like the assistant
+that crosses off things in
+
+740
+00:48:12 --> 00:48:19
+parallel like the movie,
+right?
+
+741
+00:48:19 --> 00:48:25
+ah, de, af, ce,
+ae, thank you,
+
+742
+00:48:25 --> 00:48:37
+and hopefully these survive,
+dh minus minus cf.
+
+743
+00:48:37 --> 00:48:40
+And, if we are lucky,
+that is exactly what is written
+
+744
+00:48:40 --> 00:48:42
+here, except in the opposite
+order.
+
+745
+00:48:42 --> 00:48:45
+Magic, right?
+Where the hell did Strassen get
+
+746
+00:48:45 --> 00:48:47
+this?
+You have to be careful.
+
+747
+00:48:47 --> 00:48:51
+It is OK that the plus is in
+the wrong order because plus is
+
+748
+00:48:51 --> 00:48:54
+commutative, but the
+multiplications better not be in
+
+749
+00:48:54 --> 00:48:58
+the wrong order because
+multiplication over matrixes is
+
+750
+00:48:58 --> 00:49:01
+not commutative.
+I check cf, OK,
+
+751
+00:49:01 --> 00:49:05
+dh, they are in the right
+order.
+
+752
+00:49:05 --> 00:49:11
+I won't check the other three.
+That is matrix multiplication
+
+753
+00:49:11 --> 00:49:17
+in hopefully subcubic time.
+Let's write down the
+
+754
+00:49:17 --> 00:49:19
+recurrence.
+T(n) is now 7.
+
+755
+00:49:19 --> 00:49:25
+Maybe I should write down the
+algorithm for kicks.
+
+756
+00:49:25 --> 00:49:30
+Why not?
+Assuming I have time.
+
+757
+00:49:30 --> 00:49:33
+Lots of time.
+Last lecture I was ten minutes
+
+758
+00:49:33 --> 00:49:36
+early.
+I ended ten minutes early.
+
+759
+00:49:36 --> 00:49:40
+I apologize for that.
+I know it really upsets you.
+
+760
+00:49:40 --> 00:49:46
+And I didn't realize exactly
+when the class was supposed to
+
+761
+00:49:46 --> 00:49:48
+end.
+So, today, I get to go ten
+
+762
+00:49:48 --> 00:49:50
+minutes late.
+OK.
+
+763
+00:49:50 --> 00:49:52
+Good.
+I'm glad you all agree.
+
+764
+00:49:52 --> 00:49:55
+[LAUGHTER] I am kidding.
+Don't worry.
+
+765
+00:49:55 --> 00:49:56
+OK.
+Algorithm.
+
+766
+00:49:56 --> 00:50:02
+This is Strassen.
+First we divide,
+
+767
+00:50:02 --> 00:50:07
+then we conquer and then we
+combine.
+
+768
+00:50:07 --> 00:50:14
+As usual, I don't have it
+written anywhere here.
+
+769
+00:50:14 --> 00:50:17
+Fine.
+Divide A and B.
+
+770
+00:50:17 --> 00:50:27
+This is sort of trivial.
+Then we compute the terms --
+
+771
+00:50:27 --> 00:50:36
+
+
+772
+00:50:36 --> 00:50:39
+-- for the products.
+This means we get ready to
+
+773
+00:50:39 --> 00:50:42
+compute all the P's.
+We compute a+b,
+
+774
+00:50:42 --> 00:50:45
+c+d, g-e, a+d,
+e+h and so on.
+
+775
+00:50:45 --> 00:50:49
+All of the terms that appear in
+here, we compute those.
+
+776
+00:50:49 --> 00:50:54
+That takes n2 time because it
+is just a bunch of additions and
+
+777
+00:50:54 --> 00:50:56
+subtractions.
+No big deal.
+
+778
+00:50:56 --> 00:51:04
+A constant number of them.
+Then we conquer by recursively
+
+779
+00:51:04 --> 00:51:12
+computing all the P_i's.
+That is each our product of
+
+780
+00:51:12 --> 00:51:17
+seven of them.
+We have P_1,
+
+781
+00:51:17 --> 00:51:21
+P_2 up to P_7.
+And, finally,
+
+782
+00:51:21 --> 00:51:30
+we combine, which is to compute
+r, s, t and u.
+
+783
+00:51:30 --> 00:51:36
+
+
+784
+00:51:36 --> 00:51:40
+And those are just additions
+and subtractions again,
+
+785
+00:51:40 --> 00:51:43
+so they take n^2 times.
+So, here we finally get an
+
+786
+00:51:43 --> 00:51:47
+algorithm that is nontrivial
+both in dividing and in
+
+787
+00:51:47 --> 00:51:51
+combining.
+Recursion is always recursion,
+
+788
+00:51:51 --> 00:51:54
+but now we have interesting
+steps one and three.
+
+789
+00:51:54 --> 00:51:59
+The recurrence is T(n) is seven
+recursive subproblems,
+
+790
+00:51:59 --> 00:52:03
+each are size n/2 plus order
+n^2, to do all this addition
+
+791
+00:52:03 --> 00:52:07
+work.
+Now we need to solve this
+
+792
+00:52:07 --> 00:52:11
+recurrence.
+We compute n^log_b(a),
+
+793
+00:52:11 --> 00:52:16
+which here is nlog_2(7).
+And we know log base 2 of 8 is
+
+794
+00:52:16 --> 3.
+
+
+795
+3. --> 00:52:20
+Log base 2 of 7 is going be a
+
+796
+00:52:20 --> 00:52:26
+little bit less than 3 but still
+bigger than 2 because log base 2
+
+797
+00:52:26 --> 00:52:30
+of 4 is 2.
+So, it is going to be
+
+798
+00:52:30 --> 00:52:36
+polynomially larger than n^2 but
+polynomially smaller than n^3.
+
+799
+00:52:36 --> 00:52:41
+We are again in Case 1.
+And this is the cheating way to
+
+800
+00:52:41 --> 00:52:44
+write n log base 2 of 7,
+nlg7.
+
+801
+00:52:44 --> 00:52:48
+lg means log base 2.
+You should know that.
+
+802
+00:52:48 --> 00:52:53
+It is all over the textbook and
+in our problem sets and what
+
+803
+00:52:53 --> 00:52:56
+not, nlg7.
+And, in particular,
+
+804
+00:52:56 --> 00:53:02
+if I have my calculator here.
+This is a good old-fashion
+
+805
+00:53:02 --> 00:53:04
+calculator.
+No, that is wrong.
+
+806
+00:53:04 --> 00:53:07
+Sorry.
+It is strictly less than 2.81.
+
+807
+00:53:07 --> 00:53:11
+It is strictly less than 2.81.
+That is cool.
+
+808
+00:53:11 --> 00:53:14
+I mean it is polynomially
+better than n^3.
+
+809
+00:53:14 --> 00:53:18
+Still not as good as addition,
+which is n^2.
+
+810
+00:53:18 --> 00:53:23
+It is generally believed,
+although we don't know whether
+
+811
+00:53:23 --> 00:53:29
+you can multiply as fast as you
+can divide for matrices.
+
+812
+00:53:29 --> 00:53:32
+We think you cannot get n^2,
+but who knows?
+
+813
+00:53:32 --> 00:53:36
+It could still happen.
+There are no lower bounds.
+
+814
+00:53:36 --> 00:53:40
+This is not the best algorithm
+for matrix multiplication.
+
+815
+00:53:40 --> 00:53:44
+It is sort of the simplest that
+beats n^3.
+
+816
+00:53:44 --> 00:53:46
+The best so far is like
+n^2.376.
+
+817
+00:53:46 --> 00:53:50
+Getting closer to 2.
+You might think these numbers
+
+818
+00:53:50 --> 00:53:54
+are a bit weird.
+Maybe the constants out here
+
+819
+00:53:54 --> 00:54:00
+dominate the improvement you are
+getting in the exponent.
+
+820
+00:54:00 --> 00:54:03
+It turns out improving the
+exponent is a big deal.
+
+821
+00:54:03 --> 00:54:06
+I mean, as n gets larger
+exponents really come out to
+
+822
+00:54:06 --> 00:54:09
+bite you.
+So, n^3 is pretty impractical
+
+823
+00:54:09 --> 00:54:13
+for any very large values of n.
+And we known that Strassen will
+
+824
+00:54:13 --> 00:54:16
+beat normal matrix
+multiplication if n is
+
+825
+00:54:16 --> 00:54:19
+sufficiently large.
+The claim is that roughly at
+
+826
+00:54:19 --> 00:54:22
+about 32 or so already you get
+an improvement,
+
+827
+00:54:22 --> 00:54:25
+for other reasons,
+not just because the exponent
+
+828
+00:54:25 --> 00:54:30
+gets better, but there you go.
+So, this is pretty good.
+
+829
+00:54:30 --> 00:54:33
+This is completely impractical,
+so don't use whatever this
+
+830
+00:54:33 --> 00:54:36
+algorithm is.
+I don't have the reference
+
+831
+00:54:36 --> 00:54:40
+handy, but it is just trying to
+get a theoretical improvement.
+
+832
+00:54:40 --> 00:54:44
+There may be others that are in
+between and more reasonable but
+
+833
+00:54:44 --> 00:54:46
+that is not it.
+Wow, lots of time.
+
+834
+00:54:46 --> 00:54:49
+Any questions?
+We're not done yet,
+
+835
+00:54:49 --> 00:54:52
+but any questions before we
+move on for matrix
+
+836
+00:54:52 --> 00:54:53
+multiplication?
+OK.
+
+837
+00:54:53 --> 00:54:56
+I have one more problem.
+
+838
+00:54:56 --> 00:55:15
+
+
+839
+00:55:15 --> 00:55:17
+Divide-and-conquer is a pretty
+general idea.
+
+840
+00:55:17 --> 00:55:20
+I mean, you can use it to
+dominate countries.
+
+841
+00:55:20 --> 00:55:22
+You can use it to multiply
+matrices.
+
+842
+00:55:22 --> 00:55:26
+I mean, who would have thought?
+Here is a very different kind
+
+843
+00:55:26 --> 00:55:30
+of problem you can solve with
+divide-and-conquer.
+
+844
+00:55:30 --> 00:55:32
+It is not exactly an
+algorithmic problem,
+
+845
+00:55:32 --> 00:55:35
+although it is computer
+science.
+
+846
+00:55:35 --> 00:55:37
+That is clear.
+This is very large-scale
+
+847
+00:55:37 --> 00:55:40
+integration.
+The chips, they are very large
+
+848
+00:55:40 --> 00:55:44
+scale integrated.
+Probably even more these days,
+
+849
+00:55:44 --> 00:55:47
+but that is the catch phrase.
+Here is a problem,
+
+850
+00:55:47 --> 00:55:51
+and it arises in VLSI layout.
+We won't get into too many
+
+851
+00:55:51 --> 00:55:54
+details why, but you have some
+circuit.
+
+852
+00:55:54 --> 00:55:58
+And here I am going to assume
+that the circuit is a binary
+
+853
+00:55:58 --> 00:56:02
+tree.
+This is just part of a circuit.
+
+854
+00:56:02 --> 00:56:07
+Assume for now here that it is
+just a complete binary tree.
+
+855
+00:56:07 --> 00:56:11
+A complete binary tree looks
+like this.
+
+856
+00:56:11 --> 00:56:15
+In all of my teachings,
+I have drawn this figure for
+
+857
+00:56:15 --> 00:56:18
+sure the most.
+It is my favorite figure,
+
+858
+00:56:18 --> 00:56:21
+the height four complete binary
+tree.
+
+859
+00:56:21 --> 00:56:25
+OK, there it is.
+I have some tree like that as
+
+860
+00:56:25 --> 00:56:30
+some height.
+I want to imbed it into some
+
+861
+00:56:30 --> 00:56:36
+chip layout on a grid.
+Let's say it has n leaves.
+
+862
+00:56:36 --> 00:56:41
+I want to imbed it into a grid
+with minimum area.
+
+863
+00:56:41 --> 00:56:47
+This is a very cute problem and
+it really shows you another way
+
+864
+00:56:47 --> 00:56:53
+in which divide-and-conquer is a
+useful and powerful tool.
+
+865
+00:56:53 --> 00:57:00
+So, I have this tree.
+I like to draw it in this way.
+
+866
+00:57:00 --> 00:57:02
+I want to somehow draw it on
+the grid.
+
+867
+00:57:02 --> 00:57:06
+What that means is the vertices
+have to be imbedded onto dots on
+
+868
+00:57:06 --> 00:57:09
+the grid, and I am talking about
+the square grid.
+
+869
+00:57:09 --> 00:57:12
+It has to go to vertices of the
+grid.
+
+870
+00:57:12 --> 00:57:15
+And these edges have to be
+routed as sort of orthogonal
+
+871
+00:57:15 --> 00:57:19
+paths between one dot and
+another, so that should be an
+
+872
+00:57:19 --> 00:57:22
+edge and they shouldn't cross
+and all these good things
+
+873
+00:57:22 --> 00:57:25
+because wires do not like to
+cross.
+
+874
+00:57:25 --> 00:57:28
+There is the obvious way to
+solve this problem and there is
+
+875
+00:57:28 --> 00:57:31
+the right way.
+
+876
+00:57:31 --> 00:57:36
+
+
+877
+00:57:36 --> 00:57:37
+And let's talk about both of
+them.
+
+878
+00:57:37 --> 00:57:41
+Neither of them is particularly
+obvious, but divide-and-conquer
+
+879
+00:57:41 --> 00:57:44
+sort of gives you a hint in the
+right direction.
+
+880
+00:57:44 --> 00:57:47
+So, the naïve imbedding.
+I seem to like the word naïve
+
+881
+00:57:47 --> 00:57:48
+here.
+
+882
+00:57:48 --> 00:57:54
+
+
+883
+00:57:54 --> 00:57:58
+I am going to draw this bottom
+up because it is easier,
+
+884
+00:57:58 --> 00:58:02
+so leave three grid lines and
+then start drawing.
+
+885
+00:58:02 --> 00:58:05
+I don't know how big that is
+going to be.
+
+886
+00:58:05 --> 00:58:11
+Here is the bottom of our tree.
+This is like the little three
+
+887
+00:58:11 --> 00:58:15
+nodes there.
+And then I leave a blank column
+
+888
+00:58:15 --> 00:58:21
+and then a blank column.
+I don't actually need to leave
+
+889
+00:58:21 --> 00:58:25
+those blank columns,
+but it makes a prettier
+
+890
+00:58:25 --> 00:58:30
+drawing.
+And then we work our way up.
+
+891
+00:58:30 --> 00:58:37
+
+
+892
+00:58:37 --> 00:58:40
+There is the tree,
+which should be aligned,
+
+893
+00:58:40 --> 00:58:42
+on a grid.
+No crossings.
+
+894
+00:58:42 --> 00:58:45
+Everything is happy.
+How much area does it take?
+
+895
+00:58:45 --> 00:58:49
+By area, I mean sort of the
+area of the bounding box.
+
+896
+00:58:49 --> 00:58:54
+So, I count this blank space
+even though I am not using it
+
+897
+00:58:54 --> 00:59:00
+and I count all this blank space
+even though I am not using it.
+
+898
+00:59:00 --> 00:59:04
+I want to look at the height.
+Let's call this H(n).
+
+899
+00:59:04 --> 00:59:08
+And to look at the width,
+which I will call W(n).
+
+900
+00:59:08 --> 00:59:13
+Now, it is probably pretty
+obvious that H(n) is like log n,
+
+901
+00:59:13 --> 00:59:18
+W(n) is like n or whatever.
+But I want to write it as a
+
+902
+00:59:18 --> 00:59:22
+recurrence because that will
+inspire us to do the right
+
+903
+00:59:22 --> 00:59:23
+thing.
+H(n).
+
+904
+00:59:23 --> 00:59:27
+Well, if you think of this as a
+recursion-tree,
+
+905
+00:59:27 --> 00:59:31
+in some sense.
+We start with the big tree.
+
+906
+00:59:31 --> 00:59:35
+We split it into two halves,
+two subtrees of size n/2 indeed
+
+907
+00:59:35 --> 00:59:40
+because we are counting leaves.
+It is exactly n/2 on each side.
+
+908
+00:59:40 --> 00:59:43
+Then for height they are in
+parallel so it is no big deal.
+
+909
+00:59:43 --> 00:59:46
+The height is just the height
+of this thing,
+
+910
+00:59:46 --> 00:59:48
+one of these subproblems plus
+one.
+
+911
+00:59:48 --> 00:59:52
+The width, you have to add
+together the two widths and also
+
+912
+00:59:52 --> 00:59:55
+add on 1.
+You don't have to add on 1
+
+913
+00:59:55 --> 1:00:00
+here, but it doesn't matter.
+It is certainly at most 1.
+
+914
+1:00:00 --> 1:00:10.598
+H(n) = H(n/2) + Theta(1),
+there you do have to add 1,
+
+915
+1:00:10.598 --> 1:00:20.178
+and W(n) = 2W(n/2) + O(1).
+The usual base cases.
+
+916
+1:00:20.178 --> 1:00:32
+I mean, these are recurrences
+we should know and love.
+
+917
+1:00:32 --> 1:00:36.155
+This is log n,
+I sort of have already given
+
+918
+1:00:36.155 --> 1:00:40.409
+away the answers,
+and this better be linear.
+
+919
+1:00:40.409 --> 1:00:45.356
+This is again Case 1.
+And to the log base 2 of 2 is
+
+920
+1:00:45.356 --> 1:00:49.512
+n, which is the answer,
+much bigger than 1.
+
+921
+1:00:49.512 --> 1:00:54.459
+And here n to the log base 2 of
+1 is n to the zero,
+
+922
+1:00:54.459 --> 1:01:00
+which is 1, which is the same
+so we get log n.
+
+923
+1:01:00 --> 1:01:04.085
+The area is n log n,
+but if you are making chips you
+
+924
+1:01:04.085 --> 1:01:08.331
+want the area as small as
+possible so you can fit more
+
+925
+1:01:08.331 --> 1:01:12.256
+good stuff in there.
+So, we would like to aim for,
+
+926
+1:01:12.256 --> 1:01:16.182
+well, we certainly cannot do a
+better area than n.
+
+927
+1:01:16.182 --> 1:01:19.627
+You've got to put the leaves
+down somewhere,
+
+928
+1:01:19.627 --> 1:01:22.11
+but this is already pretty
+good.
+
+929
+1:01:22.11 --> 1:01:26.356
+It is only a log factor off,
+but we want to aim for n.
+
+930
+1:01:26.356 --> 1:01:31.053
+How could we get n?
+Any guesses on what needs to
+
+931
+1:01:31.053 --> 1:01:34.794
+change in this layout?
+Not how to do it because that
+
+932
+1:01:34.794 --> 1:01:37.801
+is not obvious,
+but in terms of height and
+
+933
+1:01:37.801 --> 1:01:41.616
+width what should we do?
+It is pretty hard to get the
+
+934
+1:01:41.616 --> 1:01:44.696
+height smaller than log n,
+I will tell you,
+
+935
+1:01:44.696 --> 1:01:48.584
+because this is a tree.
+It cannot really get its width
+
+936
+1:01:48.584 --> 1:01:52.398
+down to less than log n.
+What could we do to make the
+
+937
+1:01:52.398 --> 1:01:54.819
+product linear?
+Just random ideas.
+
+938
+1:01:54.819 --> 1:01:59
+What are two functions whose
+product is n?
+
+939
+1:01:59 --> 1:02:07
+
+
+940
+1:02:07 --> 1:02:09.227
+Square root of n and square
+root of n.
+
+941
+1:02:09.227 --> 1:02:12.298
+That is a good choice.
+Were there other suggestions?
+
+942
+1:02:12.298 --> 1:02:15.188
+n times constant.
+Yeah, n times constant would be
+
+943
+1:02:15.188 --> 1:02:17.054
+nice.
+But I claim you cannot get
+
+944
+1:02:17.054 --> 1:02:19.704
+either of these down to less
+than a constant.
+
+945
+1:02:19.704 --> 1:02:23.316
+You could aim for n over log n
+by log n, that is more likely,
+
+946
+1:02:23.316 --> 1:02:25.544
+but I think that is almost
+impossible.
+
+947
+1:02:25.544 --> 1:02:30
+Root n by root n is the right
+answer, so let's go with that.
+
+948
+1:02:30 --> 1:02:36.05
+So, root n by root n.
+We haven't seen any recurrences
+
+949
+1:02:36.05 --> 1:02:42.45
+whose solution is root n,
+but surely they are out there.
+
+950
+1:02:42.45 --> 1:02:49.316
+Let's say the goal is to get
+W(n) = Theta(root n) and to get
+
+951
+1:02:49.316 --> 1:02:54.785
+H(n) = Theta(root n).
+If we did that we would be
+
+952
+1:02:54.785 --> 1:03:02
+happy, because then the area is
+the product is linear.
+
+953
+1:03:02 --> 1:03:05.677
+How?
+What is a recurrence that is in
+
+954
+1:03:05.677 --> 1:03:11.245
+the usual master method form
+whose solution is root n?
+
+955
+1:03:11.245 --> 1:03:15.237
+I mean, you could think of it
+that way.
+
+956
+1:03:15.237 --> 1:03:20.49
+Recurrence is a bit tricky,
+but let's just think of
+
+957
+1:03:20.49 --> 1:03:24.377
+n^log_b(a).
+When is log base b of a ½?
+
+958
+1:03:24.377 --> 1:03:29
+Because then n^log_b(a) is root
+n.
+
+959
+1:03:29 --> 1:03:33.726
+And there is some hope that I
+could get a root n solution to
+
+960
+1:03:33.726 --> 1:03:36.77
+recurrence.
+This is designed by knowing
+
+961
+1:03:36.77 --> 1:03:41.095
+that it is divide-and-conquer,
+and therefore it must be
+
+962
+1:03:41.095 --> 1:03:44.94
+something like this.
+It is easy once you know the
+
+963
+1:03:44.94 --> 1:03:49.186
+approach you are supposed to
+take and you can try this
+
+964
+1:03:49.186 --> 1:03:51.989
+approach.
+When is log base b of a ½?
+
+965
+1:03:51.989 --> 1:03:54.633
+Lots of solutions,
+shout them out.
+
+966
+1:03:54.633 --> 1:04:00
+4 and 2, that is a good one.
+I better get this right.
+
+967
+1:04:00 --> 1:04:06.41
+Log base 4 of 2 is ½ because
+the square root of 4 is 2.
+
+968
+1:04:06.41 --> 1:04:10.089
+So, let's aim for this.
+Why not?
+
+969
+1:04:10.089 --> 1:04:14.007
+When would we get log base 4 of
+2?
+
+970
+1:04:14.007 --> 1:04:19.823
+This is b, this is a,
+so it should be 2T(n/4) plus
+
+971
+1:04:19.823 --> 1:04:24.69
+something.
+And if I want the n^log_b(a) to
+
+972
+1:04:24.69 --> 1:04:31.338
+dominate, it has got to be
+polynomially smaller than root
+
+973
+1:04:31.338 --> 1:04:34.388
+n.
+So, this should be
+
+974
+1:04:34.388 --> 1:04:37.32
+n^1/2-epsilon.
+But it could be smaller.
+
+975
+1:04:37.32 --> 1:04:39.867
+It could be 1.
+Zero would be nice,
+
+976
+1:04:39.867 --> 1:04:43.03
+but that is probably too much
+to hope for.
+
+977
+1:04:43.03 --> 1:04:46.966
+So, something smaller,
+strictly polynomially smaller
+
+978
+1:04:46.966 --> 1:04:49.203
+than root n.
+That is our goal.
+
+979
+1:04:49.203 --> 1:04:53.293
+And now comes the magic.
+If you played with this for a
+
+980
+1:04:53.293 --> 1:04:58
+while you would find it,
+I think, at this point.
+
+981
+1:04:58 --> 1:05:02.56
+When you know that you are
+somehow solve this problem of
+
+982
+1:05:02.56 --> 1:05:07.287
+size n with two subproblems of
+size n/4 what could you do?
+
+983
+1:05:07.287 --> 1:05:11.268
+Well, if you start thinking of
+things as squares,
+
+984
+1:05:11.268 --> 1:05:15
+this is the natural thing that
+happens.
+
+985
+1:05:15 --> 1:05:20
+
+
+986
+1:05:20 --> 1:05:30
+This is called the H layout.
+You can imagine why.
+
+987
+1:05:30 --> 1:05:35.578
+It would be much easier to draw
+if I had a grid board,
+
+988
+1:05:35.578 --> 1:05:40
+a graph board,
+whatever, if that exists.
+
+989
+1:05:40 --> 1:05:46
+
+
+990
+1:05:46 --> 1:05:48.983
+This is a recursive layout.
+I am only going to draw a
+
+991
+1:05:48.983 --> 1:05:51.68
+couple iterations,
+but hopefully you can imagine
+
+992
+1:05:51.68 --> 1:05:53
+the generalization.
+
+993
+1:05:53 --> 1:06:05
+
+
+994
+1:06:05 --> 1:06:08.578
+I take four Hs,
+a good plan because I want
+
+995
+1:06:08.578 --> 1:06:12.156
+problems of size n/4.
+This has n/4 leaves.
+
+996
+1:06:12.156 --> 1:06:15.385
+This has n/4 leaves.
+This is the root,
+
+997
+1:06:15.385 --> 1:06:19.4
+by the way, in the middle.
+This has n/4 leaves.
+
+998
+1:06:19.4 --> 1:06:23.501
+This has n/4 leaves.
+So, I have four problems of
+
+999
+1:06:23.501 --> 1:06:26.905
+size n/4.
+Somehow I have got to get that
+
+1000
+1:06:26.905 --> 1:06:31.471
+down to two.
+Thankfully, if I look at width
+
+1001
+1:06:31.471 --> 1:06:35.92
+or if I look at height,
+there are only two that matter.
+
+1002
+1:06:35.92 --> 1:06:40.286
+And these two matter and these
+two get along for free.
+
+1003
+1:06:40.286 --> 1:06:44.818
+They are going in parallel,
+just like we had with height
+
+1004
+1:06:44.818 --> 1:06:48.031
+over here.
+But I get that both in height
+
+1005
+1:06:48.031 --> 1:06:50.173
+and in width.
+If I measure,
+
+1006
+1:06:50.173 --> 1:06:54.539
+well, now they are equal,
+so I will just call them the
+
+1007
+1:06:54.539 --> 1:06:58
+length.
+We have L(n)-by-L(n).
+
+1008
+1:06:58 --> 1:07:01.117
+And if I compute well,
+what is L(n)?
+
+1009
+1:07:01.117 --> 1:07:06.194
+I have here L(n/4) because
+there are only a quarter of the
+
+1010
+1:07:06.194 --> 1:07:11.271
+leaves in this one or in that
+one, then I have a constant,
+
+1011
+1:07:11.271 --> 1:07:15.813
+Theta(1), no big deal,
+and then I have L(n/4) again.
+
+1012
+1:07:15.813 --> 1:07:20
+So, I get the recurrence that I
+wanted.
+
+1013
+1:07:20 --> 1:07:26
+
+
+1014
+1:07:26 --> 1:07:35.17
+L(n) = 2L(n/4) + Theta(1).
+And that has solution square
+
+1015
+1:07:35.17 --> 1:07:39.976
+root of n, as we claimed before.
+Again, we are in Case 1 of the
+
+1016
+1:07:39.976 --> 1:07:41.759
+master method.
+Cool, ha?
+
+1017
+1:07:41.759 --> 1:07:44.395
+This is a much more compact
+layout.
+
+1018
+1:07:44.395 --> 1:07:47.108
+Charles, did you invent this
+layout?
+
+1019
+1:07:47.108 --> 1:07:49.589
+No.
+But I know it appears on your
+
+1020
+1:07:49.589 --> 1:07:53.62
+PhD thesis and you extended it
+in various directions.
+
+1021
+1:07:53.62 --> 1:07:58.271
+So, this is sort of a classic
+cool layout of trees into grids
+
+1022
+1:07:58.271 --> 1:08:03
+and another application of
+divide-and-conquer.
+
+1023
+1:08:03 --> 1:08:07.789
+I mean this is not particularly
+useful for algorithms directly.
+
+1024
+1:08:07.789 --> 1:08:10.647
+It is useful for VLSI layout
+directly.
+
+1025
+1:08:10.647 --> 1:08:14.663
+But it gives you more flavor of
+how you should think.
+
+1026
+1:08:14.663 --> 1:08:18.371
+If you know what running time
+you are aiming for,
+
+1027
+1:08:18.371 --> 1:08:23.237
+like in problem sets in quizzes
+often we say here is the running
+
+1028
+1:08:23.237 --> 1:08:27.563
+time you have got to get,
+think about the recurrence that
+
+1029
+1:08:27.563 --> 1:08:31.116
+will get you there.
+And that could inspire you.
+
+1030
+1:08:31.116 --> 1:08:33.665
+And that is it.
+Recitation Friday.
+
+1031
+1:08:33.665 --> 1:08:36.446
+Homework lab Sunday.
+No class Monday.
+
+1032
+1:08:36.446 --> 1:08:39
+See you Wednesday.
+

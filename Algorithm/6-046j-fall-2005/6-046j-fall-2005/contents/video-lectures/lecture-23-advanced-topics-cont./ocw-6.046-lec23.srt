@@ -1,0 +1,4303 @@
+1
+00:00:07 --> 00:00:11
+OK, good morning.
+So today, we're going to
+
+2
+00:00:11 --> 00:00:16
+continue our exploration of
+multithreaded algorithms.
+
+3
+00:00:16 --> 00:00:21
+Last time we talked about some
+aspects of scheduling,
+
+4
+00:00:21 --> 00:00:26
+and a little bit about
+linguistics to describe a
+
+5
+00:00:26 --> 00:00:30
+multithreaded competition.
+And today, we're going to
+
+6
+00:00:30 --> 00:00:32
+actually deal with some
+algorithms.
+
+7
+00:00:32 --> 00:00:47
+
+
+8
+00:00:47 --> 00:00:50
+So, we're going to start out
+with a really simple,
+
+9
+00:00:50 --> 00:00:53
+actually, what's fun about
+this, actually,
+
+10
+00:00:53 --> 00:00:57
+is that everything I'm going to
+teach you today I could have
+
+11
+00:00:57 --> 00:01:01
+taught you in week two,
+OK, because basically it's just
+
+12
+00:01:01 --> 00:01:05
+taking the divide and conquer
+hammer, and just smashing
+
+13
+00:01:05 --> 00:01:10
+problem after problem with it.
+OK, and so, actually next
+
+14
+00:01:10 --> 00:01:13
+week's lectures on caching,
+also very similar.
+
+15
+00:01:13 --> 00:01:18
+So, everybody should bone up on
+their master theorem and
+
+16
+00:01:18 --> 00:01:22
+substitution methods for
+occurrences, and so forth
+
+17
+00:01:22 --> 00:01:25
+because that's our going to be
+doing.
+
+18
+00:01:25 --> 00:01:28
+And of course,
+all the stuff will be on the
+
+19
+00:01:28 --> 00:01:31
+final.
+So let's start with matrix
+
+20
+00:01:31 --> 00:01:32
+multiplication.
+
+21
+00:01:32 --> 00:01:40
+
+
+22
+00:01:40 --> 00:01:45
+And we'll do n by n.
+So, our problem is to do C
+
+23
+00:01:45 --> 00:01:50
+equals A times B.
+And the way we'll do that is
+
+24
+00:01:50 --> 00:01:55
+using divide and conquer,
+as we saw before,
+
+25
+00:01:55 --> 00:02:02
+although we're not going to use
+Strassen's method.
+
+26
+00:02:02 --> 00:02:08
+OK, we'll just use the ordinary
+thing, and I'll leave Strassen's
+
+27
+00:02:08 --> 00:02:12
+as an exercise.
+So, the idea is we're going to
+
+28
+00:02:12 --> 00:02:18
+look at matrix multiplication in
+terms of an n by n matrix,
+
+29
+00:02:18 --> 00:02:22
+in terms of n over 2 by n over
+2 matrices.
+
+30
+00:02:22 --> 00:02:28
+So, I partition C into four
+blocks, and likewise with A and
+
+31
+00:02:28 --> 00:02:30
+B.
+
+32
+00:02:30 --> 00:02:50
+
+
+33
+00:02:50 --> 00:02:58
+OK, and we multiply those out,
+and that gives us the
+
+34
+00:02:58 --> 00:03:03
+following.
+Make sure I get all my indices
+
+35
+00:03:03 --> 00:03:04
+right.
+
+36
+00:03:04 --> 00:03:40
+
+
+37
+00:03:40 --> 00:03:45
+OK, so it gives us the sum of
+these two n by n matrices.
+
+38
+00:03:45 --> 00:03:49
+OK, so for example,
+if I multiply the first row by
+
+39
+00:03:49 --> 00:03:54
+the first column,
+I'm putting the first term,
+
+40
+00:03:54 --> 00:03:58
+A_1-1 times B_1-1 in this
+matrix, in the second one,
+
+41
+00:03:58 --> 00:04:03
+A_1-2 times B_2-1 gets placed
+here.
+
+42
+00:04:03 --> 00:04:06
+So, when I sum them,
+and so forth,
+
+43
+00:04:06 --> 00:04:10
+for the other entries,
+and when I sum them,
+
+44
+00:04:10 --> 00:04:16
+I'm going to get my result.
+So, we can write that out as a,
+
+45
+00:04:16 --> 00:04:22
+let's see, I'm not sure this is
+going to all fit on one board,
+
+46
+00:04:22 --> 00:04:28
+but we'll see we can do.
+OK, so we can write that out as
+
+47
+00:04:28 --> 00:04:35
+a multithreaded program.
+So this, we're going to see
+
+48
+00:04:35 --> 00:04:41
+that n is an exact power of two
+for simplicity.
+
+49
+00:04:41 --> 00:04:49
+And since we're going to have
+two matrices that we have to
+
+50
+00:04:49 --> 00:04:57
+add, we're going to basically
+put one of them in our output,
+
+51
+00:04:57 --> 00:05:04
+C; that'll be the first one,
+and we're going to use a
+
+52
+00:05:04 --> 00:05:11
+temporary matrix,
+T, which is also n by n.
+
+53
+00:05:11 --> 00:05:21
+OK, and the code looks
+something like this,
+
+54
+00:05:21 --> 00:05:32
+OK, n equals one,
+and C of one gets A of 1-1
+
+55
+00:05:32 --> 00:05:41
+times B of 1-1.
+Otherwise, what we do then is
+
+56
+00:05:41 --> 00:05:49
+we partition the matrices.
+OK, so we partition them into
+
+57
+00:05:49 --> 00:05:55
+the block.
+So, how long does it take me to
+
+58
+00:05:55 --> 00:06:05
+partition at matrix into blocks
+if I'm clever at my programming?
+
+59
+00:06:05 --> 00:06:07
+Yeah?
+No time, or it actually does
+
+60
+00:06:07 --> 00:06:10
+take a little bit of time.
+Yeah, order one,
+
+61
+00:06:10 --> 00:06:13
+basically, OK,
+because all it is is just index
+
+62
+00:06:13 --> 00:06:15
+calculations.
+You have to change what the
+
+63
+00:06:15 --> 00:06:18
+index is.
+You have to pass in what you're
+
+64
+00:06:18 --> 00:06:22
+passing these in addition to A,
+B, and C for example,
+
+65
+00:06:22 --> 00:06:26
+pass and arrange which would
+have essentially a constant
+
+66
+00:06:26 --> 00:06:28
+overhead.
+But it's basically order one
+
+67
+00:06:28 --> 00:06:30
+time.
+
+68
+00:06:30 --> 00:06:36
+
+
+69
+00:06:36 --> 00:06:39
+Basically order one time,
+OK, to partition the matrices
+
+70
+00:06:39 --> 00:06:43
+because all we are doing is
+index calculations.
+
+71
+00:06:43 --> 00:06:46
+And all we have to do is just
+as we go through,
+
+72
+00:06:46 --> 00:06:50
+is just make sure we keep track
+of the indices,
+
+73
+00:06:50 --> 00:06:52
+OK?
+Any questions about that?
+
+74
+00:06:52 --> 00:06:55
+People follow?
+OK, that's sort of standard
+
+75
+00:06:55 --> 00:07:05
+programming.
+So then, what I do is I spawn
+
+76
+00:07:05 --> 00:07:17
+multiplication of,
+woops, the sub-matrices,
+
+77
+00:07:17 --> 00:07:22
+and spawn --
+
+78
+00:07:22 --> 00:07:36
+
+
+79
+00:07:36 --> 00:07:43
+-- and continue,
+C_2-1, gets A_2-1,
+
+80
+00:07:43 --> 00:07:53
+B_1-1, two, and let's see,
+2-2, yeah, it's 2-1.
+
+81
+00:07:53 --> 00:08:02
+OK, and continuing onto the
+next page.
+
+82
+00:08:02 --> 00:08:10
+Let me just make sure I somehow
+get the indentation right.
+
+83
+00:08:10 --> 00:08:18
+This is my level of
+indentation, and I'm continuing
+
+84
+00:08:18 --> 00:08:25
+right along.
+And now what I do is put the
+
+85
+00:08:25 --> 00:08:30
+results in T,
+and then --
+
+86
+00:08:30 --> 00:08:58
+
+
+87
+00:08:58 --> 00:09:01
+OK, so I've spawn off all these
+multiplications.
+
+88
+00:09:01 --> 00:09:06
+So that means when I spawn,
+I get to, after I spawn
+
+89
+00:09:06 --> 00:09:11
+something I can go onto the next
+statement, and execute that even
+
+90
+00:09:11 --> 00:09:15
+as this is executing.
+OK, so that's our notion of
+
+91
+00:09:15 --> 00:09:20
+multithreaded programming.
+I spawn off these eight things.
+
+92
+00:09:20 --> 00:09:24
+What do I do next?
+What's the next step in this
+
+93
+00:09:24 --> 00:09:25
+code?
+Sync.
+
+94
+00:09:25 --> 00:09:28
+Yeah.
+OK, I've got to wait for them
+
+95
+00:09:28 --> 00:09:33
+to be done before I can use
+their results.
+
+96
+00:09:33 --> 00:09:38
+OK, so I put a sync in,
+say wait for all those things I
+
+97
+00:09:38 --> 00:09:42
+spawned off to be done,
+and then what?
+
+98
+00:09:42 --> 00:09:48
+
+
+99
+00:09:48 --> 00:09:51
+Yeah.
+That you have to add T and C.
+
+100
+00:09:51 --> 00:09:55
+So let's do that with a
+subroutine call.
+
+101
+00:09:55 --> 00:10:02
+OK, and then we are done.
+We do a return at the end.
+
+102
+00:10:02 --> 00:10:08
+OK, so let's write the code for
+add, because add,
+
+103
+00:10:08 --> 00:10:14
+we also would like to do in
+parallel if we can.
+
+104
+00:10:14 --> 00:10:21
+And what we are doing here is
+doing C gets C plus T,
+
+105
+00:10:21 --> 00:10:25
+OK?
+So, we're going to add T into
+
+106
+00:10:25 --> 00:10:29
+C.
+So, we have some code here to
+
+107
+00:10:29 --> 00:10:35
+do our base case,
+and partitioning because we're
+
+108
+00:10:35 --> 00:10:43
+going to do it divide and
+conquer as before.
+
+109
+00:10:43 --> 00:10:49
+And this one's actually a lot
+easier.
+
+110
+00:10:49 --> 00:10:54
+We just spawn,
+add a C_1-1,
+
+111
+00:10:54 --> 00:11:00
+T_1-1, n over 2,
+C_1-2, T_1-2,
+
+112
+00:11:00 --> 00:11:06
+n over 2, C_2-1,
+T_2-1, n over 2,
+
+113
+00:11:06 --> 00:11:13
+C_2-2, 2-2-2,
+n over 2, and then sync,
+
+114
+00:11:13 --> 00:11:21
+and return the result.
+OK, so all we're doing here is
+
+115
+00:11:21 --> 00:11:26
+just dividing it into four
+pieces, spawning them off.
+
+116
+00:11:26 --> 00:11:30
+That's it.
+OK, wait until they're all
+
+117
+00:11:30 --> 00:11:32
+done, then we return with the
+result.
+
+118
+00:11:32 --> 00:11:36
+OK, so any questions about how
+this code works?
+
+119
+00:11:36 --> 00:11:39
+So, remember that,
+here, we're going to have a
+
+120
+00:11:39 --> 00:11:43
+scheduler underneath which is
+scheduling this onto our
+
+121
+00:11:43 --> 00:11:46
+processors.
+And we're going to have to
+
+122
+00:11:46 --> 00:11:50
+worry about how well that
+scheduler is doing.
+
+123
+00:11:50 --> 00:11:53
+And, from last time,
+we learned that there were two
+
+124
+00:11:53 --> 00:11:56
+important measures,
+OK, that can be used
+
+125
+00:11:56 --> 00:12:01
+essentially to predict the
+performance on any number of
+
+126
+00:12:01 --> 00:12:03
+processors.
+And what are those two
+
+127
+00:12:03 --> 00:12:08
+measures?
+Yeah, T_1 and T infinity so
+
+128
+00:12:08 --> 00:12:12
+that we had some names.
+T_1 is the work,
+
+129
+00:12:12 --> 00:12:16
+good, and T infinity is
+critical path length,
+
+130
+00:12:16 --> 00:12:19
+good.
+So, you have to work in the
+
+131
+00:12:19 --> 00:12:23
+critical path length.
+If we know the work in the
+
+132
+00:12:23 --> 00:12:28
+critical path length,
+we can do things like say what
+
+133
+00:12:28 --> 00:12:33
+the parallelism is of our
+program, and from that,
+
+134
+00:12:33 --> 00:12:38
+understand how many processors
+it makes sense to run this
+
+135
+00:12:38 --> 00:12:47
+program on.
+OK, so let's do that analysis.
+
+136
+00:12:47 --> 00:12:59
+OK, so let's let M_P of n be
+the p processor execution time
+
+137
+00:12:59 --> 00:13:09
+for our mult code,
+and A_P of n be the same thing
+
+138
+00:13:09 --> 00:13:19
+for our matrix addition code.
+So, the first thing we're going
+
+139
+00:13:19 --> 00:13:23
+to analyze is work.
+And, what do we hope our answer
+
+140
+00:13:23 --> 00:13:26
+to our work is?
+What we analyze work,
+
+141
+00:13:26 --> 00:13:29
+what do we hope it's going to
+be?
+
+142
+00:13:29 --> 00:13:39
+
+
+143
+00:13:39 --> 00:13:41
+Well, we hope it's going to be
+small.
+
+144
+00:13:41 --> 00:13:45
+I'll grant you that.
+What could we benchmark it
+
+145
+00:13:45 --> 00:13:48
+against?
+Yeah, if we wrote just
+
+146
+00:13:48 --> 00:13:52
+something that didn't used to
+have any parallelism.
+
+147
+00:13:52 --> 00:13:57
+We'd like our parallel code
+when run on one processor to be
+
+148
+00:13:57 --> 00:14:02
+just as fast as our serial code,
+the normal code that we would
+
+149
+00:14:02 --> 00:14:08
+use to write to do this problem.
+That's generally the way that
+
+150
+00:14:08 --> 00:14:11
+we would like these things to
+operate, OK?
+
+151
+00:14:11 --> 00:14:16
+So, what is that for matrix
+multiplication in the naïve way?
+
+152
+00:14:16 --> 00:14:19
+Yeah, it's n^3.
+Of course, we use Strassen's
+
+153
+00:14:19 --> 00:14:24
+algorithm, or one of the other,
+faster algorithms beat n^3.
+
+154
+00:14:24 --> 00:14:28
+But, for this problem,
+we are just going to focus on
+
+155
+00:14:28 --> 00:14:32
+n^3.
+I'm going to let you do the
+
+156
+00:14:32 --> 00:14:37
+Strassen as an exercise.
+So, let's analyze the work.
+
+157
+00:14:37 --> 00:14:43
+OK, since we have a subroutine
+for add that we are using in the
+
+158
+00:14:43 --> 00:14:47
+multiply code,
+OK, we start by analyzing the
+
+159
+00:14:47 --> 00:14:49
+add.
+So, we have A_1 of n,
+
+160
+00:14:49 --> 00:14:52
+OK, is, well,
+can somebody give me a
+
+161
+00:14:52 --> 00:14:56
+recurrence here?
+What's the recurrence for
+
+162
+00:14:56 --> 00:15:02
+understanding the running time
+of this code?
+
+163
+00:15:02 --> 00:15:10
+
+
+164
+00:15:10 --> 00:15:16
+OK, this is basically week two.
+This is lecture one actually.
+
+165
+00:15:16 --> 00:15:22
+This is like lecture two or,
+at worst, lecture three.
+
+166
+00:15:22 --> 00:15:25
+Well, A of 1 of n.
+
+167
+00:15:25 --> 00:15:34
+
+
+168
+00:15:34 --> 00:15:35
+Plus order one,
+right.
+
+169
+00:15:35 --> 00:15:39
+OK, that's right.
+So, we have four problems of
+
+170
+00:15:39 --> 00:15:41
+size n over 2 that we are
+solving.
+
+171
+00:15:41 --> 00:15:45
+OK, so to see this,
+you don't even have to know
+
+172
+00:15:45 --> 00:15:49
+that we are doing this in
+parallel, because the work is
+
+173
+00:15:49 --> 00:15:54
+basically what would happen if
+it executed on a serial machine.
+
+174
+00:15:54 --> 00:15:59
+So, we have four problems of
+size n over 2 plus order one is
+
+175
+00:15:59 --> 00:16:05
+the total work.
+Any questions about how I got
+
+176
+00:16:05 --> 00:16:10
+that recurrence?
+Is that pretty straightforward?
+
+177
+00:16:10 --> 00:16:15
+If not, let me know.
+OK, and so, what's the solution
+
+178
+00:16:15 --> 00:16:19
+to this recurrence?
+Yeah, order n^2.
+
+179
+00:16:19 --> 00:16:23
+How do we know that?
+Yeah, master method,
+
+180
+00:16:23 --> 00:16:30
+so n to the log base two of
+four, right, is n^2.
+
+181
+00:16:30 --> 00:16:33
+Compare that with order one.
+This dramatically dominates.
+
+182
+00:16:33 --> 00:16:37
+So this is the answer,
+the n to the log base two of
+
+183
+00:16:37 --> 00:16:39
+four, n^2.
+OK, everybody remember that?
+
+184
+00:16:39 --> 00:16:43
+OK, so I want people to bone up
+because this is going to be
+
+185
+00:16:43 --> 00:16:47
+recurrences, and divide and
+conquer and stuff is going to be
+
+186
+00:16:47 --> 00:16:50
+on the final,
+OK, even though we haven't seen
+
+187
+00:16:50 --> 00:16:52
+it in many moons.
+OK, so that's good.
+
+188
+00:16:52 --> 00:16:56
+That's the same as the serial.
+If I had to add 2N by n
+
+189
+00:16:56 --> 00:16:59
+matrices, how long does it take
+me to do it?
+
+190
+00:16:59 --> 00:17:04
+n^2 time.
+OK, so the input is size n^2.
+
+191
+00:17:04 --> 00:17:12
+So, you're not going to be the
+size of the input if you have to
+
+192
+00:17:12 --> 00:17:16
+look at every piece of the
+input.
+
+193
+00:17:16 --> 00:17:23
+OK, let's now do the work of
+the matrix multiplication.
+
+194
+00:17:23 --> 00:17:28
+So once again,
+we want to get a recurrence
+
+195
+00:17:28 --> 00:17:36
+here.
+So, what's our recurrence here?
+
+196
+00:17:36 --> 00:17:39
+Yeah?
+Not quite.
+
+197
+00:17:39 --> 00:17:42
+Eight, right,
+good.
+
+198
+00:17:42 --> 00:17:48
+OK, eight, M1,
+n over 2, plus,
+
+199
+00:17:48 --> 00:18:00
+yeah, there's theta n^2 for the
+addition, and then there's extra
+
+200
+00:18:00 --> 00:18:11
+theta one that we can absorb
+into theta n^2.
+
+201
+00:18:11 --> 00:18:19
+Isn't asymptotics great?
+OK, it's just great.
+
+202
+00:18:19 --> 00:18:27
+And so, what's the solution to
+that one?
+
+203
+00:18:27 --> 00:18:35
+Theta n^3, why is that?
+Man, we are exercising old
+
+204
+00:18:35 --> 00:18:36
+muscles.
+Aren't we?
+
+205
+00:18:36 --> 00:18:39
+And they're just creaking.
+I can hear them.
+
+206
+00:18:39 --> 00:18:42
+Why is that?
+Yeah, master method because
+
+207
+00:18:42 --> 00:18:46
+we're looking at,
+what are we comparing?
+
+208
+00:18:46 --> 00:18:50
+Yeah, n to the log base two of
+eight, or n^3 versus n^2,
+
+209
+00:18:50 --> 00:18:55
+this one dominates order n^3.
+OK, so this is same as serial.
+
+210
+00:18:55 --> 00:18:59
+This was the same as serial.
+This was the same as serial.
+
+211
+00:18:59 --> 00:19:02
+That's good.
+OK, we know we have a program
+
+212
+00:19:02 --> 00:19:06
+that on one processor,
+will execute the same as our
+
+213
+00:19:06 --> 00:19:12
+serial code on which it's based.
+Namely, we could have done
+
+214
+00:19:12 --> 00:19:15
+this.
+If I had just got rid of all
+
+215
+00:19:15 --> 00:19:19
+the spawns and syncs,
+that would have just been a
+
+216
+00:19:19 --> 00:19:22
+perfectly good piece of
+pseudocode describing the
+
+217
+00:19:22 --> 00:19:26
+runtime of the algorithm,
+describing the serial
+
+218
+00:19:26 --> 00:19:29
+algorithm.
+And its run time ends up being
+
+219
+00:19:29 --> 00:19:33
+exactly the same,
+not too surprising.
+
+220
+00:19:33 --> 00:19:38
+OK?
+OK, so now we do the new stuff,
+
+221
+00:19:38 --> 00:19:47
+critical path length.
+OK, so here we have A infinity
+
+222
+00:19:47 --> 00:19:54
+of n.
+Ooh, OK, so we're going to add
+
+223
+00:19:54 --> 00:20:02
+up the critical path of this
+code here.
+
+224
+00:20:02 --> 00:20:07
+Hmm, how do I figure out the
+critical path on a piece of code
+
+225
+00:20:07 --> 00:20:08
+like that?
+
+226
+00:20:08 --> 00:20:26
+
+
+227
+00:20:26 --> 00:20:30
+So, it's going to expand into
+one of those DAG's.
+
+228
+00:20:30 --> 00:20:33
+What's the DAG going to look
+like?
+
+229
+00:20:33 --> 00:20:37
+How do I reason?
+So, it's actually easier not to
+
+230
+00:20:37 --> 00:20:42
+think about the DAG,
+but to simply think about
+
+231
+00:20:42 --> 00:20:45
+what's going on in the code.
+Yeah?
+
+232
+00:20:45 --> 00:20:49
+Yeah, so it's basically,
+since all four spawns are
+
+233
+00:20:49 --> 00:20:54
+spawning off the same thing,
+and they're operating in
+
+234
+00:20:54 --> 00:20:59
+parallel, I could just look at
+one.
+
+235
+00:20:59 --> 00:21:01
+Or in general,
+if I spawned off several
+
+236
+00:21:01 --> 00:21:06
+things, I look at which everyone
+is going to have the maximum
+
+237
+00:21:06 --> 00:21:09
+critical path for the things
+that I've spawned off.
+
+238
+00:21:09 --> 00:21:13
+So, when we do work,
+we're usually doing plus when I
+
+239
+00:21:13 --> 00:21:17
+have multiple subroutines.
+When we do critical path,
+
+240
+00:21:17 --> 00:21:20
+I'm doing max.
+It's going to be the max over
+
+241
+00:21:20 --> 00:21:23
+the critical paths of the
+subroutines that I call.
+
+242
+00:21:23 --> 00:21:26
+OK, and here they are all
+equal.
+
+243
+00:21:26 --> 00:21:30
+So what's the recurrence that I
+get?
+
+244
+00:21:30 --> 00:21:41
+
+
+245
+00:21:41 --> 00:21:47
+What's the recurrence I'm going
+to get out of this one?
+
+246
+00:21:47 --> 00:21:51
+Yeah, A infinity,
+n over 2, plus constant,
+
+247
+00:21:51 --> 00:21:58
+OK, because this is what the
+worst is of any of those four
+
+248
+00:21:58 --> 00:22:05
+because they're all the same.
+They're all a problem looking
+
+249
+00:22:05 --> 00:22:11
+at the critical path of
+something that's half the size,
+
+250
+00:22:11 --> 00:22:15
+for a problem that's half the
+size.
+
+251
+00:22:15 --> 00:22:21
+OK, people with me?
+OK, so what's the solution to
+
+252
+00:22:21 --> 00:22:24
+this?
+Yeah, that's theta log n.
+
+253
+00:22:24 --> 00:22:29
+That's just,
+once again, master theorem,
+
+254
+00:22:29 --> 00:22:36
+case two, because the solution
+to this is n to the log base two
+
+255
+00:22:36 --> 00:22:44
+of one, which is n to the zero.
+So we have, on this side,
+
+256
+00:22:44 --> 00:22:47
+we have one,
+and here, we're comparing it
+
+257
+00:22:47 --> 00:22:50
+with one.
+They're the same,
+
+258
+00:22:50 --> 00:22:53
+so therefore we tack on that
+extra log n.
+
+259
+00:22:53 --> 00:22:58
+OK, so tack on one log n.
+OK, so case two of the master
+
+260
+00:22:58 --> 00:23:01
+method.
+Pretty good.
+
+261
+00:23:01 --> 00:23:06
+OK, so that's pretty good,
+because the critical path is
+
+262
+00:23:06 --> 00:23:11
+pretty short,
+log n compared to the work,
+
+263
+00:23:11 --> 00:23:12
+n^2.
+So, let's do,
+
+264
+00:23:12 --> 00:23:18
+then, this one which is a
+little bit more interesting,
+
+265
+00:23:18 --> 00:23:22
+but not much harder.
+How about this one?
+
+266
+00:23:22 --> 00:23:25
+What's the recurrence going to
+be?
+
+267
+00:23:25 --> 00:23:31
+Critical path of the
+multiplication?
+
+268
+00:23:31 --> 00:23:38
+
+
+269
+00:23:38 --> 00:23:42
+So once again,
+it's going to be the maximum of
+
+270
+00:23:42 --> 00:23:46
+everything we spawned off in
+parallel, which is,
+
+271
+00:23:46 --> 00:23:50
+by symmetry,
+the same as one of them.
+
+272
+00:23:50 --> 00:23:54
+So what do I get here?
+M infinity, n over 2,
+
+273
+00:23:54 --> 00:23:58
+plus theta log n.
+Where'd the theta log n come
+
+274
+00:23:58 --> 00:24:02
+from?
+Yeah, from the addition.
+
+275
+00:24:02 --> 00:24:05
+That's the critical path of the
+addition.
+
+276
+00:24:05 --> 00:24:11
+Now, why is it that the maximum
+of that with all the spawns?
+
+277
+00:24:11 --> 00:24:16
+You said that when you spawn
+things off, you're going to do
+
+278
+00:24:16 --> 00:24:22
+them, yeah, you sync first.
+And, sync says you wait for all
+
+279
+00:24:22 --> 00:24:26
+those to be done.
+So, you're only taking the
+
+280
+00:24:26 --> 00:24:31
+maximum, and across syncs you're
+adding.
+
+281
+00:24:31 --> 00:24:34
+So, you add across syncs,
+and across things that you
+
+282
+00:24:34 --> 00:24:37
+spawned off in parallel.
+That's where you are doing the
+
+283
+00:24:37 --> 00:24:39
+max.
+OK, but if you have a sync,
+
+284
+00:24:39 --> 00:24:41
+it says that that's the end.
+You've got to wait for
+
+285
+00:24:41 --> 00:24:45
+everything there to end.
+This isn't going on in parallel
+
+286
+00:24:45 --> 00:24:47
+with it.
+This is going on after it.
+
+287
+00:24:47 --> 00:24:50
+So, whatever the critical path
+is here, OK, if I have an
+
+288
+00:24:50 --> 00:24:53
+infinite number of processors,
+I'd still have to wait up at
+
+289
+00:24:53 --> 00:24:57
+this point, and that would
+therefore make it so that the
+
+290
+00:24:57 --> 00:25:00
+remaining execution gear was
+whatever the critical,
+
+291
+00:25:00 --> 00:25:03
+I would have to add whatever
+the critical path was to this
+
+292
+00:25:03 --> 00:25:08
+one.
+Is that clear to everybody?
+
+293
+00:25:08 --> 00:25:16
+OK, so we get this recurrence.
+And, that has solution what?
+
+294
+00:25:16 --> 00:25:21
+Yeah, theta log squared n.
+OK, once again,
+
+295
+00:25:21 --> 00:25:27
+by master method,
+case two, where this ends up
+
+296
+00:25:27 --> 00:25:34
+being a constant versus log n,
+those don't differ by a
+
+297
+00:25:34 --> 00:25:41
+polynomial amount,
+or equal to a log factor.
+
+298
+00:25:41 --> 00:25:48
+What we do in that circumstance
+is tack on an extra log factor.
+
+299
+00:25:48 --> 00:25:53
+OK, so as I say,
+good idea to review the master
+
+300
+00:25:53 --> 00:25:56
+method.
+OK, that's great.
+
+301
+00:25:56 --> 00:26:04
+So now, let's take a look at
+the parallelism that we get.
+
+302
+00:26:04 --> 00:26:12
+We'll just do it right here for
+the multiplication.
+
+303
+00:26:12 --> 00:26:21
+OK, so parallelism is what for
+the multiplication?
+
+304
+00:26:21 --> 00:26:26
+What's the formula for
+parallelism?
+
+305
+00:26:26 --> 00:26:35
+So, we have p bar is the
+notation we use for this
+
+306
+00:26:35 --> 00:26:43
+problem.
+What's the parallelism going to
+
+307
+00:26:43 --> 00:26:47
+be?
+What's the ratio I take?
+
+308
+00:26:47 --> 00:26:54
+Yeah, it's M_1 of n divided by
+M infinity of n.
+
+309
+00:26:54 --> 00:27:00
+OK, and that's equal to,
+that's n^3.
+
+310
+00:27:00 --> 00:27:09
+That's n^2, or log n^2,
+sorry, log squared n.
+
+311
+00:27:09 --> 00:27:12
+OK, so this is the parallelism.
+That says you could run up to
+
+312
+00:27:12 --> 00:27:16
+this many processors and expect
+to be getting linear speed up.
+
+313
+00:27:16 --> 00:27:20
+If I ran with more processors
+than the parallelism,
+
+314
+00:27:20 --> 00:27:23
+I don't expect to be getting
+linear speed up anymore,
+
+315
+00:27:23 --> 00:27:26
+OK, because what I expect to
+run in, is just time
+
+316
+00:27:26 --> 00:27:30
+proportional to critical path
+length, and throwing more
+
+317
+00:27:30 --> 00:27:33
+processors at the problem is not
+going to help me very much,
+
+318
+00:27:33 --> 00:27:39
+OK?
+So let's just look at this just
+
+319
+00:27:39 --> 00:27:44
+to get a sense of what's going
+on here.
+
+320
+00:27:44 --> 00:27:50
+Let's imagine that the
+constants are irrelevant,
+
+321
+00:27:50 --> 00:27:55
+and we have,
+say, thousand by thousand
+
+322
+00:27:55 --> 00:27:59
+matrices, OK,
+so in that case,
+
+323
+00:27:59 --> 00:28:08
+our parallelism is 1,000^3
+divided by log of 1,000^2.
+
+324
+00:28:08 --> 00:28:12
+What's log of 1,000?
+Ten, approximately,
+
+325
+00:28:12 --> 00:28:16
+right?
+Log base two of 1,000 is about
+
+326
+00:28:16 --> 00:28:21
+ten, so that's 10^2.
+So, you have about 10^7
+
+327
+00:28:21 --> 00:28:24
+parallelism.
+How big is 10^7?
+
+328
+00:28:24 --> 00:28:30
+Ten million processors.
+OK, so who knows of a machine
+
+329
+00:28:30 --> 00:28:38
+with ten million processors?
+What's the most number of
+
+330
+00:28:38 --> 00:28:44
+processors anybody knows about?
+Yeah, not quite,
+
+331
+00:28:44 --> 00:28:52
+the IBM Blue Jean has a
+humungous number of processors,
+
+332
+00:28:52 --> 00:28:55
+exceeding 10,000.
+Yeah.
+
+333
+00:28:55 --> 00:29:03
+Those were one bit processors.
+OK, so this is actually a
+
+334
+00:29:03 --> 00:29:09
+pretty big number,
+and so, our parallelism is much
+
+335
+00:29:09 --> 00:29:15
+bigger than a typical,
+actual number of processors.
+
+336
+00:29:15 --> 00:29:22
+So, we would expect to be able
+to run this and get very good
+
+337
+00:29:22 --> 00:29:28
+performance, OK,
+because we're never going to be
+
+338
+00:29:28 --> 00:29:35
+limited in this algorithm by
+performance.
+
+339
+00:29:35 --> 00:29:38
+However, there are some tricks
+we can do.
+
+340
+00:29:38 --> 00:29:42
+One of the things in this code
+is that we actually have some
+
+341
+00:29:42 --> 00:29:47
+overhead that's not apparent
+because I haven't run this code
+
+342
+00:29:47 --> 00:29:51
+with you, although I could,
+which is that we have this
+
+343
+00:29:51 --> 00:29:54
+temporary matrix,
+T, and if you look at the
+
+344
+00:29:54 --> 00:29:58
+execution stack,
+we're always allocating T and
+
+345
+00:29:58 --> 00:30:01
+getting rid of it,
+etc.
+
+346
+00:30:01 --> 00:30:04
+And, one of the things when you
+actually look at the performance
+
+347
+00:30:04 --> 00:30:07
+of real code,
+which is now that you have your
+
+348
+00:30:07 --> 00:30:10
+algorithmic background,
+you're ready to go and do that
+
+349
+00:30:10 --> 00:30:13
+with some insight.
+Of course, you're interested in
+
+350
+00:30:13 --> 00:30:16
+getting more than just
+asymptotic behavior.
+
+351
+00:30:16 --> 00:30:19
+You're interested in getting
+real performance behavior on
+
+352
+00:30:19 --> 00:30:21
+real things.
+So, you do care about constants
+
+353
+00:30:21 --> 00:30:24
+in that nature.
+OK, and one of the things is
+
+354
+00:30:24 --> 00:30:26
+having a large,
+temporary variable.
+
+355
+00:30:26 --> 00:30:30
+That turns out to be a lot of
+overhead.
+
+356
+00:30:30 --> 00:30:33
+And, in fact,
+it's often the case when you're
+
+357
+00:30:33 --> 00:30:37
+looking at real code that if you
+can optimize for space,
+
+358
+00:30:37 --> 00:30:42
+you also optimized for time.
+If you can run your code with
+
+359
+00:30:42 --> 00:30:45
+smaller space,
+you can actually run it with
+
+360
+00:30:45 --> 00:30:49
+smaller time,
+tends to be a constant factor
+
+361
+00:30:49 --> 00:30:52
+advantage.
+But, those constants can add
+
+362
+00:30:52 --> 00:30:57
+up, and can make a difference in
+whether somebody else's code is
+
+363
+00:30:57 --> 00:31:01
+faster or your code is faster,
+once you have your basic
+
+364
+00:31:01 --> 00:31:03
+algorithm.
+So, the idea is to,
+
+365
+00:31:03 --> 00:31:07
+in this case,
+we're going to get rid of it by
+
+366
+00:31:07 --> 00:31:12
+trading parallelism because
+we've got oodles of parallelism
+
+367
+00:31:12 --> 00:31:22
+here for space efficiency.
+OK, and the idea is we're going
+
+368
+00:31:22 --> 00:31:33
+to get rid of T.
+OK, so let's throw this up.
+
+369
+00:31:33 --> 00:31:40
+So, who can suggest how I might
+get rid of T here,
+
+370
+00:31:40 --> 00:31:44
+get rid of this temporary
+matrix?
+
+371
+00:31:44 --> 00:31:46
+Yeah?
+
+372
+00:31:46 --> 00:31:58
+
+
+373
+00:31:58 --> 00:32:00
+Yeah?
+
+374
+00:32:00 --> 00:32:14
+
+
+375
+00:32:14 --> 00:32:15
+So, if you just did adding it
+into C?
+
+376
+00:32:15 --> 00:32:18
+So, the issue that you get
+there if they're both adding
+
+377
+00:32:18 --> 00:32:21
+into C is you get interference
+between the two subcomputations.
+
+378
+00:32:21 --> 00:32:24
+Now, there are ways of doing
+that that work out,
+
+379
+00:32:24 --> 00:32:27
+but you now have to worry about
+things we're not going to talk
+
+380
+00:32:27 --> 00:32:30
+about such as mutual exclusion
+to make sure that as you're
+
+381
+00:32:30 --> 00:32:33
+updating it, somebody else isn't
+updating it, and you don't have
+
+382
+00:32:33 --> 00:32:38
+race conditions.
+But you can actually do it in
+
+383
+00:32:38 --> 00:32:41
+this context with no race
+conditions.
+
+384
+00:32:41 --> 00:32:44
+Yeah, exactly.
+Exactly, OK,
+
+385
+00:32:44 --> 00:32:48
+exactly.
+So, the idea is spawn off four
+
+386
+00:32:48 --> 00:32:52
+of them.
+OK, they all update their copy
+
+387
+00:32:52 --> 00:32:58
+of C, and then spawn off the
+other four that add their values
+
+388
+00:32:58 --> 00:33:03
+in.
+So, that is a piece of code
+
+389
+00:33:03 --> 00:33:08
+we'll call mult add.
+And, it's actually going to do
+
+390
+00:33:08 --> 00:33:15
+C gets C plus A times B.
+OK, so it's actually going to
+
+391
+00:33:15 --> 00:33:19
+add it in.
+So, initially you'd have to
+
+392
+00:33:19 --> 00:33:26
+zero out C, but we can do that
+with code very similar to the
+
+393
+00:33:26 --> 00:33:33
+addition code with order n^2
+work, and order log n critical
+
+394
+00:33:33 --> 00:33:38
+path.
+So that's not going to be a big
+
+395
+00:33:38 --> 00:33:41
+part of what we have to deal
+with.
+
+396
+00:33:41 --> 00:33:45
+OK, so here's the code.
+We basically,
+
+397
+00:33:45 --> 00:33:51
+once again, do the base and
+partition which I'm not going to
+
+398
+00:33:51 --> 00:34:00
+write out the code for.
+We spawn a mult add of C1-1,
+
+399
+00:34:00 --> 00:34:09
+A1-1, B1-1, n over 2,
+and we do a few more of those
+
+400
+00:34:09 --> 00:34:14
+down to the fourth one.
+
+401
+00:34:14 --> 00:34:25
+
+
+402
+00:34:25 --> 00:34:32
+And then we put in a sync.
+And then we do the other four --
+
+403
+00:34:32 --> 00:35:01
+
+
+404
+00:35:01 --> 00:35:03
+-- and then sync when we're
+done with that.
+
+405
+00:35:03 --> 00:35:12
+
+
+406
+00:35:12 --> 00:35:14
+OK, does everybody understand
+that code?
+
+407
+00:35:14 --> 00:35:18
+See that it basically does the
+same calculation.
+
+408
+00:35:18 --> 00:35:22
+We actually don't need to call
+add anymore, because we are
+
+409
+00:35:22 --> 00:35:26
+doing that as part of the
+multiply because we're adding it
+
+410
+00:35:26 --> 00:35:28
+in.
+But we do have to initialize.
+
+411
+00:35:28 --> 00:35:33
+OK, we do have to initialize
+the matrix in this case.
+
+412
+00:35:33 --> 00:35:42
+OK, so there is another phase.
+So, people understand the
+
+413
+00:35:42 --> 00:35:50
+semantics of this code.
+So let's analyze it.
+
+414
+00:35:50 --> 00:35:58
+OK, so what's the work of
+multiply, add of n?
+
+415
+00:35:58 --> 00:36:06
+It's basically the same thing,
+right?
+
+416
+00:36:06 --> 00:36:10
+It's order n^3 because the
+serial code is almost the same
+
+417
+00:36:10 --> 00:36:14
+as the serial code up there,
+OK, not quite,
+
+418
+00:36:14 --> 00:36:19
+OK, but you get essentially the
+same recurrence except you don't
+
+419
+00:36:19 --> 00:36:23
+even have the add.
+You just get the same
+
+420
+00:36:23 --> 00:36:28
+recurrence but with order one
+here, oops, order one up here.
+
+421
+00:36:28 --> 00:36:33
+So, it's still got the order
+n^3 solution.
+
+422
+00:36:33 --> 00:36:37
+OK, so that,
+I think, is not too hard.
+
+423
+00:36:37 --> 00:36:42
+OK, so the critical path
+length, so there,
+
+424
+00:36:42 --> 00:36:45
+let's write out,
+so multiply,
+
+425
+00:36:45 --> 00:36:50
+add, of n, OK,
+what's my recurrence for this
+
+426
+00:36:50 --> 00:36:52
+code?
+
+427
+00:36:52 --> 00:37:02
+
+
+428
+00:37:02 --> 00:37:06
+Yeah, 2M infinity,
+M over 2 [ost that,
+
+429
+00:37:06 --> 00:37:09
+so order one.
+Plus order one,
+
+430
+00:37:09 --> 00:37:13
+yeah.
+OK, so the point is that we're
+
+431
+00:37:13 --> 00:37:17
+going to have,
+for the critical path,
+
+432
+00:37:17 --> 00:37:23
+we're going to spawn these four
+off, and so I take the maximum
+
+433
+00:37:23 --> 00:37:29
+of whatever those is,
+which since they're symmetric
+
+434
+00:37:29 --> 00:37:36
+is any one of them,
+OK, and then I have to wait.
+
+435
+00:37:36 --> 00:37:39
+And then I do it again.
+So, that sync,
+
+436
+00:37:39 --> 00:37:42
+once again, translates into,
+in the analysis,
+
+437
+00:37:42 --> 00:37:46
+it translates into a plus of
+the critical path,
+
+438
+00:37:46 --> 00:37:50
+which are the things I spawn
+off in parallel,
+
+439
+00:37:50 --> 00:37:53
+I do the max.
+OK, so people see that?
+
+440
+00:37:53 --> 00:37:58
+So, I get this recurrence,
+2MA of n over 2 plus order one,
+
+441
+00:37:58 --> 00:38:02
+and what's the solution to
+that?
+
+442
+00:38:02 --> 00:38:10
+OK, that's order n,
+OK, because n to the log base
+
+443
+00:38:10 --> 00:38:18
+two of two is n,
+and that's bigger than one so
+
+444
+00:38:18 --> 00:38:25
+we get order n.
+OK, so the parallelism,
+
+445
+00:38:25 --> 00:38:36
+we have p bar is equal to MA
+one of n over MA infinity of n
+
+446
+00:38:36 --> 00:38:47
+is equal to, in this case,
+n^3 over n, or order n^2.
+
+447
+00:38:47 --> 00:38:51
+OK, so for 1,000 by 1,000
+matrices, for example,
+
+448
+00:38:51 --> 00:38:56
+by the way, 1,000 by 1,000 is
+considered a small matrix,
+
+449
+00:38:56 --> 00:39:02
+these days, because that's only
+one million entries.
+
+450
+00:39:02 --> 00:39:07
+You can put that on your laptop
+no sweat.
+
+451
+00:39:07 --> 00:39:14
+OK, so, but for 1,000 by 1,000
+matrices, our parallelism is
+
+452
+00:39:14 --> 00:39:18
+about 10^6.
+OK, so once again,
+
+453
+00:39:18 --> 00:39:27
+ample parallelism for anything
+we would run it on today.
+
+454
+00:39:27 --> 00:39:28
+And as it turns out,
+it's faster in practice --
+
+455
+00:39:28 --> 00:39:38
+
+
+456
+00:39:38 --> 00:39:43
+-- because we have less space.
+OK, so here's a game where,
+
+457
+00:39:43 --> 00:39:49
+so, often the game you'll see
+in theory papers if you look at
+
+458
+00:39:49 --> 00:39:53
+research papers,
+people are often striving to
+
+459
+00:39:53 --> 00:39:59
+get the most parallelism,
+and that's a good game to play,
+
+460
+00:39:59 --> 00:40:04
+OK, but it's not necessarily
+the only game.
+
+461
+00:40:04 --> 00:40:06
+Particularly,
+if you have a lot of
+
+462
+00:40:06 --> 00:40:09
+parallelism, one of the things
+that's very easy to do is to
+
+463
+00:40:09 --> 00:40:14
+retreat on the parallelism and
+gain other aspects that you may
+
+464
+00:40:14 --> 00:40:16
+want in your code.
+OK, and so this is a good
+
+465
+00:40:16 --> 00:40:19
+example of that.
+In fact, and this is an
+
+466
+00:40:19 --> 00:40:22
+exercise, you can actually
+achieve work n^3,
+
+467
+00:40:22 --> 00:40:25
+order n^3 work,
+and a critical path of log n,
+
+468
+00:40:25 --> 00:40:29
+so even better than either of
+these two algorithms in terms of
+
+469
+00:40:29 --> 00:40:33
+parallelism.
+OK, so that gives you n^3 over
+
+470
+00:40:33 --> 00:40:36
+log n parallelism.
+So, that's an exercise.
+
+471
+00:40:36 --> 00:40:40
+And then, the other exercise
+that I mention that that's good
+
+472
+00:40:40 --> 00:40:44
+to do is parallel Strassen,
+OK, doing the same thing with
+
+473
+00:40:44 --> 00:40:48
+Strassen, and analyze,
+what's the working critical
+
+474
+00:40:48 --> 00:40:51
+path and parallelism of the
+Strassen code?
+
+475
+00:40:51 --> 00:40:54
+OK, any questions about matrix
+multiplication?
+
+476
+00:40:54 --> 00:40:56
+Yeah?
+
+477
+00:40:56 --> 00:41:03
+
+
+478
+00:41:03 --> 00:41:07
+Yeah, so that would take,
+that would add a log n to the
+
+479
+00:41:07 --> 00:41:10
+critical path,
+which is nothing compared to
+
+480
+00:41:10 --> 00:41:12
+the n.
+Excuse me?
+
+481
+00:41:12 --> 00:41:16
+Well, you got to make sure C is
+zero to begin with.
+
+482
+00:41:16 --> 00:41:20
+OK, so you have to set all the
+entries to zero,
+
+483
+00:41:20 --> 00:41:25
+and so that will take you n^2
+work, which is nothing compared
+
+484
+00:41:25 --> 00:41:30
+to the n^3 work you're doing
+here, and it will cost you log n
+
+485
+00:41:30 --> 00:41:34
+additional to the critical path,
+which is nothing compared to
+
+486
+00:41:34 --> 00:41:39
+the order n that you're
+spending.
+
+487
+00:41:39 --> 00:41:45
+Any other questions about
+matrix multiplication?
+
+488
+00:41:45 --> 00:41:51
+OK, as they say,
+this all goes back to week two,
+
+489
+00:41:51 --> 00:41:55
+or something,
+in the class.
+
+490
+00:41:55 --> 00:42:01
+Did you have a comment?
+Yes, you can.
+
+491
+00:42:01 --> 00:42:05
+OK, yes you can.
+It's actually kind of
+
+492
+00:42:05 --> 00:42:11
+interesting to look at that.
+Actually, we'll talk later.
+
+493
+00:42:11 --> 00:42:17
+We'll write a research paper
+after the class is over,
+
+494
+00:42:17 --> 00:42:24
+OK, because there's actually
+some interesting open questions
+
+495
+00:42:24 --> 00:42:28
+there.
+OK, let's move on to something
+
+496
+00:42:28 --> 00:42:34
+that you thought you'd gotten
+rid of weeks ago,
+
+497
+00:42:34 --> 00:42:40
+and that would be the topic of
+sorting.
+
+498
+00:42:40 --> 00:42:44
+Back to sorting.
+OK, so we want to parallel sort
+
+499
+00:42:44 --> 00:42:47
+now, OK?
+Hugely important problem.
+
+500
+00:42:47 --> 00:42:52
+So, let's take a look at,
+so if I think about algorithms
+
+501
+00:42:52 --> 00:42:57
+for sorting that sound easy to
+parallelize, which ones sound
+
+502
+00:42:57 --> 00:43:01
+kind of easy to parallelize?
+Quick sort, yeah,
+
+503
+00:43:01 --> 00:43:05
+that's a good one.
+Yeah, quick sort is a pretty
+
+504
+00:43:05 --> 00:43:08
+good one to parallelize and
+analyze.
+
+505
+00:43:08 --> 00:43:10
+But remember,
+quick sort has a little bit
+
+506
+00:43:10 --> 00:43:13
+more complicated analysis than
+some other sorts.
+
+507
+00:43:13 --> 00:43:17
+What's another one that looks
+like it should be pretty easy to
+
+508
+00:43:17 --> 00:43:19
+parallelize?
+Merge sort.
+
+509
+00:43:19 --> 00:43:21
+When did we teach merge sort?
+Day one.
+
+510
+00:43:21 --> 00:43:25
+OK, so do merge sort because
+it's just a little bit easier to
+
+511
+00:43:25 --> 00:43:27
+analyze.
+OK, we could do the same thing
+
+512
+00:43:27 --> 00:43:32
+for quick sort.
+Here's merge sort,
+
+513
+00:43:32 --> 00:43:38
+OK, and it's going to sort A of
+p to r.
+
+514
+00:43:38 --> 00:43:47
+So, if p is less than r,
+then we get the middle element,
+
+515
+00:43:47 --> 00:43:55
+and then we'll spawn off since
+we have to, as you recall,
+
+516
+00:43:55 --> 00:44:03
+when you merge sort you first
+recursively sort the two
+
+517
+00:44:03 --> 00:44:11
+sub-arrays.
+There's no reason not to do
+
+518
+00:44:11 --> 00:44:18
+those parallel.
+Let's just do them in parallel.
+
+519
+00:44:18 --> 00:44:23
+Let's spawn off,
+merge sort of A,
+
+520
+00:44:23 --> 00:44:30
+p, q, and spawn off,
+then, merge sort of A,
+
+521
+00:44:30 --> 00:44:38
+q plus one r.
+And then, we wait for them to
+
+522
+00:44:38 --> 00:44:42
+be done.
+Don't forget your syncs.
+
+523
+00:44:42 --> 00:44:48
+Sync or swim.
+OK, and then what to do what we
+
+524
+00:44:48 --> 00:44:54
+are done with this?
+OK, we merge.
+
+525
+00:44:54 --> 00:45:03
+OK, so we merge of A,
+p, q, r, which is merge A of p
+
+526
+00:45:03 --> 00:45:10
+up to q with A of q plus one up
+to r.
+
+527
+00:45:10 --> 00:45:16
+And, once we've merged,
+we're done.
+
+528
+00:45:16 --> 00:45:27
+OK, so this is the same code as
+we saw before in day one except
+
+529
+00:45:27 --> 00:45:37
+we've got a couple of spawns in
+the sync.
+
+530
+00:45:37 --> 00:45:52
+So let's analyze this.
+So, the work is called T_1 of
+
+531
+00:45:52 --> 00:46:03
+n, what's the recurrence for
+this?
+
+532
+00:46:03 --> 00:46:07
+This really is going back to
+day one, right?
+
+533
+00:46:07 --> 00:46:11
+We actually did this on day
+one.
+
+534
+00:46:11 --> 00:46:17
+OK, so what's the recurrence?
+2T1 of n over 2 plus order n
+
+535
+00:46:17 --> 00:46:21
+merges order n time operation,
+OK?
+
+536
+00:46:21 --> 00:46:25
+And so, that gives us a
+solution of n log n,
+
+537
+00:46:25 --> 00:46:32
+OK, even if you didn't know the
+solution, you should know the
+
+538
+00:46:32 --> 00:46:37
+answer, OK, which is the same as
+the serial code,
+
+539
+00:46:37 --> 00:46:45
+not surprisingly.
+That's what we want.
+
+540
+00:46:45 --> 00:46:57
+OK, critical path length,
+AT infinity of n is equal to,
+
+541
+00:46:57 --> 00:47:08
+OK, T infinity of n over 2 plus
+order n again.
+
+542
+00:47:08 --> 00:47:15
+And that's equal to order n,
+OK?
+
+543
+00:47:15 --> 00:47:29
+So, the parallelism is then p
+bar equals T_1 of n over T
+
+544
+00:47:29 --> 00:47:40
+infinity of n is equal to theta
+of log n.
+
+545
+00:47:40 --> 00:47:45
+Is that a lot of parallelism?
+No, we have a technical name
+
+546
+00:47:45 --> 00:47:47
+for that.
+We call it puny.
+
+547
+00:47:47 --> 00:47:50
+OK, that's puny parallelism.
+Log n?
+
+548
+00:47:50 --> 00:47:55
+Now, so this is actually
+probably a decent algorithm for
+
+549
+00:47:55 --> 00:48:00
+some of the small scale
+processors, especially the
+
+550
+00:48:00 --> 00:48:04
+multicore processors that are
+coming on the market,
+
+551
+00:48:04 --> 00:48:09
+and some of the smaller SMP,
+symmetric multiprocessors,
+
+552
+00:48:09 --> 00:48:15
+that are available.
+You know, they have four or
+
+553
+00:48:15 --> 00:48:19
+eight processors or something.
+It might be OK.
+
+554
+00:48:19 --> 00:48:22
+There's not a lot of
+parallelism.
+
+555
+00:48:22 --> 00:48:25
+For a million elements,
+log n is about 20.
+
+556
+00:48:25 --> 00:48:29
+OK, and so and then there's
+constant overheads,
+
+557
+00:48:29 --> 00:48:34
+etc.
+This is not very much
+
+558
+00:48:34 --> 00:48:39
+parallelism at all.
+Question?
+
+559
+00:48:39 --> 00:48:46
+Yeah, so how can we do better?
+I mean, it's like,
+
+560
+00:48:46 --> 00:48:53
+man, at merge,
+right, it takes order n.
+
+561
+00:48:53 --> 00:48:59
+if I want to do better,
+what should I do?
+
+562
+00:48:59 --> 00:49:03
+Yeah?
+Sort in-place,
+
+563
+00:49:03 --> 00:49:08
+but for example if you do quick
+sort and partition,
+
+564
+00:49:08 --> 00:49:12
+you still have a linear time
+partition.
+
+565
+00:49:12 --> 00:49:17
+So you're going to be very much
+in the same situation.
+
+566
+00:49:17 --> 00:49:21
+But what can I do here?
+Parallel merge.
+
+567
+00:49:21 --> 00:49:24
+OK, let's make merge go in
+parallel.
+
+568
+00:49:24 --> 00:49:28
+That's where all the critical
+path is.
+
+569
+00:49:28 --> 00:49:33
+Let's figure out a way of
+building a merge program that
+
+570
+00:49:33 --> 00:49:41
+has a very short critical path.
+You have to parallelize the
+
+571
+00:49:41 --> 00:49:43
+merge.
+This is great.
+
+572
+00:49:43 --> 00:49:50
+It's so nice to see at the end
+of a course like this that
+
+573
+00:49:50 --> 00:49:57
+people have the intuition that,
+oh, you can look at it and sort
+
+574
+00:49:57 --> 00:50:03
+of see, where should you put in
+your work?
+
+575
+00:50:03 --> 00:50:05
+OK, the one thing about
+algorithms is it doesn't stop
+
+576
+00:50:05 --> 00:50:09
+you from having to engineer a
+program when you code it.
+
+577
+00:50:09 --> 00:50:12
+There's a lot more to coding a
+program well than just having
+
+578
+00:50:12 --> 00:50:15
+the algorithm as we talked
+about, also, in day one.
+
+579
+00:50:15 --> 00:50:18
+There's things like making it
+modular, and making it
+
+580
+00:50:18 --> 00:50:20
+maintainable,
+and a whole bunch of things
+
+581
+00:50:20 --> 00:50:22
+like that.
+But one of the things that
+
+582
+00:50:22 --> 00:50:25
+algorithms does is it tells you,
+where should you focus your
+
+583
+00:50:25 --> 00:50:28
+work?
+OK, there's no point in,
+
+584
+00:50:28 --> 00:50:30
+for example,
+sort of saying,
+
+585
+00:50:30 --> 00:50:34
+OK, let me spawn off four of
+these things of size n over 4 in
+
+586
+00:50:34 --> 00:50:37
+hopes of getting,
+I mean, it's like,
+
+587
+00:50:37 --> 00:50:39
+that's not where you put the
+work.
+
+588
+00:50:39 --> 00:50:42
+You put the work in merge
+because that's the one that's
+
+589
+00:50:42 --> 00:50:44
+the bottleneck,
+OK?
+
+590
+00:50:44 --> 00:50:47
+And, that's the nice thing
+about algorithms is it very
+
+591
+00:50:47 --> 00:50:51
+quickly lets you hone in on
+where you should put your
+
+592
+00:50:51 --> 00:50:54
+effort, OK, when you're doing
+algorithmic design in
+
+593
+00:50:54 --> 00:50:58
+engineering practice.
+So you must parallelize the
+
+594
+00:50:58 --> 00:51:00
+merge.
+
+595
+00:51:00 --> 00:51:09
+
+
+596
+00:51:09 --> 00:51:12
+The merge we're taking,
+so here's the basic idea we're
+
+597
+00:51:12 --> 00:51:14
+going to use.
+So, in general,
+
+598
+00:51:14 --> 00:51:17
+when we merge,
+when we do our recursive merge,
+
+599
+00:51:17 --> 00:51:21
+we're going to have two arrays.
+Let's call them A and B.
+
+600
+00:51:21 --> 00:51:25
+I called them A there.
+I probably shouldn't have used
+
+601
+00:51:25 --> 00:51:27
+A.
+I probably should have called
+
+602
+00:51:27 --> 00:51:30
+them something else,
+but that's what my notes have,
+
+603
+00:51:30 --> 00:51:36
+so we're going to stick to it.
+But we get a little bit more
+
+604
+00:51:36 --> 00:51:39
+space there and see what's going
+on.
+
+605
+00:51:39 --> 00:51:43
+We have two arrays.
+I'll call them A and B,
+
+606
+00:51:43 --> 00:51:46
+OK?
+And, what we're going to do,
+
+607
+00:51:46 --> 00:51:49
+these are going to be already
+sorted.
+
+608
+00:51:49 --> 00:51:54
+And our job is going to be to
+merge them together.
+
+609
+00:51:54 --> 00:52:00
+So, what I'll do is I'll take
+the middle element of A.
+
+610
+00:52:00 --> 00:52:05
+So this, let's say,
+goes from one to l,
+
+611
+00:52:05 --> 00:52:11
+and this goes from one to m.
+OK, I'll take the middle
+
+612
+00:52:11 --> 00:52:20
+element, the element at l over
+2, say, and what I'll do is use
+
+613
+00:52:20 --> 00:52:27
+binary search to figure out,
+where does it go in the array
+
+614
+00:52:27 --> 00:52:31
+B?
+Where does this element go?
+
+615
+00:52:31 --> 00:52:36
+It goes to some point here
+where we have j here and j plus
+
+616
+00:52:36 --> 00:52:38
+one here.
+So, we know,
+
+617
+00:52:38 --> 00:52:43
+since this is sorted,
+that all these things are less
+
+618
+00:52:43 --> 00:52:48
+than or equal to A of l over 2,
+and all these things are
+
+619
+00:52:48 --> 00:52:52
+greater than or equal to A of l
+over 2.
+
+620
+00:52:52 --> 00:52:56
+And similarly,
+since that element falls here,
+
+621
+00:52:56 --> 00:53:02
+all these are less than or
+equal to A of l over 2.
+
+622
+00:53:02 --> 00:53:09
+And all these are going to be
+less greater than or equal to
+
+623
+00:53:09 --> 00:53:13
+two.
+OK, and so now what I can do is
+
+624
+00:53:13 --> 00:53:20
+once I figured out where this
+goes, I can recursively merge
+
+625
+00:53:20 --> 00:53:27
+this array with this one,
+and this one with this one,
+
+626
+00:53:27 --> 00:53:33
+and then if I can just
+concatenate them altogether,
+
+627
+00:53:33 --> 00:53:41
+I've got my merged array.
+OK, so let's write that code.
+
+628
+00:53:41 --> 00:53:47
+Everybody get the gist of
+what's going on there,
+
+629
+00:53:47 --> 00:53:52
+how we're going to parallelize
+the merge?
+
+630
+00:53:52 --> 00:53:58
+Of course, you can see,
+it's going to get a little
+
+631
+00:53:58 --> 00:54:02
+messy because j could be
+anywhere.
+
+632
+00:54:02 --> 00:54:06
+Secures my code,
+parallel merge of,
+
+633
+00:54:06 --> 00:54:13
+and we're going to put it in C
+of one to n, so I'm going to
+
+634
+00:54:13 --> 00:54:21
+have n elements.
+So, this is doing merge A and B
+
+635
+00:54:21 --> 00:54:27
+into C, and n is equal to l plus
+n.
+
+636
+00:54:27 --> 00:54:36
+OK, so we're going to take two
+arrays and merge it into the
+
+637
+00:54:36 --> 00:54:42
+third array, OK?
+So, without loss of generality,
+
+638
+00:54:42 --> 00:54:45
+I'm going to say,
+let's see, without loss of
+
+639
+00:54:45 --> 00:54:49
+generality, I'm going to say l
+is bigger than m as I show here
+
+640
+00:54:49 --> 00:54:52
+because if it's not,
+what do I do?
+
+641
+00:54:52 --> 00:54:55
+Just do it the other way
+around, right?
+
+642
+00:54:55 --> 00:54:57
+So, I figure out which one was
+bigger.
+
+643
+00:54:57 --> 00:55:01
+So that only cost me order one
+to test that,
+
+644
+00:55:01 --> 00:55:04
+or whatever.
+And then, I basically do a base
+
+645
+00:55:04 --> 00:55:07
+case, you know,
+if the two arrays are empty or
+
+646
+00:55:07 --> 00:55:10
+whatever, what you do in
+practice, of course,
+
+647
+00:55:10 --> 00:55:14
+is if they're small enough,
+you just do a serial merge,
+
+648
+00:55:14 --> 00:55:17
+OK, if they're small enough,
+and I don't really expect to
+
+649
+00:55:17 --> 00:55:20
+get much parallelism.
+There isn't much work there.
+
+650
+00:55:20 --> 00:55:23
+You might as well just do
+serial merge,
+
+651
+00:55:23 --> 00:55:25
+and be a little bit more
+efficient, OK?
+
+652
+00:55:25 --> 00:55:32
+So, do the base case.
+So then, what I do is I find
+
+653
+00:55:32 --> 00:55:41
+the j such that B of j is less
+than or equal to A of l over 2,
+
+654
+00:55:41 --> 00:55:50
+less than or equal to B of j
+plus one, using binary search.
+
+655
+00:55:50 --> 00:55:59
+What did recover binary search?
+Oh yeah, that was week one,
+
+656
+00:55:59 --> 00:56:07
+right?
+That was first recitation or
+
+657
+00:56:07 --> 00:56:13
+something.
+Yeah, it's amazing.
+
+658
+00:56:13 --> 00:56:20
+OK, and now,
+what we do is we spawn off p
+
+659
+00:56:20 --> 00:56:29
+merge of A of one,
+l over 2, B of one to j,
+
+660
+00:56:29 --> 00:56:40
+and stick it into C of one,
+two, l over 2 plus j.
+
+661
+00:56:40 --> 00:56:53
+OK, and similarly now,
+we can spawn off a merge of A
+
+662
+00:56:53 --> 00:57:07
+of l over 2 plus one up to l.
+B of j plus one up to M,
+
+663
+00:57:07 --> 00:57:19
+and a C of l over two plus j
+plus one up to n.
+
+664
+00:57:19 --> 00:57:24
+And then, I sync.
+
+665
+00:57:24 --> 00:57:32
+
+
+666
+00:57:32 --> 00:57:35
+So, code is pretty
+straightforward,
+
+667
+00:57:35 --> 00:57:42
+doing exactly what I said we
+were going to do over here,
+
+668
+00:57:42 --> 00:57:47
+analysis, a little messier,
+a little messier.
+
+669
+00:57:47 --> 00:57:53
+So, let's just try to
+understand us before we do the
+
+670
+00:57:53 --> 00:57:57
+analysis.
+Why is it that I want to pick
+
+671
+00:57:57 --> 00:58:05
+the middle of the big array
+rather than the small array?
+
+672
+00:58:05 --> 00:58:13
+What sort of my rationale
+there?
+
+673
+00:58:13 --> 00:58:27
+That's actually a key part,
+going to be a key part of the
+
+674
+00:58:27 --> 00:58:31
+analysis.
+Yeah?
+
+675
+00:58:31 --> 00:58:36
+OK.
+Yeah, imagine that B,
+
+676
+00:58:36 --> 00:58:40
+for example,
+had only one element in it,
+
+677
+00:58:40 --> 00:58:46
+OK, or just a few elements,
+then finding it in A might mean
+
+678
+00:58:46 --> 00:58:50
+finding it right near the
+beginning of A.
+
+679
+00:58:50 --> 00:58:56
+And now, I'd be left with
+subproblems that were very big,
+
+680
+00:58:56 --> 00:59:00
+whereas here,
+as you're pointing out,
+
+681
+00:59:00 --> 00:59:04
+if I start here,
+if my total number of elements
+
+682
+00:59:04 --> 00:59:11
+is n, what's the smallest that
+one of these recursions could
+
+683
+00:59:11 --> 00:59:15
+be?
+n over 4 is the smallest it
+
+684
+00:59:15 --> 00:59:18
+could be, OK,
+because I would have at least a
+
+685
+00:59:18 --> 00:59:23
+quarter of the total number of
+elements to the left here or to
+
+686
+00:59:23 --> 00:59:26
+the right here.
+If I do it the other way
+
+687
+00:59:26 --> 00:59:30
+around, my recursion,
+I might get a recursion that
+
+688
+00:59:30 --> 00:59:33
+was nearly as big as n,
+and that's sort of,
+
+689
+00:59:33 --> 00:59:37
+once again, sort of like the
+difference when we were
+
+690
+00:59:37 --> 00:59:41
+analyzing quick sort with
+whether we got a good
+
+691
+00:59:41 --> 00:59:46
+partitioning element or not.
+The partitioning element is
+
+692
+00:59:46 --> 00:59:49
+somewhere in the middle,
+we're really good,
+
+693
+00:59:49 --> 00:59:52
+but it's always at one end,
+it's no better than insertion
+
+694
+00:59:52 --> 00:59:54
+sort.
+You want to cut off at least a
+
+695
+00:59:54 --> 00:59:57
+constant fraction in your
+divided and conquered in order
+
+696
+00:59:57 --> 1:00:02.326
+to get the logarithmic behavior.
+OK, so we'll see that in the
+
+697
+1:00:02.326 --> 1:00:05.566
+analysis.
+But the key thing here is that
+
+698
+1:00:05.566 --> 1:00:10.302
+what we are going to do the
+recursion, we're going to have
+
+699
+1:00:10.302 --> 1:00:15.204
+at least n over 4 elements in
+whatever the smaller thing is.
+
+700
+1:00:15.204 --> 1:00:19.192
+OK, but let's start.
+It turns out the work is the
+
+701
+1:00:19.192 --> 1:00:23.181
+hard part of this.
+Let's start with critical path
+
+702
+1:00:23.181 --> 1:00:25.175
+length.
+OK, look at that,
+
+703
+1:00:25.175 --> 1:00:32.045
+critical path length.
+OK, so parallel merge,
+
+704
+1:00:32.045 --> 1:00:42.712
+so infinity of n is going to
+be, at most, so if the smaller
+
+705
+1:00:42.712 --> 1:00:53.379
+piece has at least a quarter,
+what's the larger piece going
+
+706
+1:00:53.379 --> 1:01:03.588
+to be of these two things here?
+So, we have two problems
+
+707
+1:01:03.588 --> 1:01:10.166
+responding off.
+Now, we really have to do max
+
+708
+1:01:10.166 --> 1:01:19.136
+because they're not symmetric.
+Which one's going to be worse?
+
+709
+1:01:19.136 --> 1:01:24.966
+One could have,
+at most, three quarters,
+
+710
+1:01:24.966 --> 1:01:30.647
+OK, of n.
+Woops, 3n, of 3n over 4 plus,
+
+711
+1:01:30.647 --> 1:01:39.767
+OK, so the worst of those two
+is going to be three quarters of
+
+712
+1:01:39.767 --> 1:01:45
+the elements plus,
+what?
+
+713
+1:01:45 --> 1:01:52
+Plus log n.
+What's the log n?
+
+714
+1:01:52 --> 1:02:02.25
+The binary search.
+OK, and that gives me a
+
+715
+1:02:02.25 --> 1:02:15
+solution of, this ends up being
+n to the, what?
+
+716
+1:02:15 --> 1:02:16.845
+n to the zero,
+right.
+
+717
+1:02:16.845 --> 1:02:20.996
+OK, it's n to the log base four
+thirds of one.
+
+718
+1:02:20.996 --> 1:02:25.147
+OK, it was the log of anything
+of one is zero.
+
+719
+1:02:25.147 --> 1:02:29.76
+So, it's n to the zero.
+So that's just one compared
+
+720
+1:02:29.76 --> 1:02:33.265
+with log n, tack on this log
+squared n.
+
+721
+1:02:33.265 --> 1:02:37.324
+So, we have a critical path of
+log squared n.
+
+722
+1:02:37.324 --> 1:02:44.09
+That's good news.
+Now, let's hope that we didn't
+
+723
+1:02:44.09 --> 1:02:49.545
+blow up the work by a
+substantial amount.
+
+724
+1:02:49.545 --> 1:02:55.545
+OK, so the work is PM_1 of n is
+equal to, OK,
+
+725
+1:02:55.545 --> 1:03:01
+so we don't know what the split
+is.
+
+726
+1:03:01 --> 1:03:07.529
+So let's call it alpha.
+OK, so alpha n in one side,
+
+727
+1:03:07.529 --> 1:03:15.235
+and then the work on the other
+side will be PM of one of one
+
+728
+1:03:15.235 --> 1:03:21.503
+minus alpha n plus,
+and then still order of log n
+
+729
+1:03:21.503 --> 1:03:26.858
+to the binary search where,
+as we've said,
+
+730
+1:03:26.858 --> 1:03:36
+alpha is going to fall between
+one quarter and three quarters.
+
+731
+1:03:36 --> 1:03:46
+
+
+732
+1:03:46 --> 1:03:51.09
+OK, how do we solve a
+recurrence like this?
+
+733
+1:03:51.09 --> 1:03:57.515
+What's the technical name for
+this kind of recurrence?
+
+734
+1:03:57.515 --> 1:04:01.151
+Hairy.
+It's a hairy recurrence.
+
+735
+1:04:01.151 --> 1:04:06
+How do we solve hairy
+recurrences?
+
+736
+1:04:06 --> 1:04:09.318
+Substitution.
+OK, good.
+
+737
+1:04:09.318 --> 1:04:15.502
+Substitution.
+OK, so we're going to say PM
+
+738
+1:04:15.502 --> 1:04:24.402
+one of k is less than or equal
+to, OK, I want to make a good
+
+739
+1:04:24.402 --> 1:04:31.34
+guess here, OK,
+because I've fooled around with
+
+740
+1:04:31.34 --> 1:04:34.493
+it.
+I want it to be linear,
+
+741
+1:04:34.493 --> 1:04:37.87
+so it's going to have a linear
+term, a times k minus,
+
+742
+1:04:37.87 --> 1:04:39.948
+and then I'm going to do b log
+k.
+
+743
+1:04:39.948 --> 1:04:43.454
+So, this is this trick of
+subtracting a low order term.
+
+744
+1:04:43.454 --> 1:04:47.22
+Remember that in substitution
+in order to make it stronger?
+
+745
+1:04:47.22 --> 1:04:51.311
+If I just did ak it's not going
+to work because here I would get
+
+746
+1:04:51.311 --> 1:04:55.077
+n, and then when I did this
+substitution I'm going to get a
+
+747
+1:04:55.077 --> 1:04:58.974
+alpha n, and then a one minus
+alpha n, and those two together
+
+748
+1:04:58.974 --> 1:05:03
+are already going to add up to
+everything here.
+
+749
+1:05:03 --> 1:05:08.411
+So, there's no way I'm going to
+get it down when I add this term
+
+750
+1:05:08.411 --> 1:05:10.558
+in.
+So, I need to subtract
+
+751
+1:05:10.558 --> 1:05:15.196
+something from both of these so
+as to absorb this term,
+
+752
+1:05:15.196 --> 1:05:17.773
+OK?
+So, I'm skipping over those
+
+753
+1:05:17.773 --> 1:05:22.411
+steps, OK, because we did those
+steps in lecture two or
+
+754
+1:05:22.411 --> 1:05:25.588
+something.
+OK, so that's the thing I'm
+
+755
+1:05:25.588 --> 1:05:31
+going to guess where a and b are
+greater than zero.
+
+756
+1:05:31 --> 1:05:34
+OK, so let's do the
+substitution.
+
+757
+1:05:34 --> 1:05:46
+
+
+758
+1:05:46 --> 1:05:52
+OK, so we have PM one of n is
+less than or equal to,
+
+759
+1:05:52 --> 1:05:57.764
+OK, we substitute this
+inductive hypothesis in for
+
+760
+1:05:57.764 --> 1:06:02.234
+these two guys.
+So, we get a alpha n minus b
+
+761
+1:06:02.234 --> 1:06:07.023
+log of alpha n plus a of one
+minus alpha n minus b log of one
+
+762
+1:06:07.023 --> 1:06:10.535
+minus alpha, maybe another
+parentheses there,
+
+763
+1:06:10.535 --> 1:06:14.206
+one minus alpha n,
+and even leave myself enough
+
+764
+1:06:14.206 --> 1:06:19.154
+space here plus a of one minus
+alpha n minus b log of one minus
+
+765
+1:06:19.154 --> 1:06:23.704
+alpha, maybe another parenthesis
+there, one minus alpha n.
+
+766
+1:06:23.704 --> 1:06:27.215
+I didn't even leave myself
+enough space here.
+
+767
+1:06:27.215 --> 1:06:31.924
+Plus, let me just move this
+over so I don't end up using too
+
+768
+1:06:31.924 --> 1:06:39.704
+much space.
+So, b log of one minus alpha n
+
+769
+1:06:39.704 --> 1:06:45.598
+plus theta of log n.
+How's that?
+
+770
+1:06:45.598 --> 1:06:52.443
+Are we OK on that?
+OK, so that's just
+
+771
+1:06:52.443 --> 1:07:01
+substitution.
+Let's do a little algebra.
+
+772
+1:07:01 --> 1:07:07.977
+That's equal to a of times
+alpha na times one minus alpha
+
+773
+1:07:07.977 --> 1:07:10.095
+n.
+That's just an,
+
+774
+1:07:10.095 --> 1:07:15.578
+OK, minus, well,
+the b isn't quite so simple.
+
+775
+1:07:15.578 --> 1:07:22.057
+OK, so I have a b term.
+Now I've got a whole bunch of
+
+776
+1:07:22.057 --> 1:07:26.543
+stuff there.
+I've got log of alpha n.
+
+777
+1:07:26.543 --> 1:07:31.9
+I have, then,
+this log of one minus alpha n,
+
+778
+1:07:31.9 --> 1:07:40
+OK, I'll start with the n,
+and then plus theta log n.
+
+779
+1:07:40 --> 1:07:45.947
+Did I do that right?
+Does that look OK?
+
+780
+1:07:45.947 --> 1:07:53.773
+OK, so look at that.
+OK, so now let's just multiply
+
+781
+1:07:53.773 --> 1:08:01.943
+some of this stuff out.
+So, I have an minus b times,
+
+782
+1:08:01.943 --> 1:08:08.845
+well, log of alpha n is just
+log alpha plus log n.
+
+783
+1:08:08.845 --> 1:08:16.45
+And then I have plus log of one
+minus alpha plus log n,
+
+784
+1:08:16.45 --> 1:08:22.929
+OK, plus theta log n.
+That's just more algebra,
+
+785
+1:08:22.929 --> 1:08:32.035
+OK, using our rules for logs.
+Now let me express this as my
+
+786
+1:08:32.035 --> 1:08:39.132
+solution minus my desired
+solution minus a residual,
+
+787
+1:08:39.132 --> 1:08:43.446
+an minus b log n,
+OK, minus, OK,
+
+788
+1:08:43.446 --> 1:08:49.708
+and so that was one of these b
+log n's, right,
+
+789
+1:08:49.708 --> 1:08:54.718
+is here.
+And the other one's going to
+
+790
+1:08:54.718 --> 1:09:00.841
+end up in here.
+I have B times log n plus log
+
+791
+1:09:00.841 --> 1:09:11
+of alpha times one minus alpha
+minus, oops, I've got too many.
+
+792
+1:09:11 --> 1:09:17.716
+Do I have the right number of
+closes.
+
+793
+1:09:17.716 --> 1:09:24.246
+Close that, close that,
+that's good,
+
+794
+1:09:24.246 --> 1:09:29.47
+minus theta log n.
+Two there.
+
+795
+1:09:29.47 --> 1:09:38.896
+Boy, my writing is degrading.
+OK, did I do that right?
+
+796
+1:09:38.896 --> 1:09:42.637
+Do I have the parentheses
+right?
+
+797
+1:09:42.637 --> 1:09:45.775
+That matches,
+that matches,
+
+798
+1:09:45.775 --> 1:09:47.948
+that matches,
+good.
+
+799
+1:09:47.948 --> 1:09:51.931
+And then B goes to that,
+OK, good.
+
+800
+1:09:51.931 --> 1:09:59.051
+OK, and I claim that is less
+than or equal to AN minus B log
+
+801
+1:09:59.051 --> 1:10:09.86
+n if we choose B large enough.
+OK, this mess dominates this
+
+802
+1:10:09.86 --> 1:10:22.837
+because this is basically a log
+n here, and this is essentially
+
+803
+1:10:22.837 --> 1:10:29.953
+a constant.
+OK, so if I increase B,
+
+804
+1:10:29.953 --> 1:10:40
+OK, times log n,
+I can overcome that log n,
+
+805
+1:10:40 --> 1:10:47.587
+whatever the constant is,
+hidden by the asymptotic
+
+806
+1:10:47.587 --> 1:10:53.935
+notation, OK,
+such that B times log n plus
+
+807
+1:10:53.935 --> 1:11:04
+log of alpha times one minus
+alpha dominates the theta log n.
+
+808
+1:11:04 --> 1:11:13.961
+OK, and I can also choose my
+base condition to be big enough
+
+809
+1:11:13.961 --> 1:11:22.74
+to handle the initial
+conditions, whatever they might
+
+810
+1:11:22.74 --> 1:11:27.467
+be.
+OK, so we'll choose A big
+
+811
+1:11:27.467 --> 1:11:30
+enough --
+
+812
+1:11:30 --> 1:11:48
+
+
+813
+1:11:48 --> 1:11:55.172
+-- to satisfy the base of the
+induction.
+
+814
+1:11:55.172 --> 1:12:04
+OK, so thus PM_1 of n is equal
+to theta n, OK?
+
+815
+1:12:04 --> 1:12:07.384
+So I actually showed O,
+and it turns out,
+
+816
+1:12:07.384 --> 1:12:12.207
+the lower bound that it is
+omega n is more straightforward
+
+817
+1:12:12.207 --> 1:12:17.03
+because the recurrence is easier
+because I can do the same
+
+818
+1:12:17.03 --> 1:12:20.584
+substitution.
+I just don't have to subtract
+
+819
+1:12:20.584 --> 1:12:24.561
+off low order terms.
+OK, so it's actually theta,
+
+820
+1:12:24.561 --> 1:12:27.776
+not just O.
+OK, so that gives us a log,
+
+821
+1:12:27.776 --> 1:12:30.907
+what did we say the critical
+path was?
+
+822
+1:12:30.907 --> 1:12:35.138
+The critical path is log
+squared n for the parallel
+
+823
+1:12:35.138 --> 1:12:40.787
+merge.
+So, let's do the analysis of
+
+824
+1:12:40.787 --> 1:12:45.927
+merge sort using this.
+So, the work is,
+
+825
+1:12:45.927 --> 1:12:52.285
+as we know already,
+T_1 of n is theta of n log n
+
+826
+1:12:52.285 --> 1:12:59.048
+because our work that we just
+analyzed was order n,
+
+827
+1:12:59.048 --> 1:13:05
+same as for the serial
+algorithm, OK?
+
+828
+1:13:05 --> 1:13:10.481
+The critical path length,
+now, is T infinity of n is
+
+829
+1:13:10.481 --> 1:13:14.457
+equal to, OK,
+so in normal merge sort,
+
+830
+1:13:14.457 --> 1:13:20.261
+we have a problem of half the
+size, T of n over 2 plus,
+
+831
+1:13:20.261 --> 1:13:26.387
+now, my critical path for
+merging is not order n as it was
+
+832
+1:13:26.387 --> 1:13:37.428
+before.
+Instead, it's just over there.
+
+833
+1:13:37.428 --> 1:13:45.6
+Log squared n,
+there we go.
+
+834
+1:13:45.6 --> 1:14:01
+OK, and so that gives us theta
+of log cubed n.
+
+835
+1:14:01 --> 1:14:10.312
+So, our parallelism is then
+theta of n over log cubed n.
+
+836
+1:14:10.312 --> 1:14:17.423
+And, in fact,
+the best that's been done is,
+
+837
+1:14:17.423 --> 1:14:23.179
+sorry, log squared n,
+you're right.
+
+838
+1:14:23.179 --> 1:14:33
+Log squared n because it's n
+log n over log cubed n.
+
+839
+1:14:33 --> 1:14:37.247
+It's n over log squared n,
+OK?
+
+840
+1:14:37.247 --> 1:14:43.106
+And the best,
+so now I wonder if I have a
+
+841
+1:14:43.106 --> 1:14:48.085
+typo here.
+I have that the best is,
+
+842
+1:14:48.085 --> 1:14:54.676
+p bar is theta of n over log n.
+Is that right?
+
+843
+1:14:54.676 --> 1:15:02
+I think so.
+Yeah, that's the best to date.
+
+844
+1:15:02 --> 1:15:05.576
+That's the best to date.
+By Occoli, I believe,
+
+845
+1:15:05.576 --> 1:15:09.153
+is who did this.
+OK, so you can actually get a
+
+846
+1:15:09.153 --> 1:15:13.446
+fairly good, but it turns out
+sorting is a really tough
+
+847
+1:15:13.446 --> 1:15:18.215
+problem to parallelize to get
+really good constants where you
+
+848
+1:15:18.215 --> 1:15:22.03
+want to make it so it's running
+exactly the same.
+
+849
+1:15:22.03 --> 1:15:26.243
+Matrix multiplication,
+you can make it run in parallel
+
+850
+1:15:26.243 --> 1:15:30.058
+and get straight,
+hard rail, linear speed up with
+
+851
+1:15:30.058 --> 1:15:35.356
+a number of processors.
+There is plenty of parallelism,
+
+852
+1:15:35.356 --> 1:15:39.994
+and running on more processors,
+every processor carries a full
+
+853
+1:15:39.994 --> 1:15:41.514
+weight.
+With sorting,
+
+854
+1:15:41.514 --> 1:15:43.947
+typically you lose,
+I don't know,
+
+855
+1:15:43.947 --> 1:15:47.596
+20% in my experience,
+OK, in terms of other stuff
+
+856
+1:15:47.596 --> 1:15:51.777
+going on because you have to
+work really hard to get the
+
+857
+1:15:51.777 --> 1:15:55.883
+constants of this merge
+algorithm down to the constants
+
+858
+1:15:55.883 --> 1:15:59
+of that normal merge,
+right?
+
+859
+1:15:59 --> 1:16:02.337
+I mean that's a pretty good
+algorithm, right,
+
+860
+1:16:02.337 --> 1:16:05.143
+the one that just goes,
+BUZZING SOUND,
+
+861
+1:16:05.143 --> 1:16:08.935
+and just takes two lists and
+merges them like that.
+
+862
+1:16:08.935 --> 1:16:13.41
+So, it's an interesting issue.
+And a lot of people work very
+
+863
+1:16:13.41 --> 1:16:16.975
+hard on sorting,
+because it's a hugely important
+
+864
+1:16:16.975 --> 1:16:21.601
+problem, and how it is that you
+can actually get the constants
+
+865
+1:16:21.601 --> 1:16:25.924
+down while still guaranteeing
+that it will scale up with a
+
+866
+1:16:25.924 --> 1:16:29.716
+number of processors.
+OK, that's our little sojourn
+
+867
+1:16:29.716 --> 1:16:33.281
+into parallel land,
+and next week we're going to
+
+868
+1:16:33.281 --> 1:16:37.073
+talk about caching,
+which is another very important
+
+869
+1:16:37.073 --> 1:16:40
+area of algorithms,
+and of programming in general.
+

@@ -1,0 +1,891 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<title>Lecture 16: Greedy Algorithms, Minimum Spanning Trees | Video Lectures | Introduction to Algorithms (SMA 5503) | Electrical Engineering and Computer Science | MIT OpenCourseWare</title>
+<!-- Begin Automatic Metadata Insertion --><meta content="6-046j-introduction-to-algorithms-sma-5503-fall-2005" name="WT.cg_n">
+<meta content="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" name="WT.cg_s">
+<meta content="" name="Description">
+<meta content="Leiserson, Charles" name="Author">
+<meta content="Demaine, Erik" name="Author">
+<meta content="algorithms,efficient algorithms,sorting,search trees,heaps,hashing,divide-and-conquer,dynamic programming,amortized analysis,graph algorithms,shortest paths,network flow,computational geometry,number-theoretic algorithms,polynomial and matrix calculations,caching,parallel computing,Algorithms and Data Structures" name="keywords">
+<meta content="6.046J Introduction to Algorithms (SMA 5503) | Lecture 16: Greedy Algorithms, Minimum Spanning Trees" name="Search_Display">
+<meta content="Algorithms and Data Structures" itemprop="about">
+<!-- End Automatic Metadata Insertion --><link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/grid.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/base.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/menu.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.bubblepopup.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/courses_new.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/jquery.jscrollpane.css">
+<link title="default" rel="stylesheet" type="text/css" href="../../../common/styles/media_tabs.css">
+<link href="http://ocw.mit.edu/xml/ocwcc.rdf" type="application/rdf+xml" rel="metadata">
+<link rel="canonical" href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees">
+<link rel="apple-touch-icon" href="../../../common/images/apple-touch-icon.png">
+<script type="text/javascript" src="../../../common/scripts/jquery.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-media-utils-offline.js"></script><script type="text/javascript" src="../../../common/scripts/ocw-offline.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.bubblepopup.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery-ui.min.js"></script><script type="text/javascript" src="../../../common/scripts/jquery.jscrollpane.min.js"></script><script type="text/javascript" src="../../../common/scripts/bubble-popup-offline.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $("#tabs").tabs();
+        IpadScroller();
+      });
+    </script>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+        
+	
+
+        <div id="top">
+			<div id="grid">
+				
+				
+					
+<div id="portletwrapper-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572" class="portletWrapper kssattr-portlethash-6f63772e746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d686561646572">
+<div class="portletStaticText portlet-static-site-header">
+<div id="banner" role="banner" class="grid_6 alpha"><a href="http://ocw.mit.edu/"><img src="../../../common/images/ocw_mast.png" alt="MIT OpenCourseWare, Massachusetts Institute of Technology" class="logo"></a></div>
+<form action="http://ocw.mit.edu/subscribe/index.htm?utm_source=header" method="get">
+    <div id="subscribe" role="form toolbar" class="grid_6 omega">
+    <div class="module">
+    <table class="social"><tbody><tr>
+<td class="text">Subscribe to the<br>
+                OCW Newsletter</td>
+                <td class="black"><input type="text" onclick="clearEmailBox()" onblur="fillEmailBox()" value="Enter Email" class="greytext emailField" id="email" name="fromemail"></td>
+                <td class="black"><input type="image" src="../../../common/images/button_subscribe.png" alt="Subscribe" class="sub_button"></td>
+                <td>
+<a href="http://facebook.com/mitocw"><img src="../../../common/images/icon_fb.png" alt="Click to visit our Facebook page."></a><a href="http://twitter.com/mitocw"><img src="../../../common/images/icon_tw.png" alt="Click to visit our Twitter feed."></a>
+</td>
+            </tr></tbody></table>
+</div>
+    <p class="helplinks"><a href="http://ocw.mit.edu/help">Help</a>   |   <a href="../../../common/jsp/feedback.htm">Contact Us</a></p>
+    </div>
+    <div class="clear"> </div>
+</form>
+</div>
+
+</div>
+
+
+
+
+
+<div id="mega" role="navigation" class="grid_8 alpha">        
+	<ul id="menu">
+<li id="menu_home">
+            <a href="http://ocw.mit.edu/"><img src="../../../common/images/top-nav_home.png" class="home_icon" alt="Click for site home page."></a><!-- Begin Home Item -->
+        </li>
+<!-- End Home Item -->        
+        <li class="selected">
+            <a href="#" class="drop">Courses</a><!-- Begin 5 columns Item -->
+            <div class="dropdown_5columns-a mega-courses">                    
+                <div class="col_1a">
+                    <div class="row_1a">
+                        <div class="quart">
+                            <h2 class="nav">Find courses by:</h2>
+                            <ul class="nav-bullet find_by">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Topic</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-number/">MIT Course Number</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/find-by-department/">Department</a></li>
+                            </ul>
+</div>
+                        <div class="quart">
+                            <h2 class="nav">Collections</h2>
+                            <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Lectures</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+                                <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+                                <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+                            </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="row_1b">
+                        <h2 class="nav">Cross-Disciplinary Topic Lists</h2>
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/energy-courses">Energy</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/entrepreneurship">Entrepreneurship</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/environment-courses">Environment</a></li>
+                        </ul>
+</div>    
+                        <div class="quart">
+                        <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/intro-programming">Introductory Programming</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/life-sciences">Life Sciences</a></li>
+                            <li><a href="http://ocw.mit.edu/courses/transportation-courses">Transportation</a></li>
+                        </ul>
+</div>
+                        <div class="clear"> </div>
+                    </div>
+                    <div class="clear"> </div>
+                </div>
+                <div class="col_1b">
+                    <h2 class="nav">Translated Courses</h2>
+                    <ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/courses/translated-courses/traditional-chinese">繁體字 / Traditional Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/simplified-chinese">简体字 / Simplified Chinese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/spanish">Español / Spanish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/portuguese">Português / Portuguese</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/thai">ภาษาเขียน / Thai</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/persian">فارسی / Persian</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/turkish">Türkçe / Turkish</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses/korean">(비디오)한국 / Korean</a></li>
+                        <li><a href="http://ocw.mit.edu/courses/translated-courses">More...</a></li>
+                    </ul>
+</div>
+            </div>
+        </li>
+        <li>
+            <a href="" class="drop">About</a>
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/">About MIT OpenCourseWare</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+                        <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OpenCourseWare Consortium</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+                        <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+                        <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+                    </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+                    </ul>
+</div>
+            </div>  
+        </li>    
+        <li>
+            <a href="" class="drop">Donate</a>        
+            <div class="dropdown_1column-a">
+                    <div class="col_1">
+                        <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/donate/">Make a Donation</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+                            <li><a href="http://ocw.mit.edu/donate/shop-ocw">Shop OCW</a></li>
+                        </ul>
+<ul class="nav-bullet">
+<li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+                        </ul>
+</div>
+            </div>            
+        </li>        
+        <li>
+            <a href="" class="drop">Featured Sites</a>        
+            <div class="dropdown_1column-a">
+                <div class="col_1">
+                    <ul class="nav-bullet mega-div-bottom">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+                        <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+                    </ul>
+<ul class="nav-bullet mega-div-top">
+<li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+                        <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+                    </ul>
+</div>
+            </div>            
+        </li>
+    </ul>
+</div>
+<div id="search" role="search" class="grid_4 omega">
+    
+    <form method="get" action="../../../common/search/AdvancedSearch.htm">
+     	 <table class="search"><tbody><tr>
+<td class="black"><input type="text" onblur="fillSearchBox()" onfocus="clearSearchBox()" maxlength="255" value="Search" name="q" class="greytext searchField" id="terms"></td> 			 
+                    <td class="black"><input type="image" src="../../../common/images/button_search.png" name="btnG" class="sub_button"></td>			 
+                    <td class="text2"><a href="../../../common/search/AdvancedSearch.htm">Advanced<br>Search</a></td>
+                </tr></tbody></table>
+</form>
+</div>
+<div class="clear"></div>
+<!-- *end header* -->  
+
+				
+				
+			</div>
+<!-- top grid end -->
+		</div>
+<!-- top end -->
+			
+		<div id="center_media">
+      	<div id="grid">
+      		<div id="left">
+        		<div id="breadcrumb_media">
+                	<p>
+
+    <a href="http://ocw.mit.edu/">Home</a>
+    
+        »
+        
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses">Courses</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="http://ocw.mit.edu/courses/electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/index.htm">Introduction to Algorithms (SMA 5503)</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            <a href="../../../contents/video-lectures/index.htm">Video Lectures</a>
+            
+                »
+                
+            
+            
+         
+    
+    
+        
+            
+            
+            Lecture 16: Greedy Algorithms, Minimum Spanning Trees
+         
+    
+</p>
+
+            	</div>
+            	<div class="clear"></div>
+        		<div id="media_title">
+        		<h1 class="title" itemprop="name" property="dct:title">
+        <span class="" id="parent-fieldname-title">
+            Lecture 16: Greedy Algorithms, Minimum Spanning Trees
+        </span>
+    </h1>
+        		</div>
+           		<div class="clear"></div>
+           		<div id="course_wrapper_media">
+           			<div id="course_nav">
+           				<script language="javascript" type="text/javascript">
+function toggleMenu(objID) {
+  if (!document.getElementById) return;
+  var ob = document.getElementById(objID);
+  ob.className = (ob.className == 'selected')?'': 'selected';
+}
+function toggleClass(id)
+{
+  var divtoggleClass= document.getElementById(id);
+  divtoggleClass.className = (divtoggleClass.className == 'mO')?'mC': 'mO';
+  return false;
+}
+function changeAlt(id)
+{
+  id.alt = (id.alt == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+  id.title = (id.title == 'Expand Menu')?'Collapse Menu' : 'Expand Menu';
+}
+</script><!--Left Nav Starts --><ul>
+<li class="">
+			   			<a href="../../../contents/index.htm">
+		                  Course Home  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/syllabus/index.htm">
+		                  Syllabus  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/calendar/index.htm">
+		                  Calendar  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/readings/index.htm">
+		                  Readings  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/assignments/index.htm">
+		                  Assignments  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="">
+			   			<a href="../../../contents/exams/index.htm">
+		                  Exams  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    <li class="selected">
+			   			<a href="../../../contents/video-lectures/index.htm">
+		                  Video Lectures  			                
+	                    </a>
+		        </li>
+		    
+         	
+	
+	
+	    	
+	    	    
+		    
+         	
+	<!--second tal block close-->  
+	
+</ul>
+<!--Left Nav Ends -->
+</div>
+           			<div id="course_inner_media">
+      					 
+        <div class="" id="parent-fieldname-text">
+            
+            
+        </div>
+    
+      					 
+
+     <span id="caption_embed_1" class="nodisplay">{'English - US': '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/ocw-6.046-lec16.srt'}</span> 
+     <div id="media-embed">
+         <div class="attention_message" id="embed_1">
+<p>Flash and JavaScript are required for this feature.</p>
+<p>Download the video from <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1854688796?i=1363359818">iTunes U</a> or the <a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-09nov2005-220k_512kb.mp4">Internet Archive</a>.</p>
+</div>
+     </div>
+    
+     <script type="text/javascript">ocw_embed_chapter_media('embed_1', 'http://www.youtube.com/v/FPEMBWg_WlY', 'youtube', '/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees', 'http://img.youtube.com/vi/FPEMBWg_WlY/0.jpg',0,0, 'http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/ocw-6.046-lec16.srt')</script><div id="media_resource_next_prev_nav" style="margin-top: 1em;">
+        <p>
+        
+            <a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+                <img src="../../../common/images/btn_previous_resource.png" style="margin: 0 30px 0 50px;" alt="Previous track" title="Previous track"></a>
+     	
+     	
+        
+            <a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm"> 
+                <img src="../../../common/images/btn_next_resource.png" alt="Next track" title="Next track"></a>
+       
+       </p>
+     </div>
+ 
+
+
+<script type="text/javascript">
+		window.onload=function(){
+		init();
+		
+		}
+		var tabLinks = new Array();
+		var contentDivs = new Array();
+		function init() {
+		  // Grab the tab links and content divs from the page
+		  var tabListItems = document.getElementById('tabs').childNodes;
+		  for ( var i = 0; i < tabListItems.length; i++ ) {
+			if ( tabListItems[i].nodeName == "LI" ) {
+			  var tabLink = getFirstChildWithTagName( tabListItems[i], 'A' );
+			  var id = getHash( tabLink.getAttribute('href') );
+			  tabLinks[id] = tabLink;
+			  contentDivs[id] = document.getElementById( id );
+			}
+		  }
+		  // Assign onclick events to the tab links, and
+		  // highlight the first tab
+		  var i = 0;
+		  for ( var id in tabLinks ) {
+			tabLinks[id].onclick = showTab;
+			tabLinks[id].onfocus = function() { this.blur() };
+			if ( i == 0 ) tabLinks[id].className = 'selected';
+			i++;
+		  }
+		  // Hide all content divs except the first
+		  var i = 0;
+		  for ( var id in contentDivs ) {
+			if ( i != 0 ) contentDivs[id].className = 'tabContent hide';
+			i++;
+		  }
+		}
+		function showTab() {
+		  var selectedId = getHash( this.getAttribute('href') );
+		  // Highlight the selected tab, and dim all others.
+		  // Also show the selected content div, and hide all others.
+		  for ( var id in contentDivs ) {
+			if ( id == selectedId ) {
+			  tabLinks[id].className = 'selected';
+			  contentDivs[id].className = 'tabContent';
+			} else {
+			  tabLinks[id].className = '';
+			  contentDivs[id].className = 'tabContent hide';
+			}
+		  }
+		  // Stop the browser following the link
+		  return false;
+		}
+		function getFirstChildWithTagName( element, tagName ) {
+		  for ( var i = 0; i < element.childNodes.length; i++ ) {
+			if ( element.childNodes[i].nodeName == tagName ) return element.childNodes[i];
+		  }
+		}
+		function getHash( url ) {
+		  var hashPos = url.lastIndexOf ( '#' );
+		  return url.substring( hashPos + 1 );
+		}
+ </script><div id="media_tabs">
+     
+        <ul id="tabs">
+<li class="first">
+                <a href="#vid_about" class="selected">About this Video</a>
+            </li>
+            <li class="">
+                <a href="#vid_index" class="">Playlist</a>
+            </li>
+            <li class="">
+                <a href="#vid_playlist" class="">Related Resources</a>
+            </li>
+            <li class="">
+                <a href="#vid_related" class="">Transcript</a>
+            </li>
+            <li class="">
+                <a href="#vid_transcript" class="">Download this Video</a>
+            </li>
+        </ul>
+<div id="vid_about" itemprop="description" class="tabContent">
+<p><strong>Topics covered:</strong> Greedy Algorithms, Minimum Spanning Trees</p>
+<p><strong>Instructors:</strong> Prof. Erik Demaine, Prof. Charles Leiserson</p>
+</div>
+        <div id="vid_index" itemprop="description" class="tabContent hide">
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/index.htm">
+<img src="../../../contents/video-lectures/lecture-1-administrivia-introduction-analysis-of-algorithms-insertion-sort-mergesort/6_046J_lec01_th.jpg" title="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort" alt="Lecture 1: Administrivia; Introduction; Analysis of Algorithms, Insertion Sort, Mergesort"><p>Lecture 1: Administrivia; I...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-2-asymptotic-notation-recurrences-substitution-master-method/6_046J_lec02_th.jpg" title="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method" alt="Lecture 2: Asymptotic Notation; Recurrences; Substitution, Master Method"><p>Lecture 2: Asymptotic Notat...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/index.htm">
+<img src="../../../contents/video-lectures/lecture-3-divide-and-conquer-strassen-fibonacci-polynomial-multiplication/6_046J_lec03_th.jpg" title="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication" alt="Lecture 3: Divide-and-Conquer: Strassen, Fibonacci, Polynomial Multiplication"><p>Lecture 3: Divide-and-Conqu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/index.htm">
+<img src="../../../contents/video-lectures/lecture-4-quicksort-randomized-algorithms/6_046J_lec04_th.jpg" title="Lecture 4: Quicksort, Randomized Algorithms" alt="Lecture 4: Quicksort, Randomized Algorithms"><p>Lecture 4: Quicksort, Rando...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/index.htm">
+<img src="../../../contents/video-lectures/lecture-5-linear-time-sorting-lower-bounds-counting-sort-radix-sort/6_046J_lec05_th.jpg" title="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort" alt="Lecture 5: Linear-time Sorting: Lower Bounds, Counting Sort, Radix Sort"><p>Lecture 5: Linear-time Sort...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-6-order-statistics-median/index.htm">
+<img src="../../../contents/video-lectures/lecture-6-order-statistics-median/6_046J_lec06_th.jpg" title="Lecture 6: Order Statistics, Median" alt="Lecture 6: Order Statistics, Median"><p>Lecture 6: Order Statistics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-7-hashing-hash-functions/index.htm">
+<img src="../../../contents/video-lectures/lecture-7-hashing-hash-functions/6_046J_lec07_th.jpg" title="Lecture 7: Hashing, Hash Functions" alt="Lecture 7: Hashing, Hash Functions"><p>Lecture 7: Hashing, Hash Fu...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/index.htm">
+<img src="../../../contents/video-lectures/lecture-8-universal-hashing-perfect-hashing/6_046J_lec08_th.jpg" title="Lecture 8: Universal Hashing, Perfect Hashing" alt="Lecture 8: Universal Hashing, Perfect Hashing"><p>Lecture 8: Universal Hashin...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/index.htm">
+<img src="../../../contents/video-lectures/lecture-9-relation-of-bsts-to-quicksort-analysis-of-random-bst/6_046J_lec09_th.jpg" title="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST" alt="Lecture 9: Relation of BSTs to Quicksort - Analysis of Random BST"><p>Lecture 9: Relation of BSTs...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/index.htm">
+<img src="../../../contents/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/6_046J_lec10_th.jpg" title="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions" alt="Lecture 10: Red-black Trees, Rotations, Insertions, Deletions"><p>Lecture 10: Red-black Trees...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/index.htm">
+<img src="../../../contents/video-lectures/lecture-11-augmenting-data-structures-dynamic-order-statistics-interval-trees/6_046J_lec11_th.jpg" title="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees" alt="Lecture 11: Augmenting Data Structures, Dynamic Order Statistics, Interval Trees"><p>Lecture 11: Augmenting Data...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-12-skip-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-12-skip-lists/6_046J_lec12_th.jpg" title="Lecture 12: Skip Lists" alt="Lecture 12: Skip Lists"><p>Lecture 12: Skip Lists</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/index.htm">
+<img src="../../../contents/video-lectures/lecture-13-amortized-algorithms-table-doubling-potential-method/6_046J_lec13_th.jpg" title="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method" alt="Lecture 13: Amortized Algorithms, Table Doubling, Potential Method"><p>Lecture 13: Amortized Algor...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/index.htm">
+<img src="../../../contents/video-lectures/lecture-14-competitive-analysis-self-organizing-lists/6_046J_lec14_th.jpg" title="Lecture 14: Competitive Analysis: Self-organizing Lists" alt="Lecture 14: Competitive Analysis: Self-organizing Lists"><p>Lecture 14: Competitive Ana...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/index.htm">
+<img src="../../../contents/video-lectures/lecture-15-dynamic-programming-longest-common-subsequence/6_046J_lec15_th.jpg" title="Lecture 15: Dynamic Programming, Longest Common Subsequence" alt="Lecture 15: Dynamic Programming, Longest Common Subsequence"><p>Lecture 15: Dynamic Program...</p></a>
+</div>
+<div class="related-media-thumbnail-nolink">
+<div class="now-playing-resource">Now Playing</div>
+<img src="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J_lec16_th.jpg" title="Lecture 16: Greedy Algorithms, Minimum Spanning Trees" alt="Lecture 16: Greedy Algorithms, Minimum Spanning Trees"><p>Lecture 16: Greedy Algorith...</p>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/index.htm">
+<img src="../../../contents/video-lectures/lecture-17-shortest-paths-i-properties-dijkstras-algorithm-breadth-first-search/6_046J_lec17_th.jpg" title="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search" alt="Lecture 17: Shortest Paths I: Properties, Dijkstra's Algorithm, Breadth-first Search"><p>Lecture 17: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/index.htm">
+<img src="../../../contents/video-lectures/lecture-18-shortest-paths-ii-bellman-ford-linear-programming-difference-constraints/6_046J_lec18_th.jpg" title="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints" alt="Lecture 18: Shortest Paths II: Bellman-Ford, Linear Programming, Difference Constraints"><p>Lecture 18: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/index.htm">
+<img src="../../../contents/video-lectures/lecture-19-shortest-paths-iii-all-pairs-shortest-paths-matrix-multiplication-floyd-warshall-johnson/6_046J_lec19_th.jpg" title="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson" alt="Lecture 19: Shortest Paths III: All-pairs Shortest Paths, Matrix Multiplication, Floyd-Warshall, Johnson"><p>Lecture 19: Shortest Paths ...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-22-advanced-topics/index.htm">
+<img src="../../../contents/video-lectures/lecture-22-advanced-topics/6_046J_lec22_th.jpg" title="Lecture 22: Advanced Topics" alt="Lecture 22: Advanced Topics"><p>Lecture 22: Advanced Topics</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-23-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-23-advanced-topics-cont./6_046J_lec23_th.jpg" title="Lecture 23: Advanced Topics (cont.)" alt="Lecture 23: Advanced Topics (cont.)"><p>Lecture 23: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-24-advanced-topics-cont./index.htm">
+<img src="../../../contents/video-lectures/lecture-24-advanced-topics-cont./6_046J_lec24_th.jpg" title="Lecture 24: Advanced Topics (cont.)" alt="Lecture 24: Advanced Topics (cont.)"><p>Lecture 24: Advanced Topics...</p></a>
+</div>
+<div class="related-media-thumbnail">
+<a href="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/index.htm">
+<img src="../../../contents/video-lectures/lecture-25-advanced-topics-cont.-discussion-of-follow-on-classes/6_046J_lec25_th.jpg" title="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes" alt="Lecture 25: Advanced Topics (cont.) - Discussion of Follow-on Classes"><p>Lecture 25: Advanced Topics...</p></a>
+</div>
+</div>
+        <div id="vid_playlist" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Related Resources</h2>
+<p>Lecture Notes (<a target="_blank" href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/lec16.pdf">PDF</a>)<br><a target="_blank" href="../../../contents/assignments/index.htm">Assignments</a><br><a target="_blank" href="../../../contents/exams/index.htm">Exams</a></p>
+</div>
+        <div id="vid_related" itemprop="description" class="tabContent hide">
+<ul><li><a class="transcript-link" title="Open in a new window." alt="Open in a new window." style="text-decoration: none; font-size: 1.0em;" target="_blank" text-decoration: none font-size: href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/6_046J2005L16.pdf"> Download this transcript - PDF (English - US)</a></li></ul>
+<p></p>
+<p><strong>Transcript - Lecture 16</strong></p>
+<p>-- valuable experience. OK, today we're going to start talking about a particular class of algorithms called greedy algorithms. But we're going to do it in the context of graphs. So, I want to review a little bit about graphs, which mostly you can find in the textbook in appendix B. And so, if you haven't reviewed in appendix B recently, please sit down and review appendix B. It will pay off especially during our take-home quiz. So, just reminder, a digraph, what's a digraph? What's that short for? Directed graph, OK? Directed graph, G equals (V,E), OK, has a set, V, of vertices.</p>
+<p>And, I always get people telling me that I have one vertice. The singular is not vertice; it is vertex, OK? The plural is vertices. The singular is vertex. It's one of those weird English words. It's probably originally like French or something, right? I don't know. OK, anyway, and we have a set, E, which is a subset of V cross V of edges. So that's a digraph. And undirected graph, E contains unordered pairs.</p>
+<p>OK, and, sorry? It's Latin, OK, so it's probably pretty old, then, in English. I guess the vertex would be a little bit of a giveaway that maybe it wasn't French. It started to be used in 1570, OK. OK, good, OK, so the number of edges is, whether it's directed or undirected, is O of what? V^2, good. OK, and one of the conventions that will have when we're dealing, once we get into graphs, we deal a lot with sets. We generally drop the vertical bar notation within O's just because it's applied. It just makes it messier. So, once again, another abuse of notation. It really should be order the size of V^2, but it just messes up, I mean, it's just more stuff to write down. And, you're multiplying these things, and all those vertical bars.</p>
+<p>Since they don't even have a sense to the vertical bar, it gets messy. So, we just drop the vertical bars there when it's in asymptotic notation. So, E is order V^2 when it's a set of pairs, because if it's a set of pairs, it's at most n choose two, which is where it's at most n^2 over 2, here it could be, at most, sorry, V^2 over 2, here it's at most V^2. And then, another property that sometimes comes up is if the G is connected, we have another bound, implies that the size of E is at least the size of V minus one. OK, so if it's connected, meaning, what does it mean to have a graph that's connected?</p>
+<p>Yeah, there's a path from any vertex to any other vertex in the graph. That's what it means to be connected. So if that's the case, that a number of edges is at least the number of vertices minus one, OK? And so, what that says, so one of the things we'll get into, a fact that I just wanted to remind you, is that in that case, if I look at log E, OK, log of the number of edges, that is O of log V.</p>
+<p>And by this, is omega of log V. So, it's equal to theta of log V. OK, so basically the number of, in the case of a connected graph, the number of edges, and the number of vertices are polynomially related. So, their logs are comparable. OK, so that's helpful just to know because sometimes I just get questions later on where people will say, oh, you showed it was log E but you didn't show it was log V. And I could point out that it's the same thing. OK, so there's various ways of representing graphs in computers, and I'm just going to cover a couple of the important ones.</p>
+<p>There's actually more. We'll see some more. So, the simplest one is what's called an adjacency matrix. An adjacency matrix of the graph, G, equals (V,E), where, for simplicity, I'll let V be the set of integers from one up to n, OK, is the n by n matrix A given by the ij-th at the entry is simply one if the edge, ij, is in the edge set and zero if ij is not in the edge set. OK, so it's simply the matrix where you say, the ij entry is one if it's in the matrix. So, this is, in some sense, giving you the predicate for, is there an edge from i to j?</p>
+<p>OK, remember, predicate is Boolean formula that is either zero or one, and in this case, you're saying it's one if there is an edge from i to j and zero otherwise. OK, sometimes you have edge weighted graphs, and then sometimes what people will do is replace this by edge weights. OK, it will be the weight of the edge from i to j. So, let's just do an example of that just to make sure that our intuition corresponds to our mathematical definitions. So, here's an example graph. Let's say that's our graph.</p>
+<p>So let's just draw the adjacency the matrix. OK, so what this says: is there's an edge from one to one? And the answer is no. Is there an edge from one to two? Yes. Is there an edge from one to three here? Yep. Is there an edge for one to four? No. Is there an edge from two until one? No. Two to two? No. Two to three? Yes. Two to four? No. No edges going out of three. Edge from four to three, and that's it. That's the adjacency matrix for this particular graph, OK? And so, I can represent a graph as this adjacency matrix.</p>
+<p>OK, when I represent it in this way, how much storage do I need? OK, n^2 or V^2 because the size is the same thing for V^2 storage, OK, and that's what we call a dense representation. OK, it works well when the graph is dense. So, the graph is dense if the number of edges is close to all of the edges possible. OK, then this is a good representation. But for many types of graphs, the number of edges is much less than the possible number of edges, in which case we say the graph is sparse. Can somebody give me an example of a sparse graph?</p>
+<p>A class of graphs: so, I want a class of graphs that as n grows, the number of edges in the graph doesn't grow as the square, but grows rather as something much smaller. A linked list, so, a chain, OK, if you look at it from a graph theoretically, is a perfectly good example: only n edges in the chain for a chain of length n. So therefore, the number of edges would be order V. And in particular, you'd only have one edge per row here. What other graphs are sparse? Yeah? Good, a planar graph, a graph that can be drawn in a plane turns out that if it has V vertices has, and V is at least three, then it has, at most, three V minus six edges.</p>
+<p>So, it turns out that's order V edges again. What's another example of a common graph? Yeah, binary tree, or even actually any tree, you know, what's called a free tree if you read the appendix, OK, a tree that just is a connected graph that has no cycles, OK, is another example. What's an example of a graph that's dense? A complete graph, OK: it's all ones, OK, or if you have edge weights, it would be a completely filled in matrix. OK, good. So, this is good for dense representation. But sometimes you want to have a sparse representation so we don't have to spend V^2 space to deal with all of the, where most of it's going to be zeroes. OK, it's sort of like, if we know why it's zero, why bother representing it as zero?</p>
+<p>So, one such representation is an adjacency list representation. Actually, adjacency list of a given vertex is the list, which we denote by Adj of V, of vertices adjacent to V. OK, just in terms by their terminology, vertices are adjacent, but edges are incident on vertices. OK, so the incidence is a relation between a vertex and an edge. An adjacency is a relation between two vertices. OK, that's just the language.</p>
+<p>Why they use to different terms, I don't know, but that's what they do. So, in the graph, for example, the adjacency list for vertex one is just the list or the set of two three because one has going out of one are edges to two and three. The adjacency list for two is just three, four, three. It's the empty set, and for four, it is three. OK, so that's the representation. Now, if we want to figure out how much storage is required for this representation, OK, we need to understand how long the adjacency list is.</p>
+<p>So, what is the length of an adjacency list of a vertex, V? What name do we give to that? It's the degree. So, in an undirected graph, we call it the degree of the vertex. This is undirected. OK, about here, OK. So that's an undirected case. In the directed case, OK, actually I guess the way we should do this is say this. If the degree, we call it the out degree for a digraph. OK, so in a digraph, we have an out degree and an in degree for each vertex.</p>
+<p>So here, the in degree is three. Here, the out degree is two, OK? So, one of the important lemma that comes up is what's called the handshaking lemma. OK, it's one of these mathematical lemmas. And so, it comes from a story. Go to a dinner party, and everybody at the dinner party shakes other people's hands. Some people may not shake anybody's hand. Some people may shake several people's hands. Nobody shakes hands with themselves.</p>
+<p>And at some point during the dinner party, the host goes around and counts up how many, the sum, of the number of hands that each person has shaken. OK, so he says, how many did you shake? How many did you shake? How many did you shake? He adds them up, OK, and that number is guaranteed to be even. OK, that's the handshaking lemma. Or, stated a little bit more precisely, if I take for any graph the degree of the vertex, and sum them all up, that's how many hands everybody shook, OK, that's actually equal to always twice the number of edges. So, why is that going to be true? Why is that going to be twice the number of edges?</p>
+<p>Yeah? Yeah. Every time you put in an edge, you add one to the degree of each person on each end. So, it's just two different ways of counting up the same number of edges. OK, I can go around, and if you imagine that, that every time I count the degree of the node, I put a mark on every edge. Then, when I'm done, every edge has two marks on it, one for each end. OK: a pretty simple theorem. So, what that says is that for undirected graphs, that implies that the adjacency list representation, uses how much storage?</p>
+<p>OK, at most, 2E, so order E because that's not all. Yeah, so you have to have the number of vertices plus order the number of edges, OK, whether it's directed or undirected because I may have a graph, say it has a whole bunch of vertices and no edges, that's still going to cost me order V, OK? So, it uses theta of V plus E storage. And, it's basically the same thing asymptotically. In fact, it's easier to see in some sense for digraphs because for digraphs, what I do is I just add up the out degrees, and that equal to E, OK, if I add up the out degrees as equally.</p>
+<p>In fact, this is kind of like it amortized analysis, if you will, a book keeping analysis, that if I'm adding up the total number of edges, one way of doing it is accounting for a vertex by vertex. OK, so for each vertex, I basically can take each degree, and basically each vertex, look at the degree, and that allocating of account per edge, and then ending up with twice the number of edges, that's exactly accounting type of analysis that we might do for amortized analysis.</p>
+<p>OK, so we'll see that. So, this is a sparse representation, and it's often better than an adjacency matrix. For example, you can imagine if the World Wide Web were done with an adjacency matrix as opposed to, essentially, with an adjacency list type of representation. Every link on the World Wide Web, I had to say, here are the ones that I'm connected to, and here are all the ones I'm not connected to. OK, that list of things you're not connected to for a given page would be pretty dramatically, show you that there is an advantage to sparse representation.</p>
+<p>On the other hand, one of the nice things about an adjacency matrix representation is that each edge can be represented with a single bit, whereas typical when I'm representing things with an adjacency list representation, how many bits am I going to need to represent each adjacency? You'll need order log of V to be able to name each different vertex. OK, the log of the number is the number of bits that I need. So, there are places where this is actually a far more efficient representation. In particular, if you have a very dense graph, OK, this may be a better way of representing it. OK, the other thing I want you to get, and we're going to see more of this in particular next week, is that a matrix and a graph, there are two ways of looking at the same thing.</p>
+<p>OK, and in fact, there's a lot of graph theory that when you do things like multiply the adjacency matrix, OK, and so forth. So, there's a lot of commonality between graphs and matrices, a lot of mathematics that if it applies for one, it applies to the other. Do you have a question, or just holding your finger in the air? OK, good. OK, so that's all just review. Now I want to get onto today's lecture. OK, so any questions about graphs? So, this is a good time to review appendix B. there are a lot of great properties in there, and in particular, there is a theorem that we're going to cover today that we're going to talk about today, which is properties of trees. Trees are very special kinds of graphs, so I really want you to go and look to see what the properties are.</p>
+<p>There is, I think, something like six different definitions of trees that are all equivalent, OK, and so, I think a very good idea to go through and read through that theorem. We're not going to prove it in class, but really, provides a very good basis for the thinking that we're going to be doing today. And we'll see more of that in the future. OK, so today, we're going to talk about minimum spanning trees.</p>
+<p>OK, this is one of the world's most important algorithms. OK, it is important in distributed systems. It's one of the first things that almost any distributed system tries to find is a minimum spanning tree of the nodes that happened to be alive at any point, OK? And one of the people who developed an algorithm for this, we'll talk about this a little bit later, OK, it was the basis of the billing system for AT&amp;T for many years while it was a monopoly.</p>
+<p>OK, so very important kind of thing. It's got a huge number of applications. So the problem is the following. You have a connected undirected graph, G equals (V,E), with an edge weight function, w, which maps the edges into weights that are real numbers. And for today's lecture, we're going to make an important assumption, OK, for simplicity. The book does not make this assumption. And so, I encourage you to look at the alternative presentation or, because what they do in the book is much more general, but for simplicity and intuition, I'm going to make this a little bit easier. We're going to assume that all edge weights are distinct.</p>
+<p>OK, all edge weights are distinct. So what does that mean? What does that mean that this function, w, what property does the function, w, have if all edge weights are distinct? Who remembers their discreet math? It's injective. OK, it's one to one. OK, it's not one to one and onto necessarily. In fact, it would be kind of hard to do that because that's a pretty big set. OK, but it's one to one. It's injective. OK, so that's what we're going to assume for simplicity. OK, and the book, they don't assume that. It just means that the way you have to state things is just a little more precise. It has to be more technically precise. So, that's the input. The output is--</p>
+<p>The output is a spanning tree, T, and by spanning tree, we mean it connects all the vertices. OK, and it's got to have minimum weight. OK, so we can write the weight of the tree is going to be, by that, we meet the sum over all edges that are in the tree of the weight of the individual edges. OK, so here I'(V,E) done a little bit of abusive notation, which is that what I should be writing is w of the edge (u,v) because this is a mapping from edges, which would give me a double parentheses.</p>
+<p>And, you know, as you know, I love to abuse notation. So, I'm going to drop that extra parentheses, because we understand that it's really the weight of the edge, OK, not the weight of the ordered pair. So, that's just a little notational convenience. OK, so one of the things, when we do the take-home exam, notational convenience can make the difference between having a horrible time writing up a problem, and an easy time. So, it's worth thinking about what kinds of notation you'll use in writing up solutions to problems, and so forth. OK, and just in general, a technical communication, you adopt good notation people understand you. You adopt a poor notation: nobody pays attention to what you're doing because they don't understand what you're saying.</p>
+<p>OK, so let's do an example. OK, so here's a graph. I think for this, somebody asked once if I was inspired by biochemistry or something, OK, but I wasn't. I was just writing these things down, OK? So, here's a graph. And let's give us some edge weights. OK, so there are some edge weights. And now, what we want is we want to find a tree. So a connected acyclic graph such that every vertex is part of the tree. But it's got to have the minimum weight possible. OK, so can somebody suggest to me some edges that have to be in this minimum spanning tree?</p>
+<p>Yeah, so nine, good. Nine has to be in there because, why? It's the only one connecting it to this vertex, OK? And likewise, 15 has to be in there. So those both have to be in. What other edges have to be in? Which one? 14 has to be it. Why does 14 have to be in? Well, one of 14 and three has to be in there. I want the minimum weight. The one that has the overall smallest weight. So, can somebody argue to me that three has to be in there?</p>
+<p>Yeah? That's the minimum of two, which means that if I had a, if you add something you said was a minimum spanning tree that didn't include three, right, and so therefore it had to include 14, then I could just delete this edge, 14, and put in edge three. And, I have something of lower weight, right? So, three has to be in there. What other edges have to be in there? Do a little puzzle logic. Six and five have to be in there. Why do they have to be in there?</p>
+<p>Yeah, well, I mean, it could be connected through this or something. It doesn't necessarily have to go this way. Six definitely has to be in there for the same reason that three had to be, right? Because we got two choices to connect up this guy. And so, if everything were connected but it weren't, 12, I mean, and 12 was in there. I could always, then, say, well, let's connect them up this way instead.</p>
+<p>OK, so definitely that's in there. I still don't have everything connected up. What else has to be in there for minimum spanning tree? Seven, five, and eight, why seven, five, and eight? OK, so can we argue those one at a time? Why does five have to be in there? Yeah? OK, so we have four connected components because we have this one, this one, we actually have, yeah, this one here, and this one, good. We need at least three edges to connect them because each edge is going to reduce the connected components by one. OK, so we need three edges, and those are the three cheapest ones. And they work.</p>
+<p>That works, right? Any other edges are going to be bigger, so that works. Good. OK, and so, now do we have a spanning tree? Everything is, we have one big connected graph here, right? Is that what I got? Hey, that's the same as what I got. Life is predictable. OK, so, so everybody had the idea of what a minimum spanning tree is, then, out of this, OK, what's going on there? So, let's first of all make some observations about this puzzle. And what I want to do is remind you about the optimal substructure property because it turns out minimum spanning tree has a great optimal substructure property.</p>
+<p>OK, so the setup is going to be, we're going to have some minimum spanning tree. Let's call it T. And, I'm going to show that with the other edges in the graph, are not going to be shown. OK, so here's a graph. OK, so here's a graph. It looks like the one I have my piece of paper here. OK, so the idea is, this is some minimum spanning tree. Now, we want to look at a property of optimal substructure. And the way I'm going to get that, is, I'm going to remove some edge, (u,v), move an arbitrary edge, (u,v), in the minimum spanning tree. So, let's call this u and this V. And so, we're removing this edge.</p>
+<p>OK, so when I remove an edge in a tree, what happens to the tree? What's left? I have two trees left, OK? I have two trees left. Now, proving that, that's basically one of the properties in that appendix, and the properties of trees that I want you to read, OK, because you can actually prove that kind of thing rather than it just being obvious, which is, OK? OK, so we remove that. Then, T is partitioned into two subtrees. And, we'll call them T_1 and T_2. So, here's one subtree, and here's another subtree. We'(V,E) partitioned it. No matter what edge I picked, there would be two subtrees that it's partitioned into.</p>
+<p>Even if the sub tree is a trivial subtree, for example, it just has a single node in it and no edges. So, the theorem that we'll prove demonstrates a property of optimal substructure. T_1 is a minimum spanning tree for the graph, G_1, E_1, a subgraph of G induced by the vertices in T_1. OK, that is, V_1 is just the vertices in T_1 is what it means to be induced. OK, so V_1 is the vertices in T_1. So, in this picture, I didn't label it. This is T_1. This is T_2. In this picture, these are the vertices of T_1. So, that's V_1, OK? And, E_1 is the set of pairs of vertices, x and y, that are the edges that are in E_1 such that both x and y belong to V_1.</p>
+<p>OK, so I haven't shown the edges of G here. But basically, if an edge went from here to here, that would be in the E_1. If it went from here to here, it would not. And if it went from here to here, it would not. OK, so the vertices, the subgraph induced by the vertices of T_1 are just those that connect up things in T_1, and similarly for T_2. So, the theorem says that if I look at just the edges within the graph here, G_1, those that are induced by these vertices, T_1 is, in fact, a minimum spanning tree for that subgraph. That's what the theorem says. OK, if I look over here conversely, or correspondingly, if I look at the set of edges that are induced by this set of vertices, the vertices in T_2, in fact, T_2 is a minimum spanning tree on that subgraph.</p>
+<p>OK, OK, we can even do it over here. If I took a look, for example, at these, let's see, let's say we cut out five, and if I cut out edge five, that T_1 would be these four vertices here. And, the point is that if I look at the subgraph induced on that, that these edges here. In fact, the six, eight, and three are all edges in a minimum spanning tree for that subgraph. OK, so that's what the theorem says. So let's prove it.</p>
+<p>OK, and so what technique are we going to use to prove it? OK, we learned this technique last time: hint, hint. It's something you do it in your text editor all the time: cut and paste, good, cut and paste. OK, so the weight of T I can express as the weight of the edge I removed, plus the weight of T_1, plus the weight of T_2. OK, so that's the total weight. So, the argument is pretty simple. Suppose that there were some T_1 prime that was better than T_1 for G_1. Suppose I had some better way of forming a spanning tree.</p>
+<p>OK, then I would make up a T prime, which just contained the edges, (u,v), and T_1 prime, union T_2. So, I would take, if I had a better spanning tree, a spanning tree of lower weight for T_1. And I call that T_1 prime. I just substitute that and make up a spanning tree that consisted of my edge, (u,v), whatever works well for T_1 prime and whatever works well for T. And, that would be a spanning tree.</p>
+<p>And it would be better than T itself was for G, OK, because the weight of these is just as the weight for this, I now just get to use the weight of T_1 prime, and that's less. And so, therefore, the assumption that T was a minimum spanning tree would be violated if I could find a better one for the subpiece. So, we have this nice property of optimal substructure. OK, I have subproblems that exhibit optimal, if I have a globally optimal solution to the whole problem within it, I can find optimal solutions to subproblems.</p>
+<p>So, now the question is, that's one hallmark. That's one hallmark of dynamic programming. What about overlapping subproblems? Do I have that property? Do I have overlapping subproblems over here for this type of problem? So, imagine, for example, that I'm removing different edges. I look at the space of taking a given edge, and removing it. It partitions it into two pieces, and now I have another piece. And I remove it, etc.</p>
+<p>Am I going to end up getting a bunch of subproblems that are similar in there? Yeah, I am. OK, if I take out this one, then I take out, say, this one here, and then I'll have another tree here and here. OK, that would be the same as if I had originally taken this out, and then taken that one out. If I look at simple ordering of taking out the edges, I'm going to end up with a whole bunch of overlapping subproblems.</p>
+<p>Yeah, OK. So then, what does that suggest we use as an approach? Dynamic programming, good. What a surprise! Yes, OK, you could use dynamic programming. But it turns out that minimum spanning tree exhibits an even more powerful property. OK, so we'(V,E) got all the clues for dynamic programming, but it turns out that there's an even bigger clue that's going to help us to use an even more powerful technique.</p>
+<p>And that, we call, the hallmark for greedy algorithms. And that is, we have a thing called the greedy choice property, which says that a locally optimal choice is globally optimal. And, of course, as all these hallmarks is the kind of thing you want to box, OK, because these are the clues that you're going to be able to do that. So, we have this property that we call the greedy choice property. I'm going to show you how it works in this case. And when you have a greedy choice property, it turns out you can do even better that dynamic programming.</p>
+<p>OK, so when you see the two dynamic programming properties, there is a clue that says dynamic programming, yes, but also it says, let me see whether it also has this greedy property because if it does, you're going to come up with something that's even better than dynamic programming, OK? So, if you just have the two, you can usually do dynamic programming, but if you have this third one, it's like, whoa! Jackpot!</p>
+<p>OK, so here's the theorem we'll prove to illustrate this idea. Once again, these are not, all these hallmarks are not things. They are heuristics. I can't give you an algorithm to say, here's where dynamic programming works, or here's where greedy algorithms work. But I can sort of indicate when they work, the kind of structure they have. OK, so here's the theorem. So let's let T be the MST of our graph. And, let's let A be any subset of V, so, some subset of vertices.</p>
+<p>And now, let's suppose that edge, (u,v), is the least weight edge connecting our set A to A complement, that is, V minus A. Then the theorem says that (u,v) is in the minimum spanning tree. So let's just take a look at our graph over here and see if that's, in fact, the case. OK, so let's take, so one thing I could do for A is just take a singleton node. So, I take a singleton node, let's say this guy here, that can be my A, and everything else is V minus A.</p>
+<p>And I look at the least weight edge connecting this to everything else. Well, there are only two edges that connect it to everything else. And the theorem says that the lighter one is in the minimum spanning tree. Hey, I win. OK, if you take a look, every vertex that I pick, the latest edge coming out of that vertex is in the minimum spanning tree. OK, the lightest weight edge coming out, but that's not all the edges that are in here.</p>
+<p>OK, or let's just imagine, let's take a look at these three vertices connected to this set of vertices. I have three edges is going across. The least weight one is five. That's the minimum spanning tree. Or, I can cut it this way. OK, the ones above one, the edges going down are seven, eight, and 14. Seven is the least weight. It's in the minimum spanning tree. So, no matter how I choose, I could make this one in, this one out, this one in, this one out, this one in, this one out, this one in, this one out, take a look at what all the edges are. Which ever one to the least weight: it's in the minimum spanning tree. So, in some sense, that's a local property because I don't have to look at what the rest of the tree is.</p>
+<p>I'm just looking at some small set of vertices if I wish, and I say, well, if I wanted to connect that set of vertices to the rest of the world, what would I pick? I'd pick the cheapest one. That's the greedy approach. It turns out, that wins, OK, that picking that thing that's locally good for that subset, A, OK, is also globally good. OK, it optimizes the overall function. That's what the theorem says, OK? So, let's prove this theorem. Any questions about this? OK, let's prove this theorem. So, we have (u,v) is the least weight edge connecting A to D minus A. So, let's suppose that this edge, (u,v), is not in the minimum spanning tree.</p>
+<p>OK, let's suppose that somehow there is a minimum spanning tree that doesn't include this least weight edge. OK, so what technique you think will use to prove to get a contradiction here? Cut and paste, good. Yeah, we're going to cut paste. OK, we're going to cut and paste. So here, I did an example. OK, so -- OK, and so I'm going to use the notation. I'm going to color some of these in.</p>
+<p>OK, and so my notation here is this is an element of A, and color it in. It's an element of V minus A. OK, so if it's not colored it, that's an A. This is my minimum spanning tree. Once again, I'm not showing the overall edges of all the graphs, but they're there, OK? So, my edge, (u,v), which is not my minimum spanning tree I say, let's say is this edge here. It's an edge from u, u as in A, v as in V minus A. OK, so everybody see the setup? So, I want to prove that this edge should have been in the minimum spanning tree, OK, that the contention that this is a minimum spanning tree, and does include (u,v) is wrong.</p>
+<p>So, what I want to do, that, is I have a tree here, T, and I have two vertices, u and v, and in a tree, between any two vertices there is a unique, simple path: simple path meaning it doesn't go back and forth and repeat edges or vertices. OK, there's a unique, simple path from u to v. So, let's consider that path. OK, and the way that I know that that path exists is because I'(V,E) read appendix B of the textbook, section B.5.1, OK, which has this nice theorem about properties of trees. OK, so that's how I know that there exists a unique, simple path.</p>
+<p>OK, so now we're going to do is take a look at that path. So in this case, it goes from here, to here, to here, to here. And along that path, there must be a point where I connect from a vertex in A to a vertex in V minus A. Why? Well, because this is in A. This is in V minus A. So, along the path somewhere, there must be a transition. OK, they are not all in A, OK, because in particular, V isn't. OK, so we're going to do is swap (u,v) with the first edge on this path that connects a vertex in A to a vertex in V minus A.</p>
+<p>So in this case, it's this edge here. I go from A to V minus A. In general, I might be alternating many times, OK, and I just picked the first one that I encounter. OK, that this guy here. And what I do is I put this edge in. OK, so then, what happens? Well, the edge, (u,v), is the lightest thing connecting something in A to something in V minus A. So that means, in particular, it's lighter than this edge, has lower weight. So, by swapping this, I'(V,E) created a tree with lower overall weight, contradicting the assumption that this other thing was a minimum spanning tree.</p>
+<p>OK: so, a lower weight spanning tree than T results, and that's a contradiction -- -- than T results. And that's a contradiction, OK? How are we doing? Everybody with me? OK, now we get to do some algorithms. Yea! So, we are going to do an algorithm called Prim's algorithm. Prim eventually became a very high-up at AT&amp;T because he invented this algorithm for minimum spanning trees, and it was used in all of the billing code for AT&amp;T for many years. He was very high up at Bell Labs back in the heyday of Bell Laboratories. OK, so it just shows, all you have to do is invent an algorithm.</p>
+<p>You too can be a president of a corporate monopoly. Of course, the government can do things to monopolies, but anyway, if that's your mission in life, invent an algorithm. OK, so here's the idea. What we're going to do is we're going to maintain V minus A as a priority queue. We'll call it Q. And each vertex, we're going to key each vertex in Q with the weight of the least weight edge, connecting it to a vertex in A.</p>
+<p>So here's the code. So, we're going to start out with Q being all vertices. So, we start out with A being, if you will, the empty set. OK, and what we're going to do it is the least weight edge, therefore, for everything in the priority queue is basically going to be infinity because none of them have any edges. The least weight edge to the empty set is going to be empty. And then, we're going to start out with one guy.</p>
+<p>We'll call him S, which will set to zero for some arbitrary S in V. And then, the main part of the algorithm kicks in. So that's our initialization. OK, when we do the analysis, I'm going to write some stuff on the left hand side of the board. So if you're taking notes, you may want to also leave a little bit of space on the left hand side of your notes. So, while Q is not empty, we get the smallest element out of it.</p>
+<p>And then we do some stuff. That's it. And the only thing I should mention here is, OK, so let's just see what's going on here. And then we'll run it on the example. OK, so what we do is we take out the smallest element out of the queue at each step. And then for each step in the adjacency list, in other words, everything for which I have an edge going from v to u, we take a look, and if v is still in our set V minus A, so things we'(V,E) taken out are going to be part of A. OK, every time we take something out, that's going to be a new A that we construct.</p>
+<p>At every step, we want to find, what's the cheapest edge connecting that A to everything else? We basically are going to take whatever that cheapest thing is, OK, add that edge in, and now bring that into A and find the next cheapest one. And we just keep repeating the process. OK, we'll do it on the example. And what we do, is every time we bring it in, I keep track of, what was the vertex responsible for bringing me in.</p>
+<p>And what I claim is that at the end, if I look at the set of these pairs that I'(V,E) made here, V and pi of V, that forms the minimum spanning tree. So let's just do this. And, what's that? We're all set up. So let's get rid of these guys here because we are going to recompute them from scratch. OK, so you may want to copy the graph over again in your notes. I was going to do it, but it turned out, this is exactly the board is going to erase this. OK, well let me just modify it. OK, so we start out. We make everything be infinity. OK, so that's where I'm going to keep the key value. OK, and then what I'm going to do is find one vertex.</p>
+<p>And I'm going to call him S. And I'm going to do this vertex here. We'll call that S. So basically, I now make him be zero. And now, what I do, is I execute extract min. So basically, what I'll do is I'll just shade him like this, indicating that he has now joined the set A. So, this is going to be A. And this is element of V minus A. OK, so then what we do is we take a look. We extract him, and then for each edge in the adjacency list, OK, so for each vertex in the adjacency lists, that these guys here, OK, we're going to look to see if it's still in Q, that is, in V minus A.</p>
+<p>And if so, and its key value is less than what the value is at the edge, there, we're going to replace it by the edge value. So, in this case, we're going to replace this by seven. We're going to replace this by 15, and we're going to replace this by ten, OK, because what we're interested in is, what is the cheapest? Now, notice that everything in V minus A, that is, what's in the priority queue, everything in there, OK, now has its cheapest way of connecting it to the things that I'(V,E) already removed, the things that are in A. OK, and so now I just, OK, when I actually do that update, there's actually something implicit going on in this priority queue.</p>
+<p>And that is that I have to do a decreased key. So, there's an implicit decrease of the key. So, decreased key is a priority queue operation that lowers the value of the key in the priority queue. And so, that's implicitly going on when I look at what data structure I'm going to use to implement that priority queue. OK, so common data structures for implementing a priority queue are a min heap.</p>
+<p>OK, so I have to make sure that I'm actually doing this operation. I can't just change it and not affect my heap. So, there is an implicit operation going on there. OK, now I repeat. I find the cheapest thing, oh, and I also have to set, now, a pointer from each of these guys back to u. So here, this guy sets a pointer going this way. This guy sets a pointer going this way, and this guy sets a pointer going this way. That's my pi thing that's going to keep track of who caused me to set my value to what it is. So now, we go in and we find the cheapest thing, again. And we're going to do it fast, too. OK, this is a fast algorithm.</p>
+<p>OK, so now we're going to go do this again. So now, what's the cheapest thing to extract? This guy here, right? So, we'll take him out, OK, and now we update all of his neighbors. So this guy gets five. This guy gets 12. This guy gets nine. This guy we don't update. We don't update him because he's no longer in the priority queue. And all of these guys now, we make point to where they're supposed to point to. And, we're done with that step. Now we find the cheapest one. What's the cheapest one now? The five over here. Good. So, we take him out. OK, we update the neighbors. Here, yep, that goes to six now. And, we have that pointer.</p>
+<p>And, this guy we don't do, because he's not in there. This guy becomes 14, and this guy here becomes eight. So, we update that guy, make him be eight. Did I do this the right way? Yeah, because pi is a function of this guy. So basically, this thing, then, disappears. Yeah, did I have another one that I missed? 12, yes, good, it's removed, OK, because pi is just a function. And now I'm OK. OK, so now what do I do? OK, so now my set, A, consists of these three things, and now I want the cheapest edge. I know it's in the minimum spanning tree. So let me just greedily pick it.</p>
+<p>OK, so what's the cheapest thing now? This guy appear? Yeah, six. So we take it. We go to update these things, and nothing matters here. OK, nothing changes because these guys are already in A. OK, so now the cheapest one is eight here. Good. So, we take eight out. OK, we update this. Nothing to be done. This: nothing to be done. This: oh, no, this one, instead of 14 we can make this be three. So, we get rid of that pointer and make it point that way. Now three is the cheapest thing. So, we take it out, and of course there's nothing to be done over there. And now, last, I take nine. And it's done. And 15: it's done. And the algorithm terminates.</p>
+<p>OK, and as I look at, now, all the edges that I picked, those are exactly all the edges that we had at the beginning. OK, let's do an analysis here. OK, so let's see, this part here costs me order V, right? OK, and this part, let's see what we are doing here. Well, we're going to go through this loop how many times? V times. It's V elements we put into the queue. We are not inserting anything. We're just taking them out. This goes V times, OK, and we do a certain number of extract Mins. So, we're going to do order V extract Mins. And then we go to the adjacency list, and we have some constant things. But we have these implicit decreased keys for this stuff here.</p>
+<p>That's this thing here. OK, and so how many implicit decreased keys do we have? That's going to be the expensive thing. OK, we have, in this case, the degree of u of those. OK, so overall, how many implicit decreased keys do we have? Well, we have V times through. How big could the degree of u be? OK, it could be as big as V, order V. So, that's V^2 decreased use. But we can do a better bound than that.</p>
+<p>How many do we really have? Yeah, at most order E, OK, because what am I doing? I'm summing up the degrees of all the vertices. That's how many times I actually execute that. So, I have order E, implicit decreased keys. So the time overall is order V times time for whatever the extract Min is plus E times the time for decreased key. So now, let's look at data structures, and we can evaluate for different data structures what this formula gives us.</p>
+<p>So, we have different ways of implementing a data structure. We have the cost of extract Min, and of decreased key, and total. So, the simplest way of implementing a data structure is an unsorted array. If I have an unsorted array, how much time does it take me to extract the minimum element? If I have an unsorted array? Right, order V in this case because it's an array of size V. And, to do a decreased key, OK, I can do it in order one.</p>
+<p>So, the total is V^2, good, order V^2 algorithm. Or, as people suggested, how about a binary heap? OK, to do an extract Min in a binary heap will cost me what? O of log V. Decreased key will cost me, yeah, it turns out you can do that in order log V because basically you just have to shuffle the value, actually shuffle it up towards the root, OK? Or at log V. And, the total cost therefore is?</p>
+<p>E log V, good. Which of these is better? It depends, good. When is one better, and when is the other better? Yeah, if it's a dense graph, E is close to V^2, the array is better. But if it's a sparse graph, and E is much smaller than V^2, then the binary heap is better. So that motivated the invention of a data structure, OK, called a Fibonacci Heap. So, Fibonacci Heap is covered in Chapter 20 of CLRS. We're not going to hold you responsible for the content, but it's an interesting data structure because it's an amortized data structure. And it turns out that it is data structure, you can do extract Min in order log V amortized time.</p>
+<p>And remarkably, you can do decreased key in order one amortized. So, when I plug those in, what do I get over here? What's that going to be? Plug that it here. It's going to be V times log V plus E: E plus V log V. These are amortized, so what's this? Trick question. It's worst-case. It's not amortized over here. These are amortized, but that's the beauty of amortization. I can say it's going to be worst case: E plus V log V over here, because when I add up the amortized cost of my operations, it's an upper bound on the true costs. OK, so that's why I say, one of the beauties of this amortized analysis, and in particular, being able to assign different costs to different operations is I can just add them up and I get my worst-case costs.</p>
+<p>So this is already V log V. There are a couple other algorithms just before I let you go. Kruskal's Algorithm in the book uses another amortized data structure called a disjoint set data structure, which also runs in E log V, that is, this time: runs in this time, the same as using a binary heap. So, I'll refer you to the book. The best algorithm to date with this problem is done by our own David Karger on the faculty here with one of our former graduates, Phil Kline, who is now a professor at Brown, and Robert Tarjan, who is sort of like the master of all data structures who was a professor at Princeton in 1993. OK, it's a randomized algorithm, and it gives you order V plus E expected time. OK, so that's the best to date.</p>
+<p>It's still open as to whether there is a deterministic, there is worst-case bound, whether there is a worst-case bound that is linear time. OK, but there is a randomized to linear time, and otherwise, this is essentially the best bound without additional assumptions. OK, very cool stuff. Next, we're going to see a lot of these ideas of greedy and dynamic programming in practice.</p>
+</div>
+        <div id="vid_transcript" itemprop="description" class="tabContent hide">
+<h2 class="subhead">Free Downloads</h2>
+<h3 class="subsubhead">Video</h3>
+<ul>
+<li>iTunes U (<a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/mit.edu.1298167185.01856524955.1854688796?i=1363359818">MP4 - 173MB</a>)</li>
+<li>Internet Archive (<a href="http://www.archive.org/download/MIT6.046JF05MPEG4/ocw-6.046-09nov2005-220k_512kb.mp4">MP4 - 343MB</a>)</li>
+</ul>
+<br><h3 class="subsubhead">Free Streaming</h3>
+<ul><li><a href="http://videolectures.net/mit6046jf05_introduction_algorithms/">VideoLectures.net</a></li></ul>
+<br><h3 class="subsubhead">Subtitle</h3>
+<ul><li>English - US (<a href="../../../contents/video-lectures/lecture-16-greedy-algorithms-minimum-spanning-trees/ocw-6.046-lec16.srt">SRT</a>)</li></ul>
+</div>
+    
+   </div>  
+
+
+      					 
+        <div class="" id="parent-fieldname-bottom_html_area">
+            
+            
+        </div>
+    
+                    </div>
+<!--Course_inner_chip tag close -->
+           		</div>
+<!--Course_wrapper tag close --> 
+            </div>
+<!--left tag close -->
+            <div id="right">
+                <!--Begin Right Portion -->
+                    <div>
+    
+<div id="portletwrapper-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465" class="portletWrapper kssattr-portlethash-6f63772e7269676874746f70706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a646f6e617465">
+<div class="portletStaticText portlet-static-donate"><p class="zero"><a href="http://ocw.mit.edu/donate"><img src="../../../common/images/button_donate-now.png" alt="Donate Now." class="donate"></a></p></div>
+
+</div>
+
+
+
+
+</div>
+
+                	<div>
+    
+
+
+
+</div>
+
+
+        <div class="" id="parent-fieldname-rsi_top_html_area">
+            
+            
+        </div>
+    
+
+<!-- RSI google ad space-->
+
+
+<div id="google_ads">    
+    <script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js"></script><script type="text/javascript">GS_googleAddAdSenseService("ca-pub-6588555046597237");GS_googleEnableAllServices();</script><script type="text/javascript">GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_A_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_B_DL");GA_googleAddSlot("ca-pub-6588555046597237", "VIDEO_INDIVIDUAL_SLOT_C_DL");</script><script type="text/javascript">GA_googleFetchAds();</script><script language="javascript" type="text/javascript">
+GA_googleAddAttr("TYPE","HOUSE");
+GA_googleAddAttr("DEPARTMENT","6");
+GA_googleAddAttr("CRS_BEG2","04");
+GA_googleAddAttr("CRS_END","6J");
+GA_googleAddAttr("SESSION","F");
+GA_googleAddAttr("YEAR","05");
+</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_A_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_B_DL");</script><script type="text/javascript">GA_googleFillSlot("VIDEO_INDIVIDUAL_SLOT_C_DL");</script>
+</div>
+
+<!-- End RSI ads--> 
+
+<div>
+    
+
+
+
+</div>
+
+            </div>
+<!--Right div close -->
+            <div class="clear"></div> 
+        </div>
+<!--grid tag close --> 
+      </div>
+		
+		<div id="bottom">
+			<div id="grid">
+				
+<div id="portletwrapper-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572" class="portletWrapper kssattr-portlethash-6f63772e626f74746f6d706f72746c65746d616e616765720a636f6e746578740a2f506c6f6e650a736974652d666f6f746572">
+<div class="portletStaticText portlet-static-site-footer"><div id="bottom">
+<div id="grid">
+<!-- *begin footer* -->
+<div id="footer" role="navigation sitemap">
+<div id="foot-c1" class="grid_2 alpha">
+<h4 class="footer">Courses</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/courses/find-by-topic/">Find by Topic</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-number/">Find by Course Number</a></li>
+    <li><a href="http://ocw.mit.edu/courses/find-by-department/">Find by Department</a></li>
+    <li><a href="http://ocw.mit.edu/courses/audio-video-courses/">Audio/Video Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/online-textbooks/">Online Textbooks</a></li>
+    <li><a href="http://ocw.mit.edu/courses/new-courses/">New Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/most-visited-courses/">Most Visited Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/ocw-scholar/">OCW Scholar Courses</a></li>
+    <li><a href="http://ocw.mit.edu/courses/this-course-at-mit/">This Course at MIT</a></li>
+    <li><a href="http://ocw.mit.edu/resources/">Supplemental Resources</a></li>
+    <li><a href="http://ocw.mit.edu/courses/translated-courses/">Translated Courses</a></li>
+</ul>
+</div>
+<div id="foot-c2" class="grid_2">
+<h4 class="footer">About</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/about/">About OpenCourseWare</a></li>
+    <li><a href="http://ocw.mit.edu/about/site-statistics/">Site Stats</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-stories/">OCW Stories</a></li>
+    <li><a href="http://ocw.mit.edu/about/ocw-consortium/">OCW Consortium</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/">Media Coverage</a></li>
+    <li><a href="http://ocw.mit.edu/about/newsletter/">Newsletter</a></li>
+    <li><a href="http://ocw.mit.edu/about/media-coverage/press-releases/">Press Releases</a></li>
+    <li><a href="http://ocw.mit.edu/about/next-decade/">OCW's Next Decade</a></li>
+</ul>
+</div>
+<div id="foot-c3" class="grid_2">
+<h4 class="footer">Donate</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/donate">Make a Donation</a></li>
+    <li><a href="http://ocw.mit.edu/donate/why-donate/">Why Donate?</a></li>
+    <li><a href="http://ocw.mit.edu/donate/ocw-course-champions-program/">Become a Course Champion</a></li>
+    <li><a href="http://ocw.mit.edu/donate/our-supporters/">Our Supporters</a></li>
+    <li><a href="http://ocw.mit.edu/donate/other-ways-to-contribute/">Other Ways to Contribute</a></li>
+    <li><a href="http://ocw.mit.edu/donate/shop-ocw/">Shop OCW</a></li>
+    <li><a href="http://ocw.mit.edu/support/">Become a Corporate Sponsor</a></li>
+</ul>
+</div>
+<div id="foot-c4" class="grid_2">
+<h4 class="footer">Featured Sites</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/high-school/">Highlights for High School</a></li>
+    <li><a href="http://ocw.mit.edu/educator/">OCW Educator</a></li>
+    <li><a href="https://www.edx.org/school/mitx/allcourses?utm_source=OCW&amp;utm_medium=MegaMenu&amp;utm_campaign=OCW">MITx Courses on edX</a></li>
+    <li><a href="http://teachingexcellence.mit.edu/">Teaching Excellence at MIT</a></li>
+</ul>
+<h4 class="footer" style="margin-top: 14px;">Tools</h4>
+<ul class="foot-bullet">
+<li><a href="http://ocw.mit.edu/help/">Help &amp; FAQs</a></li>
+    <li><a href="../../../common/jsp/feedback.htm">Contact Us</a></li>
+    <li><a href="../../../common/search/AdvancedSearch.htm">Advanced Search</a></li>
+    <li><a href="http://ocw.mit.edu/help/site-map/">Site Map</a></li>
+    <li><a href="../../../common/terms/index.htm">Privacy &amp; Terms of Use</a></li>
+    <li><a href="http://ocw.mit.edu/help/rss/">RSS Feeds</a></li>
+</ul>
+</div>
+<div id="foot-c5" class="grid_4 omega" itemprop="publisher" itemscope="" itemtype="http://schema.org/CollegeOrUniversity">
+<h4 class="footer">About <span itemprop="name">MIT OpenCourseWare</span>
+</h4>
+<p class="accent" itemprop="description">MIT OpenCourseWare makes the materials used in the teaching of almost all of MIT's subjects available on the Web, free of charge. With more than 2,200 courses available, OCW is delivering on the promise of open sharing of knowledge.</p>
+</div>
+<div id="foot-copy" class="grid_8 alpha">
+<a href="http://web.mit.edu"><img src="../../../common/images/logo_mit.png" alt="Massachusetts Institute of Technology logo and name." style="width: 195; height: 44;"></a>                 <a href="http://www.oeconsortium.org/"><img src="http://ocw.mit.edu/images/logo_oec.png" alt="Open Education Consortium logo." style="width: 219px; height: 59px; vertical-align: top;"></a>                 <a rel="license" itemprop="useRightsUrl" href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US"><img src="../../../common/images/cc_by-nc-sa.png" alt="Creative Commons logo with terms BY-NC-SA." style="width: 126px; height: 44px; margin-right: 0;"></a>
+<p class="copyright">© 2001–2014<br>
+Massachusetts Institute of Technology</p>
+<p style="font-size: 0.9em; margin-bottom: 15px;">Your use of the MIT OpenCourseWare site and materials is subject to our <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/us/deed.en_US" rel="license">Creative Commons License</a> and other <a href="../../../common/terms/index.htm" rel="cc:morePermissions">terms of use</a>.</p>
+</div>
+<div id="foot-support" class="grid_4 omega">
+<h4 class="footer">Our Corporate Supporters</h4>
+<!-- HOME_CORP_LOGO_1 -->
+<div id="div-gpt-ad-1388181177156-0" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-0'); });
+</script></div>
+<!-- HOME_CORP_LOGO_2 -->
+<div id="div-gpt-ad-1388181177156-1" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-1'); });
+</script></div>
+<!-- HOME_CORP_LOGO_3 -->
+<div id="div-gpt-ad-1388181177156-2" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-2'); });
+</script></div>
+<!-- HOME_CORP_LOGO_4 -->
+<div id="div-gpt-ad-1388181177156-3" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-3'); });
+</script></div>
+<!-- HOME_CORP_LOGO_5 -->
+<div id="div-gpt-ad-1388181177156-4" class="sponsors_google_ads_even"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-4'); });
+</script></div>
+<!-- HOME_CORP_LOGO_6 -->
+<div id="div-gpt-ad-1388181177156-5" class="sponsors_google_ads_odd"><script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-1388181177156-5'); });
+</script></div>
+</div>
+</div>
+</div>
+</div></div>
+
+</div>
+
+
+
+
+
+                
+			</div> <!-- bottom grid end -->
+		</div>
+<!-- bottom end -->
+		
+		
+   </body>
+</html>
